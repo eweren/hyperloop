@@ -6,12 +6,16 @@ import { TextNode } from "../../engine/scene/TextNode";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { asset } from "../../engine/assets/Assets";
 import { Direction } from "../../engine/geom/Direction";
+import { EnemyNode } from "../nodes/EnemyNode";
+import { TrainNode } from "../nodes/TrainNode";
 
 export class TitleScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
     private static font: BitmapFont;
 
     private playerNode = new PlayerNode();
+    private enemyNode = new EnemyNode();
+    private trainNode = new TrainNode();
 
     private titleNode = new TextNode({ font: TitleScene.font, anchor: Direction.TOP });
 
@@ -22,15 +26,7 @@ export class TitleScene extends Scene<Hyperloop> {
             .appendTo(this.rootNode);
 
         this.playerNode.moveTo(GAME_WIDTH / 2, GAME_HEIGHT - 10).appendTo(this.rootNode);
-    }
-
-    public update(dt: number) {
-        super.update(dt);
-        if (this.game.keyboard.isPressed("ArrowLeft")) {
-            this.playerNode.setMirrorX(true);
-        }
-        if (this.game.keyboard.isPressed("ArrowRight")) {
-            this.playerNode.setMirrorX(false);
-        }
+        this.enemyNode.moveTo(GAME_WIDTH * 0.9, GAME_HEIGHT - 10).appendTo(this.rootNode);
+        this.trainNode.moveTo(GAME_WIDTH * 0.1, GAME_HEIGHT - 10).appendTo(this.rootNode);
     }
 }

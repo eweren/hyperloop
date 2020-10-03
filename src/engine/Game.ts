@@ -69,6 +69,10 @@ export abstract class Game {
 
     }
 
+    public get input(): ControllerManager {
+        return this.controllerManager;
+    }
+
     private mouseMoved(): void {
         this.canvas.style.cursor = "default";
         this.mouseTimeout = MOUSE_TIMEOUT;
@@ -100,7 +104,9 @@ export abstract class Game {
     private gameLoop(): void {
         const currentUpdateTime = performance.now();
         const dt = clamp((currentUpdateTime - this.lastUpdateTime) / 1000, 0, MAX_DT);
-        this.update(dt);
+        // TODO if we are fancy, we may differentiate between elapsed system time and actual game time (e.g. to allow
+        // pausing the game and stuff, or slow-mo effects)
+        this.update(dt, currentUpdateTime / 1000);
         this.lastUpdateTime = currentUpdateTime;
 
         const { ctx, width, height } = this;
@@ -118,10 +124,10 @@ export abstract class Game {
         this.gameLoopId = requestAnimationFrame(this.gameLoopCallback);
     }
 
-    protected update(dt: number): void {
+    protected update(dt: number, time: number): void {
         this.gamepad.update();
         this.updateMouse(dt);
-        this.scenes.update(dt);
+        this.scenes.update(dt, time);
     }
 
     protected draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {

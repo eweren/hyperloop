@@ -105,7 +105,7 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
     }
 
     /** @inheritDoc */
-    public update(dt: number) {
+    public update(dt: number, time: number) {
         this.time += dt;
     }
 

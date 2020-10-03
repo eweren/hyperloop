@@ -7,7 +7,10 @@ export class Hyperloop extends Game {
     }
 }
 
-const game = new Hyperloop();
-game.scenes.setScene(LoadingScene);
-(window as any).game = game;
-game.start();
+(async () => {
+    const game = new Hyperloop();
+    await game.scenes.setScene(LoadingScene);
+    (window as any).game = game;
+    game.start();
+})();
+

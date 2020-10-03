@@ -1464,13 +1464,13 @@ export class SceneNode<T extends Game = Game> {
      * @param dt - The time in seconds since the last update.
      * @return Bit mask with used layers.
      */
-    protected updateAll(dt: number): number {
+    protected updateAll(dt: number, time: number): number {
         // Update this node and run animations
-        const postUpdate = this.update(dt);
+        const postUpdate = this.update(dt, time);
         this.updateAnimations(dt);
 
         // Update child nodes
-        const layers = this.updateChildren(dt) | this.getEffectiveLayer();
+        const layers = this.updateChildren(dt, time) | this.getEffectiveLayer();
 
         // When update method returned a post-update function then call it now
         if (postUpdate != null) {
@@ -1486,10 +1486,10 @@ export class SceneNode<T extends Game = Game> {
      * @param dt - The time in seconds since the last update.
      * @return Bit mask with used layers.
      */
-    protected updateChildren(dt: number): number {
+    protected updateChildren(dt: number, time: number): number {
         let layers = 0;
         this.forEachChild(child => {
-            layers |= child.updateAll(dt);
+            layers |= child.updateAll(dt, time);
         });
         return layers;
     }
@@ -1501,7 +1501,7 @@ export class SceneNode<T extends Game = Game> {
      * @param dt - The time in seconds since the last update.
      * @return Optional post-update function which is called after updating the child nodes.
      */
-    protected update(dt: number): void | (() => void) {}
+    protected update(dt: number, time: number): void | (() => void) {}
 
     /**
      * Recursively draws the bounds for this node and alls its child nodes as long as the [[showBounds]] for the node

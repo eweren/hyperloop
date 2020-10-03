@@ -20,7 +20,7 @@ function createValidSceneNode(args?: SceneNodeArgs): SceneNode {
     const node = new SceneNode(args);
     scene.rootNode.appendChild(parent);
     parent.appendChild(node);
-    scene.update(0);
+    scene.update(0, 0);
     scene.draw(createContext2D(game.width, game.height), game.width, game.height);
     node.getScenePosition();
     node.getSceneTransformation();
