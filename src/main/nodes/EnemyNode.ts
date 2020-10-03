@@ -3,10 +3,12 @@ import { asset } from "../../engine/assets/Assets";
 import { Direction } from "../../engine/geom/Direction";
 import { ReadonlyVector2 } from "../../engine/graphics/Vector2";
 import { CharacterNode } from "./CharacterNode";
+import { PlayerNode } from "./PlayerNode";
 
 enum AiState {
     BORED = 0,
-    FOLLOW = 1
+    FOLLOW = 1,
+    ATTACK = 2
 }
 
 export class EnemyNode extends CharacterNode {
@@ -22,9 +24,17 @@ export class EnemyNode extends CharacterNode {
     /** Distance to target position where enemy stops moving further */
     private squaredPositionThreshold = 20 ** 2;
 
+    /** Distance to player required for a successful melee attack */
+    private squaredAttackDistance = 20 ** 2;
+
+    /** ms it takes for enemy to attack player */
+    private attackDelay = 300;
+
     private targetPosition: ReadonlyVector2;
 
     private state: AiState = AiState.BORED;
+
+    private lastStateChange = 0;
 
     public constructor() {
         super({
@@ -44,6 +54,9 @@ export class EnemyNode extends CharacterNode {
                 break;
             case AiState.FOLLOW:
                 this.updateFollow();
+                break;
+            case AiState.ATTACK:
+                this.updateAttack();
                 break;
         }
     }
@@ -78,6 +91,10 @@ export class EnemyNode extends CharacterNode {
                 // TODO add intermediate ALERT state or something, where it looks around actively
                 this.setState(AiState.BORED);
             }
+            // Hurt player
+            if (squaredDistance < this.squaredAttackDistance) {
+                this.tryToAttack();
+            }
         }
         // Move to target
         if (this.getPosition().getSquareDistance(this.targetPosition) > this.squaredPositionThreshold) {
@@ -89,9 +106,26 @@ export class EnemyNode extends CharacterNode {
         }
     }
 
+    private updateAttack(): void {
+        if (Date.now() > this.lastStateChange + this.attackDelay) {
+            // Hurt player
+            // TODO get player from some global game state variable instead of via id
+            const player = this.getScene()?.getNodeById("player") as PlayerNode;
+            player?.hurt();
+            // Return to follow state
+            this.setState(AiState.FOLLOW);
+        }
+    }
+
     private setState(state: AiState): void {
         if (this.state !== state) {
             this.state = state;
+            this.lastStateChange = Date.now();
         }
+    }
+
+    private tryToAttack(): boolean {
+        this.setState(AiState.ATTACK);
+        return true;
     }
 }

@@ -84,6 +84,11 @@ export class CharacterNode extends AsepriteNode<Hyperloop> {
         }
     }
 
+    public hurt(): void {
+        // TODO reduce hitpoints or kill or something
+        this.jump(0.3);
+    }
+
     private getCollisionAt(x = this.getX(), y = this.getY()): boolean {
         // Mocked collision detection
         return (x <= 150 && y > 230) || y > 270 || x < 0 || x > 480;
