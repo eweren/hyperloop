@@ -7,6 +7,7 @@ import { Vector2, ReadonlyVector2 } from "../graphics/Vector2";
 import { Bounds2 } from "../graphics/Bounds2";
 import { Animation } from "./animations/Animation";
 import { Size2 } from "../graphics/Size2";
+import { Constructor } from "../util/types";
 
 /**
  * Hints which are returned to the scene after drawing the scene graph. These hints can suggest further actions after
@@ -1223,9 +1224,8 @@ export class SceneNode<T extends Game = Game> {
      * @param callback - The callback which checks if the iterated node is the one to look for.
      * @return The found matching descendant node or null if none.
      */
-    public findDescendant(callback: (node: SceneNode<T>) => boolean, thisArg: unknown = this):
-            SceneNode<T> | null {
-                let node = this.firstChild;
+    public findDescendant(callback: (node: SceneNode<T>) => boolean, thisArg: unknown = this): SceneNode<T> | null {
+        let node = this.firstChild;
         while (node != null && node !== this) {
             let next = node.firstChild;
             if (next == null) {
@@ -1285,6 +1285,31 @@ export class SceneNode<T extends Game = Game> {
      */
     public getDescendantById(id: string): SceneNode<T> | null {
         return this.findDescendant(node => node.getId() === id);
+    }
+
+    /**
+     * Returns the descendant node with the given type.
+     *
+     * @param type - The type to look for.
+     * @return The matching descendants. May be empty if none found.
+     */
+    public getDescendantsByType<T extends SceneNode>(type: Constructor<T>): T[] {
+        const descendants: T[] = [];
+        let node = this.firstChild;
+        while (node != null && node !== this) {
+            let next = node.firstChild;
+            if (next == null) {
+                next = node.nextSibling;
+            }
+            if (next == null) {
+                next = node.parent?.nextSibling ?? null;
+            }
+            if (node instanceof type) {
+                descendants.push(node);
+            }
+            node = next;
+        }
+        return descendants;
     }
 
     /**
