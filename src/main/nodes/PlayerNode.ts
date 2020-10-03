@@ -2,6 +2,7 @@ import { Aseprite } from "../../engine/assets/Aseprite";
 import { asset } from "../../engine/assets/Assets";
 import { Direction } from "../../engine/geom/Direction";
 import { Line2 } from "../../engine/graphics/Line2";
+import { Polygon2 } from "../../engine/graphics/Polygon2";
 import { Vector2 } from "../../engine/graphics/Vector2";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
@@ -49,6 +50,18 @@ export class PlayerNode extends CharacterNode {
     }
     public getJumpPower(): number {
         return this.jumpPower;
+    }
+
+    protected updateBoundsPolygon(bounds: Polygon2): void {
+        const boundsWidth = 14;
+        const boundsHeight = 46;
+        const offsetX = this.getWidth() / 2 - boundsWidth / 2;
+        const offsetY = 8;
+        bounds.clear();
+        bounds.addVertex(new Vector2(offsetX, offsetY));
+        bounds.addVertex(new Vector2(offsetX + boundsWidth, offsetY));
+        bounds.addVertex(new Vector2(offsetX + boundsWidth, boundsHeight));
+        bounds.addVertex(new Vector2(offsetX, boundsHeight));
     }
 
     public update(dt: number, time: number) {
