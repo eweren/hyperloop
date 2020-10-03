@@ -6,6 +6,7 @@ import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { rnd } from "../../engine/util/random";
 import { CharacterNode } from "./CharacterNode";
 import { PlayerNode } from "./PlayerNode";
+import { Polygon2 } from "../../engine/graphics/Polygon2";
 
 enum AiState {
     BORED = 0,
@@ -72,6 +73,18 @@ export class EnemyNode extends CharacterNode {
         });
         this.targetPosition = this.getPosition();
         this.moveAroundArterChase = true;
+    }
+
+    protected updateBoundsPolygon(bounds: Polygon2): void {
+        const boundsWidth = 14;
+        const boundsHeight = 46;
+        const offsetX = this.getWidth() / 2 - boundsWidth / 2;
+        const offsetY = 8;
+        bounds.clear();
+        bounds.addVertex(new Vector2(offsetX, offsetY));
+        bounds.addVertex(new Vector2(offsetX + boundsWidth, offsetY));
+        bounds.addVertex(new Vector2(offsetX + boundsWidth, boundsHeight));
+        bounds.addVertex(new Vector2(offsetX, boundsHeight));
     }
 
     public getShootingRange(): number {
