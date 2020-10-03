@@ -1,8 +1,12 @@
+import { Direction } from "../../engine/geom/Direction";
 import { Bounds2 } from "../../engine/graphics/Bounds2";
-import { SceneNode } from "../../engine/scene/SceneNode";
+import { SceneNode, SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { Hyperloop } from "../Hyperloop";
 
 export class CollisionNode extends SceneNode<Hyperloop> {
+    public constructor(args?: SceneNodeArgs) {
+        super({ anchor: Direction.TOP_LEFT, ...args });
+    }
 
     public collidesWithRectangle(x1: Bounds2): boolean;
     public collidesWithRectangle(x1: number, y1: number, x2: number, y2: number): boolean;
