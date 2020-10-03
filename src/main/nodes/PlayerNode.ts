@@ -33,7 +33,6 @@ export class PlayerNode extends CharacterNode {
             ...args
         });
         window.addEventListener("pointermove", event => this.mouseMoved(event));
-        console.log(this);
     }
 
     public getShootingRange(): number {
@@ -80,6 +79,9 @@ export class PlayerNode extends CharacterNode {
         }
     }
 
+    /**
+     * Handles a mouse move and recalculates the position of the mouse relative to the canvas with the canvas scale.
+     */
     private mouseMoved(event: PointerEvent): void {
         const sceneCanvas = this.getScene()?.game.canvas;
         if (!sceneCanvas) {
@@ -87,14 +89,25 @@ export class PlayerNode extends CharacterNode {
         }
         const { x, y, width } = sceneCanvas.getBoundingClientRect();
         const canvasScale = sceneCanvas.width / width;
-        this.mousePosition = new Vector2((event.x - x) * canvasScale, (event.y - y) * canvasScale);
+        this.mousePosition = new Vector2((event.x - x) * canvasScale, ((event.y - y) * canvasScale) + this.getHeight() / 2);
     }
 
+    /**
+     * Recalculates the angle between the x-axis and the mouse position relative from the center of the playerNode.
+     * Therefore we also have to recalculate the mousePosition relative to the camera position.
+     */
     private getAimingAngle(): number {
-        const positionInScene = new Vector2(this.getSceneBounds().centerX, this.getSceneBounds().centerY);
-        const angleVector = this.mousePosition.clone().sub(positionInScene);
-        const angle = Math.atan2(angleVector.x, angleVector.y);
-        return angle + Math.PI * 3 / 2;
+        const positionInScene = this.getScenePosition();
+        const camera = this.getScene()?.camera;
+        if (camera) {
+            const cameraPosition = new Vector2(camera.getLeft(), camera.getTop());
+            const mousePosition = this.mousePosition.clone().add(cameraPosition);
+            const angleVector = mousePosition.sub(positionInScene);
+
+            const angle = Math.atan2(angleVector.x, angleVector.y);
+            return angle + Math.PI * 3 / 2;
+        }
+        return 0;
     }
 
     private drawAimingLine(context: CanvasRenderingContext2D): void {
@@ -102,7 +115,6 @@ export class PlayerNode extends CharacterNode {
         context.save();
         const playerBounds = this.getBounds();
         const playerCenter = new Vector2(playerBounds.centerX, playerBounds.centerY);
-        console.log(this.aimingAngle);
         const endOfLine = new Vector2(
             playerCenter.x + this.shootingRange * Math.cos(this.aimingAngle),
             playerCenter.y - this.shootingRange * Math.sin(this.aimingAngle)

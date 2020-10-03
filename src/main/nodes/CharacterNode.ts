@@ -100,9 +100,8 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         let isColliding = false;
         for (let i = 0; i < this.getShootingRange(); i += PROJECTILE_STEP_SIZE) {
             isColliding = this.getCollisionAt(origin.x + i * diffX, origin.y + i * diffY);
+        console.log(isColliding);
         }
-        console.log(diffX, diffY);
-        console.log(angle, isColliding);
     }
 
     public hurt(): void {
