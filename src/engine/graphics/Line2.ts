@@ -51,7 +51,7 @@ export class Line2 {
      */
     public draw(ctx: CanvasRenderingContext2D): this {
         const { start: a, end: b } = this;
-        ctx.moveTo(a.x, a.x);
+        ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
         return this;
     }
