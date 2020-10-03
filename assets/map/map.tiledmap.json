@@ -106,6 +106,42 @@
                  "width":514.666666666667,
                  "x":329.333333333333,
                  "y":221.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":13,
+                 "name":"Train",
+                 "point":true,
+                 "rotation":0,
+                 "type":"train",
+                 "visible":true,
+                 "width":0,
+                 "x":420,
+                 "y":384
+                }, 
+                {
+                 "height":0,
+                 "id":14,
+                 "name":"Player",
+                 "point":true,
+                 "rotation":0,
+                 "type":"player",
+                 "visible":true,
+                 "width":0,
+                 "x":580,
+                 "y":362.666666666667
+                }, 
+                {
+                 "height":0,
+                 "id":15,
+                 "name":"Enemy",
+                 "point":true,
+                 "rotation":0,
+                 "type":"enemy",
+                 "visible":true,
+                 "width":0,
+                 "x":714.666666666667,
+                 "y":373.333333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -114,7 +150,7 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":13,
+ "nextobjectid":16,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",

@@ -28,15 +28,6 @@ export class TiledMapLayerNode<T extends Game> extends SceneNode<T> {
         });
         this.map = map;
         this.name = name;
-        for (const layer of this.map.getLayersByType(TiledTileLayer)) {
-            console.log(layer.getData().length, layer.getWidth() * layer.getHeight());
-        }
-        // console.log(this.map.getTilesets());
-        for (const tileset of this.map.getTilesets()) {
-            console.log(tileset);
-            console.log(tileset.getImage());
-            console.log(tileset.getFirstGID());
-        }
     }
 
     public draw(ctx: CanvasRenderingContext2D): void {

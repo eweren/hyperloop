@@ -2,6 +2,7 @@ import { Aseprite } from "../../engine/assets/Aseprite";
 import { asset } from "../../engine/assets/Assets";
 import { Direction } from "../../engine/geom/Direction";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
+import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { CharacterNode } from "./CharacterNode";
 
 export class PlayerNode extends CharacterNode {
@@ -14,12 +15,13 @@ export class PlayerNode extends CharacterNode {
     private readonly deceleration = 1800;
     private readonly jumpPower = 380;
 
-    public constructor() {
+    public constructor(args?: SceneNodeArgs) {
         super({
             aseprite: PlayerNode.sprite,
             anchor: Direction.BOTTOM,
             tag: "idle",
-            id: "player"
+            id: "player",
+            ...args
         });
     }
 

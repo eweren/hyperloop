@@ -113,7 +113,6 @@ export class SoundNode<T extends Game = Game> extends SceneNode<T> {
         // TODO Calculate distance
         const distance = 0;
         const volume = Math.max(0, this.range - distance) / this.range * this.intensity;
-        console.log(volume);
         if (volume > 0) {
             this.sound.setVolume(volume);
             if (!this.sound.isPlaying()) {

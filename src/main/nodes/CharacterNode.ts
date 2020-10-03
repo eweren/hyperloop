@@ -1,5 +1,6 @@
 import { Vector2 } from "../../engine/graphics/Vector2";
-import { AsepriteNode } from "../../engine/scene/AsepriteNode";
+import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
+import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { clamp } from "../../engine/util/math";
 import { Hyperloop } from "../Hyperloop";
 
@@ -18,7 +19,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected velocity: Vector2;
     protected isOnGround = true;
 
-    public constructor(args: any) {
+    public constructor(args: AsepriteNodeArgs) {
         super(args);
         this.velocity = new Vector2(0, 0);
     }
@@ -84,12 +85,12 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     public hurt(): void {
-        // TODO reduce hitpoints or kill or something
+        // TODO reduce hit points or kill or something
         this.jump(0.3);
     }
 
     private getCollisionAt(x = this.getX(), y = this.getY()): boolean {
         // Mocked collision detection
-        return (x <= 150 && y > 230) || y > 270 || x < 0 || x > 480;
+        return (y > 370);
     }
 }

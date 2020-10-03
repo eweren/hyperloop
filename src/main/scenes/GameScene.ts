@@ -12,18 +12,16 @@ import { TrainNode } from "../nodes/TrainNode";
 export class GameScene extends Scene<Hyperloop> {
     @asset("map/map.tiledmap.json")
     private static map: TiledMap;
-    private playerNode = new PlayerNode();
-    private enemyNode = new EnemyNode();
-    private trainNode = new TrainNode();
 
     private mapNode = new TiledMapNode({ map: GameScene.map, objects: {
-        "collision": CollisionNode
+        "collision": CollisionNode,
+        "player": PlayerNode,
+        "enemy": EnemyNode,
+        "train": TrainNode
     }});
 
     public setup() {
-        this.mapNode.moveTo(GAME_WIDTH / 2, GAME_HEIGHT / 2).appendTo(this.rootNode).transform(m => m.scale(0.4));
-        this.playerNode.moveTo(GAME_WIDTH / 2, GAME_HEIGHT - 10).appendTo(this.rootNode);
-        this.enemyNode.moveTo(GAME_WIDTH * 0.9, GAME_HEIGHT - 10).appendTo(this.rootNode);
-        this.trainNode.moveTo(GAME_WIDTH * 0.1, GAME_HEIGHT - 10).appendTo(this.rootNode);
+        this.mapNode.moveTo(GAME_WIDTH / 2, GAME_HEIGHT / 2).appendTo(this.rootNode).transform(m => m.scale(1));
+        this.camera.setFollow(this.mapNode.getDescendantById("Player"));
     }
 }

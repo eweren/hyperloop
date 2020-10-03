@@ -2,6 +2,7 @@ import { Aseprite } from "../../engine/assets/Aseprite";
 import { asset } from "../../engine/assets/Assets";
 import { Direction } from "../../engine/geom/Direction";
 import { ReadonlyVector2 } from "../../engine/graphics/Vector2";
+import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { rnd } from "../../engine/util/random";
 import { CharacterNode } from "./CharacterNode";
 import { PlayerNode } from "./PlayerNode";
@@ -51,11 +52,12 @@ export class EnemyNode extends CharacterNode {
 
     private minAlertDuration = 10;
 
-    public constructor() {
+    public constructor(args?: SceneNodeArgs) {
         super({
             aseprite: EnemyNode.sprite,
             anchor: Direction.BOTTOM,
-            tag: "idle"
+            tag: "idle",
+            ...args
         });
         this.targetPosition = this.getPosition();
     }
