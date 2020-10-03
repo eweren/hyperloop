@@ -34,6 +34,10 @@ export class ControllerEvent extends Object {
         return this[eventTypeSymbol];
     }
 
+    get intents(): ControllerIntent {
+        return this[intentsSymbol];
+    }
+
     get repeat(): boolean {
         return this[repeatSymbol];
     }

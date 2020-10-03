@@ -2,9 +2,13 @@ import { ControllerEvent } from "./ControllerEvent";
 import { ControllerFamily, ControllerSpriteMap } from "./ControllerFamily";
 import { GamepadStyle } from "./GamepadStyle";
 import { Signal } from "../util/Signal";
+import { ControllerIntent } from "./ControllerIntent";
 
-/** Symbol to identify the current/active controller family */
+/** Symbol to identify the current/active controller family. */
 const currentControllerFamilySymbol = Symbol("currentControllerFamily");
+
+/** Symbol to identify the currently active intents. */
+const currentActiveIntentsSymbol = Symbol("currentActiveIntentsSymbol");
 
 export class ControllerManager {
     private static readonly INSTANCE = new ControllerManager();
@@ -20,7 +24,12 @@ export class ControllerManager {
 
     public selectedGamepadStyle = GamepadStyle.XBOX;
 
+    public get currentActiveIntentsSymbol(): ControllerIntent {
+        return this[currentActiveIntentsSymbol];
+    }
+
     private [currentControllerFamilySymbol]: ControllerFamily;
+    private [currentActiveIntentsSymbol]: ControllerIntent;
 
     private constructor(initialControllerFamily: ControllerFamily = ControllerFamily.KEYBOARD) {
         this.currentControllerFamily = initialControllerFamily;
@@ -29,6 +38,11 @@ export class ControllerManager {
             if (this.currentControllerFamily !== e.controllerFamily) {
                 this.currentControllerFamily = e.controllerFamily;
             }
+            this[currentActiveIntentsSymbol] |= e.intents;
+        });
+
+        this.onButtonUp.connect(e => {
+            this[currentActiveIntentsSymbol] &= ~e.intents;
         });
     }
 
