@@ -102,7 +102,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         const px = x - w / 2, py = y - h;
         return y > 270 || colliders.some(c => c.collidesWithRectangle(px, py, w, h));
 */
-        return y > 370;
+        return y > 410;
     }
 
     @cacheResult
