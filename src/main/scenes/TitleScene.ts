@@ -23,14 +23,4 @@ export class TitleScene extends Scene<Hyperloop> {
 
         this.playerNode.moveTo(GAME_WIDTH / 2, GAME_HEIGHT - 10).appendTo(this.rootNode);
     }
-
-    public update(dt: number) {
-        super.update(dt);
-        if (this.game.keyboard.isPressed("ArrowLeft")) {
-            this.playerNode.setMirrorX(true);
-        }
-        if (this.game.keyboard.isPressed("ArrowRight")) {
-            this.playerNode.setMirrorX(false);
-        }
-    }
 }
