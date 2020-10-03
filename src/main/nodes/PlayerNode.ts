@@ -7,7 +7,7 @@ import { Vector2 } from "../../engine/graphics/Vector2";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { CharacterNode } from "./CharacterNode";
-import { EnemyNode } from './EnemyNode';
+import { EnemyNode } from "./EnemyNode";
 
 export class PlayerNode extends CharacterNode {
     @asset("sprites/female.aseprite.json")
@@ -15,6 +15,7 @@ export class PlayerNode extends CharacterNode {
 
     private mousePosition = new Vector2(0, 0);
     private aimingAngle = 0;
+    private nextShot = 0;
 
     // for debug purposes
     private drawDebugStuff = true;
@@ -25,6 +26,7 @@ export class PlayerNode extends CharacterNode {
     private readonly acceleration = 1200;
     private readonly deceleration = 1800;
     private readonly jumpPower = 380;
+    private readonly shotDelay = 0.5;
 
     public constructor(args?: SceneNodeArgs) {
         super({
@@ -86,7 +88,10 @@ export class PlayerNode extends CharacterNode {
         }
         // Shoot
         if (input.currentActiveIntents & ControllerIntent.PLAYER_ACTION) {
-            this.shoot(this.aimingAngle);
+            if (time >= this.nextShot) {
+                this.shoot(this.aimingAngle, 50);
+                this.nextShot = time + this.shotDelay;
+            }
         }
     }
 

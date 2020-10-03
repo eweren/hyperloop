@@ -51,7 +51,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
                 vx = clamp(this.velocity.x + tractionFactor * this.getDeceleration() * dt, -Infinity, 0);
             }
         }
-        // Death animation
+        // Death animationfffff
         if (!this.isAlive()) {
             // TODO death animation
             this.setTag("jump");
@@ -99,15 +99,21 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         }
     }
 
-    public shoot(angle: number): void {
+    public shoot(angle: number, power: number): void {
         const scenePosition = this.getScenePosition();
         const origin = new Vector2(scenePosition.x, scenePosition.y - this.getHeight() * .5);
         const diffX = Math.cos(angle);
-        const diffY = Math.sin(angle);
-        let isColliding = false;
+        const diffY = -Math.sin(angle);
+        let isColliding: CharacterNode | CollisionNode | null = null;
         for (let i = 0; i < this.getShootingRange(); i += PROJECTILE_STEP_SIZE) {
-            isColliding = this.getPlayerCollisionAt(origin.x + i * diffX, origin.y + i * diffY);
-        console.log(isColliding);
+            isColliding = this.getPointCollision(origin.x + i * diffX, origin.y + i * diffY);
+            if (isColliding) {
+                // Hurt the thing
+                if (isColliding instanceof CharacterNode) {
+                    isColliding.hurt(power);
+                }
+                break;
+            }
         }
     }
 
@@ -178,9 +184,8 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     public containsPoint(x: number, y: number): boolean {
-        const bounds = this.getBounds();
-        const minX = bounds.minX + this.getX(), minY = bounds.minY + this.getY(), maxX = bounds.maxX + this.getX(),
-                maxY = bounds.maxY + this.getY();
+        const bounds = this.getSceneBounds();
+        const minX = bounds.minX, minY = bounds.minY, maxX = bounds.maxX, maxY = bounds.maxY;
         return x >= minX && x <= maxX && y >= minY && y <= maxY;
     }
 }
