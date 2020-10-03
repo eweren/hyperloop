@@ -6,6 +6,7 @@ import { Hyperloop } from "../Hyperloop";
 export class CollisionNode extends SceneNode<Hyperloop> {
     public constructor(args?: SceneNodeArgs) {
         super({ anchor: Direction.TOP_LEFT, ...args });
+        this.setShowBounds(true);
     }
 
     public store: string = "";
