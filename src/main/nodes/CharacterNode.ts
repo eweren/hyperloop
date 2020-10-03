@@ -2,6 +2,7 @@ import { Vector2 } from "../../engine/graphics/Vector2";
 import { AsepriteNode } from "../../engine/scene/AsepriteNode";
 import { clamp } from "../../engine/util/math";
 import { Hyperloop } from "../Hyperloop";
+import { CollisionNode } from "./CollisionNode";
 
 // TODO define in some constants file
 const GRAVITY = 1200;
@@ -12,6 +13,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public abstract getAcceleration(): number;
     public abstract getDeceleration(): number;
     public abstract getJumpPower(): number;
+    private colliders: CollisionNode[];
 
     // Dynamic player state
     protected direction = 0;
@@ -21,6 +23,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public constructor(args: any) {
         super(args);
         this.velocity = new Vector2(0, 0);
+        this.colliders = this.getScene()?.rootNode.getDescendantsByType(CollisionNode) ?? [];
     }
 
     public update(dt: number, time: number): void {
@@ -89,7 +92,14 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     private getCollisionAt(x = this.getX(), y = this.getY()): boolean {
-        // Mocked collision detection
-        return (x <= 150 && y > 230) || y > 270 || x < 0 || x > 480;
+        // Enemy collision
+        // TODO
+        // Level collision
+        const bounds = this.getBounds();
+        const w = bounds.width, h = bounds.height;
+        const px = x - w / 2, py = y - h / 2;
+        return y > 270 || this.colliders.some(c => {
+            c.collidesWithRectangle(px, py, w, h);
+        });
     }
 }
