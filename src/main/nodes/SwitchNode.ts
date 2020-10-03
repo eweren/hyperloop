@@ -1,7 +1,13 @@
 import { Aseprite } from "../../engine/assets/Aseprite";
 import { asset } from "../../engine/assets/Assets";
 import { Direction } from "../../engine/geom/Direction";
+import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { InteractiveNode } from "./InteractiveNode";
+
+export interface SwitchNodeArgs extends SceneNodeArgs {
+    onlyOnce?: boolean;
+    onUpdate?: (state: boolean) => void;
+}
 
 export class SwitchNode extends InteractiveNode {
     @asset("sprites/rat.aseprite.json")
@@ -9,18 +15,24 @@ export class SwitchNode extends InteractiveNode {
     private turnedOn: boolean = false;
     private onlyOnce: boolean;
     private stateChanges = 0;
+    private onUpdate?: (state: boolean) => void;
 
-    public constructor(onlyOnce = false) {
+    public constructor({ onlyOnce = false, onUpdate, ...args }: SwitchNodeArgs) {
         super({
             aseprite: SwitchNode.sprite,
             anchor: Direction.CENTER,
+            ...args
         }, "Press E to press switch");
         this.onlyOnce = onlyOnce;
+        this.onUpdate = onUpdate;
     }
 
     public interact(): void {
         if (this.canInteract()) {
             this.turnedOn = !this.turnedOn;
+            if (this.onUpdate != null) {
+                this.onUpdate(this.turnedOn);
+            }
             this.stateChanges++;
         }
     }

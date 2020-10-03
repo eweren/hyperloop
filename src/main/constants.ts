@@ -6,3 +6,5 @@ export const GAME_HEIGHT = 270;
 
 /** Fonts */
 export const STANDARD_FONT = "fonts/pixcelsior.font.json";
+
+export const LIGHT_LAYER = 1;

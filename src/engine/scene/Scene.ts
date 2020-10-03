@@ -81,6 +81,21 @@ export abstract class Scene<T extends Game = Game, A = void> {
     }
 
     /**
+     * Toggles the visibility of the given layer.
+     *
+     * @param layer   - The layer to toggle.
+     * @param visible - Forced visibility state.
+     */
+    public toggleLayer(layer: number, visible?: boolean): this {
+        if (visible ?? !this.isLayerShown(layer)) {
+            this.showLayer(layer);
+        } else {
+            this.hideLayer(layer);
+        }
+        return this;
+    }
+
+    /**
      * Checks if given layer is hidden.
      *
      * @param layer - The layer to check (0-31).

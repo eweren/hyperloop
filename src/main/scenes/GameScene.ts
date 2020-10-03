@@ -10,6 +10,7 @@ import { TrainNode } from "../nodes/TrainNode";
 import { Rect } from "../../engine/geom/Rect";
 import { LightNode } from "../nodes/LightNode";
 import { SwitchNode } from "../nodes/SwitchNode";
+import { LIGHT_LAYER } from "../constants";
 
 export class GameScene extends Scene<Hyperloop> {
     @asset("map/map.tiledmap.json")
@@ -29,9 +30,12 @@ export class GameScene extends Scene<Hyperloop> {
         this.camera.setFollow(this.mapNode.getDescendantById("Player"));
         this.camera.setLimits(new Rect(0, 0, map.getWidth() * map.getTileWidth(),
             map.getHeight() * map.getTileHeight()));
-        this.setLightLayers([ 1 ]);
-        new SwitchNode(false).moveTo(300, 380).appendTo(this.mapNode);
-        new SwitchNode(true).moveTo(250, 380).appendTo(this.mapNode);
+        this.setLightLayers([ LIGHT_LAYER ]);
+        this.hideLayer(LIGHT_LAYER);
+        new SwitchNode({ onUpdate: () => this.toggleLayer(LIGHT_LAYER) }).moveTo(520, 380).appendTo(this.mapNode);
+
+        new SwitchNode({ onlyOnce: false }).moveTo(300, 380).appendTo(this.mapNode);
+        new SwitchNode({ onlyOnce: true }).moveTo(250, 380).appendTo(this.mapNode);
         const ratEnemy = new EnemyNode({
             id: "15",
             x: 340,
