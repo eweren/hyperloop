@@ -7,6 +7,7 @@ import { Vector2 } from "../../engine/graphics/Vector2";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { CharacterNode } from "./CharacterNode";
+import { EnemyNode } from './EnemyNode';
 
 export class PlayerNode extends CharacterNode {
     @asset("sprites/female.aseprite.json")
@@ -149,5 +150,10 @@ export class PlayerNode extends CharacterNode {
         context.closePath();
         context.restore();
         context.restore();
+    }
+
+    public getPersonalEnemies(): EnemyNode[] {
+        const enemies = this.getScene()?.rootNode.getDescendantsByType(EnemyNode) ?? [];
+        return enemies;
     }
 }

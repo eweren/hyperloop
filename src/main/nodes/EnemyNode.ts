@@ -251,4 +251,9 @@ export class EnemyNode extends CharacterNode {
         }
         this.updateSearch(time);
     }
+
+    public getPersonalEnemies(): PlayerNode[] {
+        const enemies = this.getScene()?.rootNode.getDescendantsByType(PlayerNode) ?? [];
+        return enemies;
+    }
 }

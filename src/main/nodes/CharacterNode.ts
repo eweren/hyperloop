@@ -4,7 +4,6 @@ import { cacheResult } from "../../engine/util/cache";
 import { clamp } from "../../engine/util/math";
 import { Hyperloop } from "../Hyperloop";
 import { CollisionNode } from "./CollisionNode";
-import { EnemyNode } from "./EnemyNode";
 import { PlayerNode } from "./PlayerNode";
 
 // TODO define in some constants file
@@ -147,23 +146,12 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         return y > 470 || colliders.some(c => c.collidesWithRectangle(px, py, w, h));
     }
 
-    private getPointCollision(x: number, y: number): CollisionNode | EnemyNode | PlayerNode | null {
+    private getPointCollision(x: number, y: number): CollisionNode | CharacterNode | null {
         // Enemies
-        if (this instanceof PlayerNode) {
-            // Player shooting enemies
-            const enemies = this.getEnemies();
-            for (const c of enemies) {
-                if (c.containsPoint(x, y)) {
-                    return c;
-                }
-            }
-        } else {
-            // Enemies shooting player (if this ever happens)
-            const enemies = this.getPlayers();
-            for (const c of enemies) {
-                if (c.containsPoint(x, y)) {
-                    return c;
-                }
+        const enemies = this.getPersonalEnemies();
+        for (const c of enemies) {
+            if (c.containsPoint(x, y)) {
+                return c;
             }
         }
         // Level
@@ -182,10 +170,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         return colliders;
     }
 
-    public getEnemies(): EnemyNode[] {
-        const enemies = this.getScene()?.rootNode.getDescendantsByType(EnemyNode) ?? [];
-        return enemies;
-    }
+    public abstract getPersonalEnemies(): CharacterNode[];
 
     public getPlayers(): PlayerNode[] {
         const players = this.getScene()?.rootNode.getDescendantsByType(PlayerNode) ?? [];
