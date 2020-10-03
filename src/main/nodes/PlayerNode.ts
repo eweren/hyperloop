@@ -33,6 +33,7 @@ export class PlayerNode extends CharacterNode {
             ...args
         });
         window.addEventListener("pointermove", event => this.mouseMoved(event));
+        console.log(this);
     }
 
     public getShootingRange(): number {

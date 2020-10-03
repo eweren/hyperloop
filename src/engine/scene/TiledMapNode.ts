@@ -34,12 +34,11 @@ export class TiledMapNode<T extends Game> extends SceneNode<T> {
                     const constructor = (objects != null ? objects[object.getType()] : null) ?? SceneNode;
                     const node = new constructor({
                         id: object.getName(),
-                        anchor: Direction.TOP_LEFT,
                         x: object.getX(),
                         y: object.getY(),
-                        width: object.getWidth(),
-                        height: object.getHeight(),
-                        showBounds: object.getOptionalProperty("showBounds", "bool")?.getValue() ?? false
+                        width: object.getWidth() > 0 ? object.getWidth() : undefined,
+                        height: object.getHeight() > 0 ? object.getHeight() : undefined,
+                        showBounds: object.getOptionalProperty("showBounds", "bool")?.getValue()
                     });
                     node.transform(m => m.rotate(radians(object.getRotation())));
                     this.appendChild(node);
