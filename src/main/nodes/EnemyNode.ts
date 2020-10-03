@@ -1,7 +1,7 @@
 import { Aseprite } from "../../engine/assets/Aseprite";
 import { asset } from "../../engine/assets/Assets";
 import { Direction } from "../../engine/geom/Direction";
-import { ReadonlyVector2 } from "../../engine/graphics/Vector2";
+import { ReadonlyVector2, Vector2 } from "../../engine/graphics/Vector2";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { rnd } from "../../engine/util/random";
 import { CharacterNode } from "./CharacterNode";
@@ -11,7 +11,8 @@ enum AiState {
     BORED = 0,
     FOLLOW = 1,
     ATTACK = 2,
-    ALERT = 3
+    ALERT = 3,
+    MOVE_AROUND = 4,
 }
 
 export class EnemyNode extends CharacterNode {
@@ -29,7 +30,7 @@ export class EnemyNode extends CharacterNode {
     private squaredViewDistance = 120 ** 2;
 
     /** How far enemy can see player while chasing him */
-    private squaredAlertViewDistance = 120 ** 2;
+    private squaredAlertViewDistance = 160 ** 2;
 
     /** Distance to target position where enemy stops moving further */
     private squaredPositionThreshold = 20 ** 2;
@@ -53,6 +54,15 @@ export class EnemyNode extends CharacterNode {
 
     private minAlertDuration = 10;
 
+    private moveAroundAnchor: Vector2 = new Vector2(0, 0);
+    private squaredMoveAroundDistance = 10 ** 2;
+
+    /**
+     * set to false, if after chase an enemy should transfer to ALERT,
+     * set to true - for MOVE_AROUND
+     */
+    private moveAroundArterChase = false;
+
     public constructor(args?: SceneNodeArgs) {
         super({
             aseprite: EnemyNode.sprite,
@@ -61,6 +71,7 @@ export class EnemyNode extends CharacterNode {
             ...args
         });
         this.targetPosition = this.getPosition();
+        this.moveAroundArterChase = true;
     }
 
     public getShootingRange(): number {
@@ -93,11 +104,13 @@ export class EnemyNode extends CharacterNode {
             case AiState.ATTACK:
                 this.updateAttack(time);
                 break;
+            case AiState.MOVE_AROUND:
+                this.updateMoveAround(time);
+                break;
         }
     }
 
     private getPlayer(): PlayerNode | undefined {
-        // TODO get player from some global game state variable instead of via id
         return this.getScene()?.rootNode.getDescendantsByType(PlayerNode)[0];
     }
 
@@ -111,18 +124,23 @@ export class EnemyNode extends CharacterNode {
                 this.setState(AiState.FOLLOW, time);
                 this.targetPosition = player.getPosition();
             } else {
-                // randomly change looking direction
-                const lookDirectionChangeDelay = this.state === AiState.ALERT ? this.HIGH_ALERT_CHANGE_DELAY : this.LOW_ALERT_CHANGE_DELAY;
-                const chance = this.state === AiState.ALERT ? 20 : 5;
-                if (rnd(1, 100) < chance && this.lastLookDirectionChange + lookDirectionChangeDelay < time) {
-                    this.setMirrorX(!this.isMirrorX());
-                    this.lastLookDirectionChange = time;
+                if (this.state === AiState.ALERT || this.state === AiState.BORED) {
+                    // randomly change looking direction
+                    const lookDirectionChangeDelay = this.state === AiState.ALERT ? this.HIGH_ALERT_CHANGE_DELAY : this.LOW_ALERT_CHANGE_DELAY;
+                    const chance = this.state === AiState.ALERT ? 20 : 5;
+                    if (rnd(1, 100) < chance && this.lastLookDirectionChange + lookDirectionChangeDelay < time) {
+                        this.setMirrorX(!this.isMirrorX());
+                        this.lastLookDirectionChange = time;
+                    }
                 }
 
-                // check if it is time to be bored again
-                if (this.state === AiState.ALERT
+                // check if it is time to be bored or alerted
+                if (this.state !== AiState.BORED
                     && rnd(1, 100) < 5 && this.lastStateChange + this.minAlertDuration < time) {
-                    this.setState(AiState.BORED, time);
+                    // first transfer to alert and from alert to bored state
+                    const newState = this.state === AiState.ALERT ? AiState.BORED : AiState.ALERT;
+                    this.setState(newState, time);
+                    this.setDirection(0);
                 }
             }
         }
@@ -147,9 +165,16 @@ export class EnemyNode extends CharacterNode {
                 this.targetPosition = player.getPosition();
             } else {
                 // Player too far away
-                // stay ALERT, and look around actively
-                this.setState(AiState.ALERT, time);
-                this.setDirection(0);
+                if (this.moveAroundArterChase) {
+                    // move around a bit before transfering to ALERT
+                    this.setState(AiState.MOVE_AROUND, time);
+                    //this.setDirection(this.direction * -1);
+                    this.moveAroundAnchor.setVector(this.getPosition());
+                } else {
+                    // stay ALERT, and look around actively
+                    this.setState(AiState.ALERT, time);
+                    this.setDirection(0);
+                }
             }
             // Hurt player
             if (squaredDistance < this.squaredAttackDistance) {
@@ -172,8 +197,7 @@ export class EnemyNode extends CharacterNode {
     private updateAttack(time: number): void {
         if (time > this.lastStateChange + this.attackDelay) {
             // Hurt player
-            // TODO get player from some global game state variable instead of via id
-            const player = this.getScene()?.getNodeById("player") as PlayerNode;
+            const player = this.getPlayer();
             player?.hurt();
             // Return to follow state
             this.setState(AiState.FOLLOW, time);
@@ -192,4 +216,29 @@ export class EnemyNode extends CharacterNode {
         return true;
     }
 
+    private stopAndWaitTs = 0;
+    private stopAndWaitDelaySec = 2;
+    private moveTs = 0;
+    private moveDelaySec = 0.2;
+
+
+    private updateMoveAround(time: number): void {
+        if (this.getPosition().getSquareDistance(this.moveAroundAnchor) > this.squaredMoveAroundDistance) {
+            if (this.stopAndWaitTs === 0) {
+                if (this.moveTs + this.moveDelaySec < time) {
+                    this.setDirection(0);
+                    this.stopAndWaitTs = time;
+                }
+            } else if (this.stopAndWaitTs + this.stopAndWaitDelaySec < time) {
+                if (this.getX() > this.moveAroundAnchor.x) {
+                    this.setDirection(-1);
+                } else {
+                    this.setDirection(1);
+                }
+                this.stopAndWaitTs = 0;
+                this.moveTs = time;
+            }
+        }
+        this.updateSearch(time);
+    }
 }

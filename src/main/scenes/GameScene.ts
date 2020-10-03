@@ -1,6 +1,5 @@
 import { Hyperloop } from "../Hyperloop";
 import { Scene } from "../../engine/scene/Scene";
-import { GAME_HEIGHT, GAME_WIDTH } from "../constants";
 import { PlayerNode } from "../nodes/PlayerNode";
 import { asset } from "../../engine/assets/Assets";
 import { TiledMap } from "../../engine/tiled/TiledMap";
@@ -8,6 +7,7 @@ import { TiledMapNode } from "../../engine/scene/TiledMapNode";
 import { CollisionNode } from "../nodes/CollisionNode";
 import { EnemyNode } from "../nodes/EnemyNode";
 import { TrainNode } from "../nodes/TrainNode";
+import { Rect } from "../../engine/geom/Rect";
 
 export class GameScene extends Scene<Hyperloop> {
     @asset("map/map.tiledmap.json")
@@ -21,7 +21,10 @@ export class GameScene extends Scene<Hyperloop> {
     }});
 
     public setup() {
-        this.mapNode.moveTo(GAME_WIDTH / 2, GAME_HEIGHT / 2).appendTo(this.rootNode).transform(m => m.scale(1));
+        const map = GameScene.map;
+        this.mapNode.moveTo(0, 0).appendTo(this.rootNode).transform(m => m.scale(1));
         this.camera.setFollow(this.mapNode.getDescendantById("Player"));
+        this.camera.setLimits(new Rect(0, 0, map.getWidth() * map.getTileWidth(),
+            map.getHeight() * map.getTileHeight()));
     }
 }

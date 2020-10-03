@@ -23,6 +23,7 @@ export class TiledMapNode<T extends Game> extends SceneNode<T> {
         super({
             width: map.getWidth() * map.getTileWidth(),
             height: map.getHeight() * map.getTileHeight(),
+            anchor: Direction.TOP_LEFT,
             childAnchor: Direction.TOP_LEFT,
             ...args
         });
