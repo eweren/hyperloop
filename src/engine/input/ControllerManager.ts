@@ -24,7 +24,7 @@ export class ControllerManager {
 
     public selectedGamepadStyle = GamepadStyle.XBOX;
 
-    public get currentActiveIntentsSymbol(): ControllerIntent {
+    public get currentActiveIntents(): ControllerIntent {
         return this[currentActiveIntentsSymbol];
     }
 
