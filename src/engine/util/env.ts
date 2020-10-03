@@ -1,3 +1,16 @@
+
+/** Cached result of [[isLittleEndian]] function */
+let littleEndian: boolean | null = null;
+
+/**
+ * Checks if runtime is little endian.
+ *
+ * @return True if little endian, false if not.
+ */
+export function isLittleEndian(): boolean {
+    return littleEndian ?? (littleEndian = new Uint16Array(new Uint8Array([ 0x12, 0x34 ]).buffer)[0] === 0x3412);
+}
+
 export function isElectron(): boolean {
     return !!navigator.userAgent.match(/\belectron\b/i);
 }
