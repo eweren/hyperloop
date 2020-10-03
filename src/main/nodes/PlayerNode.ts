@@ -18,6 +18,7 @@ export class PlayerNode extends CharacterNode {
     private drawDebugStuff = true;
 
     // Character settings
+    private readonly shootingRange = 150;
     private readonly speed = 150;
     private readonly acceleration = 1200;
     private readonly deceleration = 1800;
@@ -34,6 +35,9 @@ export class PlayerNode extends CharacterNode {
         window.addEventListener("pointermove", event => this.mouseMoved(event));
     }
 
+    public getShootingRange(): number {
+        return this.shootingRange;
+    }
     public getSpeed(): number {
         return this.speed;
     }
@@ -86,7 +90,7 @@ export class PlayerNode extends CharacterNode {
     }
 
     private getAimingAngle(): number {
-        const positionInScene = new Vector2(this.getX() + this.getWidth() / 2, this.getY() - this.getHeight() / 2);
+        const positionInScene = new Vector2(this.getSceneBounds().centerX, this.getSceneBounds().centerY);
         const angleVector = this.mousePosition.clone().sub(positionInScene);
         const angle = Math.atan2(angleVector.x, angleVector.y);
         return angle + Math.PI * 3 / 2;
@@ -97,6 +101,7 @@ export class PlayerNode extends CharacterNode {
         context.save();
         const playerBounds = this.getBounds();
         const playerCenter = new Vector2(playerBounds.centerX, playerBounds.centerY);
+        console.log(this.aimingAngle);
         const endOfLine = new Vector2(
             playerCenter.x + this.shootingRange * Math.cos(this.aimingAngle),
             playerCenter.y - this.shootingRange * Math.sin(this.aimingAngle)

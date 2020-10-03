@@ -19,6 +19,7 @@ export class EnemyNode extends CharacterNode {
     private static sprite: Aseprite;
 
     // Character settings
+    private readonly shootingRange = 150;
     private readonly speed = 100;
     private readonly acceleration = 600;
     private readonly deceleration = 900;
@@ -62,6 +63,9 @@ export class EnemyNode extends CharacterNode {
         this.targetPosition = this.getPosition();
     }
 
+    public getShootingRange(): number {
+        return this.shootingRange;
+    }
     public getSpeed(): number {
         return this.speed;
     }

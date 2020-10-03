@@ -7,11 +7,12 @@ import { CollisionNode } from "./CollisionNode";
 
 // TODO define in some constants file
 const GRAVITY = 1200;
+const PROJECTILE_STEP_SIZE = 5;
 
 export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     // Character settings
-    protected shootingRange = 150;
+    public abstract getShootingRange(): number;
     public abstract getSpeed(): number;
     public abstract getAcceleration(): number;
     public abstract getDeceleration(): number;
@@ -89,22 +90,16 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     public shoot(angle: number): void {
-        // const scenePosition = this.getScenePosition();
-        // const origin = new Vector2(scenePosition.x, scenePosition.y - this.getHeight() * .5);
-        // const diffX = Math.cos(angle);
-        // const diffY = Math.sin(angle);
-        // let isColliding = false;
-        // for (let i = 0; i < this.shootingRange; i += PROJECTILE_STEP_SIZE) {
-        //     isColliding = this.getCollisionAt(origin.x + i * diffX, origin.y + i * diffY);
-        // }
-        // const endOfLine = new Vector2(origin.x + diffX * this.shootingRange, origin.y + diffY * this.shootingRange);
-        // const ctx = this.getScene()?.game.canvas.getContext("2d");
-        // if (ctx) {
-        //     this.aimLine = new Line2(origin, endOfLine);
-        //     this.aimLine.draw(ctx);
-        // }
-        // console.log(diffX, diffY);
-        // console.log(angle, isColliding);
+        const scenePosition = this.getScenePosition();
+        const origin = new Vector2(scenePosition.x, scenePosition.y - this.getHeight() * .5);
+        const diffX = Math.cos(angle);
+        const diffY = Math.sin(angle);
+        let isColliding = false;
+        for (let i = 0; i < this.getShootingRange(); i += PROJECTILE_STEP_SIZE) {
+            isColliding = this.getCollisionAt(origin.x + i * diffX, origin.y + i * diffY);
+        }
+        console.log(diffX, diffY);
+        console.log(angle, isColliding);
     }
 
     public hurt(): void {
@@ -116,14 +111,12 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         // Enemy collision
         // TODO
         // Level collision
-        /*
+
         const colliders = this.getColliders();
         const bounds = this.getBounds();
         const w = bounds.width, h = bounds.height;
         const px = x - w / 2, py = y - h;
         return y > 270 || colliders.some(c => c.collidesWithRectangle(px, py, w, h));
-*/
-        return y > 370;
     }
 
     @cacheResult
