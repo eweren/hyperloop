@@ -113,7 +113,7 @@ export class EnemyNode extends CharacterNode {
             const player = this.getScene()?.getNodeById("player") as PlayerNode;
             player?.hurt();
             // Return to follow state
-            this.setState(AiState.ATTACK);
+            this.setState(AiState.FOLLOW);
         }
     }
 
