@@ -20,9 +20,15 @@ export class PlayerNode extends CharacterNode {
         super.update(dt);
         // Controls
         const input = this.getScene()!.game.input;
+        // Run left/right
         const direction = (input.currentActiveIntents & ControllerIntent.PLAYER_MOVE_RIGHT ? 1 : 0)
                 - (input.currentActiveIntents & ControllerIntent.PLAYER_MOVE_LEFT ? 1 : 0);
         this.setDirection(direction);
+        // Jump
+        if (input.currentActiveIntents & ControllerIntent.PLAYER_JUMP) {
+            this.jump();
+        }
+        // Shoot
         if (input.currentActiveIntents & ControllerIntent.PLAYER_ACTION) {
             console.log("BUUUUM!");
         }
