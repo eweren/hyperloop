@@ -95,11 +95,14 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         // Enemy collision
         // TODO
         // Level collision
+        /*
         const colliders = this.getColliders();
         const bounds = this.getBounds();
         const w = bounds.width, h = bounds.height;
         const px = x - w / 2, py = y - h;
         return y > 270 || colliders.some(c => c.collidesWithRectangle(px, py, w, h));
+*/
+        return y > 370;
     }
 
     @cacheResult
