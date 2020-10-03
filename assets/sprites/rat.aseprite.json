@@ -1,0 +1,51 @@
+{ "frames": {
+   "rat 0.aseprite": {
+    "frame": { "x": 0, "y": 0, "w": 31, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
+    "sourceSize": { "w": 31, "h": 16 },
+    "duration": 250
+   },
+   "rat 1.aseprite": {
+    "frame": { "x": 31, "y": 0, "w": 31, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
+    "sourceSize": { "w": 31, "h": 16 },
+    "duration": 200
+   },
+   "rat 2.aseprite": {
+    "frame": { "x": 62, "y": 0, "w": 31, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
+    "sourceSize": { "w": 31, "h": 16 },
+    "duration": 800
+   },
+   "rat 3.aseprite": {
+    "frame": { "x": 93, "y": 0, "w": 31, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
+    "sourceSize": { "w": 31, "h": 16 },
+    "duration": 400
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.25-x64",
+  "image": "rat.png",
+  "format": "RGBA8888",
+  "size": { "w": 124, "h": 16 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 3, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
