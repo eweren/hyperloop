@@ -1,19 +1,21 @@
 import { Vector2 } from "../../engine/graphics/Vector2";
 import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
+import { cacheResult } from "../../engine/util/cache";
 import { clamp } from "../../engine/util/math";
 import { Hyperloop } from "../Hyperloop";
+import { CollisionNode } from "./CollisionNode";
 
 // TODO define in some constants file
 const GRAVITY = 1200;
 
-export class CharacterNode extends AsepriteNode<Hyperloop> {
+export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     // Character settings
     protected shootingRange = 150;
-    protected speed = 150;
-    private acceleration = 1200;
-    private deceleration = 1800;
-    private jumpPower = 380;
+    public abstract getSpeed(): number;
+    public abstract getAcceleration(): number;
+    public abstract getDeceleration(): number;
+    public abstract getJumpPower(): number;
 
     // Dynamic player state
     protected direction = 0;
@@ -23,24 +25,25 @@ export class CharacterNode extends AsepriteNode<Hyperloop> {
     public constructor(args: AsepriteNodeArgs) {
         super(args);
         this.velocity = new Vector2(0, 0);
+        this.setShowBounds(true);
     }
 
-    public update(dt: number): void {
-        super.update(dt);
+    public update(dt: number, time: number): void {
+        super.update(dt, time);
 
         // Acceleration
         let vx = 0;
         if (this.direction !== 0) {
             // Accelerate
             this.setTag("run");
-            vx = clamp(this.velocity.x + this.direction * this.acceleration * dt, -this.speed, this.speed);
+            vx = clamp(this.velocity.x + this.direction * this.getAcceleration() * dt, -this.getSpeed(), this.getSpeed());
         } else {
             // Brake down
             this.setTag("idle");
             if (this.velocity.x > 0) {
-                vx = clamp(this.velocity.x - this.deceleration * dt, 0, Infinity);
+                vx = clamp(this.velocity.x - this.getDeceleration() * dt, 0, Infinity);
             } else {
-                vx = clamp(this.velocity.x + this.deceleration * dt, -Infinity, 0);
+                vx = clamp(this.velocity.x + this.getDeceleration() * dt, -Infinity, 0);
             }
         }
 
@@ -81,7 +84,7 @@ export class CharacterNode extends AsepriteNode<Hyperloop> {
 
     public jump(factor = 1): void {
         if (this.isOnGround) {
-            this.velocity = new Vector2(this.velocity.x, -this.jumpPower * factor);
+            this.velocity = new Vector2(this.velocity.x, -this.getJumpPower() * factor);
         }
     }
 
@@ -104,8 +107,29 @@ export class CharacterNode extends AsepriteNode<Hyperloop> {
         // console.log(angle, isColliding);
     }
 
+    public hurt(): void {
+        // TODO reduce hit points or kill or something
+        this.jump(0.3);
+    }
+
     private getCollisionAt(x = this.getX(), y = this.getY()): boolean {
-        // Mocked collision detection
-        return (x <= 150 && y > 230) || y > 270 || x < 0 || x > 480;
+        // Enemy collision
+        // TODO
+        // Level collision
+        /*
+        const colliders = this.getColliders();
+        const bounds = this.getBounds();
+        const w = bounds.width, h = bounds.height;
+        const px = x - w / 2, py = y - h;
+        return y > 270 || colliders.some(c => c.collidesWithRectangle(px, py, w, h));
+*/
+        return y > 370;
+    }
+
+    @cacheResult
+    private getColliders(): CollisionNode[] {
+        const colliders = this.getScene()?.rootNode.getDescendantsByType(CollisionNode) ?? [];
+        colliders.forEach(c => c.setShowBounds(true));
+        return colliders;
     }
 }

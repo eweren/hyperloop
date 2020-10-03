@@ -124,10 +124,10 @@ export class Scenes<T extends Game> {
         });
     }
 
-    public update(dt: number): void {
+    public update(dt: number, time: number): void {
         this.sortedScenes.forEach(scene => {
             scene.currentTransition?.update(dt);
-            scene.update(dt);
+            scene.update(dt, time);
         });
     }
 

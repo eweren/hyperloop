@@ -7,6 +7,7 @@ import { Vector2, ReadonlyVector2 } from "../graphics/Vector2";
 import { Bounds2 } from "../graphics/Bounds2";
 import { Animation } from "./animations/Animation";
 import { Size2 } from "../graphics/Size2";
+import { Constructor } from "../util/types";
 
 /**
  * Hints which are returned to the scene after drawing the scene graph. These hints can suggest further actions after
@@ -1223,9 +1224,8 @@ export class SceneNode<T extends Game = Game> {
      * @param callback - The callback which checks if the iterated node is the one to look for.
      * @return The found matching descendant node or null if none.
      */
-    public findDescendant(callback: (node: SceneNode<T>) => boolean, thisArg: unknown = this):
-            SceneNode<T> | null {
-                let node = this.firstChild;
+    public findDescendant(callback: (node: SceneNode<T>) => boolean, thisArg: unknown = this): SceneNode<T> | null {
+        let node = this.firstChild;
         while (node != null && node !== this) {
             let next = node.firstChild;
             if (next == null) {
@@ -1288,12 +1288,38 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
+     * Returns the descendant node with the given type.
+     *
+     * @param type - The type to look for.
+     * @return The matching descendants. May be empty if none found.
+     */
+    public getDescendantsByType<T extends SceneNode>(type: Constructor<T>): T[] {
+        const descendants: T[] = [];
+        let node = this.firstChild;
+        while (node != null && node !== this) {
+            let next = node.firstChild;
+            if (next == null) {
+                next = node.nextSibling;
+            }
+            if (next == null) {
+                next = node.parent?.nextSibling ?? null;
+            }
+            if (node instanceof type) {
+                descendants.push(node);
+            }
+            node = next;
+        }
+        return descendants;
+    }
+
+    /**
      * Updates the bounds polygon of the node. The default implementation simply sets a bounding box. Specialized nodes
      * can overwrite this method to define a more specific polygon.
      *
      * @param bounds - The empty bounds polygon to be filled with points by this method.
      */
     protected updateBoundsPolygon(bounds: Polygon2): void {
+        bounds.clear();
         bounds.addVertex(new Vector2(0, 0));
         bounds.addVertex(new Vector2(this.size.width, 0));
         bounds.addVertex(new Vector2(this.size.width, this.size.height));
@@ -1330,6 +1356,7 @@ export class SceneNode<T extends Game = Game> {
     public getSceneBoundsPolygon(): Polygon2 {
         if ((this.valid & SceneNodeAspect.SCENE_BOUNDS) === 0) {
             const boundsPolygon = this.getBoundsPolygon();
+            this.sceneBoundsPolygon.clear();
             for (const vertex of boundsPolygon.vertices) {
                 this.sceneBoundsPolygon.addVertex(vertex.clone());
             }
@@ -1464,13 +1491,13 @@ export class SceneNode<T extends Game = Game> {
      * @param dt - The time in seconds since the last update.
      * @return Bit mask with used layers.
      */
-    protected updateAll(dt: number): number {
+    protected updateAll(dt: number, time: number): number {
         // Update this node and run animations
-        const postUpdate = this.update(dt);
+        const postUpdate = this.update(dt, time);
         this.updateAnimations(dt);
 
         // Update child nodes
-        const layers = this.updateChildren(dt) | this.getEffectiveLayer();
+        const layers = this.updateChildren(dt, time) | this.getEffectiveLayer();
 
         // When update method returned a post-update function then call it now
         if (postUpdate != null) {
@@ -1486,10 +1513,10 @@ export class SceneNode<T extends Game = Game> {
      * @param dt - The time in seconds since the last update.
      * @return Bit mask with used layers.
      */
-    protected updateChildren(dt: number): number {
+    protected updateChildren(dt: number, time: number): number {
         let layers = 0;
         this.forEachChild(child => {
-            layers |= child.updateAll(dt);
+            layers |= child.updateAll(dt, time);
         });
         return layers;
     }
@@ -1501,7 +1528,7 @@ export class SceneNode<T extends Game = Game> {
      * @param dt - The time in seconds since the last update.
      * @return Optional post-update function which is called after updating the child nodes.
      */
-    protected update(dt: number): void | (() => void) {}
+    protected update(dt: number, time: number): void | (() => void) {}
 
     /**
      * Recursively draws the bounds for this node and alls its child nodes as long as the [[showBounds]] for the node

@@ -163,9 +163,9 @@ export abstract class Scene<T extends Game = Game, A = void> {
      * scene graph then make sure to call the super method in your overwritten method or the scene graph will not be
      * updated.
      */
-    public update(dt: number): void {
+    public update(dt: number, time: number): void {
         this.camera.update(dt);
-        this.usedLayers = this.updateRootNode(dt);
+        this.usedLayers = this.updateRootNode(dt, time);
     }
 
     /**

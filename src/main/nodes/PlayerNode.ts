@@ -4,6 +4,7 @@ import { Direction } from "../../engine/geom/Direction";
 import { Line2 } from "../../engine/graphics/Line2";
 import { Vector2 } from "../../engine/graphics/Vector2";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
+import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { CharacterNode } from "./CharacterNode";
 
 export class PlayerNode extends CharacterNode {
@@ -16,17 +17,38 @@ export class PlayerNode extends CharacterNode {
     // for debug purposes
     private drawDebugStuff = true;
 
-    public constructor() {
+    // Character settings
+    private readonly speed = 150;
+    private readonly acceleration = 1200;
+    private readonly deceleration = 1800;
+    private readonly jumpPower = 380;
+
+    public constructor(args?: SceneNodeArgs) {
         super({
             aseprite: PlayerNode.sprite,
             anchor: Direction.BOTTOM,
-            tag: "idle"
+            tag: "idle",
+            id: "player",
+            ...args
         });
         window.addEventListener("pointermove", event => this.mouseMoved(event));
     }
 
-    public update(dt: number) {
-        super.update(dt);
+    public getSpeed(): number {
+        return this.speed;
+    }
+    public getAcceleration(): number {
+        return this.acceleration;
+    }
+    public getDeceleration(): number {
+        return this.deceleration;
+    }
+    public getJumpPower(): number {
+        return this.jumpPower;
+    }
+
+    public update(dt: number, time: number) {
+        super.update(dt, time);
         // Aiming
         this.aimingAngle = this.getAimingAngle();
         // Controls
@@ -90,6 +112,5 @@ export class PlayerNode extends CharacterNode {
         context.stroke();
         context.closePath();
         context.restore();
-
     }
 }

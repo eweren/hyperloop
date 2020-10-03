@@ -38,9 +38,9 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
      */
     public constructor({ aseprite, ...args }: AsepriteNodeArgs) {
         super({
+            ...args,
             width: aseprite.width,
             height: aseprite.height,
-            ...args
         });
         this.aseprite = aseprite;
         this.tag = args.tag ?? null;
@@ -105,7 +105,7 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
     }
 
     /** @inheritDoc */
-    public update(dt: number) {
+    public update(dt: number, time: number) {
         this.time += dt;
     }
 

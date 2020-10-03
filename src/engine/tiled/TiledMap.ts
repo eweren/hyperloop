@@ -12,10 +12,21 @@ import { TiledProperties } from "./TiledProperties";
 import { TiledTileset } from "./TiledTileset";
 
 export class TiledMap extends TiledProperties<TiledMapJSON> {
-    public static fromJSON(json: TiledMapJSON): TiledMap {
-        return new TiledMap(json);
+    public static fromJSON(json: TiledMapJSON, baseURL: string | URL): TiledMap {
+        return new TiledMap(json, baseURL);
     }
 
+    /**
+     * Loads the tiled map from the given source.
+     *
+     * @param source - The URL pointing to the JSON file of the tiled map.
+     * @return The loaded tiled map.
+     */
+    public static async load(source: string): Promise<TiledMap> {
+        const json = await (await fetch(source)).json() as TiledMapJSON;
+        const baseURL = new URL(source, location.href);
+        return TiledMap.fromJSON(json, baseURL);
+    }
     /**
      * Returns the optional background color.
      *
@@ -132,12 +143,12 @@ export class TiledMap extends TiledProperties<TiledMapJSON> {
      */
     @cacheResult
     public getTilesets(): readonly TiledTileset[] {
-        return this.json.tilesets.map(json => TiledTileset.fromJSON(json));
+        return this.json.tilesets.map(json => TiledTileset.fromJSON(json, this.baseURL));
     }
 
     @cacheResult
     public getLayers(): readonly TiledLayer[] {
-        return this.json.layers.map(json => TiledLayer.fromJSON(json));
+        return this.json.layers.map(json => TiledLayer.fromJSON(json, this.baseURL));
     }
 
     public getLayersByType<T extends TiledLayer>(type: Constructor<T>): readonly T[] {

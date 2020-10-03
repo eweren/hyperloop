@@ -5,7 +5,7 @@ import { Class } from "../util/types";
  * a type in constructor lists of caches and factories and stuff like that.
  */
 export interface Deserializable<T = unknown> extends Class {
-    fromJSON(json: unknown): T;
+    fromJSON(json: unknown, ...args: unknown[]): T;
 }
 
 /**
