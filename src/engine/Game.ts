@@ -69,6 +69,10 @@ export abstract class Game {
 
     }
 
+    public get input(): ControllerManager {
+        return this.controllerManager;
+    }
+
     private mouseMoved(): void {
         this.canvas.style.cursor = "default";
         this.mouseTimeout = MOUSE_TIMEOUT;
