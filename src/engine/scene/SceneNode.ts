@@ -260,7 +260,7 @@ export class SceneNode<T extends Game = Game> {
     public setX(x: number): this {
         if (x !== this.position.x) {
             this.position.x = x;
-            this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
+            this.invalidate(SceneNodeAspect.SCENE_POSITION);
         }
         return this;
     }
@@ -290,7 +290,7 @@ export class SceneNode<T extends Game = Game> {
     public setY(y: number): this {
         if (y !== this.position.y) {
             this.position.y = y;
-            this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
+            this.invalidate(SceneNodeAspect.SCENE_POSITION);
         }
         return this;
     }
