@@ -25,4 +25,11 @@ export class CollisionNode extends SceneNode<Hyperloop> {
         }
         return minX <= x1 + w && maxX >= x1 && minY <= y1 + h && maxY >= y1;
     }
+
+    public containsPoint(x: number, y: number): boolean {
+        const bounds = this.getBounds();
+        const minX = bounds.minX + this.getX(), minY = bounds.minY + this.getY(), maxX = bounds.maxX + this.getX(),
+                maxY = bounds.maxY + this.getY();
+        return x >= minX && x <= maxX && y >= minY && y <= maxY;
+    }
 }

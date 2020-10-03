@@ -4,6 +4,8 @@ import { cacheResult } from "../../engine/util/cache";
 import { clamp } from "../../engine/util/math";
 import { Hyperloop } from "../Hyperloop";
 import { CollisionNode } from "./CollisionNode";
+import { EnemyNode } from "./EnemyNode";
+import { PlayerNode } from "./PlayerNode";
 
 // TODO define in some constants file
 const GRAVITY = 1200;
@@ -67,12 +69,12 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             let newX = x + this.velocity.x * dt,
                 newY = y + this.velocity.y * dt;
             // X collision
-            if (this.getCollisionAt(newX, y)) {
+            if (this.getPlayerCollisionAt(newX, y)) {
                 newX = x;
                 this.velocity = new Vector2(0, this.velocity.y);
             }
             // Y collision
-            if (this.getCollisionAt(newX, newY)) {
+            if (this.getPlayerCollisionAt(newX, newY)) {
                 this.isOnGround = (this.velocity.y > 0);
                 newY = y;
                 this.velocity = new Vector2(this.velocity.x, 0);
@@ -105,7 +107,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         const diffY = Math.sin(angle);
         let isColliding = false;
         for (let i = 0; i < this.getShootingRange(); i += PROJECTILE_STEP_SIZE) {
-            isColliding = this.getCollisionAt(origin.x + i * diffX, origin.y + i * diffY);
+            isColliding = this.getPlayerCollisionAt(origin.x + i * diffX, origin.y + i * diffY);
         console.log(isColliding);
         }
     }
@@ -129,15 +131,14 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     public die(): void {
         this.hitpoints = 0;
+        this.setOpacity(0.5);
     }
 
     public isAlive(): boolean {
         return this.hitpoints > 0;
     }
 
-    private getCollisionAt(x = this.getX(), y = this.getY()): boolean {
-        // Enemy collision
-        // TODO
+    private getPlayerCollisionAt(x = this.getX(), y = this.getY()): boolean {
         // Level collision
         const colliders = this.getColliders();
         const bounds = this.getBounds();
@@ -146,9 +147,55 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         return y > 470 || colliders.some(c => c.collidesWithRectangle(px, py, w, h));
     }
 
+    private getPointCollision(x: number, y: number): CollisionNode | EnemyNode | PlayerNode | null {
+        // Enemies
+        if (this instanceof PlayerNode) {
+            // Player shooting enemies
+            const enemies = this.getEnemies();
+            for (const c of enemies) {
+                if (c.containsPoint(x, y)) {
+                    return c;
+                }
+            }
+        } else {
+            // Enemies shooting player (if this ever happens)
+            const enemies = this.getPlayers();
+            for (const c of enemies) {
+                if (c.containsPoint(x, y)) {
+                    return c;
+                }
+            }
+        }
+        // Level
+        const colliders = this.getColliders();
+        for (const c of colliders) {
+            if (c.containsPoint(x, y)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
     @cacheResult
     private getColliders(): CollisionNode[] {
         const colliders = this.getScene()?.rootNode.getDescendantsByType(CollisionNode) ?? [];
         return colliders;
+    }
+
+    public getEnemies(): EnemyNode[] {
+        const enemies = this.getScene()?.rootNode.getDescendantsByType(EnemyNode) ?? [];
+        return enemies;
+    }
+
+    public getPlayers(): PlayerNode[] {
+        const players = this.getScene()?.rootNode.getDescendantsByType(PlayerNode) ?? [];
+        return players;
+    }
+
+    public containsPoint(x: number, y: number): boolean {
+        const bounds = this.getBounds();
+        const minX = bounds.minX + this.getX(), minY = bounds.minY + this.getY(), maxX = bounds.maxX + this.getX(),
+                maxY = bounds.maxY + this.getY();
+        return x >= minX && x <= maxX && y >= minY && y <= maxY;
     }
 }
