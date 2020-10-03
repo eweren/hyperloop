@@ -118,5 +118,6 @@ export class PlayerNode extends CharacterNode {
         context.stroke();
         context.closePath();
         context.restore();
+        context.restore();
     }
 }
