@@ -29,5 +29,11 @@ export class GameScene extends Scene<Hyperloop> {
             map.getHeight() * map.getTileHeight()));
         new SwitchNode(false).moveTo(300, 380).appendTo(this.mapNode);
         new SwitchNode(true).moveTo(250, 380).appendTo(this.mapNode);
+        const ratEnemy = new EnemyNode({
+            id: "15",
+            x: 340,
+            y: 334.666666666667
+        }, "rat");
+        ratEnemy.appendTo(this.mapNode);
     }
 }

@@ -18,7 +18,10 @@ enum AiState {
 
 export class EnemyNode extends CharacterNode {
     @asset("sprites/female.aseprite.json")
-    private static sprite: Aseprite;
+    private static femaleSprite: Aseprite;
+
+    @asset("sprites/rat.aseprite.json")
+    private static ratSprite: Aseprite;
 
     // Character settings
     private readonly shootingRange = 150;
@@ -64,22 +67,23 @@ export class EnemyNode extends CharacterNode {
      */
     private moveAroundArterChase = false;
 
-    public constructor(args?: SceneNodeArgs) {
+    public constructor(args?: SceneNodeArgs, private enemyType: "rat" | "female" = "female") {
         super({
-            aseprite: EnemyNode.sprite,
+            aseprite: EnemyNode.femaleSprite,
             anchor: Direction.BOTTOM,
             tag: "idle",
             ...args
         });
         this.targetPosition = this.getPosition();
         this.moveAroundArterChase = true;
+        this.setAseprite(this.enemyType === 'female' ? EnemyNode.femaleSprite: EnemyNode.ratSprite);
     }
 
     protected updateBoundsPolygon(bounds: Polygon2): void {
-        const boundsWidth = 14;
-        const boundsHeight = 46;
+        const boundsWidth = this.enemyType === 'female' ? 14 : 20;
+        const boundsHeight = this.enemyType === 'female' ? 46 : 18;
         const offsetX = this.getWidth() / 2 - boundsWidth / 2;
-        const offsetY = 8;
+        const offsetY = this.enemyType === 'female' ? 8 : 0;
         bounds.clear();
         bounds.addVertex(new Vector2(offsetX, offsetY));
         bounds.addVertex(new Vector2(offsetX + boundsWidth, offsetY));
