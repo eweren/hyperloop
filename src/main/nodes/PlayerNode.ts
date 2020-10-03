@@ -16,6 +16,7 @@ export class PlayerNode extends CharacterNode {
     private mousePosition = new Vector2(0, 0);
     private aimingAngle = 0;
     private nextShot = 0;
+    private interactPressed = false;
 
     // for debug purposes
     private drawDebugStuff = true;
@@ -91,6 +92,16 @@ export class PlayerNode extends CharacterNode {
             if (time >= this.nextShot) {
                 this.shoot(this.aimingAngle, 50);
                 this.nextShot = time + this.shotDelay;
+            }
+        }
+        // Interact
+        const interactPressed = (input.currentActiveIntents & ControllerIntent.PLAYER_INTERACT) !== 0;
+        const prevPressed = this.interactPressed;
+        this.interactPressed = interactPressed;
+        if (interactPressed && !prevPressed) {
+            const node = this.getNodeToInteractWith();
+            if (node) {
+                node.interact();
             }
         }
     }

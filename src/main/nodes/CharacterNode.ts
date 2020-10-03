@@ -4,6 +4,7 @@ import { cacheResult } from "../../engine/util/cache";
 import { clamp } from "../../engine/util/math";
 import { Hyperloop } from "../Hyperloop";
 import { CollisionNode } from "./CollisionNode";
+import { InteractiveNode } from "./InteractiveNode";
 import { PlayerNode } from "./PlayerNode";
 
 // TODO define in some constants file
@@ -24,6 +25,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected velocity: Vector2;
     protected isOnGround = true;
     protected hitpoints = 100;
+    private canInteractWith: InteractiveNode | null = null;
 
     public constructor(args: AsepriteNodeArgs) {
         super(args);
@@ -187,5 +189,19 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         const bounds = this.getSceneBounds();
         const minX = bounds.minX, minY = bounds.minY, maxX = bounds.maxX, maxY = bounds.maxY;
         return x >= minX && x <= maxX && y >= minY && y <= maxY;
+    }
+
+    public registerInteractiveNode(node: InteractiveNode): void {
+        this.canInteractWith = node;
+    }
+
+    public unregisterInteractiveNode(node: InteractiveNode): void {
+        if (this.canInteractWith === node) {
+            this.canInteractWith = null;
+        }
+    }
+
+    public getNodeToInteractWith(): InteractiveNode | null {
+        return this.canInteractWith;
     }
 }
