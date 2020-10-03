@@ -1,5 +1,5 @@
 import { Vector2 } from "../../engine/graphics/Vector2";
-import { AsepriteNode } from "../../engine/scene/AsepriteNode";
+import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
 import { clamp } from "../../engine/util/math";
 import { Hyperloop } from "../Hyperloop";
 
@@ -9,6 +9,7 @@ const GRAVITY = 1200;
 export class CharacterNode extends AsepriteNode<Hyperloop> {
 
     // Character settings
+    protected shootingRange = 150;
     protected speed = 150;
     private acceleration = 1200;
     private deceleration = 1800;
@@ -19,7 +20,7 @@ export class CharacterNode extends AsepriteNode<Hyperloop> {
     protected velocity: Vector2;
     protected isOnGround = true;
 
-    public constructor(args: any) {
+    public constructor(args: AsepriteNodeArgs) {
         super(args);
         this.velocity = new Vector2(0, 0);
     }
@@ -82,6 +83,25 @@ export class CharacterNode extends AsepriteNode<Hyperloop> {
         if (this.isOnGround) {
             this.velocity = new Vector2(this.velocity.x, -this.jumpPower * factor);
         }
+    }
+
+    public shoot(angle: number): void {
+        // const scenePosition = this.getScenePosition();
+        // const origin = new Vector2(scenePosition.x, scenePosition.y - this.getHeight() * .5);
+        // const diffX = Math.cos(angle);
+        // const diffY = Math.sin(angle);
+        // let isColliding = false;
+        // for (let i = 0; i < this.shootingRange; i += PROJECTILE_STEP_SIZE) {
+        //     isColliding = this.getCollisionAt(origin.x + i * diffX, origin.y + i * diffY);
+        // }
+        // const endOfLine = new Vector2(origin.x + diffX * this.shootingRange, origin.y + diffY * this.shootingRange);
+        // const ctx = this.getScene()?.game.canvas.getContext("2d");
+        // if (ctx) {
+        //     this.aimLine = new Line2(origin, endOfLine);
+        //     this.aimLine.draw(ctx);
+        // }
+        // console.log(diffX, diffY);
+        // console.log(angle, isColliding);
     }
 
     private getCollisionAt(x = this.getX(), y = this.getY()): boolean {

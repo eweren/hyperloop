@@ -438,7 +438,7 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
-     * Returns the width of the node.
+     * Returns the height of the node.
      *
      * @return The node width.
      */
