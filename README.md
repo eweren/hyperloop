@@ -2,6 +2,8 @@
 
 ## Development
 
+Preview of master branch builds can be found [here](https://hyperloop.vercel.app/).
+
 ### Getting started
 
 * Install [Node.js](https://nodejs.org/)
