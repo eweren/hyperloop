@@ -7,7 +7,7 @@ export class CollisionNode extends SceneNode<Hyperloop> {
     public collidesWithRectangle(x1: Bounds2): boolean;
     public collidesWithRectangle(x1: number, y1: number, x2: number, y2: number): boolean;
     public collidesWithRectangle(x1: number | Bounds2, y1: number = 0, w: number = 0, h: number = 0): boolean {
-        const bounds = this.getBounds();
+        const bounds = this.getSceneBounds();
         if (x1 instanceof Bounds2) {
             y1 = x1.minY;
             w = x1.width;

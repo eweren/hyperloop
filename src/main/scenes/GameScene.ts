@@ -22,8 +22,8 @@ export class GameScene extends Scene<Hyperloop> {
 
     public setup() {
         this.mapNode.moveTo(GAME_WIDTH / 2, GAME_HEIGHT / 2).appendTo(this.rootNode).transform(m => m.scale(0.4));
-        this.playerNode.moveTo(GAME_WIDTH / 2, GAME_HEIGHT - 80).appendTo(this.rootNode);
-        this.enemyNode.moveTo(GAME_WIDTH * 0.9, GAME_HEIGHT - 50).appendTo(this.rootNode);
+        this.playerNode.moveTo(GAME_WIDTH / 2, GAME_HEIGHT - 85).appendTo(this.rootNode);
+        this.enemyNode.moveTo(GAME_WIDTH * 0.9, GAME_HEIGHT - 85).appendTo(this.rootNode);
         this.trainNode.moveTo(GAME_WIDTH * 0.1, GAME_HEIGHT - 10).appendTo(this.rootNode);
     }
 }

@@ -1,5 +1,6 @@
 import { Vector2 } from "../../engine/graphics/Vector2";
 import { AsepriteNode } from "../../engine/scene/AsepriteNode";
+import { cacheResult } from "../../engine/util/cache";
 import { clamp } from "../../engine/util/math";
 import { Hyperloop } from "../Hyperloop";
 import { CollisionNode } from "./CollisionNode";
@@ -13,7 +14,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public abstract getAcceleration(): number;
     public abstract getDeceleration(): number;
     public abstract getJumpPower(): number;
-    private colliders: CollisionNode[];
 
     // Dynamic player state
     protected direction = 0;
@@ -23,7 +23,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public constructor(args: any) {
         super(args);
         this.velocity = new Vector2(0, 0);
-        this.colliders = this.getScene()?.rootNode.getDescendantsByType(CollisionNode) ?? [];
+        this.setShowBounds(true);
     }
 
     public update(dt: number, time: number): void {
@@ -95,11 +95,17 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         // Enemy collision
         // TODO
         // Level collision
+        const colliders = this.getColliders();
         const bounds = this.getBounds();
         const w = bounds.width, h = bounds.height;
-        const px = x - w / 2, py = y - h / 2;
-        return y > 270 || this.colliders.some(c => {
-            c.collidesWithRectangle(px, py, w, h);
-        });
+        const px = x - w / 2, py = y - h;
+        return y > 270 || colliders.some(c => c.collidesWithRectangle(px, py, w, h));
+    }
+
+    @cacheResult
+    private getColliders(): CollisionNode[] {
+        const colliders = this.getScene()?.rootNode.getDescendantsByType(CollisionNode) ?? [];
+        colliders.forEach(c => c.setShowBounds(true));
+        return colliders;
     }
 }
