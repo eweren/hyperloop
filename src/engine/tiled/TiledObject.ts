@@ -1,4 +1,7 @@
 import type { TiledLayerJSON, TiledObjectGroupLayerJSON, TiledObjectJSON } from "*.tiledmap.json";
+import { Polygon2 } from "../graphics/Polygon2";
+import { Vector2 } from "../graphics/Vector2";
+import { cacheResult } from "../util/cache";
 import { TiledProperties } from "./TiledProperties";
 
 export function isTiledObjectGroupLayerJSON(json: TiledLayerJSON): json is TiledObjectGroupLayerJSON {
@@ -12,6 +15,22 @@ export class TiledObject extends TiledProperties<TiledObjectJSON> {
 
     public static fromJSON(json: TiledObjectJSON, baseURL: string | URL): TiledObject {
         return new TiledObject(json, baseURL);
+    }
+
+    @cacheResult
+    public getPolygon(): Polygon2 | null {
+        if (this.json.polygon == null) {
+            return null;
+        }
+        const polygon = new Polygon2();
+        for (const point of this.json.polygon) {
+            polygon.addVertex(new Vector2(point.x, point.y));
+        }
+        return polygon;
+    }
+
+    public isEllipse(): boolean {
+        return this.json.ellipse === true;
     }
 
     public getId(): number {

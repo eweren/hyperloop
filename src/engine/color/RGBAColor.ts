@@ -5,6 +5,9 @@ import { WritableArrayLike } from "../util/types";
 import { Color } from "./Color";
 import { RGBColor } from "./RGBColor";
 
+/** Regular expression to parse RGBA color in HTML format. */
+const RGBAColorHTMLRegExp = /^\s*#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})\s*$/i;
+
 /** Regular expression to parse RGBA color in CSS format. */
 const RGBAColorCSSRegExp = /^\s*rgba\s*\(\s*([+-]?\d*(?:\.\d+)?(?:e[+-]?\d+)?%?)\s*[\s,]\s*([+-]?\d*(?:\.\d+)?(?:e[+-]?\d+)?%?)\s*[\s,]\s*([+-]?\d*(?:\.\d+)?(?:e[+-]?\d+)?%?)\s*[\s,]\s*([+-]?\d*(?:\.\d+)?(?:e[+-]?\d+)?)\s*\)\s*$/i;
 
@@ -56,13 +59,22 @@ export class RGBAColor implements Color {
      * @return The parsed RGBA color.
      */
     public static fromString(s: string): RGBAColor {
-        const match = RGBAColorCSSRegExp.exec(s);
+        let match = RGBAColorCSSRegExp.exec(s);
         if (match != null) {
             return new RGBAColor(
                 parseFloat(match[1]) / (match[1].endsWith("%") ? 100 : 255),
                 parseFloat(match[2]) / (match[2].endsWith("%") ? 100 : 255),
                 parseFloat(match[3]) / (match[3].endsWith("%") ? 100 : 255),
                 parseFloat(match[4])
+            );
+        }
+        match = RGBAColorHTMLRegExp.exec(s);
+        if (match != null) {
+            return new RGBAColor(
+                parseInt(match[2], 16) / 255,
+                parseInt(match[3], 16) / 255,
+                parseInt(match[4], 16) / 255,
+                parseInt(match[1], 16) / 255
             );
         }
         throw new Error("Invalid RGBA color format: " + s);
@@ -207,5 +219,15 @@ export class RGBAColor implements Color {
      */
     public getAlpha(): number {
         return this.alpha;
+    }
+
+    /** @inheritDoc */
+    public darken(factor: number): RGBAColor {
+        return new RGBAColor(
+            this.red * (1 - factor),
+            this.green * (1 - factor),
+            this.blue * (1 - factor),
+            this.alpha
+        );
     }
 }

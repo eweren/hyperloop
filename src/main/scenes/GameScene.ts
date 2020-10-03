@@ -8,6 +8,7 @@ import { CollisionNode } from "../nodes/CollisionNode";
 import { EnemyNode } from "../nodes/EnemyNode";
 import { TrainNode } from "../nodes/TrainNode";
 import { Rect } from "../../engine/geom/Rect";
+import { LightNode } from "../nodes/LightNode";
 
 export class GameScene extends Scene<Hyperloop> {
     @asset("map/map.tiledmap.json")
@@ -17,7 +18,8 @@ export class GameScene extends Scene<Hyperloop> {
         "collision": CollisionNode,
         "player": PlayerNode,
         "enemy": EnemyNode,
-        "train": TrainNode
+        "train": TrainNode,
+        "light": LightNode
     }});
 
     public setup() {
@@ -26,5 +28,6 @@ export class GameScene extends Scene<Hyperloop> {
         this.camera.setFollow(this.mapNode.getDescendantById("Player"));
         this.camera.setLimits(new Rect(0, 0, map.getWidth() * map.getTileWidth(),
             map.getHeight() * map.getTileHeight()));
+        this.setLightLayers([ 1 ]);
     }
 }

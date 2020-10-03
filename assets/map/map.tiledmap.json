@@ -22,7 +22,7 @@
          "width":64,
          "x":0,
          "y":0
-        },
+        }, 
         {
          "compression":"zlib",
          "data":"eJztzuVNA1AARtHugBTfAdcdkOI74LoDrjsUKTogZ4mXF5LvJuf\/bTRSSimllFJKKaWU\/ldddNNDL0366GeAQYYYZqTSY8lGGWOcCSaZYpoZZpljnoVKjyVbZIllVmixyhrrbLDJFtuVHku2wy577HPAIUccc8IpZ5xXeizZBZdccc0Nt9xxzwOPPPFc6bFkbV545Y13OnzwyRff\/PBb6TGllFL9\/gA02Bv9",
@@ -36,7 +36,7 @@
          "width":64,
          "x":0,
          "y":0
-        },
+        }, 
         {
          "compression":"zlib",
          "data":"eJzt1sEJADAMA7F0kk6S\/dfqEoUQrAP9\/XRXVQMAAAT41ebtkiQpqxPuhpv+38CcBw4UEjk=",
@@ -46,11 +46,11 @@
          "name":"collisions",
          "opacity":1,
          "type":"tilelayer",
-         "visible":false,
+         "visible":true,
          "width":64,
          "x":0,
          "y":0
-        },
+        }, 
         {
          "draworder":"topdown",
          "id":4,
@@ -72,7 +72,7 @@
                  "width":1152,
                  "x":0,
                  "y":400
-                },
+                }, 
                 {
                  "height":234.666666666667,
                  "id":9,
@@ -89,7 +89,7 @@
                  "width":1150.66666666667,
                  "x":2.66666666666667,
                  "y":0
-                },
+                }, 
                 {
                  "height":28,
                  "id":11,
@@ -106,7 +106,7 @@
                  "width":514.666666666667,
                  "x":329.333333333333,
                  "y":221.333333333333
-                },
+                }, 
                 {
                  "height":0,
                  "id":13,
@@ -118,7 +118,7 @@
                  "width":0,
                  "x":424,
                  "y":337.333333333333
-                },
+                }, 
                 {
                  "height":0,
                  "id":14,
@@ -130,7 +130,7 @@
                  "width":0,
                  "x":581.333333333333,
                  "y":334.666666666667
-                },
+                }, 
                 {
                  "height":0,
                  "id":15,
@@ -148,9 +148,231 @@
          "visible":true,
          "x":0,
          "y":0
+        }, 
+        {
+         "color":"#ffff00",
+         "draworder":"topdown",
+         "id":5,
+         "name":"lights",
+         "objects":[
+                {
+                 "height":562,
+                 "id":26,
+                 "name":"Ambient",
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#19ffffff"
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":1200,
+                 "x":-26,
+                 "y":-30
+                }, 
+                {
+                 "height":0,
+                 "id":27,
+                 "name":"Trainlight",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":-326.666666666667,
+                         "y":30.6666666666667
+                        }, 
+                        {
+                         "x":-54.6666666666666,
+                         "y":30.6666666666666
+                        }],
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#dcffff00"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":500
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":954,
+                 "y":370
+                }, 
+                {
+                 "height":0,
+                 "id":29,
+                 "name":"",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":-42.6666666666666,
+                         "y":116
+                        }, 
+                        {
+                         "x":34.6666666666667,
+                         "y":118.666666666667
+                        }],
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ff0000ff"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":300
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":756.666666666667,
+                 "y":283.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":30,
+                 "name":"",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":-116,
+                         "y":112
+                        }, 
+                        {
+                         "x":-14,
+                         "y":112.666666666667
+                        }],
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ff00ff00"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":300
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":846,
+                 "y":289.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":31,
+                 "name":"",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":-24.6666666666666,
+                         "y":114.666666666667
+                        }, 
+                        {
+                         "x":70.6666666666666,
+                         "y":115.333333333333
+                        }],
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff0000"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":300
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":681.333333333333,
+                 "y":286.666666666667
+                }, 
+                {
+                 "ellipse":true,
+                 "height":76,
+                 "id":32,
+                 "name":"Light 3",
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff00ff"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":150
+                        }],
+                 "rotation":22.9886301453237,
+                 "type":"light",
+                 "visible":true,
+                 "width":147.333333333333,
+                 "x":516.024606493417,
+                 "y":276.91413369267
+                }, 
+                {
+                 "height":0,
+                 "id":33,
+                 "name":"Point LIght",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ff55ffff"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":906.666666666667,
+                 "y":344
+                }],
+         "opacity":1,
+         "properties":[
+                {
+                 "name":"layer",
+                 "type":"int",
+                 "value":1
+                }],
+         "tintcolor":"#ff0000",
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":5,
- "nextobjectid":16,
+ "nextlayerid":6,
+ "nextobjectid":34,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",

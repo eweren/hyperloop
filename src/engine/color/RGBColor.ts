@@ -207,4 +207,13 @@ export class RGBColor implements Color {
     public getBlue(): number {
         return this.blue;
     }
+
+    /** @inheritDoc */
+    public darken(factor: number): RGBColor {
+        return new RGBColor(
+            this.red * (1 - factor),
+            this.green * (1 - factor),
+            this.blue * (1 - factor)
+        );
+    }
 }

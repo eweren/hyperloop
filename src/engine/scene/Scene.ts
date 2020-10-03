@@ -6,6 +6,7 @@ import { Transition } from "./Transition";
 import { RootNode, UpdateRootNode, DrawRootNode } from "./RootNode";
 import { SceneNode } from "./SceneNode";
 import { Camera } from "./Camera";
+import { createCanvas, getRenderingContext } from "../util/graphics";
 
 /**
  * Constructor type of a scene.
@@ -33,6 +34,7 @@ export abstract class Scene<T extends Game = Game, A = void> {
     private drawRootNode!: DrawRootNode;
     private usedLayers: number = 0;
     private hiddenLayers: number = 0;
+    private lightLayers: number = 0;
     private backgroundStyle: string | null = null;
 
     public readonly camera: Camera<T>;
@@ -96,6 +98,32 @@ export abstract class Scene<T extends Game = Game, A = void> {
      */
     public isLayerShown(layer: number): boolean {
         return (this.hiddenLayers & (1 << layer)) === 0;
+    }
+
+    /**
+     * Sets the layers which are handled as lighting layers. The nodes rendered in this layer are multiplied with the
+     * layers beneath them to achieve dynamic illumination.
+     *
+     * @param lightLayers - The light layers to set.
+     */
+    public setLightLayers(lightLayers: number[]): this {
+        this.lightLayers = lightLayers.reduce((layers, layer) => layers | (1 << layer), 0);
+        return this;
+    }
+
+    /**
+     * Returns the layers which are handled as lighting layers.
+     *
+     * @return The light layers.
+     */
+    public getLightLayers(): number[] {
+        const lightLayers: number[] = [];
+        for (let layer = 0; layer < 32; ++layer) {
+            if ((this.lightLayers & (1 << layer)) !== 0) {
+                lightLayers.push(layer);
+            }
+        }
+        return lightLayers;
     }
 
     /**
@@ -185,12 +213,29 @@ export abstract class Scene<T extends Game = Game, A = void> {
             ctx.restore();
         }
         ctx.save();
+        const reverseCameraTransformation = this.camera.getSceneTransformation().clone().invert();
         const postDraw = this.camera.draw(ctx, width, height);
         let layer = 1;
         let usedLayers = this.usedLayers & ~this.hiddenLayers;
         while (usedLayers !== 0) {
             if ((usedLayers & 1) === 1) {
-                this.drawRootNode(ctx, layer, width, height);
+                const light = (this.lightLayers & layer) !== 0;
+                if (light) {
+                    ctx.save();
+                    const canvas = createCanvas(width, height);
+                    const tmpCtx = getRenderingContext(canvas, "2d");
+                    tmpCtx.fillStyle = "#000";
+                    tmpCtx.fillRect(0, 0, width * 200, height * 200);
+                    this.camera.getSceneTransformation().setCanvasTransform(tmpCtx);
+                    tmpCtx.globalCompositeOperation = "screen";
+                    this.drawRootNode(tmpCtx, layer, width, height);
+                    ctx.globalCompositeOperation = "multiply";
+                    reverseCameraTransformation.transformCanvas(ctx);
+                    ctx.drawImage(canvas, 0, 0);
+                    ctx.restore();
+                } else {
+                    this.drawRootNode(ctx, layer, width, height);
+                }
             }
             usedLayers >>>= 1;
             layer <<= 1;

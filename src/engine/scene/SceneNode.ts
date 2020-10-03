@@ -1319,7 +1319,6 @@ export class SceneNode<T extends Game = Game> {
      * @param bounds - The empty bounds polygon to be filled with points by this method.
      */
     protected updateBoundsPolygon(bounds: Polygon2): void {
-        bounds.clear();
         bounds.addVertex(new Vector2(0, 0));
         bounds.addVertex(new Vector2(this.size.width, 0));
         bounds.addVertex(new Vector2(this.size.width, this.size.height));
@@ -1333,6 +1332,7 @@ export class SceneNode<T extends Game = Game> {
      */
     public getBoundsPolygon(): Polygon2 {
         if ((this.valid & SceneNodeAspect.BOUNDS) === 0) {
+            this.boundsPolygon.clear();
             this.updateBoundsPolygon(this.boundsPolygon);
             this.valid |= SceneNodeAspect.BOUNDS;
         }

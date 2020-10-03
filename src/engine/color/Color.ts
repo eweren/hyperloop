@@ -33,6 +33,14 @@ export interface Color {
      * @return The RGBA color.
      */
     toRGBA(): RGBAColor;
+
+    /**
+     * Darkens the color by the given factor and returns the new darker color.
+     *
+     * @param factor - The darkening factor (0.0 - 1.0)
+     * @return The darker color.
+     */
+    darken(factor: number): Color;
 }
 
 export namespace Color {
