@@ -7,6 +7,7 @@ import { Vector2 } from "../../engine/graphics/Vector2";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { CharacterNode } from "./CharacterNode";
+import { EnemyNode } from "./EnemyNode";
 
 export class PlayerNode extends CharacterNode {
     @asset("sprites/female.aseprite.json")
@@ -34,6 +35,7 @@ export class PlayerNode extends CharacterNode {
             ...args
         });
         window.addEventListener("pointermove", event => this.mouseMoved(event));
+        console.log("Player: ", this);
     }
 
     public getShootingRange(): number {
@@ -66,6 +68,10 @@ export class PlayerNode extends CharacterNode {
 
     public update(dt: number, time: number) {
         super.update(dt, time);
+        if (!this.isAlive()) {
+            this.setDirection(0);
+            return;
+        }
         // Aiming
         this.aimingAngle = this.getAimingAngle();
         // Controls
@@ -144,5 +150,10 @@ export class PlayerNode extends CharacterNode {
         context.closePath();
         context.restore();
         context.restore();
+    }
+
+    public getEnemies(): EnemyNode[] {
+        const enemies = this.getScene()?.rootNode.getDescendantsByType(EnemyNode) ?? [];
+        return enemies;
     }
 }

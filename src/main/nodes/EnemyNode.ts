@@ -92,6 +92,10 @@ export class EnemyNode extends CharacterNode {
 
     public update(dt: number, time: number) {
         super.update(dt, time);
+        if (!this.isAlive()) {
+            this.setDirection(0);
+            return;
+        }
         // AI
         switch (this.state) {
             case AiState.BORED:
@@ -111,7 +115,8 @@ export class EnemyNode extends CharacterNode {
     }
 
     private getPlayer(): PlayerNode | undefined {
-        return this.getScene()?.rootNode.getDescendantsByType(PlayerNode)[0];
+        const player = this.getScene()?.rootNode.getDescendantsByType(PlayerNode)[0];
+        return player?.isAlive() ? player : undefined;
     }
 
     private updateSearch(time: number): void {
@@ -123,26 +128,26 @@ export class EnemyNode extends CharacterNode {
                 // Player spotted!
                 this.setState(AiState.FOLLOW, time);
                 this.targetPosition = player.getPosition();
-            } else {
-                if (this.state === AiState.ALERT || this.state === AiState.BORED) {
-                    // randomly change looking direction
-                    const lookDirectionChangeDelay = this.state === AiState.ALERT ? this.HIGH_ALERT_CHANGE_DELAY : this.LOW_ALERT_CHANGE_DELAY;
-                    const chance = this.state === AiState.ALERT ? 20 : 5;
-                    if (rnd(1, 100) < chance && this.lastLookDirectionChange + lookDirectionChangeDelay < time) {
-                        this.setMirrorX(!this.isMirrorX());
-                        this.lastLookDirectionChange = time;
-                    }
-                }
-
-                // check if it is time to be bored or alerted
-                if (this.state !== AiState.BORED
-                    && rnd(1, 100) < 5 && this.lastStateChange + this.minAlertDuration < time) {
-                    // first transfer to alert and from alert to bored state
-                    const newState = this.state === AiState.ALERT ? AiState.BORED : AiState.ALERT;
-                    this.setState(newState, time);
-                    this.setDirection(0);
-                }
+                return;
             }
+        }
+        if (this.state === AiState.ALERT || this.state === AiState.BORED) {
+            // randomly change looking direction
+            const lookDirectionChangeDelay = this.state === AiState.ALERT ? this.HIGH_ALERT_CHANGE_DELAY : this.LOW_ALERT_CHANGE_DELAY;
+            const chance = this.state === AiState.ALERT ? 20 : 5;
+            if (rnd(1, 100) < chance && this.lastLookDirectionChange + lookDirectionChangeDelay < time) {
+                this.setMirrorX(!this.isMirrorX());
+                this.lastLookDirectionChange = time;
+            }
+        }
+
+        // check if it is time to be bored or alerted
+        if (this.state !== AiState.BORED
+            && rnd(1, 100) < 5 && this.lastStateChange + this.minAlertDuration < time) {
+            // first transfer to alert and from alert to bored state
+            const newState = this.state === AiState.ALERT ? AiState.BORED : AiState.ALERT;
+            this.setState(newState, time);
+            this.setDirection(0);
         }
     }
 
@@ -198,7 +203,12 @@ export class EnemyNode extends CharacterNode {
         if (time > this.lastStateChange + this.attackDelay) {
             // Hurt player
             const player = this.getPlayer();
-            player?.hurt();
+            const playerDied = player?.hurt(35);
+            if (playerDied) {
+                this.setState(AiState.BORED, time);
+                this.setDirection(0);
+                return;
+            }
             // Return to follow state
             this.setState(AiState.FOLLOW, time);
         }

@@ -22,6 +22,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected direction = 0;
     protected velocity: Vector2;
     protected isOnGround = true;
+    protected hitpoints = 100;
 
     public constructor(args: AsepriteNodeArgs) {
         super(args);
@@ -48,6 +49,11 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             } else {
                 vx = clamp(this.velocity.x + tractionFactor * this.getDeceleration() * dt, -Infinity, 0);
             }
+        }
+        // Death animation
+        if (!this.isAlive()) {
+            // TODO death animation
+            this.setTag("jump");
         }
 
         // Gravity
@@ -87,7 +93,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     public jump(factor = 1): void {
-        if (this.isOnGround) {
+        if (this.isOnGround && this.isAlive()) {
             this.velocity = new Vector2(this.velocity.x, -this.getJumpPower() * factor);
         }
     }
@@ -104,9 +110,29 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         }
     }
 
-    public hurt(): void {
+    /**
+     * Deal damage to the character.
+     *
+     * @param damage - Damage dealt, number > 0
+     * @return True if hurt character dies, false otherwise.
+     */
+    public hurt(damage: number): boolean {
         // TODO reduce hit points or kill or something
         this.jump(0.3);
+        this.hitpoints -= damage;
+        if (this.hitpoints <= 0) {
+            this.die();
+            return true;
+        }
+        return false;
+    }
+
+    public die(): void {
+        this.hitpoints = 0;
+    }
+
+    public isAlive(): boolean {
+        return this.hitpoints > 0;
     }
 
     private getCollisionAt(x = this.getX(), y = this.getY()): boolean {
