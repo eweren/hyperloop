@@ -1,16 +1,17 @@
 import { Color } from "../../engine/color/Color";
-import { RGBAColor } from "../../engine/color/RGBAColor";
 import { RGBColor } from "../../engine/color/RGBColor";
 import { Direction } from "../../engine/geom/Direction";
 import { Polygon2 } from "../../engine/graphics/Polygon2";
-import { SceneNode, SceneNodeArgs, SceneNodeAspect } from "../../engine/scene/SceneNode";
+import { SceneNode, SceneNodeAspect } from "../../engine/scene/SceneNode";
 import { TiledSceneArgs } from "../../engine/scene/TiledMapNode";
+import { radians } from "../../engine/util/math";
 
 export class LightNode extends SceneNode {
     private color: Color;
     private readonly polygon: Polygon2 | null;
     private readonly ellipse: boolean;
     private readonly intensity: number;
+    private readonly rotation: number;
     private gradient: Color[] = [];
 
     public constructor(args?: TiledSceneArgs) {
@@ -19,6 +20,7 @@ export class LightNode extends SceneNode {
         this.polygon = args?.tiledObject?.getPolygon() ?? null;
         this.ellipse = args?.tiledObject?.isEllipse() ?? false;
         this.intensity = args?.tiledObject?.getOptionalProperty("intensity", "int")?.getValue() ?? 100;
+        this.rotation = args?.tiledObject?.getOptionalProperty("rotation", "float")?.getValue() ?? 0;
         this.updateGradient();
     }
 
@@ -57,6 +59,21 @@ export class LightNode extends SceneNode {
         }
     }
 
+    public update(dt: number) {
+        if (this.rotation !== 0) {
+            this.transform(m => {
+                const v = this.polygon?.vertices[0];
+                if (v) {
+                    m.translate(v.x, v.y);
+                }
+                m.rotate(radians(this.rotation) * dt);
+                if (v) {
+                    m.translate(-v.x, -v.y);
+                }
+            });
+        }
+    }
+
     public draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.beginPath();
@@ -65,8 +82,9 @@ export class LightNode extends SceneNode {
         const height = this.getHeight();
         if (this.polygon != null) {
             this.polygon.draw(ctx);
-            const normal = this.polygon.getVertexNormal(0);
-            const gradient = ctx.createLinearGradient(0, 0, normal.x * intensity, normal.y * intensity);
+            const v = this.polygon.vertices[0];
+            const n = this.polygon.getVertexNormal(0);
+            const gradient = ctx.createLinearGradient(v.x, v.y, v.x + n.x * intensity, v.y + n.y * intensity);
             for (let i = 0, count = this.gradient.length - 1; i <= count; i++) {
                 gradient.addColorStop(i / count, this.gradient[i].toString());
             }

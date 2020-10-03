@@ -11,6 +11,20 @@
  "layers":[
         {
          "compression":"zlib",
+         "data":"eJzt1sEJADAMA7F0kk6S\/dfqEoUQrAP9\/XRXVQMAAAT41ebtkiQpqxPuhpv+38CcBw4UEjk=",
+         "encoding":"base64",
+         "height":28,
+         "id":1,
+         "name":"collisions",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":64,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "compression":"zlib",
          "data":"eJztwwENwCAQALFnRsDI0D5pE3Jt0hkAAICGd+Yr3\/Er\/saf+McpP\/E3HoCmH2GXZ1A=",
          "encoding":"base64",
          "height":28,
@@ -30,20 +44,6 @@
          "height":28,
          "id":3,
          "name":"assets",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
-         "width":64,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "compression":"zlib",
-         "data":"eJzt1sEJADAMA7F0kk6S\/dfqEoUQrAP9\/XRXVQMAAAT41ebtkiQpqxPuhpv+38CcBw4UEjk=",
-         "encoding":"base64",
-         "height":28,
-         "id":1,
-         "name":"collisions",
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
@@ -163,7 +163,7 @@
                         {
                          "name":"color",
                          "type":"color",
-                         "value":"#19ffffff"
+                         "value":"#32ffffff"
                         }],
                  "rotation":0,
                  "type":"light",
@@ -210,7 +210,7 @@
                 {
                  "height":0,
                  "id":29,
-                 "name":"",
+                 "name":"Light 2",
                  "polygon":[
                         {
                          "x":0,
@@ -245,19 +245,19 @@
                 {
                  "height":0,
                  "id":30,
-                 "name":"",
+                 "name":"Light 3",
                  "polygon":[
                         {
-                         "x":0,
-                         "y":0
+                         "x":-17.2188247813418,
+                         "y":34.0581343821691
                         }, 
                         {
-                         "x":-116,
-                         "y":112
+                         "x":-204.704807246574,
+                         "y":186.664487490759
                         }, 
                         {
-                         "x":-14,
-                         "y":112.666666666667
+                         "x":-59.0953768333777,
+                         "y":264.76273025974
                         }],
                  "properties":[
                         {
@@ -269,30 +269,35 @@
                          "name":"intensity",
                          "type":"int",
                          "value":300
+                        }, 
+                        {
+                         "name":"rotation",
+                         "type":"float",
+                         "value":45
                         }],
-                 "rotation":0,
+                 "rotation":359.655641804386,
                  "type":"light",
                  "visible":true,
                  "width":0,
-                 "x":846,
-                 "y":289.333333333333
+                 "x":844.930432318116,
+                 "y":288.640936212545
                 }, 
                 {
                  "height":0,
                  "id":31,
-                 "name":"",
+                 "name":"Light 1",
                  "polygon":[
                         {
                          "x":0,
                          "y":0
                         }, 
                         {
-                         "x":-24.6666666666666,
-                         "y":114.666666666667
+                         "x":-76,
+                         "y":161.333333333333
                         }, 
                         {
-                         "x":70.6666666666666,
-                         "y":115.333333333333
+                         "x":100,
+                         "y":164.666666666667
                         }],
                  "properties":[
                         {
@@ -304,19 +309,24 @@
                          "name":"intensity",
                          "type":"int",
                          "value":300
+                        }, 
+                        {
+                         "name":"rotation",
+                         "type":"float",
+                         "value":-90
                         }],
                  "rotation":0,
                  "type":"light",
                  "visible":true,
                  "width":0,
                  "x":681.333333333333,
-                 "y":286.666666666667
+                 "y":339.333333333333
                 }, 
                 {
                  "ellipse":true,
                  "height":76,
                  "id":32,
-                 "name":"Light 3",
+                 "name":"Light 4",
                  "properties":[
                         {
                          "name":"color",
@@ -357,6 +367,81 @@
                  "width":0,
                  "x":906.666666666667,
                  "y":344
+                }, 
+                {
+                 "height":0,
+                 "id":34,
+                 "name":"Floodlight",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":20,
+                         "y":117.333333333333
+                        }, 
+                        {
+                         "x":612.666666666667,
+                         "y":118
+                        }],
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffffffff"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":1000
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":112.666666666667,
+                 "y":284
+                }, 
+                {
+                 "height":0,
+                 "id":35,
+                 "name":"Light 1",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":-76,
+                         "y":161.333
+                        }, 
+                        {
+                         "x":100,
+                         "y":164.667
+                        }],
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff0000"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":300
+                        }, 
+                        {
+                         "name":"rotation",
+                         "type":"float",
+                         "value":-90
+                        }],
+                 "rotation":178.652116084996,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":681.266730875526,
+                 "y":339.695277516929
                 }],
          "opacity":1,
          "properties":[
@@ -372,7 +457,7 @@
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":34,
+ "nextobjectid":36,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",
