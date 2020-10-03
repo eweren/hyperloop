@@ -7,7 +7,7 @@ import { TiledMapNode } from "../../engine/scene/TiledMapNode";
 import { CollisionNode } from "../nodes/CollisionNode";
 
 export class GameScene extends Scene<Hyperloop> {
-    @asset("map/main.tiledmap.json")
+    @asset("map/map.tiledmap.json")
     private static map: TiledMap;
 
     private mapNode = new TiledMapNode({ map: GameScene.map, objects: {
