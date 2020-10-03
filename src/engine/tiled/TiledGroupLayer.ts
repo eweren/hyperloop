@@ -7,7 +7,7 @@ export function isTiledGroupLayerJSON(json: TiledLayerJSON): json is TiledGroupL
 }
 
 export class TiledGroupLayer extends AbstractTiledLayer<TiledGroupLayerJSON> {
-    public static fromJSON(json: TiledGroupLayerJSON): TiledGroupLayer {
-        return new TiledGroupLayer(json);
+    public static fromJSON(json: TiledGroupLayerJSON, baseURL: string | URL): TiledGroupLayer {
+        return new TiledGroupLayer(json, baseURL);
     }
 }

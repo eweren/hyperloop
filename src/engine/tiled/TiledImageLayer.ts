@@ -7,7 +7,7 @@ export function isTiledImageLayerJSON(json: TiledLayerJSON): json is TiledImageL
 }
 
 export class TiledImageLayer extends AbstractTiledLayer<TiledImageLayerJSON> {
-    public static fromJSON(json: TiledImageLayerJSON): TiledImageLayer {
-        return new TiledImageLayer(json);
+    public static fromJSON(json: TiledImageLayerJSON, baseURL: string | URL): TiledImageLayer {
+        return new TiledImageLayer(json, baseURL);
     }
 }

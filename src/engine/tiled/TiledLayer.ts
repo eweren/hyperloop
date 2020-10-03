@@ -3,7 +3,8 @@ import { TiledLayerJSON, TiledLayerType } from "*.tiledmap.json";
 import { AbstractTiledLayer } from "./AbstractTiledLayer";
 import { isTiledGroupLayerJSON, TiledGroupLayer } from "./TiledGroupLayer";
 import { isTiledImageLayerJSON, TiledImageLayer } from "./TiledImageLayer";
-import { isTiledObjectGroupLayerJSON, TiledObjectGroupLayer } from "./TiledObjectGroupLayer";
+import { isTiledObjectGroupLayerJSON } from "./TiledObject";
+import { TiledObjectGroupLayer } from "./TiledObjectGroupLayer";
 import { isTiledTileLayerJSON, TiledTileLayer } from "./TiledTileLayer";
 
 export interface TiledLayer<T extends TiledLayerJSON = TiledLayerJSON> {
@@ -21,15 +22,15 @@ export interface TiledLayer<T extends TiledLayerJSON = TiledLayerJSON> {
 }
 
 export namespace TiledLayer {
-    export function fromJSON(json: TiledLayerJSON): AbstractTiledLayer {
+    export function fromJSON(json: TiledLayerJSON, baseURL: string | URL): AbstractTiledLayer {
         if (isTiledImageLayerJSON(json)) {
-            return TiledImageLayer.fromJSON(json);
+            return TiledImageLayer.fromJSON(json, baseURL);
         } else if (isTiledTileLayerJSON(json)) {
-            return TiledTileLayer.fromJSON(json);
+            return TiledTileLayer.fromJSON(json, baseURL);
         } else if (isTiledObjectGroupLayerJSON(json)) {
-            return TiledObjectGroupLayer.fromJSON(json);
+            return TiledObjectGroupLayer.fromJSON(json, baseURL);
         } else if (isTiledGroupLayerJSON(json)) {
-            return TiledGroupLayer.fromJSON(json);
+            return TiledGroupLayer.fromJSON(json, baseURL);
         } else {
             throw new Error("Unknown tiled layer type: " + json.type);
         }

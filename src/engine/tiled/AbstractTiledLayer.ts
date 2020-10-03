@@ -3,7 +3,7 @@ import { TiledLayerJSON, TiledLayerType } from "*.tiledmap.json";
 import type { TiledLayer } from "./TiledLayer";
 
 export abstract class AbstractTiledLayer<T extends TiledLayerJSON = TiledLayerJSON> implements TiledLayer<T> {
-    protected constructor(protected readonly json: T) {}
+    public constructor(protected readonly json: T, protected readonly baseURL: string | URL) {}
 
     public toJSON(): T {
         return this.json;

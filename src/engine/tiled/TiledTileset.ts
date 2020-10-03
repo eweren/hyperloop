@@ -3,14 +3,18 @@ import { Color } from "../color/Color";
 import { RGBAColor } from "../color/RGBAColor";
 import { RGBColor } from "../color/RGBColor";
 import { cacheResult } from "../util/cache";
+import { loadImage } from "../util/graphics";
 
 export class TiledTileset {
+    private image: HTMLImageElement | null = null;
+
     private constructor(
-        private readonly json: TiledTilesetJSON
+        private readonly json: TiledTilesetJSON,
+        private readonly baseURL: string | URL
     ) {}
 
-    public static fromJSON(json: TiledTilesetJSON): TiledTileset {
-        return new TiledTileset(json);
+    public static fromJSON(json: TiledTilesetJSON, baseURL: string | URL): TiledTileset {
+        return new TiledTileset(json, baseURL);
     }
 
     public toJSON(): TiledTilesetJSON {
@@ -35,7 +39,20 @@ export class TiledTileset {
         return this.json.firstgid;
     }
 
-    public getImage(): string {
+    @cacheResult
+    public async loadImage(): Promise<HTMLImageElement> {
+        this.image = await loadImage(new URL(this.json.image, this.baseURL));
+        return this.image;
+    }
+
+    public getImage(): HTMLImageElement | null {
+        if (this.image === null) {
+            this.loadImage();
+        }
+        return this.image;
+    }
+
+    public getImageURL(): string {
         return this.json.image;
     }
 

@@ -15,7 +15,7 @@ declare module "*.tiledmap.json" {
         T extends "int" ? number :
         T extends "float" ? number :
         T extends "bool" ? boolean :
-        string
+        string;
 
     export interface TiledPropertyJSON<T extends TiledPropertyType = TiledPropertyType> {
         name: string;
@@ -25,7 +25,7 @@ declare module "*.tiledmap.json" {
 
     export interface TiledPropertiesJSON {
         /** Array of properties */
-        properties: TiledPropertyJSON[];
+        properties?: TiledPropertyJSON[];
     }
 
     /**

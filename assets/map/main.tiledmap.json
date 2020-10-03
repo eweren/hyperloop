@@ -11,7 +11,7 @@
          "name":"background",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":64,
          "x":0,
          "y":0
@@ -25,7 +25,7 @@
          "name":"assets",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":64,
          "x":0,
          "y":0
@@ -48,7 +48,58 @@
          "draworder":"topdown",
          "id":4,
          "name":"objects",
-         "objects":[],
+         "objects":[
+                {
+                 "height":108,
+                 "id":2,
+                 "name":"ground",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":1152,
+                 "x":0,
+                 "y":400
+                }, 
+                {
+                 "height":234.666666666667,
+                 "id":9,
+                 "name":"ceiling1",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":1150.66666666667,
+                 "x":2.66666666666667,
+                 "y":0
+                }, 
+                {
+                 "height":28,
+                 "id":11,
+                 "name":"ceiling2",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":514.666666666667,
+                 "x":329.333333333333,
+                 "y":221.333333333333
+                }],
          "opacity":1,
          "type":"objectgroup",
          "visible":true,
@@ -56,7 +107,7 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":1,
+ "nextobjectid":12,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",
