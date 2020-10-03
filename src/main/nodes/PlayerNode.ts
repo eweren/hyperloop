@@ -23,6 +23,7 @@ export class PlayerNode extends CharacterNode {
             id: "player",
             ...args
         });
+        console.log(this);
     }
 
     public getSpeed(): number {

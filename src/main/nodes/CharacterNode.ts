@@ -31,17 +31,19 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
         // Acceleration
         let vx = 0;
+        const tractionFactor = this.isOnGround ? 1 : 0.4;
         if (this.direction !== 0) {
             // Accelerate
             this.setTag("run");
-            vx = clamp(this.velocity.x + this.direction * this.getAcceleration() * dt, -this.getSpeed(), this.getSpeed());
+            vx = clamp(this.velocity.x + this.direction * tractionFactor * this.getAcceleration() * dt,
+                    -this.getSpeed(), this.getSpeed());
         } else {
             // Brake down
             this.setTag("idle");
             if (this.velocity.x > 0) {
-                vx = clamp(this.velocity.x - this.getDeceleration() * dt, 0, Infinity);
+                vx = clamp(this.velocity.x - tractionFactor * this.getDeceleration() * dt, 0, Infinity);
             } else {
-                vx = clamp(this.velocity.x + this.getDeceleration() * dt, -Infinity, 0);
+                vx = clamp(this.velocity.x + tractionFactor * this.getDeceleration() * dt, -Infinity, 0);
             }
         }
 
@@ -51,22 +53,23 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
         // Movement
         this.isOnGround = false;
+        const x = this.getX(), y = this.getY();
         if (this.velocity.x !== 0 || this.velocity.y !== 0) {
-            let newX = this.getX() + this.velocity.x * dt,
-                newY = this.getY() + this.velocity.y * dt;
+            let newX = x + this.velocity.x * dt,
+                newY = y + this.velocity.y * dt;
             // X collision
-            if (this.getCollisionAt(newX, this.getY())) {
-                newX = this.getX();
+            if (this.getCollisionAt(newX, y)) {
+                newX = x;
                 this.velocity = new Vector2(0, this.velocity.y);
             }
             // Y collision
             if (this.getCollisionAt(newX, newY)) {
                 this.isOnGround = (this.velocity.y > 0);
-                newY = this.getY();
+                newY = y;
                 this.velocity = new Vector2(this.velocity.x, 0);
             }
             // Apply
-            if (newX !== this.getX() || newY !== this.getY()) {
+            if (newX !== x || newY !== y) {
                 this.setX(newX);
                 this.setY(newY);
             }
@@ -95,14 +98,11 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         // Enemy collision
         // TODO
         // Level collision
-        /*
         const colliders = this.getColliders();
         const bounds = this.getBounds();
         const w = bounds.width, h = bounds.height;
         const px = x - w / 2, py = y - h;
-        return y > 270 || colliders.some(c => c.collidesWithRectangle(px, py, w, h));
-*/
-        return y > 410;
+        return y > 470 || colliders.some(c => c.collidesWithRectangle(px, py, w, h));
     }
 
     @cacheResult
