@@ -1,6 +1,6 @@
-import { Game } from "./Game";
+import { Game } from "../Game";
 import { SceneNode, SceneNodeArgs, SceneNodeAspect } from "./SceneNode";
-import { clamp } from "../util/misc";
+import { clamp } from "../util/math";
 
 const DEFAULT_BACKGROUND_STYLE = "#111";
 const DEFAULT_BORDER_STYLE = "#222";

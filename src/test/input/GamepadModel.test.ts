@@ -1,5 +1,5 @@
-import { DEFAULT_GAMEPAD_MODEL, GamepadModel } from "../../main/input/GamepadModel";
-import { GamepadStyle } from "../../main/input/GamepadStyle";
+import { DEFAULT_GAMEPAD_MODEL, GamepadModel } from "../../engine/input/GamepadModel";
+import { GamepadStyle } from "../../engine/input/GamepadStyle";
 
 /* spell-checker: disable */
 const xboxModels = [

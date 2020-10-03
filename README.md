@@ -1,4 +1,4 @@
-# Ludum Dare 47 Game
+# Hyperloop
 
 ## Development
 
@@ -9,7 +9,7 @@
 * Clone the source code:
 
   ```sh
-  git clone git@github.com:/friendlyfiregame/ludum-dare-47
+  git clone git@github.com:/friendlyfiregame/hyperloop
   ```
 
 * Initially run `npm i` in the project folder to install/update dependencies.

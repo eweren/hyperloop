@@ -1,4 +1,4 @@
-import { clamp } from "../util/misc";
+import { clamp } from "../util/math";
 import { Easing, linear } from "../util/easings";
 
 export type TransitionType = "in" | "out";

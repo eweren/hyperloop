@@ -1,7 +1,7 @@
 import "jest-extended";
-import { AffineTransform } from "../../main/graphics/AffineTransform";
-import { createCanvas, getRenderingContext } from "../../main/util/graphics";
-import { degrees, normalizeDegrees, radians } from "../../main/util/misc";
+import { AffineTransform } from "../../engine/graphics/AffineTransform";
+import { createCanvas, getRenderingContext } from "../../engine/util/graphics";
+import { degrees, normalizeDegrees, radians } from "../../engine/util/math";
 
 describe("AffineTransform", () => {
     describe("constructor", () => {

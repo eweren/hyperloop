@@ -1,5 +1,5 @@
 import { Scene } from "./Scene";
-import { Game } from "./Game";
+import { Game } from "../Game";
 import { Direction } from "../geom/Direction";
 import { AffineTransform, ReadonlyAffineTransform } from "../graphics/AffineTransform";
 import { Polygon2 } from "../graphics/Polygon2";
@@ -215,11 +215,6 @@ export class SceneNode<T extends Game = Game> {
         this.hidden = hidden;
     }
 
-    /** TODO Only needed in FriendlyFire. Remove this in future game and always assume Y goes down. */
-    private get yGoesUp(): boolean {
-        return this.scene?.yGoesUp ?? false;
-    }
-
     /**
      * Returns the node ID.
      *
@@ -315,7 +310,7 @@ export class SceneNode<T extends Game = Game> {
      */
     public getScenePosition(): ReadonlyVector2 {
         if ((this.valid & SceneNodeAspect.SCENE_POSITION) === 0) {
-            this.scenePosition.setComponents(this.x, this.yGoesUp ? -this.y : this.y);
+            this.scenePosition.setComponents(this.x, this.y);
             if (this.parent != null) {
                 this.scenePosition.mul(this.parent.getSceneTransformation());
                 this.scenePosition.translate(
@@ -508,22 +503,12 @@ export class SceneNode<T extends Game = Game> {
      * @return The top edge of the scene node.
      */
     public getTop(): number {
-        if (this.yGoesUp) {
-            if (Direction.isTop(this.anchor)) {
-                return this.position.y - this.size.height;
-            } else if (Direction.isBottom(this.anchor)) {
-                return this.position.y;
-            } else {
-                return this.position.y + this.size.height / 2;
-            }
+        if (Direction.isTop(this.anchor)) {
+            return this.position.y;
+        } else if (Direction.isBottom(this.anchor)) {
+            return this.position.y - this.size.height;
         } else {
-            if (Direction.isTop(this.anchor)) {
-                return this.position.y;
-            } else if (Direction.isBottom(this.anchor)) {
-                return this.position.y - this.size.height;
-            } else {
-                return this.position.y - this.size.height / 2;
-            }
+            return this.position.y - this.size.height / 2;
         }
     }
 
@@ -533,22 +518,12 @@ export class SceneNode<T extends Game = Game> {
      * @return The bottom edge of the scene node.
      */
     public getBottom(): number {
-        if (this.yGoesUp) {
-            if (Direction.isBottom(this.anchor)) {
-                return this.position.y + this.size.height;
-            } else if (Direction.isTop(this.anchor)) {
-                return this.position.y;
-            } else {
-                return this.position.y - this.size.height / 2;
-            }
+        if (Direction.isBottom(this.anchor)) {
+            return this.position.y;
+        } else if (Direction.isTop(this.anchor)) {
+            return this.position.y + this.size.height;
         } else {
-            if (Direction.isBottom(this.anchor)) {
-                return this.position.y;
-            } else if (Direction.isTop(this.anchor)) {
-                return this.position.y + this.size.height;
-            } else {
-                return this.position.y + this.size.height / 2;
-            }
+            return this.position.y + this.size.height / 2;
         }
     }
 
@@ -737,7 +712,7 @@ export class SceneNode<T extends Game = Game> {
             } else {
                 this.sceneTransformation.reset();
             }
-            this.sceneTransformation.translate(this.position.x, this.yGoesUp ? -this.position.y : this.position.y);
+            this.sceneTransformation.translate(this.position.x, this.position.y);
             this.sceneTransformation.mul(this.transformation);
             this.sceneTransformation.translate(
                 -(Direction.getX(this.anchor) + 1) / 2 * this.size.width,
@@ -1594,7 +1569,7 @@ export class SceneNode<T extends Game = Game> {
 
         ctx.save();
         ctx.globalAlpha *= this.getEffectiveOpacity();
-        ctx.translate(this.position.x, this.yGoesUp ? -this.position.y : this.position.y);
+        ctx.translate(this.position.x, this.position.y);
         this.transformation.transformCanvas(ctx);
         ctx.translate(
             -(Direction.getX(this.anchor) + 1) / 2 * this.size.width,

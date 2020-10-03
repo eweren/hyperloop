@@ -1,7 +1,7 @@
 {
     "lang": "en-US",
-    "name": "Ludum Dare 47",
-    "short_name": "Ludum Dare 47",
+    "name": "Hyperloop",
+    "short_name": "Hyperloop",
     "start_url": "./?utm_source=web_app_manifest",
     "display": "standalone",
     "background_color": "#cecece",

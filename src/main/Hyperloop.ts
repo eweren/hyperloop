@@ -1,13 +1,13 @@
-import { Game } from "./scene/Game";
+import { Game } from "../engine/Game";
 import { LoadingScene } from "./scenes/LoadingScene";
 
-export class MyGame extends Game {
+export class Hyperloop extends Game {
     public constructor() {
         super();
     }
 }
 
-const game = new MyGame();
+const game = new Hyperloop();
 game.scenes.setScene(LoadingScene);
 (window as any).game = game;
 game.start();

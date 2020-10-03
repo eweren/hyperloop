@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from "electron";
-import { GAME_CANVAS_HEIGHT, GAME_CANVAS_WIDTH } from "./constants";
+import { GAME_HEIGHT, GAME_WIDTH } from "./constants";
 import path from "path";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -7,16 +7,16 @@ if (require("electron-squirrel-startup")) { // eslint-disable-line global-requir
     app.quit();
 }
 
-app.name = "Friendly Fire";
+app.name = "Hyperloop";
 app.allowRendererProcessReuse = true;
 
 const createWindow = () => {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
-        width: GAME_CANVAS_WIDTH,
-        height: GAME_CANVAS_HEIGHT,
+        width: GAME_WIDTH,
+        height: GAME_HEIGHT,
         fullscreen: true,
-        title: "Friendly Fire",
+        title: "Hyperloop",
         icon: path.join(__dirname, "../renderer/assets/appicon.iconset/icon_256x256.png")
     });
 

@@ -1,4 +1,4 @@
-import { Game } from "./Game";
+import { Game } from "../Game";
 import { SceneNode, PostDrawHints } from "./SceneNode";
 import { Direction } from "../geom/Direction";
 import { Scene } from "./Scene";

@@ -1,4 +1,4 @@
-import { Game } from "./Game";
+import { Game } from "../Game";
 import { Scene, SceneConstructor } from "./Scene";
 
 export class Scenes<T extends Game> {

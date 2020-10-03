@@ -1,5 +1,5 @@
 import { AffineTransform, ReadonlyAffineTransform } from "../graphics/AffineTransform";
-import { Game } from "./Game";
+import { Game } from "../Game";
 import { SceneNode } from "./SceneNode";
 import { easeInOutQuad } from "../util/easings";
 import { Animation } from "./animations/Animation";
@@ -8,7 +8,7 @@ import { CinematicBars } from "./camera/CinematicBars";
 import { FadeToBlack as FadeToBlack } from "./camera/FadeToBlack";
 import { ReadonlyVector2Like } from "../graphics/Vector2";
 import { Rect } from "../geom/Rect";
-import { clamp } from "../util/misc";
+import { clamp } from "../util/math";
 import { Scene } from "./Scene";
 
 /** Camera target type. Can be a simple position object, a scene node or a function which returns a camera target. */
@@ -64,9 +64,6 @@ export class Camera<T extends Game = Game> {
     /** The game this camera is connected to. */
     private readonly game: T;
 
-    /** The scene this camera is connected to. */
-    private readonly scene: Scene<T, unknown>;
-
     /**
      * The camera target to follow (if any). When set then the camera automatically follows this given target. When null
      * then camera position is not adjusted automatically.
@@ -108,15 +105,9 @@ export class Camera<T extends Game = Game> {
      * of the game screen.
      */
     public constructor(scene: Scene<T, unknown>) {
-        this.scene = scene;
         this.game = scene.game;
         this.x = this.game.width / 2;
         this.y = this.game.height / 2;
-    }
-
-    /** TODO Only needed in FriendlyFire. Remove this in future game and always assume Y goes down. */
-    public get yGoesUp(): boolean {
-        return this.scene.yGoesUp;
     }
 
     /**
@@ -239,7 +230,7 @@ export class Camera<T extends Game = Game> {
      * @return The top camera edge.
      */
     public getTop(): number {
-        return this.yGoesUp ? this.y + this.getHeight() / 2 : this.y - this.getHeight() / 2;
+        return this.y - this.getHeight() / 2;
     }
 
     /**
@@ -248,7 +239,7 @@ export class Camera<T extends Game = Game> {
      * @return The bottom camera edge.
      */
     public getBottom(): number {
-        return this.yGoesUp ? this.y - this.getHeight() / 2 : this.y + this.getHeight() / 2;
+        return this.y + this.getHeight() / 2;
     }
 
     /**
@@ -350,7 +341,7 @@ export class Camera<T extends Game = Game> {
                 .mul(this.transformation)
                 .scale(this.zoom)
                 .rotate(this.rotation)
-                .translate(-this.x, this.yGoesUp ? this.y : -this.y);
+                .translate(-this.x, -this.y);
             this.sceneTransformationValid = true;
         }
         return this.sceneTransformation;
@@ -557,13 +548,7 @@ export class Camera<T extends Game = Game> {
 
     private limitY(y: number): number {
         if (this.limits) {
-            if (this.yGoesUp) {
-                // TODO This darn mirrored Y. Even Rect is not compatible to it when calculating bottom...
-                return clamp(y, this.limits.getTop() - this.limits.getHeight() + this.getHeight() / 2,
-                    this.limits.getTop() - this.getHeight() / 2);
-            } else {
-                return clamp(y, this.limits.getTop() + this.getHeight() / 2, this.limits.getBottom() - this.getHeight() / 2);
-            }
+            return clamp(y, this.limits.getTop() + this.getHeight() / 2, this.limits.getBottom() - this.getHeight() / 2);
         } else {
             return y;
         }

@@ -1,10 +1,10 @@
-import { Assets } from "./Assets";
-import { clamp } from "../util/misc";
-import { ControllerManager } from "../input/ControllerManager";
-import { createCanvas, getRenderingContext } from "../util/graphics";
-import { GamepadInput } from "../input/GamepadInput";
-import { Keyboard } from "../input/Keyboard";
-import { Scenes } from "./Scenes";
+import { Assets } from "./assets/Assets";
+import { clamp } from "./util/math";
+import { ControllerManager } from "./input/ControllerManager";
+import { createCanvas, getRenderingContext } from "./util/graphics";
+import { GamepadInput } from "./input/GamepadInput";
+import { Keyboard } from "./input/Keyboard";
+import { Scenes } from "./scene/Scenes";
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want

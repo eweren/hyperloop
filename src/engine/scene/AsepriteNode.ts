@@ -1,6 +1,6 @@
-import { Game } from "./Game";
+import { Aseprite } from "../assets/Aseprite";
+import { Game } from "../Game";
 import { SceneNode, SceneNodeArgs, SceneNodeAspect } from "./SceneNode";
-import { Aseprite } from "./Aseprite";
 
 /**
  * Constructor arguments for [[AsepriteNode]].

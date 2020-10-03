@@ -1,9 +1,9 @@
 import { ControllerManager } from "../input/ControllerManager";
-import { Game } from "./Game";
+import { Game } from "../Game";
 import { Keyboard } from "../input/Keyboard";
 import { Scenes } from "./Scenes";
 import { Transition } from "./Transition";
-import { RootNode, UpdateRootNode, DrawRootNode } from "../scene/RootNode";
+import { RootNode, UpdateRootNode, DrawRootNode } from "./RootNode";
 import { SceneNode } from "./SceneNode";
 import { Camera } from "./Camera";
 
@@ -34,12 +34,6 @@ export abstract class Scene<T extends Game = Game, A = void> {
     private usedLayers: number = 0;
     private hiddenLayers: number = 0;
     private backgroundStyle: string | null = null;
-
-    /**
-     * TODO Y usually goes down but for FriendlyFire it goes up so GameScene sets this to true. When copying the
-     * scene graph to a new game then get rid of this and ALWAYS assume Y goes down, please!
-     */
-    public yGoesUp = false;
 
     public readonly camera: Camera<T>;
 

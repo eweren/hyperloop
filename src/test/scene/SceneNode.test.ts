@@ -1,11 +1,11 @@
 import "jest-extended";
-import { Direction } from "../../main/geom/Direction";
-import { AffineTransform } from "../../main/graphics/AffineTransform";
-import { Vector2 } from "../../main/graphics/Vector2";
-import { Game } from "../../main/scene/Game";
-import { Scene } from "../../main/scene/Scene";
-import { SceneNode, SceneNodeArgs, SceneNodeAspect } from "../../main/scene/SceneNode";
-import { createContext2D } from "../../main/util/graphics";
+import { Direction } from "../../engine/geom/Direction";
+import { AffineTransform } from "../../engine/graphics/AffineTransform";
+import { Vector2 } from "../../engine/graphics/Vector2";
+import { Game } from "../../engine/Game";
+import { Scene } from "../../engine/scene/Scene";
+import { SceneNode, SceneNodeArgs, SceneNodeAspect } from "../../engine/scene/SceneNode";
+import { createContext2D } from "../../engine/util/graphics";
 
 class TestGame extends Game {
 }

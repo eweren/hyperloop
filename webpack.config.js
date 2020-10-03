@@ -6,10 +6,10 @@ const GitRevisionPlugin = require("git-revision-webpack-plugin");
 const gitRevisionPlugin = new GitRevisionPlugin();
 
 module.exports = {
-    entry: `./lib/MyGame.js`,
+    entry: `./lib/main/Hyperloop.js`,
     output: {
         path: path.join(__dirname, "dist"),
-        filename: "MyGame.js",
+        filename: "Hyperloop.js",
         chunkFilename: "[name].js?m=[chunkhash]"
     },
     mode: "development",
@@ -60,8 +60,8 @@ module.exports = {
             //{ from: "src/demo/**/*.{html,css}" },
             { from: "assets/", to: "assets/" },
             { from: "index.html", transform(content) {
-                return content.toString().replace("src=\"node_modules/steal/steal.js\" main=\"lib/MyGame\"",
-                    "src=\"MyGame.js\"");
+                return content.toString().replace("src=\"node_modules/steal/steal.js\" main=\"lib/main/Hyperloop\"",
+                    "src=\"Hyperloop.js\"");
             }},
             { from: "style.css" },
             { from: "manifest.webmanifest" }

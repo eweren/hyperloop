@@ -1,5 +1,5 @@
 module.exports = {
     mode: "production",
-    entry: "./lib/main.js",
+    entry: "./lib/main/app.js",
     devtool: false
 };

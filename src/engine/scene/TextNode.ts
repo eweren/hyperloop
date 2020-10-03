@@ -1,6 +1,6 @@
-import { Game } from "./Game";
+import { Game } from "../Game";
 import { SceneNode, SceneNodeArgs } from "./SceneNode";
-import { BitmapFont } from "./BitmapFont";
+import { BitmapFont } from "../assets/BitmapFont";
 
 /**
  * Constructor arguments for [[TextNode]].

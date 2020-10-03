@@ -24,7 +24,7 @@ module.exports = {
             //{ from: "src/demo/**/*.{html,css}" },
             { from: "assets/", to: "assets/" },
             { from: "index.html", transform(content) {
-                return content.toString().replace("src=\"node_modules/steal/steal.js\" main=\"lib/MyGame\"",
+                return content.toString().replace("src=\"node_modules/steal/steal.js\" main=\"lib/main/MyGame\"",
                     "src=\"index.js\"");
             }},
             { from: "style.css" }

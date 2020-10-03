@@ -1,5 +1,5 @@
-import { AffineTransform } from "../../main/graphics/AffineTransform";
-import { Vector2 } from "../../main/graphics/Vector2";
+import { AffineTransform } from "../../engine/graphics/AffineTransform";
+import { Vector2 } from "../../engine/graphics/Vector2";
 
 describe("Vector2", () => {
     describe("constructor", () => {

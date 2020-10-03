@@ -1,9 +1,9 @@
-import { MyGame } from "../MyGame";
-import { Scene } from "../scene/Scene";
-import { ProgressBarNode } from "../scene/ProgressBarNode";
+import { Hyperloop } from "../Hyperloop";
+import { Scene } from "../../engine/scene/Scene";
+import { ProgressBarNode } from "../../engine/scene/ProgressBarNode";
 import { TitleScene } from "./TitleScene";
 
-export class LoadingScene extends Scene<MyGame> {
+export class LoadingScene extends Scene<Hyperloop> {
     private progressBar!: ProgressBarNode;
 
     public setup(): void {

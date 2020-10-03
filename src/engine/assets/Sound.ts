@@ -1,4 +1,4 @@
-import { clamp } from "../util/misc";
+import { clamp } from "../util/math";
 import { ControllerManager } from "../input/ControllerManager";
 
 // Get cross-browser AudioContext (Safari still uses webkitAudioContext…)
