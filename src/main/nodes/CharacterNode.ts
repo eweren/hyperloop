@@ -23,7 +23,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public constructor(args: AsepriteNodeArgs) {
         super(args);
         this.velocity = new Vector2(0, 0);
-        this.setShowBounds(true);
     }
 
     public update(dt: number, time: number): void {
@@ -108,7 +107,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     @cacheResult
     private getColliders(): CollisionNode[] {
         const colliders = this.getScene()?.rootNode.getDescendantsByType(CollisionNode) ?? [];
-        colliders.forEach(c => c.setShowBounds(true));
         return colliders;
     }
 }

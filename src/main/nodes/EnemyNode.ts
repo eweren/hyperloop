@@ -92,9 +92,9 @@ export class EnemyNode extends CharacterNode {
         }
     }
 
-    private getPlayer(): PlayerNode {
+    private getPlayer(): PlayerNode | undefined {
         // TODO get player from some global game state variable instead of via id
-        return this.getScene()?.getNodeById("player") as PlayerNode;
+        return this.getScene()?.rootNode.getDescendantsByType(PlayerNode)[0];
     }
 
     private updateSearch(time: number): void {
@@ -126,7 +126,7 @@ export class EnemyNode extends CharacterNode {
 
     private isLookingInPlayerDirection(): boolean {
         const player = this.getPlayer();
-        return (player && (
+        return (player != null && (
             (this.getX() > player.getPosition().x && this.isMirrorX())
             || (this.getX() < player.getPosition().x && !this.isMirrorX())));
     }
