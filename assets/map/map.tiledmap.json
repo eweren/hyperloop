@@ -1,4 +1,11 @@
 { "compressionlevel":-1,
+ "editorsettings":
+    {
+     "export":
+        {
+         "target":"."
+        }
+    },
  "height":28,
  "infinite":false,
  "layers":[
@@ -99,23 +106,6 @@
                  "width":514.666666666667,
                  "x":329.333333333333,
                  "y":221.333333333333
-                }, 
-                {
-                 "height":65.3333333333333,
-                 "id":12,
-                 "name":"FOo",
-                 "properties":[
-                        {
-                         "name":"showBounds",
-                         "type":"bool",
-                         "value":true
-                        }],
-                 "rotation":0,
-                 "type":"collision",
-                 "visible":true,
-                 "width":141.333333333333,
-                 "x":169.333333333333,
-                 "y":305.333333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
