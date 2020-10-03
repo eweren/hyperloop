@@ -6,13 +6,12 @@ import { Hyperloop } from "../Hyperloop";
 // TODO define in some constants file
 const GRAVITY = 1200;
 
-export class CharacterNode extends AsepriteNode<Hyperloop> {
+export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
-    // Character settings
-    protected speed = 150;
-    private acceleration = 1200;
-    private deceleration = 1800;
-    private jumpPower = 380;
+    public abstract getSpeed(): number;
+    public abstract getAcceleration(): number;
+    public abstract getDeceleration(): number;
+    public abstract getJumpPower(): number;
 
     // Dynamic player state
     protected direction = 0;
@@ -32,14 +31,14 @@ export class CharacterNode extends AsepriteNode<Hyperloop> {
         if (this.direction !== 0) {
             // Accelerate
             this.setTag("run");
-            vx = clamp(this.velocity.x + this.direction * this.acceleration * dt, -this.speed, this.speed);
+            vx = clamp(this.velocity.x + this.direction * this.getAcceleration() * dt, -this.getSpeed(), this.getSpeed());
         } else {
             // Brake down
             this.setTag("idle");
             if (this.velocity.x > 0) {
-                vx = clamp(this.velocity.x - this.deceleration * dt, 0, Infinity);
+                vx = clamp(this.velocity.x - this.getDeceleration() * dt, 0, Infinity);
             } else {
-                vx = clamp(this.velocity.x + this.deceleration * dt, -Infinity, 0);
+                vx = clamp(this.velocity.x + this.getDeceleration() * dt, -Infinity, 0);
             }
         }
 
@@ -80,7 +79,7 @@ export class CharacterNode extends AsepriteNode<Hyperloop> {
 
     public jump(factor = 1): void {
         if (this.isOnGround) {
-            this.velocity = new Vector2(this.velocity.x, -this.jumpPower * factor);
+            this.velocity = new Vector2(this.velocity.x, -this.getJumpPower() * factor);
         }
     }
 

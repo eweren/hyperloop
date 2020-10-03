@@ -8,6 +8,12 @@ export class PlayerNode extends CharacterNode {
     @asset("sprites/female.aseprite.json")
     private static sprite: Aseprite;
 
+    // Character settings
+    private readonly speed = 150;
+    private readonly acceleration = 1200;
+    private readonly deceleration = 1800;
+    private readonly jumpPower = 380;
+
     public constructor() {
         super({
             aseprite: PlayerNode.sprite,
@@ -15,6 +21,19 @@ export class PlayerNode extends CharacterNode {
             tag: "idle",
             id: "player"
         });
+    }
+
+    public getSpeed(): number {
+        return this.speed;
+    }
+    public getAcceleration(): number {
+        return this.acceleration;
+    }
+    public getDeceleration(): number {
+        return this.deceleration;
+    }
+    public getJumpPower(): number {
+        return this.jumpPower;
     }
 
     public update(dt: number, time: number) {
