@@ -17,8 +17,8 @@ export class PlayerNode extends CharacterNode {
         });
     }
 
-    public update(dt: number) {
-        super.update(dt);
+    public update(dt: number, time: number) {
+        super.update(dt, time);
         // Controls
         const input = this.getScene()!.game.input;
         // Run left/right

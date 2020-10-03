@@ -24,8 +24,8 @@ export class CharacterNode extends AsepriteNode<Hyperloop> {
         this.velocity = new Vector2(0, 0);
     }
 
-    public update(dt: number): void {
-        super.update(dt);
+    public update(dt: number, time: number): void {
+        super.update(dt, time);
 
         // Acceleration
         let vx = 0;

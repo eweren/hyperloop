@@ -7,7 +7,7 @@ import { Scene } from "./Scene";
  * Function signature for updating the root node. This function is exposed to the scene through the constructor so
  * the scene can call it but no one else can by accident.
  */
-export type UpdateRootNode = (dt: number) => number;
+export type UpdateRootNode = (dt: number, time: number) => number;
 
 /**
  * Function signature for drawing the root node.

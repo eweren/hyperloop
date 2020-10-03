@@ -45,8 +45,8 @@ export class EnemyNode extends CharacterNode {
         this.targetPosition = this.getPosition();
     }
 
-    public update(dt: number) {
-        super.update(dt);
+    public update(dt: number, time: number) {
+        super.update(dt, time);
         // AI
         switch (this.state) {
             case AiState.BORED:
