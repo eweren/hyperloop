@@ -12,7 +12,8 @@ export class PlayerNode extends CharacterNode {
         super({
             aseprite: PlayerNode.sprite,
             anchor: Direction.BOTTOM,
-            tag: "idle"
+            tag: "idle",
+            id: "player"
         });
     }
 
