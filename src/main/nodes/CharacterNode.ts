@@ -1,8 +1,9 @@
 import { Vector2 } from "../../engine/graphics/Vector2";
 import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
-import { SceneNodeArgs } from "../../engine/scene/SceneNode";
+import { cacheResult } from "../../engine/util/cache";
 import { clamp } from "../../engine/util/math";
 import { Hyperloop } from "../Hyperloop";
+import { CollisionNode } from "./CollisionNode";
 
 // TODO define in some constants file
 const GRAVITY = 1200;
@@ -22,6 +23,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public constructor(args: AsepriteNodeArgs) {
         super(args);
         this.velocity = new Vector2(0, 0);
+        this.setShowBounds(true);
     }
 
     public update(dt: number, time: number): void {
@@ -90,7 +92,20 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     private getCollisionAt(x = this.getX(), y = this.getY()): boolean {
-        // Mocked collision detection
-        return (y > 370);
+        // Enemy collision
+        // TODO
+        // Level collision
+        const colliders = this.getColliders();
+        const bounds = this.getBounds();
+        const w = bounds.width, h = bounds.height;
+        const px = x - w / 2, py = y - h;
+        return y > 270 || colliders.some(c => c.collidesWithRectangle(px, py, w, h));
+    }
+
+    @cacheResult
+    private getColliders(): CollisionNode[] {
+        const colliders = this.getScene()?.rootNode.getDescendantsByType(CollisionNode) ?? [];
+        colliders.forEach(c => c.setShowBounds(true));
+        return colliders;
     }
 }
