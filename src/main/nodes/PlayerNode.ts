@@ -8,10 +8,15 @@ import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { CharacterNode } from "./CharacterNode";
 import { EnemyNode } from "./EnemyNode";
+import { PlayerArmNode } from "./player/PlayerArmNode";
+import { PlayerLegsNode } from "./player/PlayerLegsNode";
 
 export class PlayerNode extends CharacterNode {
-    @asset("sprites/female.aseprite.json")
+    @asset("sprites/spacesuitbody.aseprite.json")
     private static sprite: Aseprite;
+
+    private playerLeg: PlayerLegsNode;
+    private playerArm: PlayerArmNode;
 
     private mousePosition = new Vector2(0, 0);
     private aimingAngle = 0;
@@ -33,10 +38,16 @@ export class PlayerNode extends CharacterNode {
         super({
             aseprite: PlayerNode.sprite,
             anchor: Direction.BOTTOM,
+            childAnchor: Direction.RIGHT,
             tag: "idle",
             id: "player",
+            showBounds: true,
             ...args
         });
+        this.playerArm = new PlayerArmNode(args);
+        this.playerLeg = new PlayerLegsNode(args);
+        this.appendChild(this.playerLeg);
+        this.appendChild(this.playerArm);
         window.addEventListener("pointermove", event => this.mouseMoved(event));
         console.log("Player: ", this);
     }
@@ -58,10 +69,10 @@ export class PlayerNode extends CharacterNode {
     }
 
     protected updateBoundsPolygon(bounds: Polygon2): void {
-        const boundsWidth = 14;
-        const boundsHeight = 46;
+        const boundsWidth = 20;
+        const boundsHeight = 34;
         const offsetX = this.getWidth() / 2 - boundsWidth / 2;
-        const offsetY = 8;
+        const offsetY = 0;
         bounds.clear();
         bounds.addVertex(new Vector2(offsetX, offsetY));
         bounds.addVertex(new Vector2(offsetX + boundsWidth, offsetY));
@@ -90,7 +101,7 @@ export class PlayerNode extends CharacterNode {
         // Shoot
         if (input.currentActiveIntents & ControllerIntent.PLAYER_ACTION) {
             if (time >= this.nextShot) {
-                this.shoot(this.aimingAngle, 50);
+                this.shoot(this.aimingAngle, 200);
                 this.nextShot = time + this.shotDelay;
             }
         }
@@ -104,10 +115,33 @@ export class PlayerNode extends CharacterNode {
                 node.interact();
             }
         }
+        this.syncArmAndLeg();
+    }
+
+    private syncArmAndLeg(): void {
+        const bottomOfNode = this.getBottom();
+        this.playerLeg.setY(bottomOfNode);
+        this.playerArm.setY(30);
+        this.playerArm.transform(c => {
+            c.translateY(20);
+            c.rotate(this.aimingAngle);
+        });
+        if (this.isJumping) {
+            this.playerLeg.setTag("jump");
+        } else if (this.isFalling) {
+            this.playerLeg.setTag("fall");
+        } else if (this.direction !== 0) {
+            this.playerLeg.setTag("walk");
+        } else {
+            this.playerLeg.setTag("idle");
+        }
+        this.playerLeg.setMirrorX(this.direction < 0);
     }
 
     public draw(context: CanvasRenderingContext2D): void {
         super.draw(context);
+        this.playerArm.draw(context);
+        this.playerLeg.draw(context);
 
         if (this.drawDebugStuff) {
             this.drawAimingLine(context);
