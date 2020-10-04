@@ -17,6 +17,12 @@
          "id":2,
          "name":"background",
          "opacity":1,
+         "properties":[
+                {
+                 "name":"layer",
+                 "type":"int",
+                 "value":0
+                }],
          "type":"tilelayer",
          "visible":true,
          "width":87,
@@ -25,12 +31,18 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt2u1twjAQgGFLaVH3aNkj\/GmHKJHo1xCA1KZTANvwB+gknaMXxRIo2FFCQnxJ30ecHA5iTsenLYwBANT1GBnzFIWuYpjepa8ftrevMr5F52OfPVxwzsqYeG1jI9FGHan08Ts6H\/+bufRzYWPZUm+Rk96ahY1l4FqGRj4TzNrGJnAtWo2OYxqyDgAAUE0sl4nj9\/g18qPjuK07T936NVh51pGa8mVrXt88Gsw960hN+bI1r2+eUG7ySLPjZ6krsbVpy9\/aerPc1IbrtkRRb09JbSZRns9yUxuu21zzaJDtg7j2PzTly\/ZqfPNokO2DuPY\/NOXL9mp882gQS0x6kPepe38AAAAAfvd5pL7r++5LGoyZxEvAx9\/Z59H3f6Xic33qknO69CnxFboI9MbMhH0vNrUv+YwuuuT\/iU308b3YdY\/QjoOC754hq\/u9v7tqNSjS8vsLGJKf0AUM2G\/oAqDWIXQBFYw9x6jvruH548JY5b5lx03rADQqruN4vVZX7BW9AwAAAAAAALr3BxI4flY=",
+         "data":"eJzt2mFOwjAUB\/AmU+I9lHuML3oIWYKohwASLacAvuhV\/AJ4Es\/hW2gCGXt1K7V93f6\/+NLZbeXlAWNtphQAALR1nyn1kMXOopteqK6vprZTap+z8zZldw7nrJTK1yY2FD7y0FTHZXbe9s2M6jk3sfBUWzig2qq5iUXkXLqGrglqbWITORepBsdWx8wDAAAAmsnpb1RzP\/4f\/YNj+9V2nLb5S7Bi5pGS+m1zXm4cCWbMPFJSv23Oy40Ty9UhdLn9SHkVJjdp\/dcm37JvbKJuXyGotqcoN1UI7y\/7xibq9tWNI0G5DlK3\/iGp37ZWw40jQbkOUrf+IanftlbDjSNBTjFKoJ\/T9ngAAAAAAODdHkJz\/+\/Cp9QZE4onZt80wOtvzfvIPa9Ufa9PuZwT0hvFO7NPB8yjb5axE3A0Ufx3MQU7yzW6yuX5xEvYvotSha5Rl316HOuv38V9zy7vH57GKZ+j0w2Oa\/u7v3VPqVN0oNeRcv8VUqr3HJCO79gJdNhP7ARArH3sBBoYMtsufN4rp+imwTG2OcCw0p7SzLG2bVc+xohBBz6vT1znam3Oa7puXJ3Hpfp5DUmbtlor1O5yvtYxAAAAAAAAAACgP34Bhq6IHA==",
          "encoding":"base64",
          "height":64,
          "id":3,
          "name":"assets",
          "opacity":1,
+         "properties":[
+                {
+                 "name":"layer",
+                 "type":"int",
+                 "value":0
+                }],
          "type":"tilelayer",
          "visible":true,
          "width":87,
@@ -39,12 +51,18 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt2LEJgEAQRcHrRSvRRs5G1NJdMD8QTld0Bl60yY+3FADgDcbGbTjbH5oCXdRoyR7xUWu0ZY8AAAD4sSmas0fARbX41dzFrwYAAAAAAAAAAAAAAAAAoO0AUBoE7A==",
+         "data":"eJzt2LEJgEAQRcHNLEQr0UbORtTSPTAXBHUPnYEfbfLijQAAWjCc3Ppj20spcItSN2dHfNRSt2ZHAAAA\/NhYN2VHwEUl\/Gqe4lcDAAAAAAAAABDRZQcAAAAAAABN2wH6LgTz",
          "encoding":"base64",
          "height":64,
          "id":5,
          "name":"asstes2",
          "opacity":1,
+         "properties":[
+                {
+                 "name":"layer",
+                 "type":"int",
+                 "value":0
+                }],
          "type":"tilelayer",
          "visible":true,
          "width":87,
@@ -77,8 +95,8 @@
                  "type":"enemy",
                  "visible":true,
                  "width":0,
-                 "x":412.333666666667,
-                 "y":688
+                 "x":369,
+                 "y":693
                 }, 
                 {
                  "height":108,
@@ -432,7 +450,7 @@
                  "y":846
                 }, 
                 {
-                 "height":90,
+                 "height":29,
                  "id":43,
                  "name":"maintenanceCollision",
                  "properties":[
@@ -721,7 +739,7 @@
                  "y":918
                 }, 
                 {
-                 "height":18,
+                 "height":12,
                  "id":60,
                  "name":"",
                  "properties":[
@@ -903,8 +921,8 @@
                  "type":"enemy",
                  "visible":true,
                  "width":0,
-                 "x":1065,
-                 "y":907
+                 "x":997,
+                 "y":911
                 }, 
                 {
                  "height":0,
@@ -941,8 +959,48 @@
                  "width":0,
                  "x":937.333333333333,
                  "y":642.666666666667
+                }, 
+                {
+                 "height":6,
+                 "id":103,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":11,
+                 "x":594,
+                 "y":684
+                }, 
+                {
+                 "height":54,
+                 "id":104,
+                 "name":"maintenanceCollision",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":450,
+                 "x":360,
+                 "y":918
                 }],
          "opacity":1,
+         "properties":[
+                {
+                 "name":"layer",
+                 "type":"int",
+                 "value":0
+                }],
          "type":"objectgroup",
          "visible":true,
          "x":0,
@@ -976,6 +1034,12 @@
                  "y":522
                 }],
          "opacity":1,
+         "properties":[
+                {
+                 "name":"layer",
+                 "type":"int",
+                 "value":0
+                }],
          "type":"objectgroup",
          "visible":false,
          "x":0,
@@ -1959,7 +2023,7 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt1rEJADAMA0FDVsn+M6YPCRiMujvQAl+pitte8\/E2baPtn7Y52uZom6Ntjp8AAAAAAAAAAAAAAAAAAAAAAAAA0HcAO\/gGtQ==",
+         "data":"eJzt1rEJACAMRUHBVdx\/GgeyF61Cgsgd\/D68Kq2xGz0+zqJttL3TNo+2ebTNo20efwIAAAAAAAAAAAAAAAAAAC+aBau4FQAAAID\/LMIwITU=",
          "encoding":"base64",
          "height":64,
          "id":1,
@@ -1978,7 +2042,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":103,
+ "nextobjectid":105,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.1",
