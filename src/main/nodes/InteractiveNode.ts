@@ -65,6 +65,7 @@ export abstract class InteractiveNode extends AsepriteNode {
     }
 
     public draw(context: CanvasRenderingContext2D): void {
+        super.draw(context);
         // Draw Caption
         if (this.caption !== "" && this.captionOpacity > 0) {
             context.save();

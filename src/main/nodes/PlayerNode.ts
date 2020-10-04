@@ -168,9 +168,6 @@ export class PlayerNode extends CharacterNode {
         this.playerLeg.setMirrorX(this.isMirrorX());
     }
 
-    public draw(context: CanvasRenderingContext2D): void {
-        super.draw(context);
-    }
 
     public die(): void {
         if (this.isAlive()) {

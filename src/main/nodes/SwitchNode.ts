@@ -12,7 +12,7 @@ export interface SwitchNodeArgs extends SceneNodeArgs {
 }
 
 export class SwitchNode extends InteractiveNode {
-    @asset("sprites/rat.aseprite.json")
+    @asset("sprites/wallLever.aseprite.json")
     private static sprite: Aseprite;
     private turnedOn: boolean = false;
     private onlyOnce: boolean;
@@ -25,6 +25,7 @@ export class SwitchNode extends InteractiveNode {
         super({
             aseprite: SwitchNode.sprite,
             anchor: Direction.CENTER,
+            tag: "off",
             ...args
         }, "Press E to press switch");
         this.onlyOnce = onlyOnce;
@@ -41,6 +42,7 @@ export class SwitchNode extends InteractiveNode {
             this.clickNode?.getSound().stop();
             this.clickNode?.getSound().play();
             this.turnedOn = !this.turnedOn;
+            this.setTag(this.turnedOn ? "on" : "off");
             if (this.onUpdate != null) {
                 this.onUpdate(this.turnedOn);
             }
@@ -56,15 +58,15 @@ export class SwitchNode extends InteractiveNode {
         return this.turnedOn;
     }
 
-    public draw(context: CanvasRenderingContext2D): void {
-        // Render switch
-        const offY = 0;
-        context.fillStyle = "#666";
-        context.fillRect(-4, offY - 4, 8, 8);
-        context.fillStyle = this.turnedOn ? "#ff0000" : "#603030";
-        context.fillRect(-3, offY - 3, 6, 6);
+    // public draw(context: CanvasRenderingContext2D): void {
+    //     // Render switch
+    //     const offY = 0;
+    //     context.fillStyle = "#666";
+    //     context.fillRect(-4, offY - 4, 8, 8);
+    //     context.fillStyle = this.turnedOn ? "#ff0000" : "#603030";
+    //     context.fillRect(-3, offY - 3, 6, 6);
 
-        super.draw(context);
-    }
+    //     super.draw(context);
+    // }
 
 }
