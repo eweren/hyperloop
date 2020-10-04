@@ -54,6 +54,14 @@ export interface ReadonlyVector2 extends ReadonlyVector2Like {
     getSquareDistance(v: ReadonlyVector2Like): number;
 
     /**
+     * Returns the shortest angle (positive or negative between -PI and PI) between this vector and the given one.
+     *
+     * @param vector - The other vector.
+     * @return The angle between the vectors.
+     */
+    getAngle(vector?: ReadonlyVector2Like): number;
+
+    /**
      * Returns the dot product of this vector and the specified one.
      *
      * @param v - The other vector.
@@ -180,6 +188,18 @@ export class Vector2 implements ReadonlyVector2Like, Vector2Like {
     }
 
     /**
+     * Scales the vector by the given factors.
+     *
+     * @param sx - The x factor.
+     * @param sy - The y factor.
+     */
+    public scale(sx: number, sy: number = sx): this {
+        this.x *= sx;
+        this.y *= sy;
+        return this;
+    }
+
+    /**
      * Adds the given vector to this vector.
      *
      * @param summand - The vector to add.
@@ -243,5 +263,19 @@ export class Vector2 implements ReadonlyVector2Like, Vector2Like {
         this.x /= len;
         this.y /= len;
         return this;
+    }
+
+    /**
+     * Returns the shortest angle (positive or negative between -PI and PI) between this vector and the given one.
+     *
+     * @param vector - The other vector. Angle to origin (0, 0) is returned if no other vector specified.
+     * @return The angle between the vectors. Measured in radians.
+     */
+    public getAngle(vector?: ReadonlyVector2Like): number {
+        let angle = Math.atan2(this.x, this.y);
+        if (vector) {
+            angle -= Math.atan2(vector.x, vector.y);
+        }
+        return angle;
     }
 }

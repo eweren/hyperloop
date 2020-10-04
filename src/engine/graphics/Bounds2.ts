@@ -69,6 +69,17 @@ export class Bounds2 {
     }
 
     /**
+     * Checks if this bounding box contains the given point.
+     *
+     * @param x - The X coordinate in scene coordinate system.
+     * @param y - The Y coordinate in scene coordinate system.
+     * @return True if bounding box contains the point, false if not.
+     */
+    public containsPoint(x: number, y: number): boolean {
+        return this.minY <= y && this.maxY >= y && this.minX <= y && this.maxX >= y;
+    }
+
+    /**
      * Draws the bounds to the given 2D canvas rendering context. This only applies the closed geometry, you have to
      * fill/stroke/clip it yourself.
      *

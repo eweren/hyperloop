@@ -5,7 +5,9 @@ import { Line2 } from "../../engine/graphics/Line2";
 import { Polygon2 } from "../../engine/graphics/Polygon2";
 import { Vector2 } from "../../engine/graphics/Vector2";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
+import { ScenePointerMoveEvent } from "../../engine/scene/events/ScenePointerMoveEvent";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
+import { degrees } from "../../engine/util/math";
 import { CharacterNode } from "./CharacterNode";
 import { EnemyNode } from "./EnemyNode";
 import { FlashlightNode } from "./player/FlashlightNode";
@@ -211,5 +213,21 @@ export class PlayerNode extends CharacterNode {
 
     public setDebug(debug: boolean): void {
         this.debug = debug;
+    }
+
+    private handlePointerMove(event: ScenePointerMoveEvent): void {
+        const angle = new Vector2(event.getX(), event.getY())
+            .sub(this.getScenePosition())
+            .translate(0, this.getHeight() / 2)
+            .getAngle();
+        console.log("Fire angle: " + degrees(angle));
+    }
+
+    protected activate(): void {
+        this.getScene()?.onPointerMove.connect(this.handlePointerMove, this);
+    }
+
+    protected deactivate(): void {
+        this.getScene()?.onPointerMove.disconnect(this.handlePointerMove, this);
     }
 }

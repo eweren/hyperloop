@@ -7,6 +7,8 @@ import { RootNode, UpdateRootNode, DrawRootNode } from "./RootNode";
 import { SceneNode } from "./SceneNode";
 import { Camera } from "./Camera";
 import { createCanvas, getRenderingContext } from "../util/graphics";
+import { Signal } from "../util/Signal";
+import { ScenePointerMoveEvent } from "./events/ScenePointerMoveEvent";
 
 /**
  * Constructor type of a scene.
@@ -38,6 +40,20 @@ export abstract class Scene<T extends Game = Game, A = void> {
     private backgroundStyle: string | null = null;
 
     public readonly camera: Camera<T>;
+
+    public readonly onPointerMove = new Signal<ScenePointerMoveEvent<T, A>>(this.initPointerMove.bind(this));
+
+    private initPointerMove(signal: Signal<ScenePointerMoveEvent<T, A>>) {
+        const listener = (event: PointerEvent) => {
+            signal.emit(new ScenePointerMoveEvent(this, event));
+        };
+        console.log("los", this.game);
+        this.game.canvas.addEventListener("pointermove", listener);
+        return () => {
+            this.game.canvas.removeEventListener("pointermove", listener);
+            console.log("end");
+        };
+    }
 
     public constructor(public readonly game: T) {
         this.rootNode = new RootNode(this, (update, draw) => {

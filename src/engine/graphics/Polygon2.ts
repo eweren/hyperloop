@@ -196,4 +196,17 @@ export class Polygon2 {
         // collides
         return this.getBounds().collidesWith(other.getBounds());
     }
+
+    /**
+     * Checks if this polygon contains the given point.
+     *
+     * @param x - The X coordinate in scene coordinate system.
+     * @param y - The Y coordinate in scene coordinate system.
+     * @return True if polygon contains the point, false if not.
+     */
+    public containsPoint(x: number, y: number): boolean {
+        // TODO Only bounding box collision is checked for now. Need real polygon check performed when bounding box
+        // collides
+        return this.getBounds().containsPoint(x, y);
+    }
 }

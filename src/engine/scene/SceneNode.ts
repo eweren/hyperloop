@@ -1499,6 +1499,17 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
+     * Checks if given point is contained by this node.
+     *
+     * @param x - The X coordinate in scene coordinate system.
+     * @param y - The Y coordinate in scene coordinate system.
+     * @return True if point is contained by the node, false if not.
+     */
+    public containsPoint(x: number, y: number): boolean {
+        return this.getSceneBoundsPolygon().containsPoint(x, y);
+    }
+
+    /**
      * Updates the animations and removes finished animations.
      */
     private updateAnimations(dt: number): void {
