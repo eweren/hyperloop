@@ -1,6 +1,5 @@
 import { clamp } from "../util/math";
 import { ControllerManager } from "../input/ControllerManager";
-import { sleep } from "../util/time";
 
 // Get cross-browser AudioContext (Safari still uses webkitAudioContext…)
 const AudioContext = window.AudioContext ?? (window as any).webkitAudioContext as AudioContext;
