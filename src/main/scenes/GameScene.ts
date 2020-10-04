@@ -51,8 +51,6 @@ export class GameScene extends Scene<Hyperloop> {
         // new SwitchNode({ onlyOnce: false, onUpdate: (state) => door.setLocked(!state) }).moveTo(1130, 380).appendTo(this.mapNode);
         new SwitchNode({ onlyOnce: true }).moveTo(250, 380).appendTo(this.mapNode);
 
-        const rat = new RatNode();
-        rat.moveTo(player!.getX() + 80, player!.getY() - 20).appendTo(this.mapNode);
         if (isDev()) {
             this.rootNode.appendChild(new FpsCounterNode({
                 font: GameScene.font,
