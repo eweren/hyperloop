@@ -2,59 +2,72 @@ import { Color } from "../../engine/color/Color";
 import { RGBColor } from "../../engine/color/RGBColor";
 import { Direction } from "../../engine/geom/Direction";
 import { Polygon2 } from "../../engine/graphics/Polygon2";
+import { Vector2 } from "../../engine/graphics/Vector2";
 import { SceneNode, SceneNodeAspect } from "../../engine/scene/SceneNode";
 import { TiledSceneArgs } from "../../engine/scene/TiledMapNode";
+import { createCanvas, getRenderingContext } from "../../engine/util/graphics";
 import { radians } from "../../engine/util/math";
 import { Hyperloop } from "../Hyperloop";
+
+function intensifyColor(color: RGBColor, f: number): Color {
+    let r = f * color.getRed(), g = f * color.getGreen(), b = f * color.getBlue();
+    if (r > 1) {
+        g += (r - 1) / 2;
+        b += (r - 1) / 2;
+        r = 1;
+    }
+    if (g > 1) {
+        r += (g - 1) / 2;
+        b += (b - 1) / 2;
+        g = 1;
+    }
+    if (b > 1) {
+        r += (b - 1) / 2;
+        g += (b - 1) / 2;
+        b = 1;
+    }
+    return new RGBColor(r, g, b);
+}
 
 export class LightNode extends SceneNode<Hyperloop> {
     private color: Color;
     private readonly polygon: Polygon2 | null;
-    private readonly ellipse: boolean;
     private readonly intensity: number;
     private readonly spin: number;
-    private gradient: Color[] = [];
+    private gradient: CanvasGradient | null = null;
 
     public constructor(args?: TiledSceneArgs) {
         super({ anchor: Direction.TOP_LEFT, showBounds: true, ...args });
         this.color = args?.tiledObject?.getOptionalProperty("color", "color")?.getValue() ?? new RGBColor(1, 1, 1);
         this.polygon = args?.tiledObject?.getPolygon() ?? null;
-        this.ellipse = args?.tiledObject?.isEllipse() ?? false;
         this.intensity = args?.tiledObject?.getOptionalProperty("intensity", "int")?.getValue() ?? 100;
         this.spin = args?.tiledObject?.getOptionalProperty("spin", "float")?.getValue() ?? 0;
         this.updateGradient();
     }
 
     private updateGradient(): void {
-        this.gradient = [];
-        const color = this.color.toRGB();
-        const steps = 16;
-        const overshoot = 0.5;
-        for (let step = 0; step < steps; step++) {
-            const p = (1 + overshoot) * (1 - step / steps) ** 8;
-            const col = intensifyColor(color, p);
-            this.gradient.push(col);
-        }
-        this.gradient.push(new RGBColor(0, 0, 0));
+        if (this.polygon === null && this.width !== 0 && this.height !== 0) {
+            this.gradient = null;
+        } else {
+            const colors: Color[] = [];
+            const color = this.color.toRGB();
+            const steps = 16;
+            const overshoot = 0.5;
+            for (let step = 0; step < steps; step++) {
+                const p = (1 + overshoot) * (1 - step / steps) ** 8;
+                const col = intensifyColor(color, p);
+                colors.push(col);
+            }
+            colors.push(new RGBColor(0, 0, 0));
 
-        function intensifyColor(color: RGBColor, f: number): Color {
-            let r = f * color.getRed(), g = f * color.getGreen(), b = f * color.getBlue();
-            if (r > 1) {
-                g += (r - 1) / 2;
-                b += (r - 1) / 2;
-                r = 1;
+            const canvas = createCanvas(8, 8);
+            const ctx = getRenderingContext(canvas, "2d");
+            const origin = this.polygon?.vertices[0] ?? new Vector2(0, 0);
+            const intensity = this.polygon == null ? this.intensity / 2 : this.intensity;
+            this.gradient = ctx.createRadialGradient(origin.x, origin.y, 0, origin.x, origin.y, intensity);
+            for (let i = 0, count = colors.length - 1; i <= count; i++) {
+                this.gradient.addColorStop(i / count, colors[i].toString());
             }
-            if (g > 1) {
-                r += (g - 1) / 2;
-                b += (b - 1) / 2;
-                g = 1;
-            }
-            if (b > 1) {
-                r += (b - 1) / 2;
-                g += (b - 1) / 2;
-                b = 1;
-            }
-            return new RGBColor(r, g, b);
         }
     }
 
@@ -98,34 +111,14 @@ export class LightNode extends SceneNode<Hyperloop> {
         const intensity = this.intensity;
         const width = this.getWidth();
         const height = this.getHeight();
+        ctx.fillStyle = this.gradient ?? this.color.toString();
         if (this.polygon != null) {
             this.polygon.draw(ctx);
-            const v = this.polygon.vertices[0];
-            const gradient = ctx.createRadialGradient(v.x, v.y, 0, v.x, v.y, this.intensity);
-            for (let i = 0, count = this.gradient.length - 1; i <= count; i++) {
-                gradient.addColorStop(i / count, this.gradient[i].toString());
-            }
-            ctx.fillStyle = gradient;
-        } else if (this.ellipse) {
-            const halfWidth = width / 2;
-            const halfHeight = height / 2;
-            ctx.ellipse(halfWidth, halfHeight, halfWidth, halfHeight, 0, 0, Math.PI * 2, true);
-            const gradient = ctx.createRadialGradient(halfWidth, halfHeight, 0, halfWidth, halfHeight, this.intensity / 2);
-            for (let i = 0, count = this.gradient.length - 1; i <= count; i++) {
-                gradient.addColorStop(i / count, this.gradient[i].toString());
-            }
-            ctx.fillStyle = gradient;
         } else if (width === 0 && height === 0) {
             const halfIntensity = intensity / 2;
             ctx.ellipse(0, 0, halfIntensity, halfIntensity, 0, 0, Math.PI * 2, true);
-            const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, this.intensity / 2);
-            for (let i = 0, count = this.gradient.length - 1; i <= count; i++) {
-                gradient.addColorStop(i / count, this.gradient[i].toString());
-            }
-            ctx.fillStyle = gradient;
         } else {
             ctx.rect(0, 0, width, height);
-            ctx.fillStyle = this.color.toString();
         }
         ctx.fill();
         ctx.restore();
