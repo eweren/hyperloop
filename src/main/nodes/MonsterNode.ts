@@ -14,6 +14,9 @@ export class MonsterNode extends EnemyNode {
     @asset("sounds/fx/zombieScream.mp3")
     private static readonly monsterSoundAttack: Sound;
 
+    @asset("sounds/fx/drip.mp3")
+    private static readonly monsterSoundDamage: Sound;
+
     protected targetPosition: ReadonlyVector2;
 
     public constructor(args?: SceneNodeArgs) {
@@ -72,11 +75,16 @@ export class MonsterNode extends EnemyNode {
         bounds.addVertex(new Vector2(offsetX, boundsHeight + offsetY));
     }
 
-private staySilent() {
-    if (this.isScreaming()) {
-        MonsterNode.monsterSoundAttack.stop();
+    public hurt(damage: number, origin: ReadonlyVector2): boolean {
+        MonsterNode.monsterSoundDamage.play();
+        return super.hurt(damage, origin);
     }
-}
+
+    private staySilent() {
+        if (this.isScreaming()) {
+            MonsterNode.monsterSoundAttack.stop();
+        }
+    }
 
     private isScreaming() {
         return MonsterNode.monsterSoundAttack.isPlaying();
