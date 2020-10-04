@@ -14,10 +14,9 @@ export class PlayerLegsNode extends AsepriteNode<Hyperloop> {
     public constructor(args?: SceneNodeArgs) {
         super({
             aseprite: PlayerLegsNode.sprite,
-            anchor: Direction.BOTTOM,
+            anchor: Direction.CENTER,
             tag: "idle",
             id: "playerlegs",
-            showBounds: true,
             ...args
         });
     }

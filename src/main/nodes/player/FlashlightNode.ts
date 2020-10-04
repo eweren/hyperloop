@@ -7,7 +7,7 @@ import { PlayerNode } from "../PlayerNode";
 export class FlashlightNode extends SceneNode<Hyperloop> {
     private static image = FlashlightNode.generateImage(200, 100);
 
-    public constructor(args?: SceneNodeArgs) {
+    public constructor(private randomRotate?: boolean, args?: SceneNodeArgs) {
         super({
             anchor: Direction.CENTER,
             id: "flashlight",
@@ -26,9 +26,11 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
         if (player && player.isMirrorX()) {
             context.scale(-1, 1);
         }
-        const t = Date.now() * 0.002;
-        const randomAngle = Math.PI * 0.04 * (Math.sin(t * 0.5) + 0.5 * Math.sin(t * 0.84) + 0.3 * Math.sin(t * 0.941));
-        context.rotate(randomAngle);
+        if (this.randomRotate) {
+            const t = Date.now() * 0.002;
+            const randomAngle = Math.PI * 0.04 * (Math.sin(t * 0.5) + 0.5 * Math.sin(t * 0.84) + 0.3 * Math.sin(t * 0.941));
+            context.rotate(randomAngle);
+        }
         context.drawImage(FlashlightNode.image, 0, -54);
         context.restore();
     }
