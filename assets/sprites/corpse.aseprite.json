@@ -1,0 +1,27 @@
+{ "frames": {
+   "corpse.aseprite": {
+    "frame": { "x": 0, "y": 0, "w": 15, "h": 11 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 14, "y": 6, "w": 15, "h": 11 },
+    "sourceSize": { "w": 40, "h": 24 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.25",
+  "image": "corpse.png",
+  "format": "RGBA8888",
+  "size": { "w": 15, "h": 11 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 0, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
