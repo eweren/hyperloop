@@ -29,6 +29,7 @@ export class Hyperloop extends Game {
     private charactersAvailable = 4;
     private gameStage = GameStage.NONE;
     public keyTaken = false; // key taken from corpse
+    public fuseboxOn = false;
 
     public constructor() {
         super();

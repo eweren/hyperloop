@@ -7,7 +7,7 @@ import { PlayerNode } from "./PlayerNode";
 
 export abstract class InteractiveNode extends AsepriteNode<Hyperloop> {
     private target: CharacterNode | null = null;
-    private caption: string;
+    protected caption: string;
     private captionOpacity = 0;
     protected hideSprite = false;
 

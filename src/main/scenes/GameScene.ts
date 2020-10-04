@@ -19,6 +19,7 @@ import { Direction } from "../../engine/geom/Direction";
 import { MonsterNode } from "../nodes/MonsterNode";
 import { RatNode } from "../nodes/RatNode";
 import { CorpseNode } from "../nodes/CorpseNode";
+import { FuseboxNode } from "../nodes/FuseboxNode";
 
 export class GameScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -39,7 +40,8 @@ export class GameScene extends Scene<Hyperloop> {
         "cameraLimit": CameraLimitNode,
         "door": DoorNode,
         "corpse": CorpseNode,
-        "powerswitch": SwitchNode
+        "powerswitch": SwitchNode,
+        "fusebox": FuseboxNode
     }});
 
     public setup() {
