@@ -9,6 +9,7 @@ import { Camera } from "./Camera";
 import { createCanvas, getRenderingContext } from "../util/graphics";
 import { Signal } from "../util/Signal";
 import { ScenePointerMoveEvent } from "./events/ScenePointerMoveEvent";
+import { ScenePointerDownEvent } from "./events/ScenePointerDownEvent";
 
 /**
  * Constructor type of a scene.
@@ -42,18 +43,7 @@ export abstract class Scene<T extends Game = Game, A = void> {
     public readonly camera: Camera<T>;
 
     public readonly onPointerMove = new Signal<ScenePointerMoveEvent<T, A>>(this.initPointerMove.bind(this));
-
-    private initPointerMove(signal: Signal<ScenePointerMoveEvent<T, A>>) {
-        const listener = (event: PointerEvent) => {
-            signal.emit(new ScenePointerMoveEvent(this, event));
-        };
-        console.log("los", this.game);
-        this.game.canvas.addEventListener("pointermove", listener);
-        return () => {
-            this.game.canvas.removeEventListener("pointermove", listener);
-            console.log("end");
-        };
-    }
+    public readonly onPointerDown = new Signal<ScenePointerDownEvent<T, A>>(this.initPointerDown.bind(this));
 
     public constructor(public readonly game: T) {
         this.rootNode = new RootNode(this, (update, draw) => {
@@ -184,6 +174,26 @@ export abstract class Scene<T extends Game = Game, A = void> {
     public setBackgroundStyle(backgroundStyle: string | null): this {
         this.backgroundStyle = backgroundStyle;
         return this;
+    }
+
+    private initPointerMove(signal: Signal<ScenePointerMoveEvent<T, A>>) {
+        const listener = (event: PointerEvent) => {
+            signal.emit(new ScenePointerMoveEvent(this, event));
+        };
+        this.game.canvas.addEventListener("pointermove", listener);
+        return () => {
+            this.game.canvas.removeEventListener("pointermove", listener);
+        };
+    }
+
+    private initPointerDown(signal: Signal<ScenePointerDownEvent<T, A>>) {
+        const listener = (event: PointerEvent) => {
+            signal.emit(new ScenePointerDownEvent(this, event));
+        };
+        this.game.canvas.addEventListener("pointerdown", listener);
+        return () => {
+            this.game.canvas.removeEventListener("pointerdown", listener);
+        };
     }
 
     /**
