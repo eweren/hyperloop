@@ -1,11 +1,75 @@
 { "frames": {
-   "male.aseprite": {
+   "male 0.aseprite": {
     "frame": { "x": 0, "y": 0, "w": 8, "h": 27 },
     "rotated": false,
     "trimmed": true,
     "spriteSourceSize": { "x": 5, "y": 5, "w": 8, "h": 27 },
     "sourceSize": { "w": 20, "h": 32 },
-    "duration": 100
+    "duration": 1000
+   },
+   "male 1.aseprite": {
+    "frame": { "x": 8, "y": 0, "w": 10, "h": 27 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 5, "y": 5, "w": 10, "h": 27 },
+    "sourceSize": { "w": 20, "h": 32 },
+    "duration": 1000
+   },
+   "male 2.aseprite": {
+    "frame": { "x": 18, "y": 0, "w": 9, "h": 27 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 6, "y": 5, "w": 9, "h": 27 },
+    "sourceSize": { "w": 20, "h": 32 },
+    "duration": 150
+   },
+   "male 3.aseprite": {
+    "frame": { "x": 27, "y": 0, "w": 10, "h": 27 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 6, "y": 5, "w": 10, "h": 27 },
+    "sourceSize": { "w": 20, "h": 32 },
+    "duration": 150
+   },
+   "male 4.aseprite": {
+    "frame": { "x": 37, "y": 0, "w": 11, "h": 27 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 5, "y": 5, "w": 11, "h": 27 },
+    "sourceSize": { "w": 20, "h": 32 },
+    "duration": 150
+   },
+   "male 5.aseprite": {
+    "frame": { "x": 48, "y": 0, "w": 13, "h": 27 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 4, "y": 5, "w": 13, "h": 27 },
+    "sourceSize": { "w": 20, "h": 32 },
+    "duration": 150
+   },
+   "male 6.aseprite": {
+    "frame": { "x": 61, "y": 0, "w": 13, "h": 27 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 4, "y": 5, "w": 13, "h": 27 },
+    "sourceSize": { "w": 20, "h": 32 },
+    "duration": 1000
+   },
+   "male 7.aseprite": {
+    "frame": { "x": 74, "y": 0, "w": 13, "h": 27 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 4, "y": 5, "w": 13, "h": 27 },
+    "sourceSize": { "w": 20, "h": 32 },
+    "duration": 1000
+   },
+   "male 8.aseprite": {
+    "frame": { "x": 87, "y": 0, "w": 13, "h": 27 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 4, "y": 5, "w": 13, "h": 27 },
+    "sourceSize": { "w": 20, "h": 32 },
+    "duration": 1000
    }
  },
  "meta": {
@@ -13,12 +77,15 @@
   "version": "1.2.25",
   "image": "male.png",
   "format": "RGBA8888",
-  "size": { "w": 8, "h": 27 },
+  "size": { "w": 100, "h": 27 },
   "scale": "1",
   "frameTags": [
+   { "name": "idle", "from": 0, "to": 0, "direction": "forward" },
+   { "name": "Idle2", "from": 1, "to": 8, "direction": "pingpong" }
   ],
   "layers": [
-   { "name": "Layer", "opacity": 255, "blendMode": "normal" }
+   { "name": "Layer", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
   ],
   "slices": [
   ]
