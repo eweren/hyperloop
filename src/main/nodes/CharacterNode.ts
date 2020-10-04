@@ -1,8 +1,8 @@
+import { asset } from "../../engine/assets/Assets";
 import { Sound } from "../../engine/assets/Sound";
 import { Line2 } from "../../engine/graphics/Line2";
 import { ReadonlyVector2, Vector2, Vector2Like } from "../../engine/graphics/Vector2";
 import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
-import { SoundNode } from "../../engine/scene/SoundNode";
 import { cacheResult } from "../../engine/util/cache";
 import { clamp } from "../../engine/util/math";
 import { Hyperloop } from "../Hyperloop";
@@ -15,6 +15,8 @@ const GRAVITY = 1200;
 const PROJECTILE_STEP_SIZE = 5;
 
 export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
+    @asset("sounds/fx/shot.mp3")
+    private static readonly shootSound: Sound;
 
     // Character settings
     public abstract getShootingRange(): number;
@@ -31,7 +33,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected isJumping = false;
     protected isFalling = true;
     protected hitpoints = 100;
-    protected shootNode: SoundNode | null = null;
     protected debug = false;
     private canInteractWith: InteractiveNode | null = null;
     protected battlemode = false;
@@ -44,11 +45,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         super(args);
         this.velocity = new Vector2(0, 0);
         // this.setShowBounds(true);
-        this.setUpFx();
-    }
-
-    private async setUpFx(): Promise<void> {
-        this.shootNode = new SoundNode({ sound: await Sound.load("assets/sounds/fx/shot.mp3"), range: this.getShootingRange() });
     }
 
     public update(dt: number, time: number): void {
@@ -141,10 +137,8 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     public shoot(angle: number, power: number, origin: Vector2Like = new Vector2(this.getScenePosition().x, this.getScenePosition().y - this.getHeight() * .5)): void {
         this.startBattlemode();
-        this.shootNode?.setX(origin.x);
-        this.shootNode?.setY(origin.y);
-        this.shootNode?.getSound().stop();
-        this.shootNode?.getSound().play();
+        CharacterNode.shootSound.stop();
+        CharacterNode.shootSound.play();
         const diffX = Math.cos(angle) * PROJECTILE_STEP_SIZE;
         const diffY = Math.sin(angle) * PROJECTILE_STEP_SIZE;
         let isColliding: CharacterNode | CollisionNode | null = null;
