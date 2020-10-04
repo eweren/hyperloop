@@ -25,19 +25,37 @@ export class LightNode extends SceneNode {
     }
 
     private updateGradient(): void {
-        const color = this.color;
-        this.gradient = [
-            color,
-            color,
-            color.darken(0.75),
-            color.darken(0.89),
-            color.darken(0.94),
-            color.darken(0.96),
-            color.darken(0.97),
-            color.darken(0.98),
-            color.darken(0.99),
-            new RGBColor(0, 0, 0)
-        ];
+        this.gradient = [];
+        const color = this.color.toRGB();
+        const steps = 16;
+        const overshoot = 0.5;
+        for (let step = 0; step < steps; step++) {
+            const p = (1 + overshoot) * (1 - step / steps) ** 8;
+            const col = intensifyColor(color, p);
+            this.gradient.push(col);
+        }
+        this.gradient.push(new RGBColor(0, 0, 0));
+        console.log(this.gradient.slice());
+
+        function intensifyColor(color: RGBColor, f: number): Color {
+            let r = f * color.getRed(), g = f * color.getGreen(), b = f * color.getBlue();
+            if (r > 1) {
+                g += (r - 1) / 2;
+                b += (r - 1) / 2;
+                r = 1;
+            }
+            if (g > 1) {
+                r += (g - 1) / 2;
+                b += (b - 1) / 2;
+                g = 1;
+            }
+            if (b > 1) {
+                r += (b - 1) / 2;
+                g += (b - 1) / 2;
+                b = 1;
+            }
+            return new RGBColor(r, g, b);
+        }
     }
 
     public setColor(color: Color): this {

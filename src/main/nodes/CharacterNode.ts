@@ -35,7 +35,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public constructor(args: AsepriteNodeArgs) {
         super(args);
         this.velocity = new Vector2(0, 0);
-        this.setShowBounds(true);
+        // this.setShowBounds(true);
         this.setUpFx();
     }
 
