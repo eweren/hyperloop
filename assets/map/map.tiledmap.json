@@ -11,20 +11,6 @@
  "layers":[
         {
          "compression":"zlib",
-         "data":"eJzt1sEJADAMA7F0kk6S\/dfqEoUQrAP9\/XRXVQMAAAT41ebtkiQpqxPuhpv+38CcBw4UEjk=",
-         "encoding":"base64",
-         "height":28,
-         "id":1,
-         "name":"collisions",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
-         "width":64,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "compression":"zlib",
          "data":"eJztwwENwCAQALFnRsDI0D5pE3Jt0hkAAICGd+Yr3\/Er\/saf+McpP\/E3HoCmH2GXZ1A=",
          "encoding":"base64",
          "height":28,
@@ -453,6 +439,26 @@
          "tintcolor":"#ff0000",
          "type":"objectgroup",
          "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "compression":"zlib",
+         "data":"eJzt1sEJADAMA7F0kk6S\/dfqEoUQrAP9\/XRXVQMAAAT41ebtkiQpqxPuhpv+38CcBw4UEjk=",
+         "encoding":"base64",
+         "height":28,
+         "id":1,
+         "name":"collisions",
+         "opacity":1,
+         "properties":[
+                {
+                 "name":"layer",
+                 "type":"int",
+                 "value":2
+                }],
+         "type":"tilelayer",
+         "visible":true,
+         "width":64,
          "x":0,
          "y":0
         }],
