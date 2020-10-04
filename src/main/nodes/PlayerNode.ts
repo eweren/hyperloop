@@ -15,13 +15,25 @@ import { ScenePointerMoveEvent } from "../../engine/scene/events/ScenePointerMov
 import { Sound } from "../../engine/assets/Sound";
 import { Vector2 } from "../../engine/graphics/Vector2";
 import { asset } from "../../engine/assets/Assets";
+import { AmmoCounterNode } from "./player/AmmoCounterNode";
+import { BitmapFont } from "../../engine/assets/BitmapFont";
+import { STANDARD_FONT, HUD_LAYER } from "../constants";
+import { isDev } from "../../engine/util/env";
+import { sleep } from "../../engine/util/time";
 
 export class PlayerNode extends CharacterNode {
+
+    @asset(STANDARD_FONT)
+    private static font: BitmapFont;
+
     @asset("sounds/fx/wilhelmScream.mp3")
     private static readonly dieScream: Sound;
 
     @asset("sounds/fx/footsteps.ogg")
     private static readonly footsteps: Sound;
+
+    @asset("sounds/fx/switch.mp3")
+    private static readonly reloadSound: Sound;
 
     @asset("sprites/spacesuitbody.aseprite.json")
     private static sprite: Aseprite;
@@ -29,9 +41,11 @@ export class PlayerNode extends CharacterNode {
     private flashLight: FlashlightNode;
 
     private aimingAngle = Math.PI / 2;
+    ammoCounter: AmmoCounterNode;
     private get aimingAngleNonNegative(): number {
         return -this.aimingAngle + Math.PI / 2;
     }
+    private ammo = 6;
     private nextShot = 0;
     private interactPressed = false;
 
@@ -42,6 +56,7 @@ export class PlayerNode extends CharacterNode {
     private readonly deceleration = 800;
     private readonly jumpPower = 295;
     private readonly shotDelay = 0.5;
+    private readonly magazineSize = 6;
     private leftMouseDown = false;
 
     public constructor(args?: SceneNodeArgs) {
@@ -57,6 +72,11 @@ export class PlayerNode extends CharacterNode {
         this.playerArm = new PlayerArmNode();
         this.playerLeg = new PlayerLegsNode();
         this.flashLight = new FlashlightNode();
+        this.ammoCounter = new AmmoCounterNode({
+            font: PlayerNode.font,
+            anchor: Direction.TOP_RIGHT,
+            layer: HUD_LAYER
+        });
         this.appendChild(this.playerLeg);
         this.appendChild(this.playerArm);
         this.playerArm?.appendChild(this.flashLight);
@@ -80,6 +100,12 @@ export class PlayerNode extends CharacterNode {
     public getJumpPower(): number {
         return this.jumpPower;
     }
+    public getAmmo(): number {
+        return this.ammo;
+    }
+    public getMagazineSize(): number {
+        return this.magazineSize;
+    }
 
     public updateBoundsPolygon(bounds: Polygon2): void {
         const boundsWidth = 8;
@@ -95,6 +121,12 @@ export class PlayerNode extends CharacterNode {
 
     public update(dt: number, time: number) {
         super.update(dt, time);
+        if (!this.ammoCounter.isInScene() && isDev()) {
+            const rootNode = this.getGame().getGameScene().rootNode;
+            this.ammoCounter.setX(rootNode.getWidth() - 10);
+            this.ammoCounter.setY(10);
+            rootNode.appendChild(this.ammoCounter);
+        }
         if (!this.isAlive()) {
             this.setDirection(0);
             return;
@@ -140,8 +172,21 @@ export class PlayerNode extends CharacterNode {
         this.syncArmAndLeg();
     }
 
-    public shoot(): void {
-        super.shoot(this.aimingAngleNonNegative, 35, this.flashLight.getScenePosition());
+    public async shoot(): Promise<void> {
+        if (this.ammo > 0) {
+            this.ammo--;
+            super.shoot(this.aimingAngleNonNegative, 35, this.flashLight.getScenePosition());
+        }
+        if (this.ammo === 0){
+            PlayerNode.reloadSound.setLoop(true);
+            PlayerNode.reloadSound.play(0,0, 1.5);
+            await sleep(1500);
+            this.reload();
+        }
+    }
+
+    public reload(): void {
+        this.ammo = this.magazineSize;
     }
 
     private syncArmAndLeg(): void {
