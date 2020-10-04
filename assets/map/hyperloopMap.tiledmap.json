@@ -52,20 +52,6 @@
          "y":0
         }, 
         {
-         "compression":"zlib",
-         "data":"eJzt1rEJADAMA0FDVsn+M6YPCRiMujvQAl+pitte8\/E2baPtn7Y52uZom6Ntjp8AAAAAAAAAAAAAAAAAAAAAAAAA0HcAO\/gGtQ==",
-         "encoding":"base64",
-         "height":64,
-         "id":1,
-         "name":"foreground",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
-         "width":87,
-         "x":0,
-         "y":0
-        }, 
-        {
          "draworder":"topdown",
          "id":4,
          "name":"objects",
@@ -374,7 +360,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -694,7 +680,21 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "compression":"zlib",
+         "data":"eJzt1rEJADAMA0FDVsn+M6YPCRiMujvQAl+pitte8\/E2baPtn7Y52uZom6Ntjp8AAAAAAAAAAAAAAAAAAAAAAAAA0HcAO\/gGtQ==",
+         "encoding":"base64",
+         "height":64,
+         "id":1,
+         "name":"foreground",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":87,
          "x":0,
          "y":0
         }],
