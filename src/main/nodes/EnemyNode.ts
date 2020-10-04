@@ -246,7 +246,7 @@ export class EnemyNode extends CharacterNode {
             const pl = this.getPlayer();
             if (pl) {
                 this.targetPosition = pl.getScenePosition();
-                this.setState(AiState.ATTACK);
+                this.setState(AiState.FOLLOW);
             }
             return false;
         }
