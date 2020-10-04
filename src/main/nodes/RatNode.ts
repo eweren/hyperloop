@@ -35,8 +35,8 @@ export class RatNode extends EnemyNode {
     }
 
     protected updateBoundsPolygon(bounds: Polygon2): void {
-        const boundsWidth = 7;
-        const boundsHeight = 4;
+        const boundsWidth = 11;
+        const boundsHeight = 5;
         const offsetX = this.getWidth() / 2 - boundsWidth / 2;
         const offsetY = 6;
         bounds.clear();
