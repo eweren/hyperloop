@@ -16,11 +16,10 @@ export class PlayerArmNode extends AsepriteNode<Hyperloop> {
         super({
             aseprite: PlayerArmNode.sprite,
             anchor: Direction.LEFT,
-            childAnchor: Direction.TOP_RIGHT,
+            childAnchor: Direction.BOTTOM,
             tag: "idle",
             id: "playerarm",
-            showBounds: true,
-            x: -2,
+            y: -2,
             ...args
         });
     }

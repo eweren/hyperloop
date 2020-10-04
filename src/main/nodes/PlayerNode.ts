@@ -22,11 +22,14 @@ export class PlayerNode extends CharacterNode {
     private flashLight: FlashlightNode;
 
     private aimingAngle = 0;
+    private get aimingAngleNonNegative(): number {
+        return -this.aimingAngle + Math.PI / 2;
+    }
     private nextShot = 0;
     private interactPressed = false;
 
     // for debug purposes
-    private debug = true;
+    private debug = false;
 
     // Character settings
     private readonly shootingRange = 250;
@@ -43,7 +46,6 @@ export class PlayerNode extends CharacterNode {
             childAnchor: Direction.CENTER,
             tag: "idle",
             id: "player",
-            showBounds: true,
             ...args
         });
         this.playerArm = new PlayerArmNode();
@@ -89,8 +91,6 @@ export class PlayerNode extends CharacterNode {
             this.setDirection(0);
             return;
         }
-        // Aiming
-        // this.aimingAngle = this.getAimingAngle();
         // Controls
         const input = this.getScene()!.game.input;
         // Run left/right
@@ -104,7 +104,7 @@ export class PlayerNode extends CharacterNode {
         // Shoot
         if (input.currentActiveIntents & ControllerIntent.PLAYER_ACTION) {
             if (time >= this.nextShot) {
-                this.shoot(this.aimingAngle, 35);
+                this.shoot(this.aimingAngleNonNegative, 35);
                 this.nextShot = time + this.shotDelay;
             }
         }
@@ -124,30 +124,26 @@ export class PlayerNode extends CharacterNode {
     private syncArmAndLeg(): void {
         this.playerArm.transform(c => {
             const angleInDegrees = this.aimingAngle / Math.PI * 180;
-            c.setRotation(-this.aimingAngle + Math.PI / 2);
+            c.setRotation(this.aimingAngleNonNegative);
             // Mirror arm vertically
-            if (angleInDegrees > 0) {
+            if (angleInDegrees < 0) {
                 c.scaleY(-1);
             } else {
                 c.scaleY(1);
             }
+            // Transform flashlight to match scaling and rotation of the arm.
+            this.flashLight.transform(f => {
+                if (this.isMirrorX()) {
+                    this.playerArm.setChildAnchor(Direction.TOP);
+                    this.flashLight.setY(-1);
+                    f.setRotation(Math.PI);
+                } else {
+                    this.playerArm.setChildAnchor(Direction.BOTTOM);
+                    this.flashLight.setY(0);
+                    f.setRotation(0);
+                }
+            });
         });
-        // this.flashLight.transform(c => {
-        //     if (this.isMirrorX()) {
-        //         c.setRotation(-this.aimingAngle - Math.PI);
-        //     } else {
-        //         c.setRotation(-this.aimingAngle);
-        //     }
-        //     const angleInDegrees = this.aimingAngle / Math.PI * 180;
-        //     if (angleInDegrees > 90 && angleInDegrees < 270) {
-        //         this.flashLight.setX(this.playerArm.getBounds().minX);
-        //         this.flashLight.setY(this.playerArm.getBounds().centerY);
-        //     } else {
-        //         this.flashLight.setX(this.playerArm.getBounds().maxX);
-        //         this.flashLight.setY(this.playerArm.getBounds().centerY);
-        //     }
-
-        // });
         if (this.isJumping) {
             this.playerLeg.setTag("jump");
         } else if (this.isFalling) {
@@ -174,8 +170,8 @@ export class PlayerNode extends CharacterNode {
         const playerBounds = this.getBounds();
         const playerCenter = new Vector2(playerBounds.centerX, playerBounds.minY + playerBounds.height * 0.35);
         const endOfLine = new Vector2(
-            playerCenter.x + this.shootingRange * Math.cos(this.aimingAngle - Math.PI / 2),
-            playerCenter.y - this.shootingRange * Math.sin(this.aimingAngle - Math.PI / 2)
+            playerCenter.x + this.shootingRange * Math.cos(-this.aimingAngleNonNegative),
+            playerCenter.y - this.shootingRange * Math.sin(-this.aimingAngleNonNegative)
         );
         const line = new Line2(
             playerCenter,

@@ -17,7 +17,6 @@ export class PlayerLegsNode extends AsepriteNode<Hyperloop> {
             anchor: Direction.CENTER,
             tag: "idle",
             id: "playerlegs",
-            showBounds: true,
             ...args
         });
     }
