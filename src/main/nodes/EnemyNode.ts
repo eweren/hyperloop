@@ -121,8 +121,7 @@ export abstract class EnemyNode extends CharacterNode {
         // Check distance to player
         const player = this.getPlayer();
         if (player) {
-            const squaredDistance = player.getPosition().getSquareDistance(this.getPosition());
-            if (this.isLookingInPlayerDirection() && squaredDistance < this.squaredViewDistance) {
+            if (this.canSeePlayer(player)) {
                 // Player spotted!
                 this.setState(AiState.FOLLOW);
                 this.targetPosition = player.getPosition();
@@ -147,13 +146,6 @@ export abstract class EnemyNode extends CharacterNode {
             this.setState(newState);
             this.setDirection(0);
         }
-    }
-
-    protected isLookingInPlayerDirection(): boolean {
-        const player = this.getPlayer();
-        return (player != null && (
-            (this.getX() > player.getPosition().x && this.isMirrorX())
-            || (this.getX() < player.getPosition().x && !this.isMirrorX())));
     }
 
     protected updateFollow(time: number): void {
@@ -272,5 +264,19 @@ export abstract class EnemyNode extends CharacterNode {
     public getPersonalEnemies(): PlayerNode[] {
         const enemies = this.getScene()?.rootNode.getDescendantsByType(PlayerNode) ?? [];
         return enemies;
+    }
+
+    private isLookingInPlayerDirection(player = this.getPlayer()): boolean {
+        return player != null && ((this.getX() > player.getPosition().x) === this.isMirrorX());
+    }
+
+    public canSeePlayer(player = this.getPlayer()): boolean {
+        if (!player) {
+            return false;
+        }
+        const squaredDistance = player.getPosition().getSquareDistance(this.getPosition());
+        const origin = this.getHeadPosition(), target = player.getHeadPosition();
+        return this.isLookingInPlayerDirection(player) && squaredDistance < this.squaredViewDistance &&
+                this.getLineCollision(origin.x, origin.y, target.x - origin.x, target.y - origin.y) === player;
     }
 }
