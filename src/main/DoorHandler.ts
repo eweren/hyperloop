@@ -30,7 +30,9 @@ export class DoorHandler {
         setTimeout(() => {
             player.setX(door.getX());
             player.setY(door.getY());
-            // Fade in
+        }, 900);
+        // Fade in
+        setTimeout(() => {
             camera?.fadeToBlack.fadeIn({ duration: 0.8 });
         }, 1200);
     }

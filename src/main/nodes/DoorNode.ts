@@ -1,28 +1,35 @@
 import { Aseprite } from "../../engine/assets/Aseprite";
 import { asset } from "../../engine/assets/Assets";
-import { SceneNode, SceneNodeArgs } from "../../engine/scene/SceneNode";
+import { SceneNode } from "../../engine/scene/SceneNode";
+import { TiledSceneArgs } from "../../engine/scene/TiledMapNode";
 import { DoorHandler } from "../DoorHandler";
 import { InteractiveNode } from "./InteractiveNode";
-import { TrainNode } from "./TrainNode";
 
 export class DoorNode extends InteractiveNode {
     @asset("sprites/rat.aseprite.json")
     private static sprite: Aseprite;
     private isLocked = false;
     private gameTime = 0;
+    private targetId = "";
+    private name = "";
 
-    public constructor(args?: SceneNodeArgs) {
+    public constructor(args?: TiledSceneArgs) {
         super({
             aseprite: DoorNode.sprite,
             ...args
         }, "PRESS E TO ENTER");
+        this.targetId = args?.tiledObject?.getOptionalProperty("target", "string")?.getValue() ?? "";
+        this.name = args?.tiledObject?.getName() ?? "";
     }
 
     public interact(): void {
         if (this.canInteract()) {
             const player = this.getPlayer();
             if (player) {
-                DoorHandler.getInstance().transportToDoor(player, this.getTargetNode(), this.gameTime);
+                const target = this.getTargetNode();
+                if (target) {
+                    DoorHandler.getInstance().transportToDoor(player, target, this.gameTime);
+                }
             }
         }
     }
@@ -45,9 +52,9 @@ export class DoorNode extends InteractiveNode {
         return this.isLocked;
     }
 
-    private getTargetNode(): SceneNode {
-        // TODO get target from editor attributes, id, whatever
-        const target = (this.getScene()?.rootNode.getDescendantsByType(TrainNode) ?? [])[0];
+    private getTargetNode(): SceneNode | null {
+        const target = this.getScene()?.rootNode.getDescendantsByType(DoorNode)
+                .filter(door => door.name === this.targetId)[0] ?? null;
         return target;
     }
 

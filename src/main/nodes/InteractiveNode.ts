@@ -1,10 +1,11 @@
 
 import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
 import { clamp } from "../../engine/util/math";
+import { Hyperloop } from "../Hyperloop";
 import { CharacterNode } from "./CharacterNode";
 import { PlayerNode } from "./PlayerNode";
 
-export abstract class InteractiveNode extends AsepriteNode {
+export abstract class InteractiveNode extends AsepriteNode<Hyperloop> {
     private target: CharacterNode | null = null;
     private caption: string;
     private captionOpacity = 0;
@@ -15,7 +16,7 @@ export abstract class InteractiveNode extends AsepriteNode {
     }
 
     protected getRange(): number {
-        return 30;
+        return 50;
     }
 
     public update(dt: number, time: number): void {
@@ -65,7 +66,7 @@ export abstract class InteractiveNode extends AsepriteNode {
     }
 
     public draw(context: CanvasRenderingContext2D): void {
-        super.draw(context);
+        // super.draw(context);
         // Draw Caption
         if (this.caption !== "" && this.captionOpacity > 0) {
             context.save();
