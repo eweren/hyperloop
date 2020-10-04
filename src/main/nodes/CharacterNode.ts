@@ -233,6 +233,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     public die(): void {
+        this.endBattlemode();
         this.setTag("die");
         this.playerLeg?.setTag("die");
         this.hitpoints = 0;

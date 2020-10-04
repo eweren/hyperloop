@@ -218,7 +218,7 @@ export class PlayerNode extends CharacterNode {
 
     protected endBattlemode(): void {
         super.endBattlemode();
-        this.getScene()!.game.canvas.style.cursor = "crosshair";
+        this.getGame().canvas.style.cursor = "crosshair";
     }
 
     private setupMouseKeyHandlers(): void {
