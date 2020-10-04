@@ -68,10 +68,12 @@ export class RatNode extends EnemyNode {
         if (this.getPosition().getSquareDistance(this.moveAroundAnchor) > this.squaredMoveAroundDistance) {
             if (this.stopAndWaitTs === 0) {
                 if (this.moveTs + this.moveDelaySec < time) {
+                    this.setTag("idle");
                     this.setDirection(0);
                     this.stopAndWaitTs = time;
                 }
             } else if (this.stopAndWaitTs + this.stopAndWaitDelaySec < time) {
+                this.setTag("walk");
                 if (this.getX() > this.moveAroundAnchor.x) {
                     this.setDirection(-1);
                 } else {
@@ -89,6 +91,7 @@ export class RatNode extends EnemyNode {
     private updateAlert(time: number): void {
         const player = this.getPlayer();
         if (player && this.getDistanceToPlayerSquared() < this.squaredSafetyDistance) {
+            this.setTag("walk");
             this.setDirection(this.getX() < player.getX() ? -1 : 1);
         } else {
             this.targetPosition = this.getPosition();
