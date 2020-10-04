@@ -8,7 +8,6 @@ import { ScenePointerMoveEvent } from "../../engine/scene/events/ScenePointerMov
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { GameScene } from "../scenes/GameScene";
 import { CharacterNode } from "./CharacterNode";
-import { DoorNode } from "./DoorNode";
 import { EnemyNode } from "./EnemyNode";
 import { FlashlightNode } from "./player/FlashlightNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
@@ -22,7 +21,7 @@ export class PlayerNode extends CharacterNode {
     private playerArm: PlayerArmNode;
     private flashLight: FlashlightNode;
 
-    private aimingAngle = 0;
+    private aimingAngle = Math.PI / 2;
     private get aimingAngleNonNegative(): number {
         return -this.aimingAngle + Math.PI / 2;
     }
@@ -31,7 +30,7 @@ export class PlayerNode extends CharacterNode {
 
     // Character settings
     private readonly shootingRange = 250;
-    private readonly speed = 60;
+    private readonly speed = 120;
     private readonly acceleration = 600;
     private readonly deceleration = 800;
     private readonly jumpPower = 380;

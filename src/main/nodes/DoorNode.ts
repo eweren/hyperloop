@@ -40,7 +40,7 @@ export class DoorNode extends InteractiveNode {
     }
 
     public canInteract(): boolean {
-        return !this.isLocked;
+        return DoorHandler.getInstance().isReady(this.gameTime) && !this.isLocked;
     }
 
     public setLocked(locked: boolean): this {
