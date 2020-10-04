@@ -15,6 +15,6 @@ Custom Properties
 Name            | Type  | Description
 -----------------|-------|-------------
 layer           | int   | Used on a layer in Tiled to define the layer within the scene graph
-color           | color | Defines the light color on an object. Defaults to white if not specified.
-intensity       | int   | Defines how strong/far the light shines. This influences the light gradient. Not used for ambient lights.
-spin            | float | Only makes sense for spot lights. Defines how fast the light spins in degrees per second around the first vertex.
+color           | color | Defines the light color of an object. Defaults to white if not specified.
+intensity       | int   | Defines how strong/far the light shines. This influences the light gradient. Not used for ambient lights. Defaults to 100.
+spin            | float | Only makes sense for spot lights. Defines how fast the light spins in degrees per second around the first vertex. Defaults to 0.
