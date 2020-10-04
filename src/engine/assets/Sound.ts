@@ -69,7 +69,7 @@ export class Sound {
         return this.source != null;
     }
 
-    public play(fadeIn = 0): void {
+    public play(fadeIn = 0, delay = 0, duration?: number): void {
         if (!this.isPlaying()) {
             const source = getAudioContext().createBufferSource();
             source.buffer = this.buffer;
@@ -87,7 +87,7 @@ export class Sound {
                 this.gainNode.gain.setValueAtTime(0, this.source.context.currentTime);
                 this.gainNode.gain.linearRampToValueAtTime(1, this.source.context.currentTime + fadeIn);
             }
-            source.start();
+            source.start(this.source.context.currentTime, delay, duration);
         }
     }
 

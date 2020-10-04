@@ -23,9 +23,6 @@ export class PlayerNode extends CharacterNode {
     @asset("sounds/fx/footsteps.ogg")
     private static readonly footsteps: Sound;
 
-    @asset("sounds/fx/footstep.ogg")
-    private static readonly footstep: Sound;
-
     @asset("sprites/spacesuitbody.aseprite.json")
     private static sprite: Aseprite;
 
@@ -112,14 +109,11 @@ export class PlayerNode extends CharacterNode {
         if (input.currentActiveIntents & ControllerIntent.PLAYER_JUMP) {
             this.jump();
         }
-        if (this.isOnGround && direction !== 0) {
+        if (this.getTag() === "walk") {
             PlayerNode.footsteps.setLoop(true);
             PlayerNode.footsteps.play(0.5);
         } else {
-            if (PlayerNode.footsteps.isPlaying()) {
-                PlayerNode.footsteps.stop(0.1);
-                PlayerNode.footstep.play();
-            }
+            PlayerNode.footsteps.stop(0.3);
         }
         // Shoot
         if (input.currentActiveIntents & ControllerIntent.PLAYER_ACTION || this.leftMouseDown) {
