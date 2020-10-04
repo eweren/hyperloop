@@ -60,7 +60,7 @@ export abstract class InteractiveNode extends AsepriteNode {
         return this.target;
     }
 
-    private getPlayer(): PlayerNode | undefined {
+    protected getPlayer(): PlayerNode | undefined {
         return this.getScene()?.rootNode.getDescendantsByType(PlayerNode)[0];
     }
 
