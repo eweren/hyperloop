@@ -23,6 +23,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public abstract getJumpPower(): number;
 
     // Dynamic player state
+    protected updateTime = 0;
     protected direction = 0;
     protected velocity: Vector2;
     protected isOnGround = true;
@@ -35,7 +36,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public constructor(args: AsepriteNodeArgs) {
         super(args);
         this.velocity = new Vector2(0, 0);
-        // this.setShowBounds(true);
+        this.setShowBounds(true);
         this.setUpFx();
     }
 
@@ -45,6 +46,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     public update(dt: number, time: number): void {
         super.update(dt, time);
+        this.updateTime = time;
 
         // Acceleration
         let vx = 0;
