@@ -59,6 +59,16 @@ export class Bounds2 {
     }
 
     /**
+     * Checks if this bounding box collides with the given one.
+     *
+     * @param other - The other bounding box to check collision with.
+     * @return True if bounding boxes collide, false if not.
+     */
+    public collidesWith(other: Bounds2): boolean {
+        return this.minY <= other.maxY && this.maxY >= other.minY && this.minX <= other.maxX && this.maxX >= other.minX;
+    }
+
+    /**
      * Draws the bounds to the given 2D canvas rendering context. This only applies the closed geometry, you have to
      * fill/stroke/clip it yourself.
      *

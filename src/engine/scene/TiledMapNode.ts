@@ -39,16 +39,22 @@ export class TiledMapNode<T extends Game> extends SceneNode<T> {
             } else if (tiledLayer instanceof TiledObjectGroupLayer) {
                 for (const object of tiledLayer.getObjects()) {
                     const constructor = (objects != null ? objects[object.getType()] : null) ?? SceneNode;
-                    const node = new constructor({
+                    const args: TiledSceneArgs = {
                         id: object.getName(),
                         x: object.getX(),
                         y: object.getY(),
-                        width: object.getWidth() > 0 ? object.getWidth() : undefined,
-                        height: object.getHeight() > 0 ? object.getHeight() : undefined,
                         showBounds: object.getOptionalProperty("showBounds", "bool")?.getValue(),
                         layer,
                         tiledObject: object
-                    });
+                    };
+                    const width = object.getWidth();
+                    const height = object.getHeight();
+                    if (width > 0 && height > 0) {
+                        args.width = width;
+                        args.height = height;
+                        args.anchor = Direction.TOP_LEFT;
+                    }
+                    const node = new constructor(args);
                     node.transform(m => m.rotate(radians(object.getRotation())));
                     this.appendChild(node);
                 }
