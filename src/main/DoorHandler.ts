@@ -6,7 +6,7 @@ export class DoorHandler {
 
     private lastUsage: number = 0;
     // Delay between two door activations, in seconds
-    private usageDelay: number = 3;
+    private usageDelay: number = 4;
 
     private constructor() {
     }
@@ -25,17 +25,18 @@ export class DoorHandler {
         // Fade out
         const scene = player.getScene();
         const camera = scene?.camera;
-        camera?.fadeToBlack.fadeOut({ duration: 0.8 });
-        // Teleport
-        setTimeout(() => {
+        camera?.fadeToBlack.fadeOut({ duration: 0.8 }).then(() => {
+            // Teleport
             player.setX(door.getX());
             player.setY(door.getY());
-            // Fade in
+        });
+        // Fade in
+        setTimeout(() => {
             camera?.fadeToBlack.fadeIn({ duration: 0.8 });
         }, 1200);
     }
 
-    public isReady(currentTime: number = Date.now()): boolean {
+    public isReady(currentTime: number): boolean {
         return currentTime - this.lastUsage > this.usageDelay;
     }
 

@@ -35,7 +35,8 @@ export class GameScene extends Scene<Hyperloop> {
         "rat": RatNode,
         "train": TrainNode,
         "light": LightNode,
-        "cameraLimit": CameraLimitNode
+        "cameraLimit": CameraLimitNode,
+        "door": DoorNode
     }});
 
     public setup() {
@@ -45,9 +46,9 @@ export class GameScene extends Scene<Hyperloop> {
         this.setLightLayers([ LIGHT_LAYER ]);
         this.setHudLayers([ HUD_LAYER ]);
 
-        const door = new DoorNode();
-        door.moveTo(1040, 380).setLocked(true).appendTo(this.mapNode);
-        new SwitchNode({ onlyOnce: false, onUpdate: (state) => door.setLocked(!state) }).moveTo(1130, 380).appendTo(this.mapNode);
+        // const door = new DoorNode();
+        // door.moveTo(1040, 380).setLocked(true).appendTo(this.mapNode);
+        // new SwitchNode({ onlyOnce: false, onUpdate: (state) => door.setLocked(!state) }).moveTo(1130, 380).appendTo(this.mapNode);
         new SwitchNode({ onlyOnce: true }).moveTo(250, 380).appendTo(this.mapNode);
 
         const rat = new RatNode();

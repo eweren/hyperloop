@@ -19,11 +19,9 @@ export class PlayerNode extends CharacterNode {
     @asset("sprites/spacesuitbody.aseprite.json")
     private static sprite: Aseprite;
 
-    private playerLeg: PlayerLegsNode;
-    private playerArm: PlayerArmNode;
     private flashLight: FlashlightNode;
 
-    private aimingAngle = 0;
+    private aimingAngle = Math.PI / 2;
     private get aimingAngleNonNegative(): number {
         return -this.aimingAngle + Math.PI / 2;
     }
@@ -32,7 +30,7 @@ export class PlayerNode extends CharacterNode {
 
     // Character settings
     private readonly shootingRange = 250;
-    private readonly speed = 60;
+    private readonly speed = 120;
     private readonly acceleration = 600;
     private readonly deceleration = 800;
     private readonly jumpPower = 380;
@@ -53,7 +51,7 @@ export class PlayerNode extends CharacterNode {
         this.flashLight = new FlashlightNode();
         this.appendChild(this.playerLeg);
         this.appendChild(this.playerArm);
-        this.playerArm.appendChild(this.flashLight);
+        this.playerArm?.appendChild(this.flashLight);
         this.setupMouseKeyHandlers();
         (<any>window)["player"] = this;
     }
@@ -132,7 +130,7 @@ export class PlayerNode extends CharacterNode {
     }
 
     private syncArmAndLeg(): void {
-        this.playerArm.transform(c => {
+        this.playerArm?.transform(c => {
             const angleInDegrees = this.aimingAngle / Math.PI * 180;
             c.setRotation(this.aimingAngleNonNegative);
             // Mirror arm vertically
@@ -144,7 +142,7 @@ export class PlayerNode extends CharacterNode {
             // look in aiming direction
             this.setMirrorX(angleInDegrees < 0);
             const backwards = this.direction === 1 && angleInDegrees < 0 || this.direction === -1 && angleInDegrees >= 0;
-            this.playerLeg.getAseprite().setDirection(backwards ? "reverse" : "forward");
+            this.playerLeg?.getAseprite().setDirection(backwards ? "reverse" : "forward");
             // Transform flashlight to match scaling and rotation of the arm.
             this.flashLight.transform(f => {
                 if (this.isMirrorX()) {
@@ -157,15 +155,15 @@ export class PlayerNode extends CharacterNode {
             });
         });
         if (this.isJumping) {
-            this.playerLeg.setTag("jump");
+            this.setTag("jump");
         } else if (this.isFalling) {
-            this.playerLeg.setTag("fall");
+            this.setTag("fall");
         } else if (this.direction !== 0) {
-            this.playerLeg.setTag("walk");
+            this.setTag("walk");
         } else {
-            this.playerLeg.setTag("idle");
+            this.setTag("idle");
         }
-        this.playerLeg.setMirrorX(this.isMirrorX());
+        this.playerLeg?.setMirrorX(this.isMirrorX());
     }
 
 
@@ -206,7 +204,7 @@ export class PlayerNode extends CharacterNode {
 
     private handlePointerMove(event: ScenePointerMoveEvent): void {
         this.aimingAngle = new Vector2(event.getX(), event.getY())
-            .sub(this.playerArm.getScenePosition())
+            .sub(this.playerArm ? this.playerArm.getScenePosition() : this.getScenePosition())
             .getAngle();
     }
 

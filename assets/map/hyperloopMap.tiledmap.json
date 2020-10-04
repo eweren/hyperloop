@@ -25,7 +25,7 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt2uttwjAQwHFLaVmkZY\/wpR2iRKKvIQCpTacAtukXUCfpHL0olkDGjvKA+JL+f+LkcAFzOp62MAYA0NRDYsxjEruKcXqTvr7b3r7I+Jqcj0N23+I+G2PSrY2dxCXqyKWPX8n5+N8spZ8rG+sL9RYl6a1Z2VhHrmVs5DPBbG3sItei1eQ45jHrAAAA9aRymXl+j18jPzmO303naVq\/BpvAOlJTvmrNG5pHg2VgHakpX7XmDc0Ty00ZeXH8JHVltjZt+Vtbb5Gb2\/CdyxT19pTUZjLl+SI3t+E755tHg2IfxLf\/oSlftVcTmkeDYh\/Et\/+hKV+1VxOaR4NUYjaAfEjT2wMAAAAIuysjD10\/9F\/SaCwkniM+\/t4+j6H\/K7nP9ak29+nTh8Rn7CIwGAsT973Y1aHiM9rV5v+JXQzxvdh3j4AhaPq9v79qNXBp+f0FjMlP7AJG7Dd2AUAH08Ax+jd1xjq3rTruWgegkbuO4\/Van9sregcAAAAAAAD07w\/dZHxA",
+         "data":"eJzt2u1twjAQgGFLaVH3aNkj\/GmHKJHo1xCA1KZTANvwB+gknaMXxRIo2FFCQnxJ30ecHA5iTsenLYwBANT1GBnzFIWuYpjepa8ftrevMr5F52OfPVxwzsqYeG1jI9FGHan08Ts6H\/+bufRzYWPZUm+Rk96ahY1l4FqGRj4TzNrGJnAtWo2OYxqyDgAAUE0sl4nj9\/g18qPjuK07T936NVh51pGa8mVrXt88Gsw960hN+bI1r2+eUG7ySLPjZ6krsbVpy9\/aerPc1IbrtkRRb09JbSZRns9yUxuu21zzaJDtg7j2PzTly\/ZqfPNokO2DuPY\/NOXL9mp882gQS0x6kPepe38AAAAAfvd5pL7r++5LGoyZxEvAx9\/Z59H3f6Xic33qknO69CnxFboI9MbMhH0vNrUv+YwuuuT\/iU308b3YdY\/QjoOC754hq\/u9v7tqNSjS8vsLGJKf0AUM2G\/oAqDWIXQBFYw9x6jvruH548JY5b5lx03rADQqruN4vVZX7BW9AwAAAAAAALr3BxI4flY=",
          "encoding":"base64",
          "height":64,
          "id":3,
@@ -65,8 +65,8 @@
                  "type":"player",
                  "visible":true,
                  "width":0,
-                 "x":183.666333333333,
-                 "y":601.833333333333
+                 "x":279.666333333333,
+                 "y":375.333333333333
                 }, 
                 {
                  "height":0,
@@ -225,7 +225,7 @@
                  "y":282
                 }, 
                 {
-                 "height":35,
+                 "height":3,
                  "id":31,
                  "name":"tunneldoor2",
                  "properties":[
@@ -244,10 +244,10 @@
                  "visible":true,
                  "width":20,
                  "x":1034,
-                 "y":127
+                 "y":159.090909090909
                 }, 
                 {
-                 "height":35,
+                 "height":3,
                  "id":32,
                  "name":"maintenancedoor1",
                  "properties":[
@@ -266,10 +266,10 @@
                  "visible":true,
                  "width":20,
                  "x":152,
-                 "y":577
+                 "y":609
                 }, 
                 {
-                 "height":35,
+                 "height":3,
                  "id":33,
                  "name":"tunneldoor1",
                  "properties":[
@@ -288,10 +288,10 @@
                  "visible":true,
                  "width":20,
                  "x":1034,
-                 "y":361
+                 "y":393
                 }, 
                 {
-                 "height":35,
+                 "height":3,
                  "id":34,
                  "name":"maintenancedoor2",
                  "properties":[
@@ -310,7 +310,7 @@
                  "visible":true,
                  "width":20,
                  "x":1106,
-                 "y":613
+                 "y":645
                 }, 
                 {
                  "height":144,
@@ -809,8 +809,8 @@
                  "type":"enemy",
                  "visible":true,
                  "width":0,
-                 "x":458.666666666667,
-                 "y":668.666666666667
+                 "x":178.541666666667,
+                 "y":841.541666666667
                 }, 
                 {
                  "height":0,
@@ -823,10 +823,128 @@
                  "width":0,
                  "x":559.333333333333,
                  "y":672
+                }, 
+                {
+                 "height":11,
+                 "id":94,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":17,
+                 "x":1098,
+                 "y":797
+                }, 
+                {
+                 "height":11,
+                 "id":95,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":17,
+                 "x":757,
+                 "y":671
+                }, 
+                {
+                 "height":0,
+                 "id":96,
+                 "name":"Enemy",
+                 "point":true,
+                 "rotation":0,
+                 "type":"enemy",
+                 "visible":true,
+                 "width":0,
+                 "x":235.5,
+                 "y":842.125
+                }, 
+                {
+                 "height":0,
+                 "id":97,
+                 "name":"Enemy",
+                 "point":true,
+                 "rotation":0,
+                 "type":"enemy",
+                 "visible":true,
+                 "width":0,
+                 "x":683.666666666667,
+                 "y":877.666666666667
+                }, 
+                {
+                 "height":0,
+                 "id":98,
+                 "name":"Enemy",
+                 "point":true,
+                 "rotation":0,
+                 "type":"enemy",
+                 "visible":true,
+                 "width":0,
+                 "x":998,
+                 "y":769.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":99,
+                 "name":"Enemy",
+                 "point":true,
+                 "rotation":0,
+                 "type":"enemy",
+                 "visible":true,
+                 "width":0,
+                 "x":1065,
+                 "y":907
+                }, 
+                {
+                 "height":0,
+                 "id":100,
+                 "name":"Enemy",
+                 "point":true,
+                 "rotation":0,
+                 "type":"enemy",
+                 "visible":true,
+                 "width":0,
+                 "x":771,
+                 "y":732.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":101,
+                 "name":"Enemy",
+                 "point":true,
+                 "rotation":0,
+                 "type":"enemy",
+                 "visible":true,
+                 "width":0,
+                 "x":973.666666666667,
+                 "y":643
+                }, 
+                {
+                 "height":0,
+                 "id":102,
+                 "name":"Enemy",
+                 "point":true,
+                 "rotation":0,
+                 "type":"enemy",
+                 "visible":true,
+                 "width":0,
+                 "x":937.333333333333,
+                 "y":642.666666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -937,6 +1055,11 @@
                  "name":"Light 7",
                  "point":true,
                  "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffb4ffff"
+                        }, 
                         {
                          "name":"intensity",
                          "type":"int",
@@ -1855,7 +1978,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":94,
+ "nextobjectid":103,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",

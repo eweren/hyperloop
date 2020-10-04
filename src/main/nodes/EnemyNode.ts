@@ -206,6 +206,22 @@ export abstract class EnemyNode extends CharacterNode {
             this.state = state;
             this.lastStateChange = time;
         }
+        if (this.getTag() === "hurt" || this.getTag() === "die") {
+            return;
+        }
+        switch (state) {
+            case AiState.ALERT:
+            case AiState.BORED:
+                this.setTag("idle");
+                break;
+            case AiState.ATTACK:
+                this.setTag("attack");
+                break;
+            case AiState.FOLLOW:
+            case AiState.MOVE_AROUND:
+                this.setTag("walk");
+                break;
+        }
     }
 
     protected tryToAttack(): boolean {
@@ -215,6 +231,7 @@ export abstract class EnemyNode extends CharacterNode {
 
     public hurt(damage: number, origin: ReadonlyVector2): boolean {
         if (!super.hurt(damage, origin)) {
+            this.setTag("hurt");
             const pl = this.getPlayer();
             if (pl) {
                 this.targetPosition = pl.getScenePosition();
@@ -222,6 +239,7 @@ export abstract class EnemyNode extends CharacterNode {
             }
             return false;
         }
+        this.setTag("die");
         return true;
     }
 
