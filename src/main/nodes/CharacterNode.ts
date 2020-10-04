@@ -141,29 +141,34 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         this.startBattlemode();
         CharacterNode.shootSound.stop();
         CharacterNode.shootSound.play();
-        const diffX = Math.cos(angle) * PROJECTILE_STEP_SIZE;
-        const diffY = Math.sin(angle) * PROJECTILE_STEP_SIZE;
-        let isColliding: CharacterNode | CollisionNode | null = null;
-        const nextCheckPoint = new Vector2().setVector(origin);
-        if (this.debug) {
-            this.bulletStartPoint = new Vector2().setVector({x: this.getWidth() / 2, y: this.getHeight() / 2});
-            this.bulletEndPoint = new Vector2().setVector(this.bulletStartPoint).add({ x: diffX, y: diffY });
+        const diffX = Math.cos(angle) * this.getShootingRange();
+        const diffY = Math.sin(angle) * this.getShootingRange();
+        const isColliding = this.getLineCollision(origin.x, origin.y, diffX, diffY, PROJECTILE_STEP_SIZE);
+        if (isColliding) {
+            if (isColliding instanceof CharacterNode) {
+                isColliding.hurt(power, this.getScenePosition());
+            }
         }
-        for (let i = 0; i < this.getShootingRange(); i++) {
+    }
+
+    protected getLineCollision(x1: number, y1: number, dx: number, dy: number, stepSize = 5): CharacterNode | CollisionNode | null {
+        let isColliding: CharacterNode | CollisionNode | null = null;
+        const nextCheckPoint = new Vector2(x1, y1);
+        const length = Math.sqrt(dx * dx + dy * dy);
+        const steps = Math.ceil(length / stepSize);
+        const stepX = dx / steps, stepY = dy / steps;
+        for (let i = 0; i < steps; i++) {
             isColliding = this.getPointCollision(nextCheckPoint.x, nextCheckPoint.y);
-            nextCheckPoint.add({ x: diffX, y: diffY });
+            nextCheckPoint.add({ x: stepX, y: stepY });
             if (this.debug) {
-                this.bulletStartPoint = this.bulletStartPoint!.add({ x: diffX, y: diffY });
-                this.bulletEndPoint = this.bulletEndPoint!.add({ x: diffX, y: diffY });
+                this.bulletStartPoint = this.bulletStartPoint!.add({ x: stepX, y: stepY });
+                this.bulletEndPoint = this.bulletEndPoint!.add({ x: stepX, y: stepY });
             }
             if (isColliding) {
-                // Hurt the thing
-                if (isColliding instanceof CharacterNode) {
-                    isColliding.hurt(power, this.getScenePosition());
-                }
-                break;
+                return isColliding;
             }
         }
+        return null;
     }
 
     public draw(context: CanvasRenderingContext2D): void {
