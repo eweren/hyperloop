@@ -6,7 +6,6 @@ import { Vector2 } from "../../../engine/graphics/Vector2";
 import { AsepriteNode } from "../../../engine/scene/AsepriteNode";
 import { SceneNodeArgs } from "../../../engine/scene/SceneNode";
 import { Hyperloop } from "../../Hyperloop";
-import { FlashlightNode } from "./FlashlightNode";
 
 export class PlayerArmNode extends AsepriteNode<Hyperloop> {
     @asset("sprites/spacesuitarm.aseprite.json")
