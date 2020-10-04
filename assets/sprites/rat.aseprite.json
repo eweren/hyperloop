@@ -85,7 +85,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
     "sourceSize": { "w": 31, "h": 16 },
-    "duration": 100
+    "duration": 80
    },
    "rat 11.aseprite": {
     "frame": { "x": 310, "y": 0, "w": 31, "h": 16 },
@@ -93,7 +93,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
     "sourceSize": { "w": 31, "h": 16 },
-    "duration": 100
+    "duration": 80
    },
    "rat 12.aseprite": {
     "frame": { "x": 341, "y": 0, "w": 31, "h": 16 },
@@ -101,7 +101,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
     "sourceSize": { "w": 31, "h": 16 },
-    "duration": 100
+    "duration": 80
    },
    "rat 13.aseprite": {
     "frame": { "x": 372, "y": 0, "w": 31, "h": 16 },
@@ -109,7 +109,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
     "sourceSize": { "w": 31, "h": 16 },
-    "duration": 100
+    "duration": 70
    },
    "rat 14.aseprite": {
     "frame": { "x": 403, "y": 0, "w": 31, "h": 16 },
@@ -117,7 +117,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
     "sourceSize": { "w": 31, "h": 16 },
-    "duration": 100
+    "duration": 60
    },
    "rat 15.aseprite": {
     "frame": { "x": 434, "y": 0, "w": 31, "h": 16 },
@@ -125,7 +125,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
     "sourceSize": { "w": 31, "h": 16 },
-    "duration": 100
+    "duration": 50
    },
    "rat 16.aseprite": {
     "frame": { "x": 465, "y": 0, "w": 31, "h": 16 },
@@ -133,7 +133,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
     "sourceSize": { "w": 31, "h": 16 },
-    "duration": 100
+    "duration": 50
    },
    "rat 17.aseprite": {
     "frame": { "x": 496, "y": 0, "w": 31, "h": 16 },
@@ -141,7 +141,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
     "sourceSize": { "w": 31, "h": 16 },
-    "duration": 100
+    "duration": 1000
    }
  },
  "meta": {
