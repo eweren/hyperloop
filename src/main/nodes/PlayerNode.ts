@@ -138,6 +138,8 @@ export class PlayerNode extends CharacterNode {
             }
             // look in aiming direction
             this.setMirrorX(angleInDegrees < 0);
+            const backwards = this.direction === 1 && angleInDegrees < 0 || this.direction === -1 && angleInDegrees >= 0;
+            this.playerLeg.getAseprite().setDirection(backwards ? "reverse" : "forward");
             // Transform flashlight to match scaling and rotation of the arm.
             this.flashLight.transform(f => {
                 if (this.isMirrorX()) {
