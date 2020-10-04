@@ -83,11 +83,12 @@ export abstract class Game {
     }
 
     private gameLoop(): void {
-        const currentUpdateTime = this.currentTime = performance.now();
+        const currentUpdateTime = performance.now();
         const dt = clamp((currentUpdateTime - this.lastUpdateTime) / 1000, 0, MAX_DT);
+        this.currentTime = currentUpdateTime / 1000;
         // TODO if we are fancy, we may differentiate between elapsed system time and actual game time (e.g. to allow
         // pausing the game and stuff, or slow-mo effects)
-        this.update(dt, currentUpdateTime / 1000);
+        this.update(dt, this.currentTime);
         this.lastUpdateTime = currentUpdateTime;
 
         const { ctx, width, height } = this;
