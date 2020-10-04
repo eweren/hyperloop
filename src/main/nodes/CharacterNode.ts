@@ -1,5 +1,7 @@
+import { Sound } from "../../engine/assets/Sound";
 import { Vector2 } from "../../engine/graphics/Vector2";
 import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
+import { SoundNode } from "../../engine/scene/SoundNode";
 import { cacheResult } from "../../engine/util/cache";
 import { clamp } from "../../engine/util/math";
 import { Hyperloop } from "../Hyperloop";
@@ -25,12 +27,18 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected velocity: Vector2;
     protected isOnGround = true;
     protected hitpoints = 100;
+    protected shootNode: SoundNode | null = null;
     private canInteractWith: InteractiveNode | null = null;
 
     public constructor(args: AsepriteNodeArgs) {
         super(args);
         this.velocity = new Vector2(0, 0);
         this.setShowBounds(true);
+        this.setUpFx();
+    }
+
+    private async setUpFx(): Promise<void> {
+        this.shootNode = new SoundNode({ sound: await Sound.load("assets/sounds/fx/shot.mp3"), range: this.getShootingRange() });
     }
 
     public update(dt: number, time: number): void {
@@ -53,7 +61,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
                 vx = clamp(this.velocity.x + tractionFactor * this.getDeceleration() * dt, -Infinity, 0);
             }
         }
-        // Death animationfffff
+        // Death animation
         if (!this.isAlive()) {
             // TODO death animation
             this.setTag("jump");
@@ -103,6 +111,10 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     public shoot(angle: number, power: number): void {
         const scenePosition = this.getScenePosition();
+        this.shootNode?.setX(scenePosition.x);
+        this.shootNode?.setY(scenePosition.y);
+        this.shootNode?.getSound().stop();
+        this.shootNode?.getSound().play();
         const origin = new Vector2(scenePosition.x, scenePosition.y - this.getHeight() * .5);
         const diffX = Math.cos(angle);
         const diffY = -Math.sin(angle);
