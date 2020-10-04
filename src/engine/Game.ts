@@ -74,7 +74,7 @@ export abstract class Game {
     }
 
     private mouseMoved(): void {
-        this.canvas.style.cursor = "default";
+        this.canvas.style.cursor = "crosshair";
         this.mouseTimeout = MOUSE_TIMEOUT;
     }
 
