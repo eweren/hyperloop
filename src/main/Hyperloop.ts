@@ -1,7 +1,7 @@
 import { Game } from "../engine/Game";
 import { Camera } from "../engine/scene/Camera";
 import { FadeToBlack } from "../engine/scene/camera/FadeToBlack";
-import { SceneNode, SceneNodeAspect } from "../engine/scene/SceneNode";
+import { SceneNode } from "../engine/scene/SceneNode";
 import { rnd } from "../engine/util/random";
 import { CollisionNode } from "./nodes/CollisionNode";
 import { PlayerNode } from "./nodes/PlayerNode";
