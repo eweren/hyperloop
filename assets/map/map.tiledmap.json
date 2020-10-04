@@ -11,7 +11,7 @@
  "layers":[
         {
          "compression":"zlib",
-         "data":"eJztwwENwCAQALFnRsDI0D5pE3Jt0hkAAICGd+Yr3\/Er\/saf+McpP\/E3HoCmH2GXZ1A=",
+         "data":"eJztwwENACAMA7AFJVdy7UjDB2uTJgAAAMDvNrnNp\/wxzaf8lgeg0wNd6MAB",
          "encoding":"base64",
          "height":28,
          "id":2,
@@ -32,7 +32,7 @@
          "name":"assets",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":64,
          "x":0,
          "y":0
@@ -131,7 +131,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -438,13 +438,13 @@
                 }],
          "tintcolor":"#ff0000",
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt1sEJADAMA7F0kk6S\/dfqEoUQrAP9\/XRXVQMAAAT41ebtkiQpqxPuhpv+38CcBw4UEjk=",
+         "data":"eJzt1gEJACAQBMEziUke7J\/KGII3C9NhJ8kAAADwvZ2cZqtcJEmVrXK73Ov\/BN6579BCkA==",
          "encoding":"base64",
          "height":28,
          "id":1,
