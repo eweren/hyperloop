@@ -69,7 +69,7 @@ export class Sound {
         return this.source != null;
     }
 
-    public play(): void {
+    public play(fadeIn = 0): void {
         if (!this.isPlaying()) {
             const source = getAudioContext().createBufferSource();
             source.buffer = this.buffer;
@@ -83,16 +83,27 @@ export class Sound {
             });
 
             this.source = source;
+            if (fadeIn > 0) {
+                this.gainNode.gain.setValueAtTime(0, this.source.context.currentTime);
+                this.gainNode.gain.linearRampToValueAtTime(1, this.source.context.currentTime + fadeIn);
+            }
             source.start();
         }
     }
 
-    public stop(): void {
+    public async stop(fadeOut = 0): Promise<void> {
         if (this.source) {
-            try {
-                this.source.stop();
-            } catch (e) {
-                // Ignored. Happens on Safari sometimes. Can't stop a sound which may not be really playing?
+            if (fadeOut > 0) {
+                const stopTime = this.source.context.currentTime + fadeOut;
+                this.gainNode.gain.linearRampToValueAtTime(0, stopTime);
+                // this.gainNode.gain.cancelAndHoldAtTime(this.source.context.currentTime + 1);
+                this.source.stop(stopTime);
+            } else {
+                try {
+                    this.source.stop();
+                } catch (e) {
+                    // Ignored. Happens on Safari sometimes. Can't stop a sound which may not be really playing?
+                }
             }
 
             this.source = null;
@@ -110,5 +121,9 @@ export class Sound {
     public setVolume(volume: number): void {
         const gain = this.gainNode.gain;
         gain.value = clamp(volume, gain.minValue, gain.maxValue);
+    }
+
+    public getVolume(): number {
+        return this.gainNode.gain.value;
     }
 }

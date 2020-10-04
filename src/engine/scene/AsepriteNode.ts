@@ -103,8 +103,8 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
         return this;
     }
 
-    public getTimesPlayed(tag: string): number {
-        if (tag === this.tag) {
+    public getTimesPlayed(tag: string | null): number {
+        if (tag != null && tag === this.tag) {
             return this.timesTagPlayed;
         }
 
@@ -138,7 +138,7 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
         if (this.tag != null) {
             if (this.tagPlayTime > 0) {
                 // Calculate the times the tag was played since tagStartTime.
-                this.timesTagPlayed = Math.floor((100 + (this.time - this.tagStartTime) * 1000) / this.tagPlayTime);
+                this.timesTagPlayed = Math.floor((50 + (this.time - this.tagStartTime) * 1000) / this.tagPlayTime);
             }
             this.aseprite.drawTag(ctx, this.tag, 0, 0, this.time * 1000);
         } else {

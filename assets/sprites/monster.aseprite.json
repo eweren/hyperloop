@@ -141,7 +141,7 @@
     "trimmed": true,
     "spriteSourceSize": { "x": 3, "y": 2, "w": 19, "h": 38 },
     "sourceSize": { "w": 32, "h": 40 },
-    "duration": 100
+    "duration": 250
    },
    "monster 18.aseprite": {
     "frame": { "x": 447, "y": 0, "w": 17, "h": 39 },
