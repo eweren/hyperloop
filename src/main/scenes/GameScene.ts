@@ -5,7 +5,6 @@ import { asset } from "../../engine/assets/Assets";
 import { TiledMap } from "../../engine/tiled/TiledMap";
 import { TiledMapNode } from "../../engine/scene/TiledMapNode";
 import { CollisionNode } from "../nodes/CollisionNode";
-import { EnemyNode } from "../nodes/EnemyNode";
 import { TrainNode } from "../nodes/TrainNode";
 import { LightNode } from "../nodes/LightNode";
 import { SwitchNode } from "../nodes/SwitchNode";
@@ -17,6 +16,8 @@ import { isDev } from "../../engine/util/env";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { FpsCounterNode } from "../../engine/scene/FpsCounterNode";
 import { Direction } from "../../engine/geom/Direction";
+import { MonsterNode } from "../nodes/MonsterNode";
+import { RatNode } from "../nodes/RatNode";
 
 export class GameScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -30,7 +31,8 @@ export class GameScene extends Scene<Hyperloop> {
     private mapNode = new TiledMapNode<Hyperloop>({ map: GameScene.map, objects: {
         "collision": CollisionNode,
         "player": PlayerNode,
-        "enemy": EnemyNode,
+        "enemy": MonsterNode,
+        "rat": RatNode,
         "train": TrainNode,
         "light": LightNode,
         "cameraLimit": CameraLimitNode,
@@ -39,7 +41,8 @@ export class GameScene extends Scene<Hyperloop> {
 
     public setup() {
         this.mapNode.moveTo(0, 0).appendTo(this.rootNode).transform(m => m.scale(1));
-        this.camera.setFollow(this.mapNode.getDescendantById("Player"));
+        const player = this.mapNode.getDescendantById("Player");
+        this.camera.setFollow(player);
         this.setLightLayers([ LIGHT_LAYER ]);
         this.setHudLayers([ HUD_LAYER ]);
 
@@ -48,6 +51,8 @@ export class GameScene extends Scene<Hyperloop> {
         // new SwitchNode({ onlyOnce: false, onUpdate: (state) => door.setLocked(!state) }).moveTo(1130, 380).appendTo(this.mapNode);
         new SwitchNode({ onlyOnce: true }).moveTo(250, 380).appendTo(this.mapNode);
 
+        const rat = new RatNode();
+        rat.moveTo(player!.getX() + 80, player!.getY() - 20).appendTo(this.mapNode);
         if (isDev()) {
             this.rootNode.appendChild(new FpsCounterNode({
                 font: GameScene.font,

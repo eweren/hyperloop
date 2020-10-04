@@ -1,14 +1,10 @@
-import { Aseprite } from "../../engine/assets/Aseprite";
-import { asset } from "../../engine/assets/Assets";
-import { Direction } from "../../engine/geom/Direction";
 import { ReadonlyVector2, Vector2 } from "../../engine/graphics/Vector2";
-import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { rnd } from "../../engine/util/random";
 import { CharacterNode } from "./CharacterNode";
 import { PlayerNode } from "./PlayerNode";
-import { Polygon2 } from "../../engine/graphics/Polygon2";
 
-enum AiState {
+
+export enum AiState {
     BORED = 0,
     FOLLOW = 1,
     ATTACK = 2,
@@ -16,77 +12,51 @@ enum AiState {
     MOVE_AROUND = 4,
 }
 
-export class EnemyNode extends CharacterNode {
-    @asset("sprites/monster.aseprite.json")
-    private static sprite: Aseprite;
+export abstract class EnemyNode extends CharacterNode {
 
     // Character settings
-    private readonly shootingRange = 150;
-    private readonly speed = 100;
-    private readonly acceleration = 600;
-    private readonly deceleration = 900;
-    private readonly jumpPower = 380;
+    protected shootingRange = 150;
+    protected speed = 100;
+    protected acceleration = 600;
+    protected deceleration = 900;
+    protected jumpPower = 380;
 
     /** How far enemy can see player while idling */
-    private squaredViewDistance = 120 ** 2;
+    protected squaredViewDistance = 120 ** 2;
 
     /** How far enemy can see player while chasing him */
-    private squaredAlertViewDistance = 160 ** 2;
+    protected squaredAlertViewDistance = 160 ** 2;
 
     /** Distance to target position where enemy stops moving further */
-    private squaredPositionThreshold = 20 ** 2;
+    protected squaredPositionThreshold = 20 ** 2;
 
     /** Distance to player required for a successful melee attack */
-    private squaredAttackDistance = 20 ** 2;
+    protected squaredAttackDistance = 20 ** 2;
 
     /** ms it takes for enemy to attack player */
-    private attackDelay = 0.3;
+    protected attackDelay = 0.3;
 
-    private targetPosition: ReadonlyVector2;
-
-    private state: AiState = AiState.BORED;
+    protected state: AiState = AiState.BORED;
 
     private lastStateChange = 0;
 
     // look direction change delays in seconds
-    private LOW_ALERT_CHANGE_DELAY = 3;
-    private HIGH_ALERT_CHANGE_DELAY = 0.5;
-    private lastLookDirectionChange = 0;
+    protected LOW_ALERT_CHANGE_DELAY = 3;
+    protected HIGH_ALERT_CHANGE_DELAY = 0.5;
+    protected lastLookDirectionChange = 0;
 
-    private minAlertDuration = 10;
+    protected minAlertDuration = 10;
 
-    private moveAroundAnchor: Vector2 = new Vector2(0, 0);
-    private squaredMoveAroundDistance = 10 ** 2;
+    protected squaredMoveAroundDistance = 10 ** 2;
 
     /**
      * set to false, if after chase an enemy should transfer to ALERT,
      * set to true - for MOVE_AROUND
      */
-    private moveAroundAfterChase = false;
+    protected moveAroundAfterChase = false;
 
-    public constructor(args?: SceneNodeArgs) {
-        super({
-            aseprite: EnemyNode.sprite,
-            anchor: Direction.BOTTOM,
-            tag: "idle",
-            ...args
-        });
-        this.targetPosition = this.getPosition();
-        this.moveAroundAfterChase = true;
-        this.setAseprite(EnemyNode.sprite);
-    }
-
-    protected updateBoundsPolygon(bounds: Polygon2): void {
-        const boundsWidth = 16;
-        const boundsHeight = 34;
-        const offsetX = this.getWidth() / 2 - boundsWidth / 2;
-        const offsetY = 6;
-        bounds.clear();
-        bounds.addVertex(new Vector2(offsetX, offsetY));
-        bounds.addVertex(new Vector2(offsetX + boundsWidth, offsetY));
-        bounds.addVertex(new Vector2(offsetX + boundsWidth, boundsHeight + offsetY));
-        bounds.addVertex(new Vector2(offsetX, boundsHeight + offsetY));
-    }
+    protected abstract targetPosition: ReadonlyVector2;
+    private moveAroundAnchor: Vector2 = new Vector2(0, 0);
 
     public getShootingRange(): number {
         return this.shootingRange;
@@ -106,6 +76,11 @@ export class EnemyNode extends CharacterNode {
 
     public update(dt: number, time: number) {
         super.update(dt, time);
+        this.updateAi(dt, time);
+    }
+
+    // default ai implementation
+    protected updateAi(dt: number, time: number) {
         if (!this.isAlive()) {
             this.setDirection(0);
             return;
@@ -137,12 +112,12 @@ export class EnemyNode extends CharacterNode {
         }
     }
 
-    private getPlayer(): PlayerNode | undefined {
+    protected getPlayer(): PlayerNode | undefined {
         const player = this.getScene()?.rootNode.getDescendantsByType(PlayerNode)[0];
         return player?.isAlive() ? player : undefined;
     }
 
-    private updateSearch(time: number): void {
+    protected updateSearch(time: number): void {
         // Check distance to player
         const player = this.getPlayer();
         if (player) {
@@ -174,14 +149,14 @@ export class EnemyNode extends CharacterNode {
         }
     }
 
-    private isLookingInPlayerDirection(): boolean {
+    protected isLookingInPlayerDirection(): boolean {
         const player = this.getPlayer();
         return (player != null && (
             (this.getX() > player.getPosition().x && this.isMirrorX())
             || (this.getX() < player.getPosition().x && !this.isMirrorX())));
     }
 
-    private updateFollow(time: number): void {
+    protected updateFollow(time: number): void {
         const player = this.getPlayer();
         // Update target position if seeing player
         if (player) {
@@ -211,7 +186,7 @@ export class EnemyNode extends CharacterNode {
         }
     }
 
-    private updateAttack(time: number): void {
+    protected updateAttack(time: number): void {
         if (time > this.lastStateChange + this.attackDelay) {
             // Hurt player
             const player = this.getPlayer();
@@ -226,7 +201,7 @@ export class EnemyNode extends CharacterNode {
         }
     }
 
-    private setState(state: AiState, time: number = this.updateTime): void {
+    protected setState(state: AiState, time: number = this.updateTime): void {
         if (this.state !== state) {
             this.state = state;
             this.lastStateChange = time;
@@ -249,7 +224,7 @@ export class EnemyNode extends CharacterNode {
         }
     }
 
-    private tryToAttack(): boolean {
+    protected tryToAttack(): boolean {
         this.setState(AiState.ATTACK);
         return true;
     }
@@ -269,12 +244,12 @@ export class EnemyNode extends CharacterNode {
     }
 
     private stopAndWaitTs = 0;
-    private stopAndWaitDelaySec = 2;
+    protected stopAndWaitDelaySec = 2;
     private moveTs = 0;
-    private moveDelaySec = 0.2;
+    protected moveDelaySec = 0.2;
 
 
-    private updateMoveAround(time: number): void {
+    protected updateMoveAround(time: number): void {
         if (this.getPosition().getSquareDistance(this.moveAroundAnchor) > this.squaredMoveAroundDistance) {
             if (this.stopAndWaitTs === 0) {
                 if (this.moveTs + this.moveDelaySec < time) {
