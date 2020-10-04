@@ -56,7 +56,7 @@ export abstract class EnemyNode extends CharacterNode {
     protected moveAroundAfterChase = false;
 
     protected abstract targetPosition: ReadonlyVector2;
-    private moveAroundAnchor: Vector2 = new Vector2(0, 0);
+    protected moveAroundAnchor: Vector2 = new Vector2(0, 0);
 
     public getShootingRange(): number {
         return this.shootingRange;
@@ -235,9 +235,9 @@ export abstract class EnemyNode extends CharacterNode {
         return true;
     }
 
-    private stopAndWaitTs = 0;
+    protected stopAndWaitTs = 0;
     protected stopAndWaitDelaySec = 2;
-    private moveTs = 0;
+    protected moveTs = 0;
     protected moveDelaySec = 0.2;
 
 

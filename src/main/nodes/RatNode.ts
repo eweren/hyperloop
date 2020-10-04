@@ -11,6 +11,9 @@ export class RatNode extends EnemyNode {
     private static sprite: Aseprite;
 
     protected targetPosition: ReadonlyVector2;
+    
+    /** minimum distance between enemy and player to stop escaping */
+    private squaredSafetyDistance = 100 ** 2;
 
     public constructor(args?: SceneNodeArgs) {
         super({
@@ -44,26 +47,52 @@ export class RatNode extends EnemyNode {
         switch (this.state) {
             case AiState.BORED:
             case AiState.ALERT:
-                this.updateSearch(time);
-                break;
-            case AiState.FOLLOW:
-                this.updateFollow(time);
-                break;
-            case AiState.ATTACK:
-                this.setState(AiState.FOLLOW);
+                this.updateAlert(time);
                 break;
             case AiState.MOVE_AROUND:
                 this.updateMoveAround(time);
                 break;
         }
+    }
 
-        // Move to target
-        if (this.getPosition().getSquareDistance(this.targetPosition) > this.squaredPositionThreshold) {
-            if (this.getX() > this.targetPosition.x) {
-                this.setDirection(-1);
-            } else {
-                this.setDirection(1);
+    protected updateMoveAround(time: number): void {
+        if (this.getPosition().getSquareDistance(this.moveAroundAnchor) > this.squaredMoveAroundDistance) {
+            if (this.stopAndWaitTs === 0) {
+                if (this.moveTs + this.moveDelaySec < time) {
+                    this.setDirection(0);
+                    this.stopAndWaitTs = time;
+                }
+            } else if (this.stopAndWaitTs + this.stopAndWaitDelaySec < time) {
+                if (this.getX() > this.moveAroundAnchor.x) {
+                    this.setDirection(-1);
+                } else {
+                    this.setDirection(1);
+                }
+                this.stopAndWaitTs = 0;
+                this.moveTs = time;
             }
         }
+        if (this.getDistanceToPlayerSquared() < this.squaredSafetyDistance) {
+            this.setState(AiState.ALERT);
+        }
+    }
+    
+    private updateAlert(time: number): void {
+        const player = this.getPlayer();
+        if (player && this.getDistanceToPlayerSquared() < this.squaredSafetyDistance) {
+            this.setDirection(this.getX() < player.getX() ? -1 : 1);
+        } else {
+            this.targetPosition = this.getPosition();
+            this.moveAroundAnchor.setVector(this.targetPosition);
+            this.setState(AiState.MOVE_AROUND);
+        }
+    }
+
+    private getDistanceToPlayerSquared(): number {
+        const player = this.getPlayer();
+        if (!player) {
+            return Infinity;
+        }
+        return player.getPosition().getSquareDistance(this.getPosition());
     }
 }
