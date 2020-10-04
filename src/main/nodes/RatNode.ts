@@ -20,7 +20,7 @@ export class RatNode extends EnemyNode {
     protected targetPosition: ReadonlyVector2;
 
     /** minimum distance between enemy and player to stop escaping */
-    private squaredSafetyDistance = 10 ** 2;
+    private squaredSafetyDistance = 50 ** 2;
 
     public constructor(args?: SceneNodeArgs) {
         super({
