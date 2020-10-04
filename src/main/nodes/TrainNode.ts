@@ -21,7 +21,8 @@ export class TrainNode extends AsepriteNode<Hyperloop> {
         });
         this.foreground = new AsepriteNode({
             aseprite: TrainNode.foregroundSprite,
-            anchor: Direction.CENTER
+            anchor: Direction.CENTER,
+            layer: 2
         });
         this.appendChild(this.foreground);
         (window as any).train = this;

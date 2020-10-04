@@ -24,6 +24,7 @@ export class Hyperloop extends Game {
     private stageStartTime = 0;
     private stageTime = 0;
     private trainSpeed = 455; // px per second
+    private trainDriveTime = 8; // drive time in seconds, bevore braking starts
     private totalBrakeTime = 0; // calculated later; seconds train requires to brake down to standstill
 
     public constructor() {
@@ -64,6 +65,9 @@ export class Hyperloop extends Game {
                 case GameStage.INTRO:
                     this.initIntro();
                     break;
+                case GameStage.STUCK:
+                    this.initStuck();
+                    break;
             }
         }
     }
@@ -80,19 +84,19 @@ export class Hyperloop extends Game {
     }
 
     private updateDrive(): void {
-        if (this.stageTime > 10) {
+        if (this.stageTime > this.trainDriveTime) {
             this.setStage(GameStage.BRAKE);
             // Compute total break time so that train ends up in desired position
             const train = this.getTrain();
             const targetX = 1800;
-            const distance = targetX - train.getScenePosition().x
+            const distance = targetX - train.getScenePosition().x;
             this.totalBrakeTime = distance / (this.trainSpeed / 2);
             return;
         }
         // Driving illusion
         const train = this.getTrain();
         const offsetX = this.getTime() * this.trainSpeed;
-        train.setX(325 + (offsetX % 429));
+        train.setX(450 + (offsetX % 324)); // 108px between two tunnel lights
         this.getCamera().update(0);
         this.applyCamShake(1);
     }
@@ -135,7 +139,7 @@ export class Hyperloop extends Game {
         const player = this.getPlayer();
         const train = this.getTrain();
         const pos = player.getScenePosition();
-        player.moveTo(pos.x, pos.y).appendTo(train.getParent() as SceneNode<Hyperloop>);
+        player.remove().moveTo(pos.x, pos.y).appendTo(train.getParent() as SceneNode<Hyperloop>);
     }
 
     public spawnNewPlayer(): void {
