@@ -11,7 +11,7 @@ export class LightNode extends SceneNode {
     private readonly polygon: Polygon2 | null;
     private readonly ellipse: boolean;
     private readonly intensity: number;
-    private readonly rotation: number;
+    private readonly spin: number;
     private gradient: Color[] = [];
 
     public constructor(args?: TiledSceneArgs) {
@@ -20,7 +20,7 @@ export class LightNode extends SceneNode {
         this.polygon = args?.tiledObject?.getPolygon() ?? null;
         this.ellipse = args?.tiledObject?.isEllipse() ?? false;
         this.intensity = args?.tiledObject?.getOptionalProperty("intensity", "int")?.getValue() ?? 100;
-        this.rotation = args?.tiledObject?.getOptionalProperty("rotation", "float")?.getValue() ?? 0;
+        this.spin = args?.tiledObject?.getOptionalProperty("spin", "float")?.getValue() ?? 0;
         this.updateGradient();
     }
 
@@ -60,13 +60,13 @@ export class LightNode extends SceneNode {
     }
 
     public update(dt: number) {
-        if (this.rotation !== 0) {
+        if (this.spin !== 0) {
             this.transform(m => {
                 const v = this.polygon?.vertices[0];
                 if (v) {
                     m.translate(v.x, v.y);
                 }
-                m.rotate(radians(this.rotation) * dt);
+                m.rotate(radians(this.spin) * dt);
                 if (v) {
                     m.translate(-v.x, -v.y);
                 }
