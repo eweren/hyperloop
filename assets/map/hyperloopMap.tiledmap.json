@@ -11,7 +11,7 @@
  "layers":[
         {
          "compression":"zlib",
-         "data":"eJztmmluEzEUx9+08I0TIEFSiVLgBHwBAgcpHKTAXKrsS6DcgKUIhBBLDwCV2JH4m4wVx\/E2yxvPZPyknzxJk8z4N37286hEy3Fh4Jxar48tYvctNsLNEXA0kGPKMb6XJ7dut1vgjIOzyvE55XirJ24fgkdMPPa4nYDL4ErRSjbBafgTbM5YeD3pidu34B643zAPwDuP221wFVwr2lC2e+T2NbiIYdQkbwLc7oDr4MaszW+iDWGnZ27H8NEkIW5XvU5Q3DaKzy1nxHZqmBMaJbmduf0GjmdEGzQHr3O8RT6+W\/hBye1P8AT8AZcU\/oIp+FWD347zckZsp\/rYNbl1jbu6cEZsnyvudtoQMdzWvm5Ot1z7zCq8J7tbrnNyRtN7zLqcn9UJEwle55zn4wzUgNMhw+l2jN8fMrUFOmINvz9kmN0OGs4YDxzOcD3nGAKckVmwPfvoI64+cUadZyCrAGfEfoYQG86I3bfYcEbsvsWGM2L3LTYp+hkvBg5niN\/fBbcCuc3c11Vz+xzsgWeWVh4LXjL1scz9rYppXHCGdPtB40S2iHyfy624hk9E+WeAltDSAc3vqXqP9eOP2uf3tO\/J1nTtnCH7pbu8g\/e+FtyldtxmGeVr4v8RcH60tJ4t33MTFPj5GG6\/0Nyj5FDrt+36quaynp+r6jZkTMnre0WLjvZpeU625bHIXZnvej91t2OwkS3nk4mTgZ\/vulvVj5gfDyhsbMnxJcekz606JzXFIXXbrepHuFDzMGR8hbrV84OrPuSMULeqn1GRg2hzNQ99Y02siS63I8Wtad23zT2yTvDdjxg1mA\/TWheac4axaXQrziHc11nLbDVbzBqsLVxu5d+RD7nMi9C1rOt1gquWamqf63Mbmh\/6PNN1t8W+6H9e6bVTU\/sFn9uqv+mqwbriNrPc+yprRFtuXWNd3U921e1TWlwf9DUitF7ap7nbKjVWmXu5W5yv6259CPeiDlJrJr1Wkvsy6RbHuameMu3n9L\/5xrz0iuvKu+J2VGJt1ucyCrgv6r4Dx7nrs2XXJJ\/XmHvesmu0Ppe16dY1n9i8in1NF\/e8tnVJ38\/6xry6p8NxXjY31DlInSvU57dlvHbVbZVatErtGjKObfWtz2tX3baB6Zl9mWeMPq9Ddls3N3xeh+y2DTgjdt9ikyJFihQpUqRIkSJFihQpViP+AbMRweM=",
+         "data":"eJztmmlu00AUx59b+MYJkCCpRClwAr4AgYMUDlLAlyr7Eig3YCkCIcTSA0AldiT+QzzKZDKbl+dx7HnST+Okju35zfbGKtFyXBg4p9brY4vYdYuNcHMEHA3kmHKM3+XJrdvtFjjj4KxyfE453loRtw\/BIyYee9xOwGVwpSglm+A0\/Ak2Zyx8nqyI27fgHrjfMA\/AO4\/bbXAVXCvKULZXyO1rcBHdqEneBLjdAdfBjVmZ30QZws6KuR3DR5OEuO17nqC4bRSfW86I7dQwJzRKcjtz+w0cz4g2aA4+5\/iKfHy38IOS25\/gCfgDLin8BVPwqwa\/HffljNhO9b5rcuvqd3XhjNg+e+522hAx3NZ+bk63XPvMKrwnu1uue3JG03vMupyf5QkTCT7nnPfjDOSA0yHD6XaM6w+Z2gIdsYbrDxlmt4OGM8YDhzNc7zmGAGdkFmzvPlYRV504o847kD7AGbHfIcSGM2LXLTacEbtuseGM2HWLTYrVjBcDhzPE9XfBrUBuM9e1b26fgz3wzFLKY8FLpjqWad+qmPoFZ0i3HzROZIvI77ncimf4RJR\/BigJJR3QvE3VNtaPP2rn72m\/k6Xp2TlD1kt3eQfffS24S+24zTLK18T\/I+D+KGk9W25zExR4fgy3X2juUXKo1dv2fFXHsj4+++o2pE\/J53tFi472aXlOto1jMXbleNfrqbsdg41seTyZOBl4ftfdqn7E\/HhAYX1L9i\/ZJ31u1TmpKQ6p225VP8KFOg5D+leoW318cOWHnBHqVvUzKsYgylwdh76+JtZEl9uR4ta07tvmHpkn+NojRg7mw7TWhY45Q980uhX3EO7rrGW2nC1mDtYWLrfy7xgPuRwXoWtZ1\/MEVy7V1D7X5zZ0fOjzTNfdFvui\/+NKz52a2i\/43Fa9pisH64rbzNL2VdaItty6+rq6n+yq26e0uD7oa0RovrRPc7dVcqwybblb3K\/rbn0I9yIPUnMmPVeS+zLp9sBwjm0\/p\/\/N1+elVzxX3hW3oxJrsz6XUUC7qPuOKm3ocuTzGnPPW3aN1ueyNt265hObV7Gv6eKe17Yu6ftZX59X93Sh48M2B6lzhfr+tozXrrqtkotWyV1D+rEtv\/V57arbNjC9sy\/zjtHndchu644Nn9chu20Dzohdt9ikSJEiRYoUKVKkSJEiRYp+xD9RVr\/v",
          "encoding":"base64",
          "height":64,
          "id":2,
@@ -25,7 +25,7 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt2G2KAjEMgOHAuJ5r\/OMeQgf82kOooOMp1Nt4NFMMuGA7WFAax\/fBUIkSQmDERgQAkGtcifxWpbvop5XO9c9mu9BzWT2e3+YoUp8szhqvqNnqHA\/V4\/lt1jrPjcX2RbPFjc5WNhbbwr30jf4myMniXLgXr4b3sy3ZBwAAeE6tr1Hk\/\/g78sP7ecmtk9u\/B8fEPdJTvuvOm6rjwTpxj\/SU77rzpuqUMrhFG95PtK\/GevOW\/7F+Q25qEfuscTTb\/7Q3aZznQ25qEfssVseDsAeJ7T885bt2Nak6HoQ9SGz\/4SnftatJ1fGg1hh9QD4l9\/sAAAAAUMJMY166iZ7aaexLN4GPMROexXfhWQQAAAAAAAAAAAAAAAAA5LgCzKpufw==",
+         "data":"eJzt2lFOwkAQgOFJqlxED1Je8BDSBEEPASRaTwHcxqM5m25SE3aKrehO6\/+FycIUNpNJStgJIgCAvhaFyEORu4ppeta+vsTernXdFOfrmN0P+MxBpDzGOGlco45a+\/henK\/\/zVb7uYuxv1Jv0dDeyi7GPnMtU6PfCXKMccpci1ezdq1z1gEAAL6n1Mc88Xv8N\/Kzdv3ou0\/f+j04GOdIT\/muM6+1jwdb4xzpKd915rX2yeWmiTo8f9S6qlibt\/xtrDfkljFS1ypHvf1Ka5PKeT7kljFS11L7eBDmIKn5h6d816zG2seDMAdJzT885btmNdY+HpQa8xHkLX3fDwAAAMB210RtvcZwK42n3EVM1KvGW+4iMBormc69eOk7esj\/E39ijPfiX\/cIAAAAAAAAAAAAAAAAAND6BBWccT0=",
          "encoding":"base64",
          "height":64,
          "id":3,
@@ -39,7 +39,7 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt2MEJwCAQRNGtzTSijZjWsxUIQsKCeQ\/+fc4TAQAA7+vZqB5xqJnd1SMAAAB+rGVX9QjY1MNX8xVfDQAAAAAAAAAAAAAAAADA2gPMzwQC",
+         "data":"eJzt2LEJgEAQRcHrRSvRRs5G1NJdMD8QTld0Bl60yY+3FADgDcbGbTjbH5oCXdRoyR7xUWu0ZY8AAAD4sSmas0fARbX41dzFrwYAAAAAAAAAAAAAAAAAoO0AUBoE7A==",
          "encoding":"base64",
          "height":64,
          "id":5,
@@ -58,18 +58,6 @@
          "objects":[
                 {
                  "height":0,
-                 "id":1,
-                 "name":"Train",
-                 "point":true,
-                 "rotation":0,
-                 "type":"train",
-                 "visible":true,
-                 "width":0,
-                 "x":179,
-                 "y":360.666
-                }, 
-                {
-                 "height":0,
                  "id":2,
                  "name":"Player",
                  "point":true,
@@ -77,8 +65,8 @@
                  "type":"player",
                  "visible":true,
                  "width":0,
-                 "x":186.666333333333,
-                 "y":592.833333333333
+                 "x":183.666333333333,
+                 "y":601.833333333333
                 }, 
                 {
                  "height":0,
@@ -299,8 +287,8 @@
                  "type":"door",
                  "visible":true,
                  "width":20,
-                 "x":1029,
-                 "y":357.5
+                 "x":1034,
+                 "y":361
                 }, 
                 {
                  "height":35,
@@ -799,10 +787,22 @@
                  "width":36,
                  "x":1116,
                  "y":864
+                }, 
+                {
+                 "height":0,
+                 "id":67,
+                 "name":"Train",
+                 "point":true,
+                 "rotation":0,
+                 "type":"train",
+                 "visible":true,
+                 "width":0,
+                 "x":252,
+                 "y":396.090909090909
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -1001,6 +1001,11 @@
                  "point":true,
                  "properties":[
                         {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffb4ffff"
+                        }, 
+                        {
                          "name":"intensity",
                          "type":"int",
                          "value":500
@@ -1171,6 +1176,190 @@
                  "width":1152,
                  "x":90,
                  "y":522
+                }, 
+                {
+                 "height":0,
+                 "id":64,
+                 "name":"Light 3",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff2528"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":500
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":783,
+                 "y":98
+                }, 
+                {
+                 "height":0,
+                 "id":65,
+                 "name":"Light 3",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff2528"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":500
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":909,
+                 "y":98.6666666666667
+                }, 
+                {
+                 "height":0,
+                 "id":66,
+                 "name":"Light 3",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff2528"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":500
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":1044,
+                 "y":101.666666666667
+                }, 
+                {
+                 "height":0,
+                 "id":68,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":161.958333333333,
+                 "y":567.458333333333
+                }, 
+                {
+                 "height":0,
+                 "id":69,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":234.25,
+                 "y":569.25
+                }, 
+                {
+                 "height":0,
+                 "id":70,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff4040"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":351,
+                 "y":660
+                }, 
+                {
+                 "height":0,
+                 "id":71,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":468.25,
+                 "y":638
+                }, 
+                {
+                 "height":0,
+                 "id":72,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff4040"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":603.333333333333,
+                 "y":642
                 }],
          "opacity":1,
          "properties":[
@@ -1180,7 +1369,7 @@
                  "value":1
                 }],
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -1199,7 +1388,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":64,
+ "nextobjectid":73,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",
