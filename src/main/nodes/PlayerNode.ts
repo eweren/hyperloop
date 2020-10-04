@@ -118,7 +118,6 @@ export class PlayerNode extends CharacterNode {
                 node.interact();
             }
         }
-
         // Battlemode
         if (this.battlemode) {
             this.getScene()!.game.canvas.style.cursor = "none";
@@ -137,6 +136,8 @@ export class PlayerNode extends CharacterNode {
             } else {
                 c.scaleY(1);
             }
+            // look in aiming direction
+            this.setMirrorX(angleInDegrees < 0);
             // Transform flashlight to match scaling and rotation of the arm.
             this.flashLight.transform(f => {
                 if (this.isMirrorX()) {
