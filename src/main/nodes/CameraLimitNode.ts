@@ -7,7 +7,7 @@ export class CameraLimitNode extends SceneNode<Hyperloop> {
         const scene = this.getScene();
         if (scene != null) {
             const player = scene.getNodeById("Player");
-            if (player != null) {
+            if (player != null && player === scene.camera.getFollow()) {
                 if (this.collidesWithNode(player)) {
                     scene.camera.setLimits(new Rect(this.x, this.y, this.width, this.height));
                 }

@@ -5,6 +5,7 @@ import { createCanvas, getRenderingContext } from "./util/graphics";
 import { GamepadInput } from "./input/GamepadInput";
 import { Keyboard } from "./input/Keyboard";
 import { Scenes } from "./scene/Scenes";
+import { PlayerNode } from "../main/nodes/PlayerNode";
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want
@@ -74,7 +75,10 @@ export abstract class Game {
     }
 
     private mouseMoved(): void {
-        this.canvas.style.cursor = "crosshair";
+        const player = this.scenes.activeScene?.rootNode.getDescendantsByType(PlayerNode)[0];
+        if (!player?.isInBattlemode()) {
+            this.canvas.style.cursor = "crosshair";
+        }
         this.mouseTimeout = MOUSE_TIMEOUT;
     }
 

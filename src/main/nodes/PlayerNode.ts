@@ -118,6 +118,12 @@ export class PlayerNode extends CharacterNode {
                 node.interact();
             }
         }
+
+        // Battlemode
+        if (this.battlemode) {
+            this.getScene()!.game.canvas.style.cursor = "none";
+        }
+
         this.syncArmAndLeg();
     }
 
@@ -209,5 +215,10 @@ export class PlayerNode extends CharacterNode {
 
     protected deactivate(): void {
         this.getScene()?.onPointerMove.disconnect(this.handlePointerMove, this);
+    }
+
+    protected endBattlemode(): void {
+        super.endBattlemode();
+        this.getScene()!.game.canvas.style.cursor = "crosshair";
     }
 }
