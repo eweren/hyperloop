@@ -146,11 +146,9 @@ export class PlayerNode extends CharacterNode {
             // Transform flashlight to match scaling and rotation of the arm.
             this.flashLight.transform(f => {
                 if (this.isMirrorX()) {
-                    this.playerArm.setChildAnchor(Direction.TOP_RIGHT);
                     this.flashLight.setY(-3);
                     f.setRotation(Math.PI);
                 } else {
-                    this.playerArm.setChildAnchor(Direction.TOP_RIGHT);
                     this.flashLight.setY(5);
                     f.setRotation(0);
                 }
@@ -168,9 +166,6 @@ export class PlayerNode extends CharacterNode {
         this.playerLeg.setMirrorX(this.isMirrorX());
     }
 
-    public draw(context: CanvasRenderingContext2D): void {
-        super.draw(context);
-    }
 
     public die(): void {
         super.die();
