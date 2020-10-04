@@ -83,8 +83,7 @@ export class LightNode extends SceneNode {
         if (this.polygon != null) {
             this.polygon.draw(ctx);
             const v = this.polygon.vertices[0];
-            const n = this.polygon.getVertexNormal(0);
-            const gradient = ctx.createLinearGradient(v.x, v.y, v.x + n.x * intensity, v.y + n.y * intensity);
+            const gradient = ctx.createRadialGradient(v.x, v.y, 0, v.x, v.y, this.intensity);
             for (let i = 0, count = this.gradient.length - 1; i <= count; i++) {
                 gradient.addColorStop(i / count, this.gradient[i].toString());
             }
