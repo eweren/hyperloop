@@ -224,7 +224,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         const bounds = this.getBounds();
         const w = bounds.width, h = bounds.height;
         const px = x - w / 2, py = y - h;
-        return y > 470 || colliders.some(c => c.collidesWithRectangle(px, py, w, h));
+        return colliders.some(c => c.collidesWithRectangle(px, py, w, h));
     }
 
     private getPointCollision(x: number, y: number): CollisionNode | CharacterNode | null {

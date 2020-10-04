@@ -16,7 +16,7 @@ import { ScenePointerDownEvent } from "../../engine/scene/events/ScenePointerDow
 import { isDev } from "../../engine/util/env";
 
 export class GameScene extends Scene<Hyperloop> {
-    @asset("map/testMap.tiledmap.json")
+    @asset("map/hyperloopMap.tiledmap.json")
     private static map: TiledMap;
 
     private debugMode: boolean = false;
