@@ -63,6 +63,19 @@ export class Signal<T = void> {
     }
 
     /**
+     * Disconnects all slots from this signal.
+     */
+    public clear(): void {
+        if (this.slots.length > 0) {
+            this.slots.length = 0;
+            if (this.onDone != null) {
+                this.onDone(this);
+                this.onDone = null;
+            }
+        }
+    }
+
+    /**
      * Emits the given value to all connected slots.
      *
      * @param value - The value to emit.
