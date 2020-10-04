@@ -35,7 +35,6 @@ export class LightNode extends SceneNode {
             this.gradient.push(col);
         }
         this.gradient.push(new RGBColor(0, 0, 0));
-        console.log(this.gradient.slice());
 
         function intensifyColor(color: RGBColor, f: number): Color {
             let r = f * color.getRed(), g = f * color.getGreen(), b = f * color.getBlue();

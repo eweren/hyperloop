@@ -8,6 +8,7 @@ import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { CharacterNode } from "./CharacterNode";
 import { EnemyNode } from "./EnemyNode";
+import { FlashlightNode } from "./player/FlashlightNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
 import { PlayerLegsNode } from "./player/PlayerLegsNode";
 
@@ -49,6 +50,7 @@ export class PlayerNode extends CharacterNode {
         this.appendChild(this.playerLeg);
         this.appendChild(this.playerArm);
         window.addEventListener("pointermove", event => this.mouseMoved(event));
+        this.appendChild(new FlashlightNode());
         console.log("Player: ", this);
     }
 

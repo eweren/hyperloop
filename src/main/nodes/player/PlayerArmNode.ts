@@ -6,11 +6,12 @@ import { Vector2 } from "../../../engine/graphics/Vector2";
 import { AsepriteNode } from "../../../engine/scene/AsepriteNode";
 import { SceneNodeArgs } from "../../../engine/scene/SceneNode";
 import { Hyperloop } from "../../Hyperloop";
+import { FlashlightNode } from "./FlashlightNode";
 
 export class PlayerArmNode extends AsepriteNode<Hyperloop> {
     @asset("sprites/spacesuitarm.aseprite.json")
     private static sprite: Aseprite;
-
+    // private flashlight: FlashlightNode;
 
     public constructor(args?: SceneNodeArgs) {
         super({
@@ -22,9 +23,11 @@ export class PlayerArmNode extends AsepriteNode<Hyperloop> {
             y: 40,
             ...args
         });
+        // this.flashlight = new FlashlightNode();
     }
 
     protected updateBoundsPolygon(bounds: Polygon2): void {
+        return;
         const boundsWidth = 12;
         const boundsHeight = 5;
         const offsetX = this.getWidth() / 2 - boundsWidth / 2;
