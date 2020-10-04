@@ -143,7 +143,7 @@ export class EnemyNode extends CharacterNode {
             const squaredDistance = player.getPosition().getSquareDistance(this.getPosition());
             if (this.isLookingInPlayerDirection() && squaredDistance < this.squaredViewDistance) {
                 // Player spotted!
-                this.setState(AiState.FOLLOW, time);
+                this.setState(AiState.FOLLOW);
                 this.targetPosition = player.getPosition();
                 return;
             }
@@ -163,7 +163,7 @@ export class EnemyNode extends CharacterNode {
             && rnd(1, 100) < 5 && this.lastStateChange + this.minAlertDuration < time) {
             // first transfer to alert and from alert to bored state
             const newState = this.state === AiState.ALERT ? AiState.BORED : AiState.ALERT;
-            this.setState(newState, time);
+            this.setState(newState);
             this.setDirection(0);
         }
     }
@@ -183,24 +183,24 @@ export class EnemyNode extends CharacterNode {
             const squaredDistance = player.getPosition().getSquareDistance(this.getPosition());
             if (squaredDistance < this.squaredAlertViewDistance) {
                 // Player spotted!
-                this.setState(AiState.FOLLOW, time);
+                this.setState(AiState.FOLLOW);
                 this.targetPosition = player.getPosition();
             } else {
                 // Player too far away
                 if (this.moveAroundArterChase) {
                     // move around a bit before transfering to ALERT
-                    this.setState(AiState.MOVE_AROUND, time);
+                    this.setState(AiState.MOVE_AROUND);
                     //this.setDirection(this.direction * -1);
                     this.moveAroundAnchor.setVector(this.getPosition());
                 } else {
                     // stay ALERT, and look around actively
-                    this.setState(AiState.ALERT, time);
+                    this.setState(AiState.ALERT);
                     this.setDirection(0);
                 }
             }
             // Hurt player
             if (squaredDistance < this.squaredAttackDistance) {
-                this.tryToAttack(time);
+                this.tryToAttack();
             }
         }
 
@@ -222,24 +222,36 @@ export class EnemyNode extends CharacterNode {
             const player = this.getPlayer();
             const playerDied = player?.hurt(35);
             if (playerDied) {
-                this.setState(AiState.BORED, time);
+                this.setState(AiState.BORED);
                 this.setDirection(0);
                 return;
             }
             // Return to follow state
-            this.setState(AiState.FOLLOW, time);
+            this.setState(AiState.FOLLOW);
         }
     }
 
-    private setState(state: AiState, time: number): void {
+    private setState(state: AiState, time: number = this.updateTime): void {
         if (this.state !== state) {
             this.state = state;
             this.lastStateChange = time;
         }
     }
 
-    private tryToAttack(time: number): boolean {
-        this.setState(AiState.ATTACK, time);
+    private tryToAttack(): boolean {
+        this.setState(AiState.ATTACK);
+        return true;
+    }
+
+    public hurt(damage: number): boolean {
+        if (!super.hurt(damage)) {
+            const pl = this.getPlayer();
+            if (pl) {
+                this.targetPosition = pl.getScenePosition();
+                this.setState(AiState.ATTACK);
+            }
+            return false;
+        }
         return true;
     }
 
