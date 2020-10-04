@@ -11,6 +11,7 @@ import { LightNode } from "../nodes/LightNode";
 import { SwitchNode } from "../nodes/SwitchNode";
 import { LIGHT_LAYER } from "../constants";
 import { CameraLimitNode } from "../nodes/CameraLimitNode";
+import { DoorNode } from "../nodes/DoorNode";
 
 export class GameScene extends Scene<Hyperloop> {
     @asset("map/testMap.tiledmap.json")
@@ -30,7 +31,9 @@ export class GameScene extends Scene<Hyperloop> {
         this.camera.setFollow(this.mapNode.getDescendantById("Player"));
         this.setLightLayers([ LIGHT_LAYER ]);
 
-        new SwitchNode({ onlyOnce: false }).moveTo(300, 380).appendTo(this.mapNode);
+        const door = new DoorNode();
+        door.moveTo(1040, 380).setLocked(true).appendTo(this.mapNode);
+        new SwitchNode({ onlyOnce: false, onUpdate: (state) => door.setLocked(!state) }).moveTo(1130, 380).appendTo(this.mapNode);
         new SwitchNode({ onlyOnce: true }).moveTo(250, 380).appendTo(this.mapNode);
         const ratEnemy = new EnemyNode({
             id: "15",
