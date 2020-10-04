@@ -765,6 +765,18 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
+     * Returns the game.
+     *
+     * @return The game.
+     */
+    public getGame(): Game {
+        if (this.scene == null) {
+            throw new Error("Node is not in a scene and therefor can't access the game");
+        }
+        return this.scene.game;
+    }
+
+    /**
      * Sets the scene this node and all its children belongs to. This is called internally when a node is added to
      * the scene.
      *

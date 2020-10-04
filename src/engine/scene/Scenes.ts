@@ -1,4 +1,5 @@
 import { Game } from "../Game";
+import { Constructor } from "../util/types";
 import { Scene, SceneConstructor } from "./Scene";
 
 export class Scenes<T extends Game> {
@@ -45,6 +46,10 @@ export class Scenes<T extends Game> {
 
     public getPreviousScene(): Scene<T> | null {
         return this.scenes[this.scenes.length - 2] ?? null;
+    }
+
+    public getScene<C extends Scene<T>>(type: Constructor<C>): C | null {
+        return (this.scenes.find(scene => scene instanceof type) ?? null) as (C | null);
     }
 
     public async popScene({ noTransition = false }: { noTransition?: boolean} = {}): Promise<Scene<T> | null> {
