@@ -1,5 +1,6 @@
 import { clamp } from "../util/math";
 import { ControllerManager } from "../input/ControllerManager";
+import { sleep } from "../util/time";
 
 // Get cross-browser AudioContext (Safari still uses webkitAudioContext…)
 const AudioContext = window.AudioContext ?? (window as any).webkitAudioContext as AudioContext;
@@ -96,7 +97,6 @@ export class Sound {
             if (fadeOut > 0) {
                 const stopTime = this.source.context.currentTime + fadeOut;
                 this.gainNode.gain.linearRampToValueAtTime(0, stopTime);
-                // this.gainNode.gain.cancelAndHoldAtTime(this.source.context.currentTime + 1);
                 this.source.stop(stopTime);
             } else {
                 try {
