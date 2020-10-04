@@ -149,7 +149,7 @@ export class PlayerNode extends CharacterNode {
         // Draw aiming line
         context.save();
         const playerBounds = this.getBounds();
-        const playerCenter = new Vector2(playerBounds.centerX, playerBounds.centerY);
+        const playerCenter = new Vector2(playerBounds.centerX, playerBounds.minY + playerBounds.height * 0.35);
         const endOfLine = new Vector2(
             playerCenter.x + this.shootingRange * Math.cos(this.aimingAngle),
             playerCenter.y - this.shootingRange * Math.sin(this.aimingAngle)
