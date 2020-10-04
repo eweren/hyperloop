@@ -92,7 +92,7 @@ export class Camera<T extends Game = Game> {
     public readonly fadeToBlack = new FadeToBlack();
 
     /** The currently playing focus animation. Null if none. */
-    private focusAnimation: Animator<this> | null = null;
+    private focusAnimation: Animator<Camera> | null = null;
 
     /**
      * The current camera limits. Null if no limits. When set then the followed target position is corrected so
@@ -433,7 +433,7 @@ export class Camera<T extends Game = Game> {
         const newRotation = args.rotation ?? oldRotation;
         const deltaScale = newScale - oldScale;
         const deltaRotation = newRotation - oldRotation;
-        const finished = await this.runAnimation(this.focusAnimation = new Animator(
+        this.focusAnimation = new Animator<Camera>(
             (camera, value) => {
                 const position = getCameraTargetPosition(target);
                 const newX = position.x;
@@ -455,7 +455,8 @@ export class Camera<T extends Game = Game> {
                 this.invalidate();
                 this.invalidateSceneTransformation();
             }, { easing: easeInOutQuad, ...args }
-        ));
+        );
+        const finished = await this.runAnimation(this.focusAnimation);
         if (finished) {
             this.focusAnimation = null;
             if (args.follow === true) {

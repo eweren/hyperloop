@@ -21,7 +21,7 @@ export class GameScene extends Scene<Hyperloop> {
 
     private debugMode: boolean = false;
 
-    private mapNode = new TiledMapNode({ map: GameScene.map, objects: {
+    private mapNode = new TiledMapNode<Hyperloop>({ map: GameScene.map, objects: {
         "collision": CollisionNode,
         "player": PlayerNode,
         "enemy": EnemyNode,

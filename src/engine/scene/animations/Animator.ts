@@ -26,7 +26,7 @@ export type AnimatorFunction<T> = (target: T, value: number, elapsed: number) =>
  * interpolated with an easing function) to perform the actual animation. It is guaranteed that the animator function
  * is called with value 1.0 when animation is finished.
  */
-export class Animator<T> implements Animation<T> {
+export class Animator<T extends unknown = unknown> implements Animation<T> {
     /** The animator function. */
     private readonly animator: AnimatorFunction<T>;
 

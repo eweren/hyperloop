@@ -3,14 +3,15 @@ import { asset } from "../../engine/assets/Assets";
 import { Direction } from "../../engine/geom/Direction";
 import { AsepriteNode } from "../../engine/scene/AsepriteNode";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
+import { Hyperloop } from "../Hyperloop";
 
-export class TrainNode extends AsepriteNode {
+export class TrainNode extends AsepriteNode<Hyperloop> {
     @asset("sprites/hyperloopInt.aseprite.json")
     private static sprite: Aseprite;
     @asset("sprites/hyperloopExt.aseprite.json")
     private static foregroundSprite: Aseprite;
 
-    public foreground: AsepriteNode;
+    public foreground: AsepriteNode<Hyperloop>;
 
     public constructor(args?: SceneNodeArgs) {
         super({
