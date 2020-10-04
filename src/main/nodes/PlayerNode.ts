@@ -38,6 +38,8 @@ export class PlayerNode extends CharacterNode {
     private readonly deceleration = 800;
     private readonly jumpPower = 380;
     private readonly shotDelay = 0.5;
+    private lastShot = new Date(0).valueOf();
+    private shootingInterval: NodeJS.Timeout | null = null;
 
     public constructor(args?: SceneNodeArgs) {
         super({
@@ -54,6 +56,7 @@ export class PlayerNode extends CharacterNode {
         this.appendChild(this.playerLeg);
         this.appendChild(this.playerArm);
         this.playerArm.appendChild(this.flashLight);
+        this.setupMouseKeyHandlers();
         (<any>window)["player"] = this;
     }
 
@@ -104,7 +107,7 @@ export class PlayerNode extends CharacterNode {
         // Shoot
         if (input.currentActiveIntents & ControllerIntent.PLAYER_ACTION) {
             if (time >= this.nextShot) {
-                this.shoot(this.aimingAngleNonNegative, 35);
+                this.shoot();
                 this.nextShot = time + this.shotDelay;
             }
         }
@@ -124,6 +127,10 @@ export class PlayerNode extends CharacterNode {
         }
 
         this.syncArmAndLeg();
+    }
+
+    public shoot(): void {
+        super.shoot(this.aimingAngleNonNegative, 35);
     }
 
     private syncArmAndLeg(): void {
@@ -223,5 +230,26 @@ export class PlayerNode extends CharacterNode {
     protected endBattlemode(): void {
         super.endBattlemode();
         this.getScene()!.game.canvas.style.cursor = "crosshair";
+    }
+
+    private setupMouseKeyHandlers(): void {
+        window.addEventListener("mousedown", event => {
+            const shootIfCooldownDone = () => {
+                if (new Date().valueOf() - this.lastShot > this.shotDelay * 1000) {
+                    this.lastShot = new Date().valueOf();
+                    this.shoot();
+                }
+            };
+            this.shootingInterval = setInterval(() => {
+                if (event.button === 0) {
+                    shootIfCooldownDone();
+                }
+            }, this.shotDelay);
+        });
+        window.addEventListener("mouseup", () => {
+            if (this.shootingInterval) {
+                clearInterval(this.shootingInterval);
+            }
+        });
     }
 }
