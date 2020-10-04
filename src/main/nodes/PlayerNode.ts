@@ -7,7 +7,6 @@ import { Vector2 } from "../../engine/graphics/Vector2";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { ScenePointerMoveEvent } from "../../engine/scene/events/ScenePointerMoveEvent";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
-import { degrees } from "../../engine/util/math";
 import { CharacterNode } from "./CharacterNode";
 import { EnemyNode } from "./EnemyNode";
 import { FlashlightNode } from "./player/FlashlightNode";
@@ -20,14 +19,14 @@ export class PlayerNode extends CharacterNode {
 
     private playerLeg: PlayerLegsNode;
     private playerArm: PlayerArmNode;
+    private flashLight: FlashlightNode;
 
-    private mousePosition = new Vector2(0, 0);
     private aimingAngle = 0;
     private nextShot = 0;
     private interactPressed = false;
 
     // for debug purposes
-    private debug = false;
+    private debug = true;
 
     // Character settings
     private readonly shootingRange = 250;
@@ -41,19 +40,19 @@ export class PlayerNode extends CharacterNode {
         super({
             aseprite: PlayerNode.sprite,
             anchor: Direction.BOTTOM,
-            childAnchor: Direction.RIGHT,
+            childAnchor: Direction.CENTER,
             tag: "idle",
             id: "player",
             showBounds: true,
             ...args
         });
-        this.playerArm = new PlayerArmNode(args);
-        this.playerLeg = new PlayerLegsNode(args);
+        this.playerArm = new PlayerArmNode();
+        this.playerLeg = new PlayerLegsNode();
+        this.flashLight = new FlashlightNode();
         this.appendChild(this.playerLeg);
         this.appendChild(this.playerArm);
-        window.addEventListener("pointermove", event => this.mouseMoved(event));
+        this.playerArm.appendChild(this.flashLight);
         (<any>window)["player"] = this;
-        this.appendChild(new FlashlightNode());
     }
 
     public getShootingRange(): number {
@@ -91,7 +90,7 @@ export class PlayerNode extends CharacterNode {
             return;
         }
         // Aiming
-        this.aimingAngle = this.getAimingAngle();
+        // this.aimingAngle = this.getAimingAngle();
         // Controls
         const input = this.getScene()!.game.input;
         // Run left/right
@@ -123,13 +122,32 @@ export class PlayerNode extends CharacterNode {
     }
 
     private syncArmAndLeg(): void {
-        const bottomOfNode = this.getBottom();
-        this.playerLeg.setY(bottomOfNode);
-        this.playerArm.setY(30);
         this.playerArm.transform(c => {
-            c.translateY(20);
-            c.rotate(this.aimingAngle);
+            const angleInDegrees = this.aimingAngle / Math.PI * 180;
+            c.setRotation(-this.aimingAngle + Math.PI / 2);
+            // Mirror arm vertically
+            if (angleInDegrees > 90 && angleInDegrees < 270) {
+                c.scaleY(-1);
+            } else {
+                c.scaleY(1);
+            }
         });
+        // this.flashLight.transform(c => {
+        //     if (this.isMirrorX()) {
+        //         c.setRotation(-this.aimingAngle - Math.PI);
+        //     } else {
+        //         c.setRotation(-this.aimingAngle);
+        //     }
+        //     const angleInDegrees = this.aimingAngle / Math.PI * 180;
+        //     if (angleInDegrees > 90 && angleInDegrees < 270) {
+        //         this.flashLight.setX(this.playerArm.getBounds().minX);
+        //         this.flashLight.setY(this.playerArm.getBounds().centerY);
+        //     } else {
+        //         this.flashLight.setX(this.playerArm.getBounds().maxX);
+        //         this.flashLight.setY(this.playerArm.getBounds().centerY);
+        //     }
+
+        // });
         if (this.isJumping) {
             this.playerLeg.setTag("jump");
         } else if (this.isFalling) {
@@ -139,48 +157,15 @@ export class PlayerNode extends CharacterNode {
         } else {
             this.playerLeg.setTag("idle");
         }
-        this.playerLeg.setMirrorX(this.direction < 0);
+        this.playerLeg.setMirrorX(this.isMirrorX());
     }
 
     public draw(context: CanvasRenderingContext2D): void {
         super.draw(context);
-        this.playerArm.draw(context);
-        this.playerLeg.draw(context);
 
         if (this.debug) {
             this.drawAimingLine(context);
         }
-    }
-
-    /**
-     * Handles a mouse move and recalculates the position of the mouse relative to the canvas with the canvas scale.
-     */
-    private mouseMoved(event: PointerEvent): void {
-        const sceneCanvas = this.getScene()?.game.canvas;
-        if (!sceneCanvas) {
-            return;
-        }
-        const { x, y, width } = sceneCanvas.getBoundingClientRect();
-        const canvasScale = sceneCanvas.width / width;
-        this.mousePosition = new Vector2((event.x - x) * canvasScale, ((event.y - y) * canvasScale) + this.getHeight() / 2);
-    }
-
-    /**
-     * Recalculates the angle between the x-axis and the mouse position relative from the center of the playerNode.
-     * Therefore we also have to recalculate the mousePosition relative to the camera position.
-     */
-    private getAimingAngle(): number {
-        const positionInScene = this.getScenePosition();
-        const camera = this.getScene()?.camera;
-        if (camera) {
-            const cameraPosition = new Vector2(camera.getLeft(), camera.getTop());
-            const mousePosition = this.mousePosition.clone().add(cameraPosition);
-            const angleVector = mousePosition.sub(positionInScene);
-
-            const angle = Math.atan2(angleVector.x, angleVector.y);
-            return angle + Math.PI * 3 / 2;
-        }
-        return 0;
     }
 
     private drawAimingLine(context: CanvasRenderingContext2D): void {
@@ -189,8 +174,8 @@ export class PlayerNode extends CharacterNode {
         const playerBounds = this.getBounds();
         const playerCenter = new Vector2(playerBounds.centerX, playerBounds.minY + playerBounds.height * 0.35);
         const endOfLine = new Vector2(
-            playerCenter.x + this.shootingRange * Math.cos(this.aimingAngle),
-            playerCenter.y - this.shootingRange * Math.sin(this.aimingAngle)
+            playerCenter.x + this.shootingRange * Math.cos(this.aimingAngle - Math.PI / 2),
+            playerCenter.y - this.shootingRange * Math.sin(this.aimingAngle - Math.PI / 2)
         );
         const line = new Line2(
             playerCenter,
@@ -216,11 +201,10 @@ export class PlayerNode extends CharacterNode {
     }
 
     private handlePointerMove(event: ScenePointerMoveEvent): void {
-        const angle = new Vector2(event.getX(), event.getY())
+        this.aimingAngle = new Vector2(event.getX(), event.getY())
             .sub(this.getScenePosition())
             .translate(0, this.getHeight() / 2)
             .getAngle();
-        console.log("Fire angle: " + degrees(angle));
     }
 
     protected activate(): void {

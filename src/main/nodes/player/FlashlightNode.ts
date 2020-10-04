@@ -12,6 +12,7 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
             anchor: Direction.CENTER,
             id: "flashlight",
             layer: 1,
+            showBounds: true,
             ...args
         });
         // Debug code to add flashlight to DOM to see raw data
