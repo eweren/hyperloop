@@ -216,4 +216,9 @@ export class PlayerNode extends CharacterNode {
     protected deactivate(): void {
         this.getScene()?.onPointerMove.disconnect(this.handlePointerMove, this);
     }
+
+    protected endBattlemode(): void {
+        super.endBattlemode();
+        this.getScene()!.game.canvas.style.cursor = "crosshair";
+    }
 }

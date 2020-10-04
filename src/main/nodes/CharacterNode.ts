@@ -194,7 +194,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         return this.battlemode;
     }
 
-    private startBattlemode(): void {
+    protected startBattlemode(): void {
         this.battlemode = true;
         // refresh timer
         this.clearBattlemodeTimer();
@@ -203,7 +203,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             }, this.battlemodeTimeout);
     }
 
-    private endBattlemode(): void {
+    protected endBattlemode(): void {
         if (!this.battlemode) {
             return;
         }
