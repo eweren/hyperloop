@@ -8,6 +8,7 @@ import { ScenePointerMoveEvent } from "../../engine/scene/events/ScenePointerMov
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { GameScene } from "../scenes/GameScene";
 import { CharacterNode } from "./CharacterNode";
+import { DoorNode } from "./DoorNode";
 import { EnemyNode } from "./EnemyNode";
 import { FlashlightNode } from "./player/FlashlightNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
