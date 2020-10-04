@@ -5,9 +5,12 @@ import { AsepriteNode } from "../../engine/scene/AsepriteNode";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 
 export class TrainNode extends AsepriteNode {
-    // TODO use proper train sprite instead of that person
-    @asset("sprites/male.aseprite.json")
+    @asset("sprites/hyperloopInt.aseprite.json")
     private static sprite: Aseprite;
+    @asset("sprites/hyperloopExt.aseprite.json")
+    private static foregroundSprite: Aseprite;
+
+    public foreground: AsepriteNode;
 
     public constructor(args?: SceneNodeArgs) {
         super({
@@ -15,6 +18,11 @@ export class TrainNode extends AsepriteNode {
             anchor: Direction.BOTTOM,
             ...args
         });
+        this.foreground = new AsepriteNode({
+            aseprite: TrainNode.foregroundSprite,
+            anchor: Direction.CENTER
+        });
+        this.appendChild(this.foreground);
     }
 
 }
