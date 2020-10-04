@@ -15,16 +15,16 @@ export interface TiledSceneArgs extends SceneNodeArgs {
 /**
  * Constructor arguments for [[TiledMapNode]].
  */
-export interface TiledMapNodeArgs extends SceneNodeArgs {
+export interface TiledMapNodeArgs<T extends Game> extends SceneNodeArgs {
     map: TiledMap,
-    objects?: Record<string, new (args: TiledSceneArgs) => SceneNode>
+    objects?: Record<string, new (args: TiledSceneArgs) => SceneNode<T>>
 }
 
 export class TiledMapNode<T extends Game> extends SceneNode<T> {
     /**
      * Creates a new scene node displaying the given Tiled Map.
      */
-    public constructor({ map, objects, ...args }: TiledMapNodeArgs) {
+    public constructor({ map, objects, ...args }: TiledMapNodeArgs<T>) {
         super({
             width: map.getWidth() * map.getTileWidth(),
             height: map.getHeight() * map.getTileHeight(),
