@@ -15,14 +15,13 @@ export class PlayerArmNode extends AsepriteNode<Hyperloop> {
     public constructor(args?: SceneNodeArgs) {
         super({
             aseprite: PlayerArmNode.sprite,
-            anchor: Direction.CENTER,
+            anchor: Direction.LEFT,
+            childAnchor: Direction.BOTTOM,
             tag: "idle",
             id: "playerarm",
-            x: 20,
-            y: 40,
+            y: -2,
             ...args
         });
-        // this.flashlight = new FlashlightNode();
     }
 
     protected updateBoundsPolygon(bounds: Polygon2): void {
