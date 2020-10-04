@@ -30,7 +30,7 @@ export class PlayerNode extends CharacterNode {
 
     // Character settings
     private readonly shootingRange = 250;
-    private readonly speed = 120;
+    private readonly speed = 60;
     private readonly acceleration = 600;
     private readonly deceleration = 800;
     private readonly jumpPower = 380;
@@ -60,7 +60,8 @@ export class PlayerNode extends CharacterNode {
         return this.shootingRange;
     }
     public getSpeed(): number {
-        return this.speed;
+        // TODO remove before publishing
+        return this.speed * (this.getScene()?.keyboard.isPressed("Shift") ? 4 : 1);
     }
     public getAcceleration(): number {
         return this.acceleration;

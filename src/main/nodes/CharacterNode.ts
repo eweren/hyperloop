@@ -157,8 +157,10 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         const length = Math.sqrt(dx * dx + dy * dy);
         const steps = Math.ceil(length / stepSize);
         const stepX = dx / steps, stepY = dy / steps;
-        for (let i = 0; i < steps; i++) {
-            isColliding = this.getPointCollision(nextCheckPoint.x, nextCheckPoint.y);
+        const enemies = this.getPersonalEnemies();
+        const colliders = this.getColliders();
+        for (let i = 0; i <= steps; i++) {
+            isColliding = this.getPointCollision(nextCheckPoint.x, nextCheckPoint.y, enemies, colliders);
             nextCheckPoint.add({ x: stepX, y: stepY });
             if (this.debug) {
                 this.bulletStartPoint = this.bulletStartPoint!.add({ x: stepX, y: stepY });
@@ -279,16 +281,15 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         return colliders.some(c => c.collidesWithRectangle(px, py, w, h));
     }
 
-    private getPointCollision(x: number, y: number): CollisionNode | CharacterNode | null {
+    private getPointCollision(x: number, y: number, enemies = this.getPersonalEnemies(),
+            colliders = this.getColliders()): CollisionNode | CharacterNode | null {
         // Enemies
-        const enemies = this.getPersonalEnemies();
         for (const c of enemies) {
             if (c.containsPoint(x, y)) {
                 return c;
             }
         }
         // Level
-        const colliders = this.getColliders();
         for (const c of colliders) {
             if (c.containsPoint(x, y)) {
                 return c;
@@ -305,9 +306,29 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     public abstract getPersonalEnemies(): CharacterNode[];
 
+    public getClosestPersonalEnemy(): CharacterNode | null {
+        const enemies = this.getPersonalEnemies();
+        const selfPos = this.getScenePosition();
+        let bestDis = Infinity, closest: CharacterNode | null = null;
+        for (const e of enemies) {
+            const dis2 = e.getScenePosition().getSquareDistance(selfPos);
+            if (dis2 < bestDis) {
+                bestDis = dis2;
+                closest = e;
+            }
+        }
+        return closest;
+    }
+
     public getPlayers(): PlayerNode[] {
         const players = this.getScene()?.rootNode.getDescendantsByType(PlayerNode) ?? [];
         return players;
+    }
+
+    public getHeadPosition(): Vector2 {
+        const p = this.getScenePosition();
+        const h = this.height;
+        return new Vector2(p.x, p.y - h * 0.8);
     }
 
     public containsPoint(x: number, y: number): boolean {
