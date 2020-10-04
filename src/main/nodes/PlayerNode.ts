@@ -7,7 +7,7 @@ import { Vector2 } from "../../engine/graphics/Vector2";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { ScenePointerMoveEvent } from "../../engine/scene/events/ScenePointerMoveEvent";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
-import { degrees } from "../../engine/util/math";
+// import { degrees } from "../../engine/util/math";
 import { CharacterNode } from "./CharacterNode";
 import { EnemyNode } from "./EnemyNode";
 import { FlashlightNode } from "./player/FlashlightNode";
@@ -32,8 +32,8 @@ export class PlayerNode extends CharacterNode {
     // Character settings
     private readonly shootingRange = 250;
     private readonly speed = 60;
-    private readonly acceleration = 1200;
-    private readonly deceleration = 1800;
+    private readonly acceleration = 600;
+    private readonly deceleration = 800;
     private readonly jumpPower = 380;
     private readonly shotDelay = 0.5;
 
@@ -216,11 +216,11 @@ export class PlayerNode extends CharacterNode {
     }
 
     private handlePointerMove(event: ScenePointerMoveEvent): void {
-        const angle = new Vector2(event.getX(), event.getY())
-            .sub(this.getScenePosition())
-            .translate(0, this.getHeight() / 2)
-            .getAngle();
-        console.log("Fire angle: " + degrees(angle));
+        // const angle = new Vector2(event.getX(), event.getY())
+        //     .sub(this.getScenePosition())
+        //     .translate(0, this.getHeight() / 2)
+        //     .getAngle();
+        // console.log("Fire angle: " + degrees(angle));
     }
 
     protected activate(): void {
