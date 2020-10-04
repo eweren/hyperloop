@@ -2,16 +2,15 @@
 import { Direction } from "../../../engine/geom/Direction";
 import { SceneNode, SceneNodeArgs } from "../../../engine/scene/SceneNode";
 import { Hyperloop } from "../../Hyperloop";
+import { PlayerNode } from "../PlayerNode";
 
 export class FlashlightNode extends SceneNode<Hyperloop> {
     private static image = FlashlightNode.generateImage(200, 100);
 
     public constructor(args?: SceneNodeArgs) {
         super({
-            anchor: Direction.TOP,
+            anchor: Direction.CENTER,
             id: "flashlight",
-            x: 0,
-            y: -54,
             layer: 1,
             ...args
         });
@@ -22,7 +21,16 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
     }
 
     public draw(context: CanvasRenderingContext2D): void {
-        context.drawImage(FlashlightNode.image, 0, 0);
+        context.save();
+        const player = this.getPlayer();
+        if (player && player.isMirrorX()) {
+            context.scale(-1, 1);
+        }
+        const t = Date.now() * 0.002;
+        const randomAngle = Math.PI * 0.04 * (Math.sin(t * 0.5) + 0.5 * Math.sin(t * 0.84) + 0.3 * Math.sin(t * 0.941));
+        context.rotate(randomAngle);
+        context.drawImage(FlashlightNode.image, 0, -54);
+        context.restore();
     }
 
     private static generateImage(width: number, height: number): HTMLImageElement {
@@ -53,5 +61,13 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
         const img = new Image();
         img.src = canvas.toDataURL();
         return img;
+    }
+
+    public getPlayer(): PlayerNode | null {
+        let node = this.getParent();
+        while (node && !(node instanceof PlayerNode)) {
+            node = node.getParent();
+        }
+        return node ?? null;
     }
 }

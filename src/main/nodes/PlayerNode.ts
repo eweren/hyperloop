@@ -29,7 +29,7 @@ export class PlayerNode extends CharacterNode {
 
     // Character settings
     private readonly shootingRange = 250;
-    private readonly speed = 150;
+    private readonly speed = 60;
     private readonly acceleration = 1200;
     private readonly deceleration = 1800;
     private readonly jumpPower = 380;
