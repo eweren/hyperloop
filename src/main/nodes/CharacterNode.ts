@@ -17,7 +17,7 @@ const GRAVITY = 1200;
 const PROJECTILE_STEP_SIZE = 5;
 
 export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
-    @asset("sounds/fx/shot.mp3")
+    @asset("sounds/fx/gunshot.ogg")
     private static readonly shootSound: Sound;
 
     protected playerLeg?: PlayerLegsNode;
