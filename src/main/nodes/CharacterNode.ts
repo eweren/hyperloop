@@ -1,5 +1,5 @@
 import { Sound } from "../../engine/assets/Sound";
-import { Vector2 } from "../../engine/graphics/Vector2";
+import { ReadonlyVector2, Vector2 } from "../../engine/graphics/Vector2";
 import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
 import { SoundNode } from "../../engine/scene/SoundNode";
 import { cacheResult } from "../../engine/util/cache";
@@ -147,7 +147,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             if (isColliding) {
                 // Hurt the thing
                 if (isColliding instanceof CharacterNode) {
-                    isColliding.hurt(power);
+                    isColliding.hurt(power, this.getScenePosition());
                 }
                 break;
             }
@@ -160,9 +160,13 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
      * @param damage - Damage dealt, number > 0
      * @return True if hurt character dies, false otherwise.
      */
-    public hurt(damage: number): boolean {
+    public hurt(damage: number, origin: ReadonlyVector2): boolean {
         // TODO reduce hit points or kill or something
-        this.jump(0.3);
+        // Pushback
+        const direction = origin.x > this.getX() ? -1 : 1;
+        const pushForce = damage * 5;
+        this.velocity = new Vector2(pushForce * direction, this.velocity.y - pushForce * 0.1);
+        // Damage
         this.hitpoints -= damage;
         if (this.hitpoints <= 0) {
             this.die();

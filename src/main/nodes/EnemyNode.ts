@@ -218,7 +218,7 @@ export class EnemyNode extends CharacterNode {
         if (time > this.lastStateChange + this.attackDelay) {
             // Hurt player
             const player = this.getPlayer();
-            const playerDied = player?.hurt(35);
+            const playerDied = player?.hurt(35, this.getScenePosition());
             if (playerDied) {
                 this.setState(AiState.BORED);
                 this.setDirection(0);
@@ -241,8 +241,8 @@ export class EnemyNode extends CharacterNode {
         return true;
     }
 
-    public hurt(damage: number): boolean {
-        if (!super.hurt(damage)) {
+    public hurt(damage: number, origin: ReadonlyVector2): boolean {
+        if (!super.hurt(damage, origin)) {
             const pl = this.getPlayer();
             if (pl) {
                 this.targetPosition = pl.getScenePosition();
