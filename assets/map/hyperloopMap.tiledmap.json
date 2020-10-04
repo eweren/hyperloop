@@ -25,7 +25,7 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt2lFOwkAQgOFJqlxED1Je8BDSBEEPASRaTwHcxqM5m25SE3aKrehO6\/+FycIUNpNJStgJIgCAvhaFyEORu4ppeta+vsTernXdFOfrmN0P+MxBpDzGOGlco45a+\/henK\/\/zVb7uYuxv1Jv0dDeyi7GPnMtU6PfCXKMccpci1ezdq1z1gEAAL6n1Mc88Xv8N\/Kzdv3ou0\/f+j04GOdIT\/muM6+1jwdb4xzpKd915rX2yeWmiTo8f9S6qlibt\/xtrDfkljFS1ypHvf1Ka5PKeT7kljFS11L7eBDmIKn5h6d816zG2seDMAdJzT885btmNdY+HpQa8xHkLX3fDwAAAMB210RtvcZwK42n3EVM1KvGW+4iMBormc69eOk7esj\/E39ijPfiX\/cIAAAAAAAAAAAAAAAAAND6BBWccT0=",
+         "data":"eJzt2uttwjAQwHFLaVmkZY\/wpR2iRKKvIQCpTacAtukXUCfpHL0olkDGjvKA+JL+f+LkcAFzOp62MAYA0NRDYsxjEruKcXqTvr7b3r7I+Jqcj0N23+I+G2PSrY2dxCXqyKWPX8n5+N8spZ8rG+sL9RYl6a1Z2VhHrmVs5DPBbG3sItei1eQ45jHrAAAA9aRymXl+j18jPzmO303naVq\/BpvAOlJTvmrNG5pHg2VgHakpX7XmDc0Ty00ZeXH8JHVltjZt+Vtbb5Gb2\/CdyxT19pTUZjLl+SI3t+E755tHg2IfxLf\/oSlftVcTmkeDYh\/Et\/+hKV+1VxOaR4NUYjaAfEjT2wMAAAAIuysjD10\/9F\/SaCwkniM+\/t4+j6H\/K7nP9ak29+nTh8Rn7CIwGAsT973Y1aHiM9rV5v+JXQzxvdh3j4AhaPq9v79qNXBp+f0FjMlP7AJG7Dd2AUAH08Ax+jd1xjq3rTruWgegkbuO4\/Van9sregcAAAAAAAD07w\/dZHxA",
          "encoding":"base64",
          "height":64,
          "id":3,
@@ -77,8 +77,8 @@
                  "type":"enemy",
                  "visible":true,
                  "width":0,
-                 "x":327.667,
-                 "y":347.333333333333
+                 "x":412.333666666667,
+                 "y":688
                 }, 
                 {
                  "height":108,
@@ -799,6 +799,30 @@
                  "width":0,
                  "x":252,
                  "y":396.090909090909
+                }, 
+                {
+                 "height":0,
+                 "id":73,
+                 "name":"Enemy",
+                 "point":true,
+                 "rotation":0,
+                 "type":"enemy",
+                 "visible":true,
+                 "width":0,
+                 "x":458.666666666667,
+                 "y":668.666666666667
+                }, 
+                {
+                 "height":0,
+                 "id":74,
+                 "name":"Enemy",
+                 "point":true,
+                 "rotation":0,
+                 "type":"enemy",
+                 "visible":true,
+                 "width":0,
+                 "x":559.333333333333,
+                 "y":672
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1360,6 +1384,443 @@
                  "width":0,
                  "x":603.333333333333,
                  "y":642
+                }, 
+                {
+                 "height":0,
+                 "id":75,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff4040"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":999.333333333333,
+                 "y":874.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":76,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff4040"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":783,
+                 "y":695.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":77,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff4040"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":765,
+                 "y":588.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":78,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff4040"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":999,
+                 "y":589
+                }, 
+                {
+                 "height":0,
+                 "id":79,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":279.333333333333,
+                 "y":819.666666666667
+                }, 
+                {
+                 "height":0,
+                 "id":80,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":333.333333333333,
+                 "y":819
+                }, 
+                {
+                 "height":0,
+                 "id":81,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":250
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":495.333333333333,
+                 "y":836.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":82,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":250
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":531.666666666667,
+                 "y":837.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":83,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":250
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":693.332666666667,
+                 "y":837.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":84,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":250
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":747.333333333333,
+                 "y":838
+                }, 
+                {
+                 "height":0,
+                 "id":85,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":250
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":801.333333333333,
+                 "y":837
+                }, 
+                {
+                 "height":0,
+                 "id":86,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":300
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":855.333333333333,
+                 "y":891
+                }, 
+                {
+                 "height":0,
+                 "id":87,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":300
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":927.666666666667,
+                 "y":890.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":88,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":300
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":1071.33333333333,
+                 "y":873.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":89,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":300
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":1107.33333333333,
+                 "y":836.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":90,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":300
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":1098.33333333333,
+                 "y":715
+                }, 
+                {
+                 "height":0,
+                 "id":91,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":300
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":899.666666666667,
+                 "y":696
+                }, 
+                {
+                 "height":0,
+                 "id":92,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":300
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":882.333333333333,
+                 "y":590.666666666667
+                }, 
+                {
+                 "height":0,
+                 "id":93,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":300
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":1116.33333333333,
+                 "y":589.666666666667
                 }],
          "opacity":1,
          "properties":[
@@ -1369,7 +1830,7 @@
                  "value":1
                 }],
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -1394,7 +1855,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":73,
+ "nextobjectid":94,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",
