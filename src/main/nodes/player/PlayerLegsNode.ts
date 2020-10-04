@@ -22,14 +22,14 @@ export class PlayerLegsNode extends AsepriteNode<Hyperloop> {
     }
 
     protected updateBoundsPolygon(bounds: Polygon2): void {
-        const boundsWidth = 20;
-        const boundsHeight = 32;
+        const boundsWidth = 0;
+        const boundsHeight = 0;
         const offsetX = this.getWidth() / 2 - boundsWidth / 2;
-        const offsetY = 8;
+        const offsetY = 0;
         bounds.clear();
         bounds.addVertex(new Vector2(offsetX, offsetY));
         bounds.addVertex(new Vector2(offsetX + boundsWidth, offsetY));
-        bounds.addVertex(new Vector2(offsetX + boundsWidth, boundsHeight));
-        bounds.addVertex(new Vector2(offsetX, boundsHeight));
+        bounds.addVertex(new Vector2(offsetX + boundsWidth, boundsHeight + offsetY));
+        bounds.addVertex(new Vector2(offsetX, boundsHeight + offsetY));
     }
 }

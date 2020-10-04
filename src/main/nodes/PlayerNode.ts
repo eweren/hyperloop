@@ -77,15 +77,15 @@ export class PlayerNode extends CharacterNode {
     }
 
     public updateBoundsPolygon(bounds: Polygon2): void {
-        const boundsWidth = 20;
-        const boundsHeight = 34;
+        const boundsWidth = 8;
+        const boundsHeight = 26;
         const offsetX = this.getWidth() / 2 - boundsWidth / 2;
-        const offsetY = 0;
+        const offsetY = 6;
         bounds.clear();
         bounds.addVertex(new Vector2(offsetX, offsetY));
         bounds.addVertex(new Vector2(offsetX + boundsWidth, offsetY));
-        bounds.addVertex(new Vector2(offsetX + boundsWidth, boundsHeight));
-        bounds.addVertex(new Vector2(offsetX, boundsHeight));
+        bounds.addVertex(new Vector2(offsetX + boundsWidth, boundsHeight + offsetY));
+        bounds.addVertex(new Vector2(offsetX, boundsHeight + offsetY));
     }
 
     public update(dt: number, time: number) {

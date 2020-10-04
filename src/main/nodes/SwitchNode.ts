@@ -1,8 +1,10 @@
 import { Aseprite } from "../../engine/assets/Aseprite";
-import { asset } from "../../engine/assets/Assets";
 import { Direction } from "../../engine/geom/Direction";
-import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { InteractiveNode } from "./InteractiveNode";
+import { SceneNodeArgs } from "../../engine/scene/SceneNode";
+import { Sound } from "../../engine/assets/Sound";
+import { SoundNode } from "../../engine/scene/SoundNode";
+import { asset } from "../../engine/assets/Assets";
 
 export interface SwitchNodeArgs extends SceneNodeArgs {
     onlyOnce?: boolean;
@@ -15,6 +17,8 @@ export class SwitchNode extends InteractiveNode {
     private turnedOn: boolean = false;
     private onlyOnce: boolean;
     private stateChanges = 0;
+    private clickNode: SoundNode | null = null;
+    private clickSoundRange: number = 2;
     private onUpdate?: (state: boolean) => void;
 
     public constructor({ onlyOnce = false, onUpdate, ...args }: SwitchNodeArgs) {
@@ -25,10 +29,17 @@ export class SwitchNode extends InteractiveNode {
         }, "Press E to press switch");
         this.onlyOnce = onlyOnce;
         this.onUpdate = onUpdate;
+        this.setUpFx();
+    }
+
+    private async setUpFx(): Promise<void> {
+        this.clickNode = new SoundNode({ sound: await Sound.load("assets/sounds/fx/switch.mp3"), range: this.clickSoundRange });
     }
 
     public interact(): void {
         if (this.canInteract()) {
+            this.clickNode?.getSound().stop();
+            this.clickNode?.getSound().play();
             this.turnedOn = !this.turnedOn;
             if (this.onUpdate != null) {
                 this.onUpdate(this.turnedOn);
