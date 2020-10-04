@@ -26,6 +26,8 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected direction = 0;
     protected velocity: Vector2;
     protected isOnGround = true;
+    protected isJumping = false;
+    protected isFalling = true;
     protected hitpoints = 100;
     protected shootNode: SoundNode | null = null;
     private canInteractWith: InteractiveNode | null = null;
@@ -64,7 +66,13 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         // Death animation
         if (!this.isAlive()) {
             // TODO death animation
-            this.setTag("jump");
+            this.setTag("dance-fluke-1");
+            if (this.getTransformation().getRotation() === 0) {
+                this.transform(c => {
+                    c.translateY(-10);
+                    c.rotate(90 / 180 * Math.PI);
+                });
+            }
         }
 
         // Gravity
@@ -85,6 +93,12 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             // Y collision
             if (this.getPlayerCollisionAt(newX, newY)) {
                 this.isOnGround = (this.velocity.y > 0);
+                if (this.isOnGround) {
+                    this.isJumping = false;
+                    this.isFalling = false;
+                } else if (!this.isJumping) {
+                    this.isFalling = true;
+                }
                 newY = y;
                 this.velocity = new Vector2(this.velocity.x, 0);
             }
@@ -93,6 +107,12 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
                 this.setX(newX);
                 this.setY(newY);
             }
+        }
+        if (this.isJumping) {
+            this.setTag("jump");
+        }
+        if (this.isFalling) {
+            this.setTag("fall");
         }
     }
 
@@ -106,6 +126,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public jump(factor = 1): void {
         if (this.isOnGround && this.isAlive()) {
             this.velocity = new Vector2(this.velocity.x, -this.getJumpPower() * factor);
+            this.isJumping = true;
         }
     }
 
