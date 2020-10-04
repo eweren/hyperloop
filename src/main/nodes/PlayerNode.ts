@@ -24,7 +24,7 @@ export class PlayerNode extends CharacterNode {
     private interactPressed = false;
 
     // for debug purposes
-    private drawDebugStuff = true;
+    private debug = false;
 
     // Character settings
     private readonly shootingRange = 250;
@@ -49,7 +49,7 @@ export class PlayerNode extends CharacterNode {
         this.appendChild(this.playerLeg);
         this.appendChild(this.playerArm);
         window.addEventListener("pointermove", event => this.mouseMoved(event));
-        console.log("Player: ", this);
+        (<any>window)["player"] = this;
     }
 
     public getShootingRange(): number {
@@ -68,7 +68,7 @@ export class PlayerNode extends CharacterNode {
         return this.jumpPower;
     }
 
-    protected updateBoundsPolygon(bounds: Polygon2): void {
+    public updateBoundsPolygon(bounds: Polygon2): void {
         const boundsWidth = 20;
         const boundsHeight = 34;
         const offsetX = this.getWidth() / 2 - boundsWidth / 2;
@@ -143,7 +143,7 @@ export class PlayerNode extends CharacterNode {
         this.playerArm.draw(context);
         this.playerLeg.draw(context);
 
-        if (this.drawDebugStuff) {
+        if (this.debug) {
             this.drawAimingLine(context);
         }
     }
@@ -205,5 +205,9 @@ export class PlayerNode extends CharacterNode {
     public getPersonalEnemies(): EnemyNode[] {
         const enemies = this.getScene()?.rootNode.getDescendantsByType(EnemyNode) ?? [];
         return enemies;
+    }
+
+    public setDebug(debug: boolean): void {
+        this.debug = debug;
     }
 }
