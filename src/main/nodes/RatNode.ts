@@ -1,14 +1,21 @@
+import { AiState, EnemyNode } from "./EnemyNode";
 import { Aseprite } from "../../engine/assets/Aseprite";
-import { asset } from "../../engine/assets/Assets";
 import { Direction } from "../../engine/geom/Direction";
 import { Polygon2 } from "../../engine/graphics/Polygon2";
 import { ReadonlyVector2, Vector2 } from "../../engine/graphics/Vector2";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
-import { AiState, EnemyNode } from "./EnemyNode";
+import { Sound } from "../../engine/assets/Sound";
+import { asset } from "../../engine/assets/Assets";
 
 export class RatNode extends EnemyNode {
     @asset("sprites/rat.aseprite.json")
     private static sprite: Aseprite;
+
+    @asset("sounds/fx/ratSqueak.mp3")
+    private static readonly ratSoundAttack: Sound;
+
+    @asset("sounds/fx/ratSqueak2.mp3")
+    private static readonly ratSoundFollow: Sound;
 
     protected targetPosition: ReadonlyVector2;
     
@@ -41,6 +48,7 @@ export class RatNode extends EnemyNode {
     protected updateAi(dt: number, time: number) {
         if (!this.isAlive()) {
             this.setDirection(0);
+            this.staySilent();
             return;
         }
         // AI
@@ -48,6 +56,7 @@ export class RatNode extends EnemyNode {
             case AiState.BORED:
             case AiState.ALERT:
                 this.updateAlert(time);
+                this.sqeak();
                 break;
             case AiState.MOVE_AROUND:
                 this.updateMoveAround(time);
@@ -94,5 +103,35 @@ export class RatNode extends EnemyNode {
             return Infinity;
         }
         return player.getPosition().getSquareDistance(this.getPosition());
+    }
+
+    private staySilent() {
+        if (this.isSqeaking()) {
+            RatNode.ratSoundAttack.stop();
+            RatNode.ratSoundFollow.stop();
+        }
+    }
+
+    private isSqeaking() {
+        return RatNode.ratSoundAttack.isPlaying() || RatNode.ratSoundFollow.isPlaying();
+    }
+
+    private sqeak() {
+        switch (this.state) {
+            case AiState.ATTACK:
+                if (!this.isSqeaking()) {
+                    this.staySilent();
+                    RatNode.ratSoundAttack.play();
+                }
+                break;
+            case AiState.BORED:
+            case AiState.FOLLOW:
+            case AiState.MOVE_AROUND:
+                if (!this.isSqeaking()) {
+                    this.staySilent();
+                    RatNode.ratSoundFollow.play();
+                }
+                break;
+        }
     }
 }
