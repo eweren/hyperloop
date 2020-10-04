@@ -20,6 +20,9 @@ export class PlayerNode extends CharacterNode {
     @asset("sounds/fx/wilhelmScream.mp3")
     private static readonly dieScream: Sound;
 
+    @asset("sounds/fx/footsteps.ogg")
+    private static readonly footstep: Sound;
+
     @asset("sprites/spacesuitbody.aseprite.json")
     private static sprite: Aseprite;
 
@@ -105,6 +108,12 @@ export class PlayerNode extends CharacterNode {
         // Jump
         if (input.currentActiveIntents & ControllerIntent.PLAYER_JUMP) {
             this.jump();
+        }
+        if (this.isOnGround && direction !== 0) {
+            PlayerNode.footstep.setLoop(true);
+            PlayerNode.footstep.play(0.5);
+        } else {
+            PlayerNode.footstep.stop(0.5);
         }
         // Shoot
         if (input.currentActiveIntents & ControllerIntent.PLAYER_ACTION || this.leftMouseDown) {

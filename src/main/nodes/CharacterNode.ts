@@ -22,6 +22,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     protected playerLeg?: PlayerLegsNode;
     protected playerArm?: PlayerArmNode;
+    private preventNewTag = false;
 
     // Character settings
     public abstract getShootingRange(): number;
@@ -56,6 +57,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public update(dt: number, time: number): void {
         super.update(dt, time);
         this.updateTime = time;
+        this.preventNewTag = this.getTag() === "die" && this.getTimesPlayed("die") === 0 || this.getTag() === "hurt" && this.getTimesPlayed("hurt") === 0;
 
         // Death animation
         if (!this.isAlive()) {
@@ -70,7 +72,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         const tractionFactor = this.isOnGround ? 1 : 0.4;
         if (this.direction !== 0) {
             // Accelerate
-            this.setTag("run");
+            this.setTag("walk");
             vx = clamp(this.velocity.x + this.direction * tractionFactor * this.getAcceleration() * dt,
                     -this.getSpeed(), this.getSpeed());
         } else {
@@ -228,9 +230,11 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     public setTag(tag: string | null): this {
-        super.setTag(tag);
-        this.playerLeg?.setTag(tag);
-        this.playerArm?.setTag(tag);
+        if (!this.preventNewTag) {
+            super.setTag(tag);
+            this.playerLeg?.setTag(tag);
+            this.playerArm?.setTag(tag);
+        }
         return this;
     }
 
