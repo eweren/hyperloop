@@ -103,7 +103,7 @@ export class PlayerNode extends CharacterNode {
         // Shoot
         if (input.currentActiveIntents & ControllerIntent.PLAYER_ACTION) {
             if (time >= this.nextShot) {
-                this.shoot(this.aimingAngle, 200);
+                this.shoot(this.aimingAngle, 35);
                 this.nextShot = time + this.shotDelay;
             }
         }

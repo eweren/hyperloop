@@ -17,7 +17,7 @@ enum AiState {
 }
 
 export class EnemyNode extends CharacterNode {
-    @asset("sprites/female.aseprite.json")
+    @asset("sprites/monster.aseprite.json")
     private static femaleSprite: Aseprite;
 
     @asset("sprites/rat.aseprite.json")
@@ -65,7 +65,7 @@ export class EnemyNode extends CharacterNode {
      * set to false, if after chase an enemy should transfer to ALERT,
      * set to true - for MOVE_AROUND
      */
-    private moveAroundArterChase = false;
+    private moveAroundAfterChase = false;
 
     public constructor(args?: SceneNodeArgs, private enemyType: "rat" | "female" = "female") {
         super({
@@ -75,7 +75,7 @@ export class EnemyNode extends CharacterNode {
             ...args
         });
         this.targetPosition = this.getPosition();
-        this.moveAroundArterChase = true;
+        this.moveAroundAfterChase = true;
         this.setAseprite(this.enemyType === "female" ? EnemyNode.femaleSprite: EnemyNode.ratSprite);
     }
 
@@ -128,6 +128,15 @@ export class EnemyNode extends CharacterNode {
             case AiState.MOVE_AROUND:
                 this.updateMoveAround(time);
                 break;
+        }
+
+        // Move to target
+        if (this.getPosition().getSquareDistance(this.targetPosition) > this.squaredPositionThreshold) {
+            if (this.getX() > this.targetPosition.x) {
+                this.setDirection(-1);
+            } else {
+                this.setDirection(1);
+            }
         }
     }
 
@@ -185,32 +194,21 @@ export class EnemyNode extends CharacterNode {
                 // Player spotted!
                 this.setState(AiState.FOLLOW);
                 this.targetPosition = player.getPosition();
+                // Hurt player
+                if (squaredDistance < this.squaredAttackDistance) {
+                    this.tryToAttack();
+                }
             } else {
                 // Player too far away
-                if (this.moveAroundArterChase) {
+                if (this.moveAroundAfterChase) {
                     // move around a bit before transfering to ALERT
                     this.setState(AiState.MOVE_AROUND);
                     //this.setDirection(this.direction * -1);
-                    this.moveAroundAnchor.setVector(this.getPosition());
+                    this.moveAroundAnchor.setVector(this.targetPosition);
                 } else {
                     // stay ALERT, and look around actively
                     this.setState(AiState.ALERT);
                     this.setDirection(0);
-                }
-            }
-            // Hurt player
-            if (squaredDistance < this.squaredAttackDistance) {
-                this.tryToAttack();
-            }
-        }
-
-        if (this.state === AiState.FOLLOW) {
-            // Move to target
-            if (this.getPosition().getSquareDistance(this.targetPosition) > this.squaredPositionThreshold) {
-                if (this.getX() > this.targetPosition.x) {
-                    this.setDirection(-1);
-                } else {
-                    this.setDirection(1);
                 }
             }
         }
