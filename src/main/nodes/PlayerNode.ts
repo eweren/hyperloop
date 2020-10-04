@@ -126,7 +126,7 @@ export class PlayerNode extends CharacterNode {
             const angleInDegrees = this.aimingAngle / Math.PI * 180;
             c.setRotation(-this.aimingAngle + Math.PI / 2);
             // Mirror arm vertically
-            if (angleInDegrees > 90 && angleInDegrees < 270) {
+            if (angleInDegrees > 0) {
                 c.scaleY(-1);
             } else {
                 c.scaleY(1);
