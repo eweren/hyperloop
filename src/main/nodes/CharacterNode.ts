@@ -32,6 +32,9 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected hitpoints = 100;
     protected shootNode: SoundNode | null = null;
     private canInteractWith: InteractiveNode | null = null;
+    protected battlemode = false;
+    private battlemodeTimeout = 2000;
+    private battlemodeTimeoutTimerId: number | null = null;
 
     public constructor(args: AsepriteNodeArgs) {
         super(args);
@@ -133,6 +136,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     public shoot(angle: number, power: number): void {
+        this.startBattlemode();
         const scenePosition = this.getScenePosition();
         this.shootNode?.setX(scenePosition.x);
         this.shootNode?.setY(scenePosition.y);
@@ -171,6 +175,8 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         if (this.hitpoints <= 0) {
             this.die();
             return true;
+        } else {
+            this.startBattlemode();
         }
         return false;
     }
@@ -182,6 +188,34 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     public isAlive(): boolean {
         return this.hitpoints > 0;
+    }
+
+    public isInBattlemode(): boolean {
+        return this.battlemode;
+    }
+
+    protected startBattlemode(): void {
+        this.battlemode = true;
+        // refresh timer
+        this.clearBattlemodeTimer();
+        this.battlemodeTimeoutTimerId = <any>setTimeout(() => {
+                this.endBattlemode();
+            }, this.battlemodeTimeout);
+    }
+
+    protected endBattlemode(): void {
+        if (!this.battlemode) {
+            return;
+        }
+        this.clearBattlemodeTimer();
+        this.battlemode = false;
+    }
+
+    private clearBattlemodeTimer(): void {
+        if (this.battlemodeTimeoutTimerId) {
+            clearInterval(this.battlemodeTimeoutTimerId);
+            this.battlemodeTimeoutTimerId = null;
+        }
     }
 
     private getPlayerCollisionAt(x = this.getX(), y = this.getY()): boolean {
