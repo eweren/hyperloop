@@ -6,14 +6,14 @@
          "target":"."
         }
     },
- "height":48,
+ "height":64,
  "infinite":false,
  "layers":[
         {
          "compression":"zlib",
-         "data":"eJzt11FOwkAUhWFAfGMP8AAi7AHSshBwIagszaVxJqVJbWAySb1ekvt\/yZ\/WEif2PMlohL7ly\/BwX9pmql4Lm3Xu9XsXtn0sbbNW75k2nftt537Ntllpm0rV6nC7tq3Um\/ZLrZp+\/VyxbVba5qhO6uN2Le3Itllpm7P6VF\/N9fKta0lnts3i\/wQA\/2UXPEve7+adJe93886Szv\/5ozy2Gfx3W2471\/mRs9x2rPNLqvS1u1bP\/Lx9lvusf47ltnudHznLbRc6P3KDB8yY6PzIGW8bOkuL4FnaB8\/SuLBK1U\/+vH2W+6x\/jqV58Cx5f5\/3zpL3u3lnyfvdvLPk\/W7eAQAAAAAAAAAAABjuCuFA5GI=",
+         "data":"eJztmFtu1DAUhj0U3lgBUqVBorSwgr4AAwspLKTAbKpcym1YA1eBEGuASlwKqPzRTNSM61tsn5wkPr\/0KclIk8RfjmM7Sp3NjcK5spGOLdxt46Zycx5cCORiYx\/\/m4tbt9ttsOPgWmP\/emN\/eyBuX4CXRLzyuJ2B2+DOaluzBa7CX8XWkrXj2UDcfgaH4FlmnoMvHrd74C64t9qGsjcgtx\/BTZRRTj4FuN0H98GD5Xb+ENsQ9gfmdgofOQlxO\/Z5QsNtVnxuKcPt1PBOyIq4Xbr9AS5NlLqsTsHxHD8pHz8t\/FLi9jd4Df6CWw3+gQU4TuCP47qU4Xaq167JravuUqEMt8+Ru11kgsNt8n1TuqVaZ8bwVdndUl2TMrnXmKnsLucJsxoczymvRxnMARclQ+l2ivOXTLJAR87h\/CVD7LZoKDMtHMq4vnOUAGUmFmzfPoaIq02USfkGMgYow\/0NgRvKcLeNG8pwt40bynC3jRvJMPO2cChTnf8APArkMXFbx+b2DTgJ5B1RG9s831hMdUEZm9vNyTrUbts831hM906Zul26yyf47fuKp577E7fmVOf\/pk491hwpc7v1+4vty3r\/HKvbNjX1Xq07+pCpnbpbvR\/loO9uqWpIv0bznZSLIzVctyG1E+pW7x9U80PKhLoN8earNdeYWF8jpS\/4ngfHHMyHaawL7XO22tTdVtdoui9lLMuFy22b\/mF7z\/TVrWsulWud63Mb2j9s75m+unWNV7nWCz63secMrek+uo0ZI7py66p1vab76DZ1fDatM2LmWG2e5YE6u64Zotuu8dW8ySu3W6rxuUu3Nq+ca962YzT1XDT2HWTzWq1r+rjmjRmfc5H6HFxe++o2Zi5KOXeN8dpXt12Q2jd8Xkt2m9o3fF5LdtsFlOFuGzcSiUQikUgkEolEIhlH\/gNGBzg3",
          "encoding":"base64",
-         "height":48,
+         "height":64,
          "id":2,
          "name":"background",
          "opacity":1,
@@ -25,9 +25,9 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt1U0KwkAMhuHA2Hu50kPY2fhzCNtNPUXb25pgFkKzESkN5X0gTPkCIQREEQDAr05F5Fy23mKf7nrXh9\/2qu+tLF\/8b9A7vsryBQAAAADsxyhynLUy55ZNXlEvmpPBU\/fqg90y5ZZ1XlEvmrOVw6cG+77oXtV3y5Y3vq9lrVfUq4lu+013k5o8t6z1inrRnAz0NyV98tyyzivqRXMy0P8CmZPnlk1eUS+aAwAAAAAAAAAAAAAAAGA9b5rYUss=",
+         "data":"eJzt2G2KAjEMgOHAuJ5r\/OMeQgf82kOooOMp1Nt4NFMMuGA7WFAax\/fBUIkSQmDERgQAkGtcifxWpbvop5XO9c9mu9BzWT2e3+YoUp8szhqvqNnqHA\/V4\/lt1jrPjcX2RbPFjc5WNhbbwr30jf4myMniXLgXr4b3sy3ZBwAAeE6tr1Hk\/\/g78sP7ecmtk9u\/B8fEPdJTvuvOm6rjwTpxj\/SU77rzpuqUMrhFG95PtK\/GevOW\/7F+Q25qEfuscTTb\/7Q3aZznQ25qEfssVseDsAeJ7T885bt2Nak6HoQ9SGz\/4SnftatJ1fGg1hh9QD4l9\/sAAAAAUMJMY166iZ7aaexLN4GPMROexXfhWQQAAAAAAAAAAAAAAAAA5LgCzKpufw==",
          "encoding":"base64",
-         "height":48,
+         "height":64,
          "id":3,
          "name":"assets",
          "opacity":1,
@@ -39,25 +39,11 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJztzsENABAQAEG10QiN0LqLCnhdIjPJ\/rcUAAAAAAAAbtWoZU\/Aox6N7IlPzWhlTwAAAAAAAAAAAMcGZdACRA==",
+         "data":"eJzt2MEJwCAQRNGtzTSijZjWsxUIQsKCeQ\/+fc4TAQAA7+vZqB5xqJnd1SMAAAB+rGVX9QjY1MNX8xVfDQAAAAAAAAAAAAAAAADA2gPMzwQC",
          "encoding":"base64",
-         "height":48,
+         "height":64,
          "id":5,
          "name":"asstes2",
-         "opacity":1,
-         "type":"tilelayer",
-         "visible":true,
-         "width":87,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "compression":"zlib",
-         "data":"eJzt1rEJADAMA0FDVsn+M7oPSWUEKe5AC3ylKk57zcfdtI22b9rmaJujbY62OX4CAAAAAAAAAAAAAAAAAPypAVKqBrU=",
-         "encoding":"base64",
-         "height":48,
-         "id":1,
-         "name":"foreground",
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
@@ -124,7 +110,7 @@
                  "y":396
                 }, 
                 {
-                 "height":108,
+                 "height":126,
                  "id":5,
                  "name":"ceiling1",
                  "properties":[
@@ -136,12 +122,12 @@
                  "rotation":0,
                  "type":"collision",
                  "visible":true,
-                 "width":1152,
+                 "width":666,
                  "x":90,
-                 "y":180
+                 "y":162
                 }, 
                 {
-                 "height":324,
+                 "height":342,
                  "id":6,
                  "name":"wall",
                  "rotation":0,
@@ -149,10 +135,10 @@
                  "visible":true,
                  "width":36,
                  "x":54,
-                 "y":180
+                 "y":162
                 }, 
                 {
-                 "height":324,
+                 "height":342,
                  "id":7,
                  "name":"wall",
                  "rotation":0,
@@ -160,19 +146,563 @@
                  "visible":true,
                  "width":36,
                  "x":1242,
-                 "y":180
+                 "y":162
+                }, 
+                {
+                 "height":126,
+                 "id":8,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":432,
+                 "x":810,
+                 "y":162
+                }, 
+                {
+                 "height":36,
+                 "id":9,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":432,
+                 "x":702,
+                 "y":54
+                }, 
+                {
+                 "height":72,
+                 "id":10,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":36,
+                 "x":1098,
+                 "y":90
+                }, 
+                {
+                 "height":72,
+                 "id":11,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":36,
+                 "x":702,
+                 "y":90
+                }, 
+                {
+                 "height":6,
+                 "id":12,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":11,
+                 "x":756,
+                 "y":162
+                }, 
+                {
+                 "height":6,
+                 "id":13,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":11,
+                 "x":799,
+                 "y":162
+                }, 
+                {
+                 "height":6,
+                 "id":14,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":11,
+                 "x":756,
+                 "y":282
+                }, 
+                {
+                 "height":6,
+                 "id":15,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":11,
+                 "x":799,
+                 "y":282
+                }, 
+                {
+                 "height":35,
+                 "id":31,
+                 "name":"tunneldoor2",
+                 "properties":[
+                        {
+                         "name":"music",
+                         "type":"string",
+                         "value":"track2"
+                        }, 
+                        {
+                         "name":"target",
+                         "type":"string",
+                         "value":"maintenancedoor2"
+                        }],
+                 "rotation":0,
+                 "type":"door",
+                 "visible":true,
+                 "width":20,
+                 "x":1034,
+                 "y":127
+                }, 
+                {
+                 "height":35,
+                 "id":32,
+                 "name":"maintenancedoor1",
+                 "properties":[
+                        {
+                         "name":"music",
+                         "type":"string",
+                         "value":"track1"
+                        }, 
+                        {
+                         "name":"target",
+                         "type":"string",
+                         "value":"tunneldoor1"
+                        }],
+                 "rotation":0,
+                 "type":"door",
+                 "visible":true,
+                 "width":20,
+                 "x":152,
+                 "y":577
+                }, 
+                {
+                 "height":35,
+                 "id":33,
+                 "name":"tunneldoor1",
+                 "properties":[
+                        {
+                         "name":"music",
+                         "type":"string",
+                         "value":"track2"
+                        }, 
+                        {
+                         "name":"target",
+                         "type":"string",
+                         "value":"maintenancedoor1"
+                        }],
+                 "rotation":0,
+                 "type":"door",
+                 "visible":true,
+                 "width":20,
+                 "x":1029,
+                 "y":357.5
+                }, 
+                {
+                 "height":35,
+                 "id":34,
+                 "name":"maintenancedoor2",
+                 "properties":[
+                        {
+                         "name":"music",
+                         "type":"string",
+                         "value":"track1"
+                        }, 
+                        {
+                         "name":"target",
+                         "type":"string",
+                         "value":"tunneldoor2"
+                        }],
+                 "rotation":0,
+                 "type":"door",
+                 "visible":true,
+                 "width":20,
+                 "x":1106,
+                 "y":613
+                }, 
+                {
+                 "height":126,
+                 "id":35,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":630,
+                 "x":90,
+                 "y":613.666666666667
+                }, 
+                {
+                 "height":126,
+                 "id":36,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":522,
+                 "x":720,
+                 "y":648.333333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
          "visible":false,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":6,
+         "name":"limits",
+         "objects":[
+                {
+                 "height":450,
+                 "id":16,
+                 "name":"Camera Limit Tunnel",
+                 "rotation":0,
+                 "type":"cameraLimit",
+                 "visible":true,
+                 "width":1152,
+                 "x":90,
+                 "y":54
+                }, 
+                {
+                 "height":450,
+                 "id":17,
+                 "name":"Maintenance Limit",
+                 "rotation":0,
+                 "type":"cameraLimit",
+                 "visible":true,
+                 "width":1152,
+                 "x":90,
+                 "y":522
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":false,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":7,
+         "name":"lights",
+         "objects":[
+                {
+                 "height":504,
+                 "id":18,
+                 "name":"Ambient Tunnel",
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ff080808"
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":1152,
+                 "x":90,
+                 "y":0
+                }, 
+                {
+                 "height":0,
+                 "id":19,
+                 "name":"Light 9",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":500
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":342,
+                 "y":333.666666666667
+                }, 
+                {
+                 "height":0,
+                 "id":20,
+                 "name":"Light 8",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":500
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":449.333,
+                 "y":332.999666666667
+                }, 
+                {
+                 "height":0,
+                 "id":21,
+                 "name":"Light 7",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":500
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":556,
+                 "y":332.999666666667
+                }, 
+                {
+                 "height":0,
+                 "id":22,
+                 "name":"Light 6",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":500
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":664.667,
+                 "y":332.999666666667
+                }, 
+                {
+                 "height":0,
+                 "id":23,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":500
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":232.667,
+                 "y":331.666666666667
+                }, 
+                {
+                 "height":0,
+                 "id":24,
+                 "name":"Light 4",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":500
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":772.667,
+                 "y":331.666666666667
+                }, 
+                {
+                 "height":0,
+                 "id":25,
+                 "name":"Light 3",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":500
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":880.667,
+                 "y":332.333666666667
+                }, 
+                {
+                 "height":0,
+                 "id":26,
+                 "name":"Light 2",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":250
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":980.667,
+                 "y":332.999666666667
+                }, 
+                {
+                 "height":0,
+                 "id":27,
+                 "name":"Light 1",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":250
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":1106,
+                 "y":332.333666666667
+                }, 
+                {
+                 "height":90,
+                 "id":28,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffffffff"
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":270,
+                 "x":1260,
+                 "y":17.6666666666666
+                }, 
+                {
+                 "height":0,
+                 "id":29,
+                 "name":"Light 1",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":-76,
+                         "y":161.333
+                        }, 
+                        {
+                         "x":100,
+                         "y":164.667
+                        }],
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff0000"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":300
+                        }, 
+                        {
+                         "name":"spin",
+                         "type":"float",
+                         "value":-90
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":1043.65,
+                 "y":350.554666666667
+                }, 
+                {
+                 "height":0,
+                 "id":30,
+                 "name":"Light 1",
+                 "polygon":[
+                        {
+                         "x":0,
+                         "y":0
+                        }, 
+                        {
+                         "x":-76,
+                         "y":161.333
+                        }, 
+                        {
+                         "x":100,
+                         "y":164.667
+                        }],
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff0000"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":300
+                        }, 
+                        {
+                         "name":"spin",
+                         "type":"float",
+                         "value":-90
+                        }],
+                 "rotation":178.652,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":1044.33,
+                 "y":351.166666666667
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "compression":"zlib",
+         "data":"eJzt1rEJADAMA0FDVsn+M6YPCRiMujvQAl+pitte8\/E2baPtn7Y52uZom6Ntjp8AAAAAAAAAAAAAAAAAAAAAAAAA0HcAO\/gGtQ==",
+         "encoding":"base64",
+         "height":64,
+         "id":1,
+         "name":"foreground",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":87,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":6,
- "nextobjectid":8,
+ "nextlayerid":8,
+ "nextobjectid":37,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.4.1",
+ "tiledversion":"1.4.2",
  "tileheight":18,
  "tilesets":[
         {
