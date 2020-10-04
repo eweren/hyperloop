@@ -1252,7 +1252,14 @@ export class SceneNode<T extends Game = Game> {
                 next = node.nextSibling;
             }
             if (next == null) {
-                next = node.parent?.nextSibling ?? null;
+                let parent = node.parent;
+                if (parent === this) {
+                    parent = null;
+                }
+                while (parent != null && parent.nextSibling == null) {
+                    parent = parent.parent;
+                }
+                next = parent?.nextSibling ?? null;
             }
             if (callback.call(thisArg, node)) {
                 return node;
@@ -1322,7 +1329,14 @@ export class SceneNode<T extends Game = Game> {
                 next = node.nextSibling;
             }
             if (next == null) {
-                next = node.parent?.nextSibling ?? null;
+                let parent = node.parent;
+                if (parent === this) {
+                    parent = null;
+                }
+                while (parent != null && parent.nextSibling == null) {
+                    parent = parent.parent;
+                }
+                next = parent?.nextSibling ?? null;
             }
             if (node instanceof type) {
                 descendants.push(node);
