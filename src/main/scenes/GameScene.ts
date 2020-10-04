@@ -54,7 +54,13 @@ export class GameScene extends Scene<Hyperloop> {
         door.moveTo(1040, 380).setLocked(true).appendTo(this.mapNode);
         new SwitchNode({ onlyOnce: false, onUpdate: (state) => door.setLocked(!state) }).moveTo(1130, 380).appendTo(this.mapNode);
         new SwitchNode({ onlyOnce: true }).moveTo(250, 380).appendTo(this.mapNode);
-        this.rootNode.appendChild(this.fpsNode);
+        if (isDev()) {
+            this.rootNode.appendChild(this.fpsNode);
+        }
+    }
+
+    public cleanup() {
+        this.rootNode.clear();
     }
 
     public activate() {
