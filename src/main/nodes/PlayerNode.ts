@@ -9,9 +9,11 @@ import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { GameScene } from "../scenes/GameScene";
 import { CharacterNode } from "./CharacterNode";
 import { EnemyNode } from "./EnemyNode";
+import { MonsterNode } from "./MonsterNode";
 import { FlashlightNode } from "./player/FlashlightNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
 import { PlayerLegsNode } from "./player/PlayerLegsNode";
+import { RatNode } from "./RatNode";
 
 export class PlayerNode extends CharacterNode {
     @asset("sprites/spacesuitbody.aseprite.json")
@@ -192,7 +194,9 @@ export class PlayerNode extends CharacterNode {
 
 
     public getPersonalEnemies(): EnemyNode[] {
-        const enemies = this.getScene()?.rootNode.getDescendantsByType(EnemyNode) ?? [];
+        const monsters = this.getScene()?.rootNode.getDescendantsByType(MonsterNode) ?? [];
+        const rats = this.getScene()?.rootNode.getDescendantsByType(RatNode) ?? [];
+        const enemies = [...monsters, ...rats];
         return enemies.filter(e => e.isAlive());
     }
 

@@ -6,15 +6,15 @@ import { TextNode } from "../../engine/scene/TextNode";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { asset } from "../../engine/assets/Assets";
 import { Direction } from "../../engine/geom/Direction";
-import { EnemyNode } from "../nodes/EnemyNode";
 import { TrainNode } from "../nodes/TrainNode";
+import { MonsterNode } from "../nodes/MonsterNode";
 
 export class TitleScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
     private static font: BitmapFont;
 
     private playerNode = new PlayerNode();
-    private enemyNode = new EnemyNode();
+    private enemyNode = new MonsterNode();
     private trainNode = new TrainNode();
 
     private titleNode = new TextNode({ font: TitleScene.font, anchor: Direction.TOP });
