@@ -1,11 +1,15 @@
 import { Aseprite } from "../../engine/assets/Aseprite";
-import { asset } from "../../engine/assets/Assets";
-import { SceneNode } from "../../engine/scene/SceneNode";
-import { TiledSceneArgs } from "../../engine/scene/TiledMapNode";
 import { DoorHandler } from "../DoorHandler";
 import { InteractiveNode } from "./InteractiveNode";
+import { SceneNode } from "../../engine/scene/SceneNode";
+import { Sound } from "../../engine/assets/Sound";
+import { TiledSceneArgs } from "../../engine/scene/TiledMapNode";
+import { asset } from "../../engine/assets/Assets";
 
 export class DoorNode extends InteractiveNode {
+    @asset("sounds/fx/metalDoor.mp3")
+    private static readonly doorSound: Sound;
+
     @asset("sprites/rat.aseprite.json")
     private static sprite: Aseprite;
     private isLocked = false;
@@ -29,6 +33,8 @@ export class DoorNode extends InteractiveNode {
                 const target = this.getTargetNode();
                 if (target) {
                     DoorHandler.getInstance().transportToDoor(player, target, this.gameTime);
+                    DoorNode.doorSound.stop();
+                    DoorNode.doorSound.play();
                 }
             }
         }
