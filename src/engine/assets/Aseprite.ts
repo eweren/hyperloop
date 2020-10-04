@@ -15,6 +15,8 @@ export class Aseprite {
     private readonly duration: number;
     private readonly fallbackTag = "idle";
 
+    private direction: AsepriteDirection = "forward";
+
     private constructor(private readonly json: AsepriteJSON, private readonly image: HTMLImageElement) {
         this.frames = Object.values(json.frames);
         this.duration = this.frames.reduce((duration, frame) => duration + frame.duration, 0);
@@ -63,9 +65,13 @@ export class Aseprite {
         return this.frames[0].sourceSize.h;
     }
 
+    public setDirection(direction: AsepriteDirection) {
+        this.direction = direction;
+    }
+
     private calculateFrameIndex(
         time: number = now(), duration = this.duration, from = 0, to = this.frames.length - 1,
-        direction: AsepriteDirection = "forward"
+        direction = this.direction
     ): number {
         let delta = direction === "reverse" ? -1 : 1;
 
