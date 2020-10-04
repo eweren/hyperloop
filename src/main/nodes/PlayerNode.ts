@@ -1,7 +1,6 @@
 import { Aseprite } from "../../engine/assets/Aseprite";
 import { asset } from "../../engine/assets/Assets";
 import { Direction } from "../../engine/geom/Direction";
-import { Line2 } from "../../engine/graphics/Line2";
 import { Polygon2 } from "../../engine/graphics/Polygon2";
 import { Vector2 } from "../../engine/graphics/Vector2";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
@@ -28,9 +27,6 @@ export class PlayerNode extends CharacterNode {
     }
     private nextShot = 0;
     private interactPressed = false;
-
-    // for debug purposes
-    private debug = true;
 
     // Character settings
     private readonly shootingRange = 250;
@@ -130,7 +126,7 @@ export class PlayerNode extends CharacterNode {
     }
 
     public shoot(): void {
-        super.shoot(this.aimingAngleNonNegative, 35);
+        super.shoot(this.aimingAngleNonNegative, 35, this.flashLight.getScenePosition());
     }
 
     private syncArmAndLeg(): void {
@@ -150,12 +146,12 @@ export class PlayerNode extends CharacterNode {
             // Transform flashlight to match scaling and rotation of the arm.
             this.flashLight.transform(f => {
                 if (this.isMirrorX()) {
-                    this.playerArm.setChildAnchor(Direction.TOP);
-                    this.flashLight.setY(-1);
+                    this.playerArm.setChildAnchor(Direction.TOP_RIGHT);
+                    this.flashLight.setY(-3);
                     f.setRotation(Math.PI);
                 } else {
-                    this.playerArm.setChildAnchor(Direction.BOTTOM);
-                    this.flashLight.setY(0);
+                    this.playerArm.setChildAnchor(Direction.TOP_RIGHT);
+                    this.flashLight.setY(5);
                     f.setRotation(0);
                 }
             });
@@ -174,33 +170,6 @@ export class PlayerNode extends CharacterNode {
 
     public draw(context: CanvasRenderingContext2D): void {
         super.draw(context);
-
-        if (this.debug) {
-            this.drawAimingLine(context);
-        }
-    }
-
-    private drawAimingLine(context: CanvasRenderingContext2D): void {
-        // Draw aiming line
-        context.save();
-        const playerBounds = this.getBounds();
-        const playerCenter = new Vector2(playerBounds.centerX, playerBounds.minY + playerBounds.height * 0.35);
-        const endOfLine = new Vector2(
-            playerCenter.x + this.shootingRange * Math.cos(-this.aimingAngleNonNegative),
-            playerCenter.y - this.shootingRange * Math.sin(-this.aimingAngleNonNegative)
-        );
-        const line = new Line2(
-            playerCenter,
-            endOfLine
-        );
-        context.save();
-        context.beginPath();
-        line.draw(context);
-        context.strokeStyle = "#ffffff";
-        context.stroke();
-        context.closePath();
-        context.restore();
-        context.restore();
     }
 
     public die(): void {
@@ -240,8 +209,7 @@ export class PlayerNode extends CharacterNode {
 
     private handlePointerMove(event: ScenePointerMoveEvent): void {
         this.aimingAngle = new Vector2(event.getX(), event.getY())
-            .sub(this.getScenePosition())
-            .translate(0, this.getHeight() / 2)
+            .sub(this.playerArm.getScenePosition())
             .getAngle();
     }
 

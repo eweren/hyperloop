@@ -16,7 +16,7 @@ export class PlayerArmNode extends AsepriteNode<Hyperloop> {
         super({
             aseprite: PlayerArmNode.sprite,
             anchor: Direction.LEFT,
-            childAnchor: Direction.BOTTOM,
+            childAnchor: Direction.TOP_RIGHT,
             tag: "idle",
             id: "playerarm",
             y: -2,

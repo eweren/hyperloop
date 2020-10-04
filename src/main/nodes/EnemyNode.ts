@@ -198,7 +198,7 @@ export class EnemyNode extends CharacterNode {
             } else {
                 // Player too far away
                 if (this.moveAroundAfterChase) {
-                    // move around a bit before transfering to ALERT
+                    // move around a bit before transferring to ALERT
                     this.setState(AiState.MOVE_AROUND);
                     //this.setDirection(this.direction * -1);
                     this.moveAroundAnchor.setVector(this.targetPosition);

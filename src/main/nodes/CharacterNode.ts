@@ -1,5 +1,6 @@
 import { Sound } from "../../engine/assets/Sound";
-import { ReadonlyVector2, Vector2 } from "../../engine/graphics/Vector2";
+import { Line2 } from "../../engine/graphics/Line2";
+import { ReadonlyVector2, Vector2, Vector2Like } from "../../engine/graphics/Vector2";
 import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
 import { SoundNode } from "../../engine/scene/SoundNode";
 import { cacheResult } from "../../engine/util/cache";
@@ -31,10 +32,13 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected isFalling = true;
     protected hitpoints = 100;
     protected shootNode: SoundNode | null = null;
+    protected debug = false;
     private canInteractWith: InteractiveNode | null = null;
     protected battlemode = false;
     private battlemodeTimeout = 2000;
     private battlemodeTimeoutTimerId: number | null = null;
+    private bulletStartPoint: Vector2 | null = null;
+    private bulletEndPoint: Vector2 | null = null;
 
     public constructor(args: AsepriteNodeArgs) {
         super(args);
@@ -135,19 +139,27 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         }
     }
 
-    public shoot(angle: number, power: number): void {
+    public shoot(angle: number, power: number, origin: Vector2Like = new Vector2(this.getScenePosition().x, this.getScenePosition().y - this.getHeight() * .5)): void {
         this.startBattlemode();
-        const scenePosition = this.getScenePosition();
-        this.shootNode?.setX(scenePosition.x);
-        this.shootNode?.setY(scenePosition.y);
+        this.shootNode?.setX(origin.x);
+        this.shootNode?.setY(origin.y);
         this.shootNode?.getSound().stop();
         this.shootNode?.getSound().play();
-        const origin = new Vector2(scenePosition.x, scenePosition.y - this.getHeight() * .5);
-        const diffX = Math.cos(angle);
-        const diffY = -Math.sin(angle);
+        const diffX = Math.cos(angle) * PROJECTILE_STEP_SIZE;
+        const diffY = Math.sin(angle) * PROJECTILE_STEP_SIZE;
         let isColliding: CharacterNode | CollisionNode | null = null;
-        for (let i = 0; i < this.getShootingRange(); i += PROJECTILE_STEP_SIZE) {
-            isColliding = this.getPointCollision(origin.x + i * diffX, origin.y + i * diffY);
+        const nextCheckPoint = new Vector2().setVector(origin);
+        if (this.debug) {
+            this.bulletStartPoint = new Vector2().setVector({x: this.getWidth() / 2, y: this.getHeight() / 2});
+            this.bulletEndPoint = new Vector2().setVector(this.bulletStartPoint).add({ x: diffX, y: diffY });
+        }
+        for (let i = 0; i < this.getShootingRange(); i++) {
+            isColliding = this.getPointCollision(nextCheckPoint.x, nextCheckPoint.y);
+            nextCheckPoint.add({ x: diffX, y: diffY });
+            if (this.debug) {
+                this.bulletStartPoint = this.bulletStartPoint!.add({ x: diffX, y: diffY });
+                this.bulletEndPoint = this.bulletEndPoint!.add({ x: diffX, y: diffY });
+            }
             if (isColliding) {
                 // Hurt the thing
                 if (isColliding instanceof CharacterNode) {
@@ -155,6 +167,32 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
                 }
                 break;
             }
+        }
+    }
+
+    public draw(context: CanvasRenderingContext2D): void {
+        super.draw(context);
+        if (this.debug) {
+            this.drawShootingLine(context);
+        }
+    }
+
+    private drawShootingLine(context: CanvasRenderingContext2D): void {
+        // Draw shot line
+        if (this.bulletStartPoint && this.bulletEndPoint) {
+            context.save();
+            const line = new Line2(
+                this.bulletStartPoint,
+                this.bulletEndPoint
+            );
+            context.save();
+            context.beginPath();
+            line.draw(context);
+            context.strokeStyle = "#ffffff";
+            context.stroke();
+            context.closePath();
+            context.restore();
+            context.restore();
         }
     }
 
@@ -259,8 +297,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     public containsPoint(x: number, y: number): boolean {
-        const bounds = this.getSceneBounds();
-        const minX = bounds.minX, minY = bounds.minY, maxX = bounds.maxX, maxY = bounds.maxY;
+        const {minX, minY, maxX, maxY} = this.getSceneBounds();
         return x >= minX && x <= maxX && y >= minY && y <= maxY;
     }
 
