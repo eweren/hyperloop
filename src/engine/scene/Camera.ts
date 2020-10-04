@@ -525,8 +525,9 @@ export class Camera<T extends Game = Game> {
      *
      * @param limits - The limits to set. Null to unset.
      */
-    public setLimits(limits: Rect | null): void {
+    public setLimits(limits: Rect | null): this {
         this.limits = limits;
+        return this;
     }
 
     /**
