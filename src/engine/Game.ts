@@ -5,16 +5,12 @@ import { createCanvas, getRenderingContext } from "./util/graphics";
 import { GamepadInput } from "./input/GamepadInput";
 import { Keyboard } from "./input/Keyboard";
 import { Scenes } from "./scene/Scenes";
-import { PlayerNode } from "../main/nodes/PlayerNode";
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want
  * updates to jump too much.
  */
 const MAX_DT = 0.1;
-
-/** Number of seconds the mouse is visible after moving it */
-const MOUSE_TIMEOUT = 2.0;
 
 export abstract class Game {
     public readonly controllerManager = ControllerManager.getInstance();
@@ -30,7 +26,6 @@ export abstract class Game {
     private readonly gameLoopCallback = this.gameLoop.bind(this);
     private gameLoopId: number | null = null;
     private lastUpdateTime: number = performance.now();
-    private mouseTimeout: number = MOUSE_TIMEOUT;
     protected currentTime: number = 0;
 
     public constructor(public readonly width: number = 480, public readonly height: number = 270) {
@@ -48,7 +43,6 @@ export abstract class Game {
         document.body.appendChild(this.canvas);
         this.updateCanvasSize();
         window.addEventListener("resize", () => this.updateCanvasSize());
-        window.addEventListener("pointermove", () => this.mouseMoved());
 
         // Use Alt+Enter to toggle fullscreen mode.
         window.addEventListener("keydown", async (event) => {
@@ -73,24 +67,6 @@ export abstract class Game {
 
     public get input(): ControllerManager {
         return this.controllerManager;
-    }
-
-    private mouseMoved(): void {
-        const player = this.scenes.activeScene?.rootNode.getDescendantsByType(PlayerNode)[0];
-        if (!player?.isInBattlemode()) {
-            this.canvas.style.cursor = "crosshair";
-        }
-        this.mouseTimeout = MOUSE_TIMEOUT;
-    }
-
-    private updateMouse(dt: number): void {
-        if (this.mouseTimeout > 0) {
-            this.mouseTimeout = Math.max(0, this.mouseTimeout - dt);
-
-            if (this.mouseTimeout === 0) {
-                this.canvas.style.cursor = "none";
-            }
-        }
     }
 
     private updateCanvasSize(): void {
@@ -131,7 +107,6 @@ export abstract class Game {
 
     protected update(dt: number, time: number): void {
         this.gamepad.update();
-        this.updateMouse(dt);
         this.scenes.update(dt, time);
     }
 
