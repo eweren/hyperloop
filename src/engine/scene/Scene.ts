@@ -232,6 +232,7 @@ export abstract class Scene<T extends Game = Game, A = void> {
         const postDraw = this.camera.draw(ctx, width, height);
         let layer = 1;
         let usedLayers = this.usedLayers & ~this.hiddenLayers;
+        let debugLight = true;
         while (usedLayers !== 0) {
             if ((usedLayers & 1) === 1) {
                 const light = (this.lightLayers & layer) !== 0;
@@ -244,12 +245,15 @@ export abstract class Scene<T extends Game = Game, A = void> {
                     this.camera.getSceneTransformation().setCanvasTransform(tmpCtx);
                     tmpCtx.globalCompositeOperation = "screen";
                     this.drawRootNode(tmpCtx, layer, width, height);
-                    ctx.globalCompositeOperation = "multiply";
+                    if (!debugLight) {
+                        ctx.globalCompositeOperation = "multiply";
+                    }
                     reverseCameraTransformation.transformCanvas(ctx);
                     ctx.drawImage(canvas, 0, 0);
                     ctx.restore();
                 } else {
                     this.drawRootNode(ctx, layer, width, height);
+                    debugLight = false;
                 }
             }
             usedLayers >>>= 1;
