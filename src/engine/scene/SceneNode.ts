@@ -8,6 +8,7 @@ import { Bounds2 } from "../graphics/Bounds2";
 import { Animation } from "./animations/Animation";
 import { Size2 } from "../graphics/Size2";
 import { Constructor } from "../util/types";
+import { TiledObject } from "../tiled/TiledObject";
 
 /**
  * Hints which are returned to the scene after drawing the scene graph. These hints can suggest further actions after
@@ -94,6 +95,9 @@ export interface SceneNodeArgs {
 
     /** Optional initial hidden flag. Set to true to hide the node. */
     hidden?: boolean;
+
+    /** Optional parameter used to identify the connected TiledObject. */
+    tiledObject?: TiledObject;
 }
 
 /**

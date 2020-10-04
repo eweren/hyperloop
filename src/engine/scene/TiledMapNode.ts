@@ -17,7 +17,7 @@ export interface TiledSceneArgs extends SceneNodeArgs {
  */
 export interface TiledMapNodeArgs extends SceneNodeArgs {
     map: TiledMap,
-    objects?: Record<string, new (args: TiledSceneArgs) => SceneNode>;
+    objects?: Record<string, new (args: TiledSceneArgs) => SceneNode>
 }
 
 export class TiledMapNode<T extends Game> extends SceneNode<T> {
