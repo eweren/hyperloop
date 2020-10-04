@@ -257,7 +257,7 @@
                          "value":300
                         }, 
                         {
-                         "name":"rotation",
+                         "name":"spin",
                          "type":"float",
                          "value":45
                         }],
@@ -297,7 +297,7 @@
                          "value":300
                         }, 
                         {
-                         "name":"rotation",
+                         "name":"spin",
                          "type":"float",
                          "value":-90
                         }],
@@ -418,7 +418,7 @@
                          "value":300
                         }, 
                         {
-                         "name":"rotation",
+                         "name":"spin",
                          "type":"float",
                          "value":-90
                         }],
@@ -438,7 +438,7 @@
                 }],
          "tintcolor":"#ff0000",
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
