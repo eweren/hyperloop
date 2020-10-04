@@ -20,9 +20,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     @asset("sounds/fx/gunshot.ogg")
     private static readonly shootSound: Sound;
 
-    @asset("sounds/fx/wilhelmScream.mp3")
-    private static readonly dieScream: Sound;
-
     protected playerLeg?: PlayerLegsNode;
     protected playerArm?: PlayerArmNode;
 
@@ -238,8 +235,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     public die(): void {
-        CharacterNode.dieScream.stop();
-        CharacterNode.dieScream.play();
         this.endBattlemode();
         this.setTag("die");
         this.hitpoints = 0;

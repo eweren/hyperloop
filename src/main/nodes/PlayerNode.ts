@@ -1,21 +1,25 @@
 import { Aseprite } from "../../engine/assets/Aseprite";
-import { asset } from "../../engine/assets/Assets";
-import { Direction } from "../../engine/geom/Direction";
-import { Polygon2 } from "../../engine/graphics/Polygon2";
-import { Vector2 } from "../../engine/graphics/Vector2";
-import { ControllerIntent } from "../../engine/input/ControllerIntent";
-import { ScenePointerMoveEvent } from "../../engine/scene/events/ScenePointerMoveEvent";
-import { SceneNodeArgs } from "../../engine/scene/SceneNode";
-import { GameScene } from "../scenes/GameScene";
 import { CharacterNode } from "./CharacterNode";
+import { ControllerIntent } from "../../engine/input/ControllerIntent";
+import { Direction } from "../../engine/geom/Direction";
 import { EnemyNode } from "./EnemyNode";
-import { MonsterNode } from "./MonsterNode";
 import { FlashlightNode } from "./player/FlashlightNode";
+import { GameScene } from "../scenes/GameScene";
+import { MonsterNode } from "./MonsterNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
 import { PlayerLegsNode } from "./player/PlayerLegsNode";
+import { Polygon2 } from "../../engine/graphics/Polygon2";
 import { RatNode } from "./RatNode";
+import { SceneNodeArgs } from "../../engine/scene/SceneNode";
+import { ScenePointerMoveEvent } from "../../engine/scene/events/ScenePointerMoveEvent";
+import { Sound } from "../../engine/assets/Sound";
+import { Vector2 } from "../../engine/graphics/Vector2";
+import { asset } from "../../engine/assets/Assets";
 
 export class PlayerNode extends CharacterNode {
+    @asset("sounds/fx/wilhelmScream.mp3")
+    private static readonly dieScream: Sound;
+
     @asset("sprites/spacesuitbody.aseprite.json")
     private static sprite: Aseprite;
 
@@ -171,6 +175,8 @@ export class PlayerNode extends CharacterNode {
 
     public die(): void {
         super.die();
+        PlayerNode.dieScream.stop();
+        PlayerNode.dieScream.play();
         // Slow fade out, then play as different character
         const camera = this.getGame().scenes.getScene(GameScene)?.camera;
         if (camera) {
