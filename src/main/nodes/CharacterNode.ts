@@ -57,7 +57,9 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public update(dt: number, time: number): void {
         super.update(dt, time);
         this.updateTime = time;
-        this.preventNewTag = this.getTag() === "die" && this.getTimesPlayed("die") === 0 || this.getTag() === "hurt" && this.getTimesPlayed("hurt") === 0;
+        this.preventNewTag = this.getTag() === "die" && this.getTimesPlayed("die") === 0
+            || this.getTag() === "hurt" && this.getTimesPlayed("hurt") === 0
+            || this.getTag() === "attack" && this.getTimesPlayed("attack") === 0;
 
         // Death animation
         if (!this.isAlive()) {
