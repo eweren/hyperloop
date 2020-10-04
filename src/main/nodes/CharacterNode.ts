@@ -13,7 +13,7 @@ import { PlayerLegsNode } from "./player/PlayerLegsNode";
 import { PlayerNode } from "./PlayerNode";
 
 // TODO define in some constants file
-const GRAVITY = 1200;
+const GRAVITY = 800;
 const PROJECTILE_STEP_SIZE = 5;
 
 export abstract class CharacterNode extends AsepriteNode<Hyperloop> {

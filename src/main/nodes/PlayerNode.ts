@@ -40,7 +40,7 @@ export class PlayerNode extends CharacterNode {
     private readonly speed = 60;
     private readonly acceleration = 600;
     private readonly deceleration = 800;
-    private readonly jumpPower = 380;
+    private readonly jumpPower = 280;
     private readonly shotDelay = 0.5;
     private leftMouseDown = false;
 
