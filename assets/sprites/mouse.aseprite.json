@@ -1,0 +1,88 @@
+{ "frames": {
+   "0": {
+    "frame": { "x": 0, "y": 0, "w": 9, "h": 4 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 6, "w": 9, "h": 4 },
+    "sourceSize": { "w": 13, "h": 10 },
+    "duration": 100
+   },
+   "1": {
+    "frame": { "x": 9, "y": 0, "w": 9, "h": 4 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 6, "w": 9, "h": 4 },
+    "sourceSize": { "w": 13, "h": 10 },
+    "duration": 100
+   },
+   "2": {
+    "frame": { "x": 18, "y": 0, "w": 9, "h": 4 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 6, "w": 9, "h": 4 },
+    "sourceSize": { "w": 13, "h": 10 },
+    "duration": 100
+   },
+   "3": {
+    "frame": { "x": 27, "y": 0, "w": 9, "h": 4 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 6, "w": 9, "h": 4 },
+    "sourceSize": { "w": 13, "h": 10 },
+    "duration": 100
+   },
+   "4": {
+    "frame": { "x": 36, "y": 0, "w": 7, "h": 7 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 3, "w": 7, "h": 7 },
+    "sourceSize": { "w": 13, "h": 10 },
+    "duration": 100
+   },
+   "5": {
+    "frame": { "x": 43, "y": 0, "w": 7, "h": 7 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 3, "w": 7, "h": 7 },
+    "sourceSize": { "w": 13, "h": 10 },
+    "duration": 100
+   },
+   "6": {
+    "frame": { "x": 50, "y": 0, "w": 7, "h": 7 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 3, "w": 7, "h": 7 },
+    "sourceSize": { "w": 13, "h": 10 },
+    "duration": 100
+   },
+   "7": {
+    "frame": { "x": 57, "y": 0, "w": 7, "h": 7 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 2, "y": 3, "w": 7, "h": 7 },
+    "sourceSize": { "w": 13, "h": 10 },
+    "duration": 100
+   },
+   "8": {
+    "frame": { "x": 64, "y": 0, "w": 9, "h": 4 },
+    "rotated": false,
+    "trimmed": true,
+    "spriteSourceSize": { "x": 1, "y": 6, "w": 9, "h": 4 },
+    "sourceSize": { "w": 13, "h": 10 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.25-x64",
+  "image": "mouse.png",
+  "format": "RGBA8888",
+  "size": { "w": 73, "h": 7 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "walk", "from": 0, "to": 3, "direction": "forward" },
+   { "name": "idle", "from": 4, "to": 7, "direction": "forward" },
+   { "name": "die", "from": 8, "to": 8, "direction": "forward" }
+  ]
+ }
+}
