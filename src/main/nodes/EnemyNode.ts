@@ -18,7 +18,7 @@ enum AiState {
 
 export class EnemyNode extends CharacterNode {
     @asset("sprites/monster.aseprite.json")
-    private static femaleSprite: Aseprite;
+    private static sprite: Aseprite;
 
     // Character settings
     private readonly shootingRange = 150;
@@ -66,14 +66,14 @@ export class EnemyNode extends CharacterNode {
 
     public constructor(args?: SceneNodeArgs) {
         super({
-            aseprite: EnemyNode.femaleSprite,
+            aseprite: EnemyNode.sprite,
             anchor: Direction.BOTTOM,
             tag: "idle",
             ...args
         });
         this.targetPosition = this.getPosition();
         this.moveAroundAfterChase = true;
-        this.setAseprite(EnemyNode.femaleSprite);
+        this.setAseprite(EnemyNode.sprite);
     }
 
     protected updateBoundsPolygon(bounds: Polygon2): void {
@@ -231,6 +231,22 @@ export class EnemyNode extends CharacterNode {
             this.state = state;
             this.lastStateChange = time;
         }
+        if (this.getTag() === "hurt" || this.getTag() === "die") {
+            return;
+        }
+        switch (state) {
+            case AiState.ALERT:
+            case AiState.BORED:
+                this.setTag("idle");
+                break;
+            case AiState.ATTACK:
+                this.setTag("attack");
+                break;
+            case AiState.FOLLOW:
+            case AiState.MOVE_AROUND:
+                this.setTag("walk");
+                break;
+        }
     }
 
     private tryToAttack(): boolean {
@@ -240,6 +256,7 @@ export class EnemyNode extends CharacterNode {
 
     public hurt(damage: number, origin: ReadonlyVector2): boolean {
         if (!super.hurt(damage, origin)) {
+            this.setTag("hurt");
             const pl = this.getPlayer();
             if (pl) {
                 this.targetPosition = pl.getScenePosition();
@@ -247,6 +264,7 @@ export class EnemyNode extends CharacterNode {
             }
             return false;
         }
+        this.setTag("die");
         return true;
     }
 

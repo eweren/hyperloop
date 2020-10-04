@@ -28,10 +28,15 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
     /** The animation tag to draw. Null to draw whole animation. */
     private tag: string | null;
 
+    /** Counter how often a tag was played. */
+    private timesTagPlayed = 0;
+
     /** The current time index of the animation. */
     private time = 0;
 
     private mirrorX: boolean;
+    private tagPlayTime = 0;
+    private tagStartTime = 0;
 
     /**
      * Creates a new scene node displaying the given Aseprite.
@@ -88,8 +93,22 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
         if (tag !== this.tag) {
             this.tag = tag;
             this.invalidate(SceneNodeAspect.RENDERING);
+            if (this.tag) {
+                this.timesTagPlayed = 0;
+                this.tagPlayTime = this.aseprite.getAnimationDurationByTag(this.tag);
+                this.tagStartTime = 0;
+                this.time = 0;
+            }
         }
         return this;
+    }
+
+    public getTimesPlayed(tag: string): number {
+        if (tag === this.tag) {
+            return this.timesTagPlayed;
+        }
+
+        return 0;
     }
 
     public setMirrorX(mirrorX: boolean): this {
@@ -117,6 +136,10 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
             ctx.scale(-1, 1);
         }
         if (this.tag != null) {
+            if (this.tagPlayTime > 0) {
+                // Calculate the times the tag was played since tagStartTime.
+                this.timesTagPlayed = Math.floor((100 + (this.time - this.tagStartTime) * 1000) / this.tagPlayTime);
+            }
             this.aseprite.drawTag(ctx, this.tag, 0, 0, this.time * 1000);
         } else {
             this.aseprite.draw(ctx, 0, 0, this.time * 1000);

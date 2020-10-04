@@ -8,6 +8,8 @@ import { clamp } from "../../engine/util/math";
 import { Hyperloop } from "../Hyperloop";
 import { CollisionNode } from "./CollisionNode";
 import { InteractiveNode } from "./InteractiveNode";
+import { PlayerArmNode } from "./player/PlayerArmNode";
+import { PlayerLegsNode } from "./player/PlayerLegsNode";
 import { PlayerNode } from "./PlayerNode";
 
 // TODO define in some constants file
@@ -17,6 +19,9 @@ const PROJECTILE_STEP_SIZE = 5;
 export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     @asset("sounds/fx/shot.mp3")
     private static readonly shootSound: Sound;
+
+    protected playerLeg?: PlayerLegsNode;
+    protected playerArm?: PlayerArmNode;
 
     // Character settings
     public abstract getShootingRange(): number;
@@ -51,6 +56,14 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         super.update(dt, time);
         this.updateTime = time;
 
+        // Death animation
+        if (!this.isAlive()) {
+            this.setTag("die");
+            if (this.getTimesPlayed("die") > 0) {
+                this.remove();
+            }
+            return;
+        }
         // Acceleration
         let vx = 0;
         const tractionFactor = this.isOnGround ? 1 : 0.4;
@@ -66,17 +79,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
                 vx = clamp(this.velocity.x - tractionFactor * this.getDeceleration() * dt, 0, Infinity);
             } else {
                 vx = clamp(this.velocity.x + tractionFactor * this.getDeceleration() * dt, -Infinity, 0);
-            }
-        }
-        // Death animation
-        if (!this.isAlive()) {
-            // TODO death animation
-            this.setTag("dance-fluke-1");
-            if (this.getTransformation().getRotation() === 0) {
-                this.transform(c => {
-                    c.translateY(-10);
-                    c.rotate(90 / 180 * Math.PI);
-                });
             }
         }
 
@@ -211,14 +213,24 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             this.die();
             return true;
         } else {
+            this.setTag("hurt");
+            this.playerLeg?.setTag("hurt");
             this.startBattlemode();
         }
         return false;
     }
 
+    public setTag(tag: string | null): this {
+        super.setTag(tag);
+        this.playerLeg?.setTag(tag);
+        this.playerArm?.setTag(tag);
+        return this;
+    }
+
     public die(): void {
+        this.setTag("die");
+        this.playerLeg?.setTag("die");
         this.hitpoints = 0;
-        this.setOpacity(0.5);
     }
 
     public isAlive(): boolean {
