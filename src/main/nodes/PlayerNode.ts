@@ -170,34 +170,32 @@ export class PlayerNode extends CharacterNode {
 
 
     public die(): void {
-        if (this.isAlive()) {
-            super.die();
-            // Slow fade out, then play as different character
-            const camera = this.getGame().scenes.getScene(GameScene)?.camera;
-            if (camera) {
-                const fader = camera.fadeToBlack;
-                fader.fadeOut({ duration: 6 });
-                camera.focus(this, {
-                    duration: 6,
-                    scale: 4,
-                    rotation: Math.PI * 2
-                }).then(() => {
-                    // Reset camera
-                    camera.setZoom(1);
-                    camera.setRotation(0);
-                    fader.fadeIn({ duration: 3 });
-                    // TODO Leave corpse in place
-                    // TODO Jump to dialog sequence in train
-                    // TODO spawn new player
-                });
-            }
+        super.die();
+        // Slow fade out, then play as different character
+        const camera = this.getGame().scenes.getScene(GameScene)?.camera;
+        if (camera) {
+            const fader = camera.fadeToBlack;
+            fader.fadeOut({ duration: 6 });
+            camera.focus(this, {
+                duration: 6,
+                scale: 4,
+                rotation: Math.PI * 2
+            }).then(() => {
+                // Reset camera
+                camera.setZoom(1);
+                camera.setRotation(0);
+                fader.fadeIn({ duration: 3 });
+                // TODO Leave corpse in place
+                // TODO Jump to dialog sequence in train
+                this.getGame().spawnNewPlayer();
+            });
         }
     }
 
 
     public getPersonalEnemies(): EnemyNode[] {
         const enemies = this.getScene()?.rootNode.getDescendantsByType(EnemyNode) ?? [];
-        return enemies;
+        return enemies.filter(e => e.isAlive());
     }
 
     public setDebug(debug: boolean): void {

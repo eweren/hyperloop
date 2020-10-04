@@ -48,7 +48,7 @@ export class Scenes<T extends Game> {
         return this.scenes[this.scenes.length - 2] ?? null;
     }
 
-    public getScene<C extends Scene<T>>(type: Constructor<C>): C | null {
+    public getScene<C extends Scene>(type: Constructor<C>): C | null {
         return (this.scenes.find(scene => scene instanceof type) ?? null) as (C | null);
     }
 

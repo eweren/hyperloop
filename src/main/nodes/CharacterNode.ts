@@ -203,6 +203,9 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
      * @return True if hurt character dies, false otherwise.
      */
     public hurt(damage: number, origin: ReadonlyVector2): boolean {
+        if (!this.isAlive()) {
+            return false;
+        }
         // TODO reduce hit points or kill or something
         // Pushback
         const direction = origin.x > this.getX() ? -1 : 1;
