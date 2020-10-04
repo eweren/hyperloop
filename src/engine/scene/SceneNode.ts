@@ -769,7 +769,7 @@ export class SceneNode<T extends Game = Game> {
      *
      * @return The game.
      */
-    public getGame(): Game {
+    public getGame(): T {
         if (this.scene == null) {
             throw new Error("Node is not in a scene and therefor can't access the game");
         }

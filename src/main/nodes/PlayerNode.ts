@@ -7,6 +7,7 @@ import { Vector2 } from "../../engine/graphics/Vector2";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { ScenePointerMoveEvent } from "../../engine/scene/events/ScenePointerMoveEvent";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
+import { GameScene } from "../scenes/GameScene";
 import { CharacterNode } from "./CharacterNode";
 import { EnemyNode } from "./EnemyNode";
 import { FlashlightNode } from "./player/FlashlightNode";
@@ -29,7 +30,7 @@ export class PlayerNode extends CharacterNode {
     private interactPressed = false;
 
     // for debug purposes
-    private debug = false;
+    private debug = true;
 
     // Character settings
     private readonly shootingRange = 250;
@@ -38,6 +39,7 @@ export class PlayerNode extends CharacterNode {
     private readonly deceleration = 800;
     private readonly jumpPower = 380;
     private readonly shotDelay = 0.5;
+    private leftMouseDown = false;
 
     public constructor(args?: SceneNodeArgs) {
         super({
@@ -54,6 +56,7 @@ export class PlayerNode extends CharacterNode {
         this.appendChild(this.playerLeg);
         this.appendChild(this.playerArm);
         this.playerArm.appendChild(this.flashLight);
+        this.setupMouseKeyHandlers();
         (<any>window)["player"] = this;
     }
 
@@ -102,9 +105,9 @@ export class PlayerNode extends CharacterNode {
             this.jump();
         }
         // Shoot
-        if (input.currentActiveIntents & ControllerIntent.PLAYER_ACTION) {
+        if (input.currentActiveIntents & ControllerIntent.PLAYER_ACTION || this.leftMouseDown) {
             if (time >= this.nextShot) {
-                this.shoot(this.aimingAngleNonNegative, 35);
+                this.shoot();
                 this.nextShot = time + this.shotDelay;
             }
         }
@@ -126,6 +129,10 @@ export class PlayerNode extends CharacterNode {
         this.syncArmAndLeg();
     }
 
+    public shoot(): void {
+        super.shoot(this.aimingAngleNonNegative, 35);
+    }
+
     private syncArmAndLeg(): void {
         this.playerArm.transform(c => {
             const angleInDegrees = this.aimingAngle / Math.PI * 180;
@@ -138,6 +145,8 @@ export class PlayerNode extends CharacterNode {
             }
             // look in aiming direction
             this.setMirrorX(angleInDegrees < 0);
+            const backwards = this.direction === 1 && angleInDegrees < 0 || this.direction === -1 && angleInDegrees >= 0;
+            this.playerLeg.getAseprite().setDirection(backwards ? "reverse" : "forward");
             // Transform flashlight to match scaling and rotation of the arm.
             this.flashLight.transform(f => {
                 if (this.isMirrorX()) {
@@ -194,6 +203,32 @@ export class PlayerNode extends CharacterNode {
         context.restore();
     }
 
+    public die(): void {
+        if (this.isAlive()) {
+            super.die();
+            // Slow fade out, then play as different character
+            const camera = this.getGame().scenes.getScene(GameScene)?.camera;
+            if (camera) {
+                const fader = camera.fadeToBlack;
+                fader.fadeOut({ duration: 6 });
+                camera.focus(this, {
+                    duration: 6,
+                    scale: 4,
+                    rotation: Math.PI * 2
+                }).then(() => {
+                    // Reset camera
+                    camera.setZoom(1);
+                    camera.setRotation(0);
+                    fader.fadeIn({ duration: 3 });
+                    // TODO Leave corpse in place
+                    // TODO Jump to dialog sequence in train
+                    // TODO spawn new player
+                });
+            }
+        }
+    }
+
+
     public getPersonalEnemies(): EnemyNode[] {
         const enemies = this.getScene()?.rootNode.getDescendantsByType(EnemyNode) ?? [];
         return enemies;
@@ -221,5 +256,18 @@ export class PlayerNode extends CharacterNode {
     protected endBattlemode(): void {
         super.endBattlemode();
         this.getScene()!.game.canvas.style.cursor = "crosshair";
+    }
+
+    private setupMouseKeyHandlers(): void {
+        window.addEventListener("mousedown", event => {
+            if (event.button === 0) {
+                this.leftMouseDown = true;
+            }
+        });
+        window.addEventListener("mouseup", event => {
+            if (event.button === 0) {
+                this.leftMouseDown = false;
+            }
+        });
     }
 }
