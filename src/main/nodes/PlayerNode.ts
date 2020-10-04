@@ -29,7 +29,7 @@ export class PlayerNode extends CharacterNode {
     private interactPressed = false;
 
     // for debug purposes
-    private debug = false;
+    private debug = true;
 
     // Character settings
     private readonly shootingRange = 250;
@@ -38,8 +38,7 @@ export class PlayerNode extends CharacterNode {
     private readonly deceleration = 800;
     private readonly jumpPower = 380;
     private readonly shotDelay = 0.5;
-    private lastShot = new Date(0).valueOf();
-    private shootingInterval: NodeJS.Timeout | null = null;
+    private leftMouseDown = false;
 
     public constructor(args?: SceneNodeArgs) {
         super({
@@ -105,7 +104,7 @@ export class PlayerNode extends CharacterNode {
             this.jump();
         }
         // Shoot
-        if (input.currentActiveIntents & ControllerIntent.PLAYER_ACTION) {
+        if (input.currentActiveIntents & ControllerIntent.PLAYER_ACTION || this.leftMouseDown) {
             if (time >= this.nextShot) {
                 this.shoot();
                 this.nextShot = time + this.shotDelay;
@@ -234,21 +233,13 @@ export class PlayerNode extends CharacterNode {
 
     private setupMouseKeyHandlers(): void {
         window.addEventListener("mousedown", event => {
-            const shootIfCooldownDone = () => {
-                if (new Date().valueOf() - this.lastShot > this.shotDelay * 1000) {
-                    this.lastShot = new Date().valueOf();
-                    this.shoot();
-                }
-            };
-            this.shootingInterval = setInterval(() => {
-                if (event.button === 0) {
-                    shootIfCooldownDone();
-                }
-            }, this.shotDelay);
+            if (event.button === 0) {
+                this.leftMouseDown = true;
+            }
         });
-        window.addEventListener("mouseup", () => {
-            if (this.shootingInterval) {
-                clearInterval(this.shootingInterval);
+        window.addEventListener("mouseup", event => {
+            if (event.button === 0) {
+                this.leftMouseDown = false;
             }
         });
     }
