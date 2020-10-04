@@ -62,6 +62,86 @@
     "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
     "sourceSize": { "w": 31, "h": 16 },
     "duration": 100
+   },
+   "rat 8.aseprite": {
+    "frame": { "x": 248, "y": 0, "w": 31, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
+    "sourceSize": { "w": 31, "h": 16 },
+    "duration": 100
+   },
+   "rat 9.aseprite": {
+    "frame": { "x": 248, "y": 0, "w": 31, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
+    "sourceSize": { "w": 31, "h": 16 },
+    "duration": 100
+   },
+   "rat 10.aseprite": {
+    "frame": { "x": 279, "y": 0, "w": 31, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
+    "sourceSize": { "w": 31, "h": 16 },
+    "duration": 100
+   },
+   "rat 11.aseprite": {
+    "frame": { "x": 310, "y": 0, "w": 31, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
+    "sourceSize": { "w": 31, "h": 16 },
+    "duration": 100
+   },
+   "rat 12.aseprite": {
+    "frame": { "x": 341, "y": 0, "w": 31, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
+    "sourceSize": { "w": 31, "h": 16 },
+    "duration": 100
+   },
+   "rat 13.aseprite": {
+    "frame": { "x": 372, "y": 0, "w": 31, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
+    "sourceSize": { "w": 31, "h": 16 },
+    "duration": 100
+   },
+   "rat 14.aseprite": {
+    "frame": { "x": 403, "y": 0, "w": 31, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
+    "sourceSize": { "w": 31, "h": 16 },
+    "duration": 100
+   },
+   "rat 15.aseprite": {
+    "frame": { "x": 434, "y": 0, "w": 31, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
+    "sourceSize": { "w": 31, "h": 16 },
+    "duration": 100
+   },
+   "rat 16.aseprite": {
+    "frame": { "x": 465, "y": 0, "w": 31, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
+    "sourceSize": { "w": 31, "h": 16 },
+    "duration": 100
+   },
+   "rat 17.aseprite": {
+    "frame": { "x": 496, "y": 0, "w": 31, "h": 16 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 31, "h": 16 },
+    "sourceSize": { "w": 31, "h": 16 },
+    "duration": 100
    }
  },
  "meta": {
@@ -69,11 +149,12 @@
   "version": "1.2.25-x64",
   "image": "rat.png",
   "format": "RGBA8888",
-  "size": { "w": 248, "h": 16 },
+  "size": { "w": 527, "h": 16 },
   "scale": "1",
   "frameTags": [
    { "name": "idle", "from": 0, "to": 3, "direction": "forward" },
-   { "name": "walk", "from": 4, "to": 7, "direction": "forward" }
+   { "name": "walk", "from": 4, "to": 7, "direction": "forward" },
+   { "name": "explode", "from": 9, "to": 17, "direction": "forward" }
   ],
   "layers": [
    { "name": "Gray Rat", "opacity": 255, "blendMode": "normal" }
