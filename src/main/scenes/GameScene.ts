@@ -18,6 +18,7 @@ import { FpsCounterNode } from "../../engine/scene/FpsCounterNode";
 import { Direction } from "../../engine/geom/Direction";
 import { MonsterNode } from "../nodes/MonsterNode";
 import { RatNode } from "../nodes/RatNode";
+import { CorpseNode } from "../nodes/CorpseNode";
 
 export class GameScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -36,7 +37,8 @@ export class GameScene extends Scene<Hyperloop> {
         "train": TrainNode,
         "light": LightNode,
         "cameraLimit": CameraLimitNode,
-        "door": DoorNode
+        "door": DoorNode,
+        "corpse": CorpseNode
     }});
 
     public setup() {

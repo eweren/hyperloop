@@ -9,6 +9,7 @@ export abstract class InteractiveNode extends AsepriteNode<Hyperloop> {
     private target: CharacterNode | null = null;
     private caption: string;
     private captionOpacity = 0;
+    protected hideSprite = false;
 
     public constructor(args: AsepriteNodeArgs, caption: string = "") {
         super(args);
@@ -66,7 +67,9 @@ export abstract class InteractiveNode extends AsepriteNode<Hyperloop> {
     }
 
     public draw(context: CanvasRenderingContext2D): void {
-        // super.draw(context);
+        if (!this.hideSprite) {
+            super.draw(context);
+        }
         // Draw Caption
         if (this.caption !== "" && this.captionOpacity > 0) {
             context.save();

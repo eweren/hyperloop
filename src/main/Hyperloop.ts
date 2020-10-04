@@ -19,13 +19,16 @@ export enum GameStage {
 }
 
 export class Hyperloop extends Game {
-    private charactersAvailable = 4;
-    private gameStage = GameStage.NONE;
     private stageStartTime = 0;
     private stageTime = 0;
     private trainSpeed = 455; // px per second
     private trainDriveTime = 8; // drive time in seconds, bevore braking starts
     private totalBrakeTime = 0; // calculated later; seconds train requires to brake down to standstill
+
+    // Game progress
+    private charactersAvailable = 4;
+    private gameStage = GameStage.NONE;
+    public keyTaken = false; // key taken from corpse
 
     public constructor() {
         super();

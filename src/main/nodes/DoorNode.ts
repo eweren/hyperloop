@@ -24,6 +24,7 @@ export class DoorNode extends InteractiveNode {
         }, "PRESS E TO ENTER");
         this.targetId = args?.tiledObject?.getOptionalProperty("target", "string")?.getValue() ?? "";
         this.name = args?.tiledObject?.getName() ?? "";
+        this.hideSprite = true;
     }
 
     public interact(): void {
