@@ -32,7 +32,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected hitpoints = 100;
     protected shootNode: SoundNode | null = null;
     private canInteractWith: InteractiveNode | null = null;
-    private battlemode = false;
+    protected battlemode = false;
     private battlemodeTimeout = 2000;
     private battlemodeTimeoutTimerId: number | null = null;
 
@@ -119,11 +119,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         if (this.isFalling) {
             this.setTag("fall");
         }
-
-        // Battlemode
-        if (this.battlemode) {
-            this.getScene()!.game.canvas.style.cursor = "none";
-        }
     }
 
     public setDirection(direction = 0): void {
@@ -201,7 +196,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     private startBattlemode(): void {
         this.battlemode = true;
-        this.getScene()!.game.canvas.style.cursor = "none"; 
         // refresh timer
         this.clearBattlemodeTimer();
         this.battlemodeTimeoutTimerId = <any>setTimeout(() => {
@@ -214,7 +208,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             return;
         }
         this.clearBattlemodeTimer();
-        this.getScene()!.game.canvas.style.cursor = "crosshair";
         this.battlemode = false;
     }
 

@@ -118,6 +118,12 @@ export class PlayerNode extends CharacterNode {
                 node.interact();
             }
         }
+
+        // Battlemode
+        if (this.battlemode) {
+            this.getScene()!.game.canvas.style.cursor = "none";
+        }
+
         this.syncArmAndLeg();
     }
 
