@@ -21,8 +21,8 @@ export enum GameStage {
 export class Hyperloop extends Game {
     private stageStartTime = 0;
     private stageTime = 0;
-    private trainSpeed = 455; // px per second
-    private trainDriveTime = 8; // drive time in seconds, bevore braking starts
+    private trainSpeed = 800; // px per second
+    private trainDriveTime = 2; // drive time in seconds, bevore braking starts
     private totalBrakeTime = 0; // calculated later; seconds train requires to brake down to standstill
 
     // Game progress

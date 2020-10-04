@@ -38,7 +38,8 @@ export class GameScene extends Scene<Hyperloop> {
         "light": LightNode,
         "cameraLimit": CameraLimitNode,
         "door": DoorNode,
-        "corpse": CorpseNode
+        "corpse": CorpseNode,
+        "powerswitch": SwitchNode
     }});
 
     public setup() {
