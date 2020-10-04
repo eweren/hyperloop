@@ -7,6 +7,7 @@ import { Vector2 } from "../../engine/graphics/Vector2";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { ScenePointerMoveEvent } from "../../engine/scene/events/ScenePointerMoveEvent";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
+import { GameScene } from "../scenes/GameScene";
 import { CharacterNode } from "./CharacterNode";
 import { EnemyNode } from "./EnemyNode";
 import { FlashlightNode } from "./player/FlashlightNode";
@@ -201,6 +202,32 @@ export class PlayerNode extends CharacterNode {
         context.restore();
         context.restore();
     }
+
+    public die(): void {
+        if (this.isAlive()) {
+            super.die();
+            // Slow fade out, then play as different character
+            const camera = this.getGame().scenes.getScene(GameScene)?.camera;
+            if (camera) {
+                const fader = camera.fadeToBlack;
+                fader.fadeOut({ duration: 6 });
+                camera.focus(this, {
+                    duration: 6,
+                    scale: 4,
+                    rotation: Math.PI * 2
+                }).then(() => {
+                    // Reset camera
+                    camera.setZoom(1);
+                    camera.setRotation(0);
+                    fader.fadeIn({ duration: 3 });
+                    // TODO Leave corpse in place
+                    // TODO Jump to dialog sequence in train
+                    // TODO spawn new player
+                });
+            }
+        }
+    }
+
 
     public getPersonalEnemies(): EnemyNode[] {
         const enemies = this.getScene()?.rootNode.getDescendantsByType(EnemyNode) ?? [];

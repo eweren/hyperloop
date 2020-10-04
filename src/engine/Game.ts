@@ -31,6 +31,7 @@ export abstract class Game {
     private gameLoopId: number | null = null;
     private lastUpdateTime: number = performance.now();
     private mouseTimeout: number = MOUSE_TIMEOUT;
+    protected currentTime: number = 0;
 
     public constructor(public readonly width: number = 480, public readonly height: number = 270) {
         const canvas = this.canvas = createCanvas(width, height);
@@ -106,7 +107,7 @@ export abstract class Game {
     }
 
     private gameLoop(): void {
-        const currentUpdateTime = performance.now();
+        const currentUpdateTime = this.currentTime = performance.now();
         const dt = clamp((currentUpdateTime - this.lastUpdateTime) / 1000, 0, MAX_DT);
         // TODO if we are fancy, we may differentiate between elapsed system time and actual game time (e.g. to allow
         // pausing the game and stuff, or slow-mo effects)
@@ -150,5 +151,9 @@ export abstract class Game {
             cancelAnimationFrame(this.gameLoopId);
             this.gameLoopId = null;
         }
+    }
+
+    public getTime(): number {
+        return this.currentTime;
     }
 }
