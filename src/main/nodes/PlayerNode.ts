@@ -55,8 +55,9 @@ export class PlayerNode extends CharacterNode {
     private readonly acceleration = 600;
     private readonly deceleration = 800;
     private readonly jumpPower = 295;
-    private readonly shotDelay = 0.5;
+    private readonly shotDelay = 0.2;
     private readonly magazineSize = 6;
+    private readonly reloadDelay = 2200;
     private leftMouseDown = false;
 
     public constructor(args?: SceneNodeArgs) {
@@ -176,17 +177,18 @@ export class PlayerNode extends CharacterNode {
         if (this.ammo > 0) {
             this.ammo--;
             super.shoot(this.aimingAngleNonNegative, 35, this.flashLight.getScenePosition());
-        }
-        if (this.ammo === 0){
-            PlayerNode.reloadSound.setLoop(true);
-            PlayerNode.reloadSound.play(0,0, 1.5);
-            await sleep(1500);
-            this.reload();
+            if (this.ammo === 0){
+                PlayerNode.reloadSound.setLoop(true);
+                PlayerNode.reloadSound.play(0,0, 1.5);
+                await sleep(this.reloadDelay);
+                this.reload();
+            }
         }
     }
 
     public reload(): void {
         this.ammo = this.magazineSize;
+        PlayerNode.reloadSound.stop();
     }
 
     private syncArmAndLeg(): void {
