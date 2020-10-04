@@ -221,9 +221,9 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     private getPlayerCollisionAt(x = this.getX(), y = this.getY()): boolean {
         // Level collision
         const colliders = this.getColliders();
-        const bounds = this.getBounds();
+        const bounds = this.getSceneBounds();
         const w = bounds.width, h = bounds.height;
-        const px = x - w / 2, py = y - h;
+        const px = bounds.minX + x - this.getX(), py = bounds.minY + y - this.getY();
         return colliders.some(c => c.collidesWithRectangle(px, py, w, h));
     }
 
