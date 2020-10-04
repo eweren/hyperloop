@@ -18,9 +18,9 @@ export class RatNode extends EnemyNode {
     private static readonly ratSoundFollow: Sound;
 
     protected targetPosition: ReadonlyVector2;
-    
+
     /** minimum distance between enemy and player to stop escaping */
-    private squaredSafetyDistance = 100 ** 2;
+    private squaredSafetyDistance = 10 ** 2;
 
     public constructor(args?: SceneNodeArgs) {
         super({
@@ -48,7 +48,7 @@ export class RatNode extends EnemyNode {
     protected updateAi(dt: number, time: number) {
         if (!this.isAlive()) {
             this.setDirection(0);
-            this.staySilent();
+            this.stopSounds();
             return;
         }
         // AI
@@ -56,7 +56,6 @@ export class RatNode extends EnemyNode {
             case AiState.BORED:
             case AiState.ALERT:
                 this.updateAlert(time);
-                this.sqeak();
                 break;
             case AiState.MOVE_AROUND:
                 this.updateMoveAround(time);
@@ -85,9 +84,11 @@ export class RatNode extends EnemyNode {
         }
         if (this.getDistanceToPlayerSquared() < this.squaredSafetyDistance) {
             this.setState(AiState.ALERT);
+            this.stopSounds();
+            RatNode.ratSoundAttack.play();
         }
     }
-    
+
     private updateAlert(time: number): void {
         const player = this.getPlayer();
         if (player && this.getDistanceToPlayerSquared() < this.squaredSafetyDistance) {
@@ -108,33 +109,15 @@ export class RatNode extends EnemyNode {
         return player.getPosition().getSquareDistance(this.getPosition());
     }
 
-    private staySilent() {
-        if (this.isSqeaking()) {
+    private stopSounds() {
+        if (this.isSoundPlaying()) {
             RatNode.ratSoundAttack.stop();
             RatNode.ratSoundFollow.stop();
         }
     }
 
-    private isSqeaking() {
+    private isSoundPlaying() {
         return RatNode.ratSoundAttack.isPlaying() || RatNode.ratSoundFollow.isPlaying();
     }
 
-    private sqeak() {
-        switch (this.state) {
-            case AiState.ATTACK:
-                if (!this.isSqeaking()) {
-                    this.staySilent();
-                    RatNode.ratSoundAttack.play();
-                }
-                break;
-            case AiState.BORED:
-            case AiState.FOLLOW:
-            case AiState.MOVE_AROUND:
-                if (!this.isSqeaking()) {
-                    this.staySilent();
-                    RatNode.ratSoundFollow.play();
-                }
-                break;
-        }
-    }
 }
