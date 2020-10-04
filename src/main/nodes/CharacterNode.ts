@@ -47,6 +47,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     private battlemodeTimeoutTimerId: number | null = null;
     private bulletStartPoint: Vector2 | null = null;
     private bulletEndPoint: Vector2 | null = null;
+    private storedCollisionCoordinate: Vector2 = new Vector2(0, 0);
 
     public constructor(args: AsepriteNodeArgs) {
         super(args);
@@ -151,7 +152,11 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         const isColliding = this.getLineCollision(origin.x, origin.y, diffX, diffY, PROJECTILE_STEP_SIZE);
         if (isColliding) {
             if (isColliding instanceof CharacterNode) {
-                isColliding.hurt(power, this.getScenePosition());
+                const coord = this.storedCollisionCoordinate;
+                const bounds = isColliding.getSceneBounds();
+                const headshot = (coord.y < bounds.minY + 0.25 * (bounds.height));
+                const damage = headshot ? (2.4 * power) : power;
+                isColliding.hurt(damage, this.getScenePosition());
             }
         }
     }
@@ -172,6 +177,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
                 this.bulletEndPoint = this.bulletEndPoint!.add({ x: stepX, y: stepY });
             }
             if (isColliding) {
+                this.storedCollisionCoordinate = nextCheckPoint;
                 return isColliding;
             }
         }

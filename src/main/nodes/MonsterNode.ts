@@ -6,6 +6,7 @@ import { ReadonlyVector2, Vector2 } from "../../engine/graphics/Vector2";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { Sound } from "../../engine/assets/Sound";
 import { asset } from "../../engine/assets/Assets";
+import { rnd } from "../../engine/util/random";
 
 export class MonsterNode extends EnemyNode {
     @asset("sprites/monster.aseprite.json")
@@ -28,6 +29,7 @@ export class MonsterNode extends EnemyNode {
         });
         this.targetPosition = this.getPosition();
         this.moveAroundAfterChase = true;
+        this.hitpoints = rnd(65, 120) + rnd(rnd(100));
     }
 
     protected updateAi(dt: number, time: number) {
