@@ -21,6 +21,9 @@ export class PlayerNode extends CharacterNode {
     private static readonly dieScream: Sound;
 
     @asset("sounds/fx/footsteps.ogg")
+    private static readonly footsteps: Sound;
+
+    @asset("sounds/fx/footstep.ogg")
     private static readonly footstep: Sound;
 
     @asset("sprites/spacesuitbody.aseprite.json")
@@ -40,7 +43,7 @@ export class PlayerNode extends CharacterNode {
     private readonly speed = 60;
     private readonly acceleration = 600;
     private readonly deceleration = 800;
-    private readonly jumpPower = 380;
+    private readonly jumpPower = 280;
     private readonly shotDelay = 0.5;
     private leftMouseDown = false;
 
@@ -110,10 +113,13 @@ export class PlayerNode extends CharacterNode {
             this.jump();
         }
         if (this.isOnGround && direction !== 0) {
-            PlayerNode.footstep.setLoop(true);
-            PlayerNode.footstep.play(0.5);
+            PlayerNode.footsteps.setLoop(true);
+            PlayerNode.footsteps.play(0.5);
         } else {
-            PlayerNode.footstep.stop(0.5);
+            if (PlayerNode.footsteps.isPlaying()) {
+                PlayerNode.footsteps.stop(0.1);
+                PlayerNode.footstep.play();
+            }
         }
         // Shoot
         if (input.currentActiveIntents & ControllerIntent.PLAYER_ACTION || this.leftMouseDown) {
