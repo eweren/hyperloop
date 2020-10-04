@@ -5,8 +5,9 @@ import { Polygon2 } from "../../engine/graphics/Polygon2";
 import { SceneNode, SceneNodeAspect } from "../../engine/scene/SceneNode";
 import { TiledSceneArgs } from "../../engine/scene/TiledMapNode";
 import { radians } from "../../engine/util/math";
+import { Hyperloop } from "../Hyperloop";
 
-export class LightNode extends SceneNode {
+export class LightNode extends SceneNode<Hyperloop> {
     private color: Color;
     private readonly polygon: Polygon2 | null;
     private readonly ellipse: boolean;

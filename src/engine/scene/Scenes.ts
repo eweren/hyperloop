@@ -4,13 +4,13 @@ import { Scene, SceneConstructor } from "./Scene";
 
 export class Scenes<T extends Game> {
     public activeScene: Scene<T, unknown> | null = null;
-    private sceneCache = new WeakMap<SceneConstructor<T, unknown>, Scene<T, unknown>>();
+    private sceneCache = new WeakMap<SceneConstructor>();
     private scenes: Scene<T, unknown>[] = [];
     private sortedScenes: Scene<T, unknown>[] = [];
 
     public constructor(public readonly game: T) {}
 
-    private createScene<A>(sceneClass: SceneConstructor<T, A>): Scene<T, A> {
+    private createScene<A>(sceneClass: SceneConstructor): Scene<T, A> {
         let scene = this.sceneCache.get(sceneClass);
 
         if (scene == null) {
@@ -21,9 +21,9 @@ export class Scenes<T extends Game> {
         return scene;
     }
 
-    public async pushScene<A>(sceneClass: SceneConstructor<T, void>, args: void): Promise<void>;
-    public async pushScene<A>(sceneClass: SceneConstructor<T, A>, args: A): Promise<void>;
-    public async pushScene<A>(sceneClass: SceneConstructor<T, A>, args: A): Promise<void> {
+    public async pushScene<A>(sceneClass: SceneConstructor, args: void): Promise<void>;
+    public async pushScene<A>(sceneClass: SceneConstructor, args: A): Promise<void>;
+    public async pushScene<A>(sceneClass: SceneConstructor, args: A): Promise<void> {
         if (this.activeScene != null) {
             await this.activeScene.deactivate();
         }
@@ -77,9 +77,9 @@ export class Scenes<T extends Game> {
         return activeScene;
     }
 
-    public async setScene<A>(newSceneClass: SceneConstructor<T, void>, args: void): Promise<void>;
-    public async setScene<A>(newSceneClass: SceneConstructor<T, A>, args: A): Promise<void>;
-    public async setScene<A>(newSceneClass: SceneConstructor<T, A>, args: A): Promise<void> {
+    public async setScene<A>(newSceneClass: SceneConstructor<T>, args: void): Promise<void>;
+    public async setScene<A>(newSceneClass: SceneConstructor<T>, args: A): Promise<void>;
+    public async setScene<A>(newSceneClass: SceneConstructor, args: A): Promise<void> {
         const currentScene = this.activeScene;
 
         if (currentScene == null) {

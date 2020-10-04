@@ -3,7 +3,7 @@ import { Game } from "../Game";
 import { Keyboard } from "../input/Keyboard";
 import { Scenes } from "./Scenes";
 import { Transition } from "./Transition";
-import { RootNode, UpdateRootNode, DrawRootNode } from "./RootNode";
+import { UpdateRootNode, DrawRootNode, RootNode } from "./RootNode";
 import { SceneNode } from "./SceneNode";
 import { Camera } from "./Camera";
 import { createCanvas, getRenderingContext } from "../util/graphics";
@@ -18,7 +18,7 @@ import { ScenePointerDownEvent } from "./events/ScenePointerDownEvent";
  * @param A - Optional scene argument type. A value of this type must be specified when setting or pushing a scene.
  *            Defaults to no argument (void type)
  */
-export type SceneConstructor<T extends Game, A = void> = new (game: T) => Scene<T, A>;
+export type SceneConstructor<T extends Game = Game, A = void> = new (game: T) => Scene<T, A>;
 
 /**
  * Abstract base class of a scene.
@@ -154,7 +154,7 @@ export abstract class Scene<T extends Game = Game, A = void> {
      * @return The matching scene node or null if none.
      */
     public getNodeById(id: string): SceneNode<T> | null {
-        return this.rootNode.getDescendantById(id);
+        return null;
     }
 
     /**

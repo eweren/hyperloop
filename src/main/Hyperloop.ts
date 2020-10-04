@@ -5,6 +5,10 @@ export class Hyperloop extends Game {
     public constructor() {
         super();
     }
+
+    public foo(): void {
+        // TODO Remove me when actual content is added to game class
+    }
 }
 
 (async () => {
@@ -13,4 +17,3 @@ export class Hyperloop extends Game {
     (window as any).game = game;
     game.start();
 })();
-
