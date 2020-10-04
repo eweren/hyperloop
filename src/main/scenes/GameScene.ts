@@ -27,14 +27,6 @@ export class GameScene extends Scene<Hyperloop> {
 
     private debugMode: boolean = false;
 
-    private fpsNode = new FpsCounterNode<Hyperloop>({
-        font: GameScene.font,
-        anchor: Direction.TOP_LEFT,
-        x: 10,
-        y: 10,
-        layer: HUD_LAYER
-    });
-
     private mapNode = new TiledMapNode<Hyperloop>({ map: GameScene.map, objects: {
         "collision": CollisionNode,
         "player": PlayerNode,
@@ -54,8 +46,15 @@ export class GameScene extends Scene<Hyperloop> {
         door.moveTo(1040, 380).setLocked(true).appendTo(this.mapNode);
         new SwitchNode({ onlyOnce: false, onUpdate: (state) => door.setLocked(!state) }).moveTo(1130, 380).appendTo(this.mapNode);
         new SwitchNode({ onlyOnce: true }).moveTo(250, 380).appendTo(this.mapNode);
+
         if (isDev()) {
-            this.rootNode.appendChild(this.fpsNode);
+            this.rootNode.appendChild(new FpsCounterNode({
+                font: GameScene.font,
+                anchor: Direction.TOP_LEFT,
+                x: 10,
+                y: 10,
+                layer: HUD_LAYER
+            }));
         }
     }
 
