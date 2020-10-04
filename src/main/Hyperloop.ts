@@ -147,9 +147,10 @@ export class Hyperloop extends Game {
             this.charactersAvailable--;
             // TODO get proper spawn position
             const oldPlayer = this.getPlayer();
-            const spawnPoint = oldPlayer.getScenePosition();
+            const spawnPoint = this.getTrain().getScenePosition();
             const pl = new PlayerNode();
-            pl.moveTo(spawnPoint.x, spawnPoint.y);
+            pl.moveTo(spawnPoint.x, spawnPoint.y - 10);
+            this.getCamera().setFollow(pl);
             const root = this.getGameScene().rootNode;
             root.appendChild(pl);
             oldPlayer.remove();
