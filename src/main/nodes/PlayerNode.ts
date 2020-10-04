@@ -50,6 +50,7 @@ export class PlayerNode extends CharacterNode {
             id: "player",
             ...args
         });
+        this.removeOnDie = false;
         this.playerArm = new PlayerArmNode();
         this.playerLeg = new PlayerLegsNode();
         this.flashLight = new FlashlightNode();

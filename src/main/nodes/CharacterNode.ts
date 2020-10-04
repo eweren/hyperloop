@@ -38,6 +38,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected isJumping = false;
     protected isFalling = true;
     protected hitpoints = 100;
+    protected removeOnDie = true;
     protected debug = false;
     private canInteractWith: InteractiveNode | null = null;
     protected battlemode = false;
@@ -59,7 +60,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         // Death animation
         if (!this.isAlive()) {
             this.setTag("die");
-            if (this.getTimesPlayed("die") > 0) {
+            if (this.getTimesPlayed("die") > 0 && this.removeOnDie) {
                 this.remove();
             }
             return;
@@ -221,7 +222,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             return true;
         } else {
             this.setTag("hurt");
-            this.playerLeg?.setTag("hurt");
             this.startBattlemode();
         }
         return false;
@@ -237,7 +237,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public die(): void {
         this.endBattlemode();
         this.setTag("die");
-        this.playerLeg?.setTag("die");
         this.hitpoints = 0;
     }
 
