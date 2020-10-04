@@ -93,10 +93,7 @@ export class Hyperloop extends Game {
         const train = this.getTrain();
         const offsetX = this.getTime() * this.trainSpeed;
         train.setX(325 + (offsetX % 429));
-        train.invalidate(SceneNodeAspect.SCENE_POSITION);
-        train.invalidate(SceneNodeAspect.BOUNDS);
-        train.invalidate(SceneNodeAspect.SCENE_BOUNDS);
-        train.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
+        this.getCamera().update(0);
         this.applyCamShake(1);
     }
 
