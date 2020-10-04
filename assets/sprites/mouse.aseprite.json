@@ -197,7 +197,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 10 },
     "sourceSize": { "w": 18, "h": 10 },
-    "duration": 200
+    "duration": 350
    },
    "mouse 25.aseprite": {
     "frame": { "x": 450, "y": 0, "w": 18, "h": 10 },
@@ -221,10 +221,58 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 10 },
     "sourceSize": { "w": 18, "h": 10 },
-    "duration": 100
+    "duration": 250
    },
    "mouse 28.aseprite": {
     "frame": { "x": 504, "y": 0, "w": 18, "h": 10 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 10 },
+    "sourceSize": { "w": 18, "h": 10 },
+    "duration": 100
+   },
+   "mouse 29.aseprite": {
+    "frame": { "x": 522, "y": 0, "w": 18, "h": 10 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 10 },
+    "sourceSize": { "w": 18, "h": 10 },
+    "duration": 100
+   },
+   "mouse 30.aseprite": {
+    "frame": { "x": 540, "y": 0, "w": 18, "h": 10 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 10 },
+    "sourceSize": { "w": 18, "h": 10 },
+    "duration": 100
+   },
+   "mouse 31.aseprite": {
+    "frame": { "x": 558, "y": 0, "w": 18, "h": 10 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 10 },
+    "sourceSize": { "w": 18, "h": 10 },
+    "duration": 100
+   },
+   "mouse 32.aseprite": {
+    "frame": { "x": 576, "y": 0, "w": 18, "h": 10 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 10 },
+    "sourceSize": { "w": 18, "h": 10 },
+    "duration": 100
+   },
+   "mouse 33.aseprite": {
+    "frame": { "x": 594, "y": 0, "w": 18, "h": 10 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 10 },
+    "sourceSize": { "w": 18, "h": 10 },
+    "duration": 100
+   },
+   "mouse 34.aseprite": {
+    "frame": { "x": 612, "y": 0, "w": 18, "h": 10 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 18, "h": 10 },
@@ -237,12 +285,12 @@
   "version": "1.2.25",
   "image": "mouse.png",
   "format": "RGBA8888",
-  "size": { "w": 522, "h": 10 },
+  "size": { "w": 630, "h": 10 },
   "scale": "1",
   "frameTags": [
    { "name": "walk", "from": 0, "to": 3, "direction": "forward" },
    { "name": "idle", "from": 4, "to": 13, "direction": "forward" },
-   { "name": "die", "from": 14, "to": 28, "direction": "forward" }
+   { "name": "die", "from": 14, "to": 34, "direction": "forward" }
   ],
   "layers": [
    { "name": "Layer 2", "opacity": 255, "blendMode": "normal" }
