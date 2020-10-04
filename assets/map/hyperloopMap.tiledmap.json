@@ -65,8 +65,8 @@
                  "type":"player",
                  "visible":true,
                  "width":0,
-                 "x":183.666333333333,
-                 "y":601.833333333333
+                 "x":279.666333333333,
+                 "y":375.333333333333
                 }, 
                 {
                  "height":0,
@@ -944,7 +944,7 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -1055,6 +1055,11 @@
                  "name":"Light 7",
                  "point":true,
                  "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffb4ffff"
+                        }, 
                         {
                          "name":"intensity",
                          "type":"int",
@@ -1948,7 +1953,7 @@
                  "value":1
                 }],
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
