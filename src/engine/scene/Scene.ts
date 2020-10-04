@@ -38,6 +38,7 @@ export abstract class Scene<T extends Game = Game, A = void> {
     private usedLayers: number = 0;
     private hiddenLayers: number = 0;
     private lightLayers: number = 0;
+    private hudLayers: number = 0;
     private backgroundStyle: string | null = null;
 
     public readonly camera: Camera<T>;
@@ -145,6 +146,32 @@ export abstract class Scene<T extends Game = Game, A = void> {
             }
         }
         return lightLayers;
+    }
+
+    /**
+     * Sets the layers which are not transformed by the camera. These layers can be used to display fixed information
+     * on the screen which is independent from the current camera settings.
+     *
+     * @param hudLayers - The hud layers to set.
+     */
+    public setHudLayers(hudLayers: number[]): this {
+        this.hudLayers = hudLayers.reduce((layers, layer) => layers | (1 << layer), 0);
+        return this;
+    }
+
+    /**
+     * Returns the HUD layers which are not transformed by the camera.
+     *
+     * @return The hud layers.
+     */
+    public getHudLayers(): number[] {
+        const hudLayers: number[] = [];
+        for (let layer = 0; layer < 32; ++layer) {
+            if ((this.hudLayers & (1 << layer)) !== 0) {
+                hudLayers.push(layer);
+            }
+        }
+        return hudLayers;
     }
 
     /**
@@ -262,6 +289,7 @@ export abstract class Scene<T extends Game = Game, A = void> {
         while (usedLayers !== 0) {
             if ((usedLayers & 1) === 1) {
                 const light = (this.lightLayers & layer) !== 0;
+                const hud = (this.hudLayers & layer) !== 0;
                 if (light) {
                     ctx.save();
                     const canvas = createCanvas(width, height);
@@ -278,8 +306,15 @@ export abstract class Scene<T extends Game = Game, A = void> {
                     ctx.drawImage(canvas, 0, 0);
                     ctx.restore();
                 } else {
+                    if (hud) {
+                        ctx.save();
+                        reverseCameraTransformation.transformCanvas(ctx);
+                    }
                     this.drawRootNode(ctx, layer, width, height);
                     debugLight = false;
+                    if (hud) {
+                        ctx.restore();
+                    }
                 }
             }
             usedLayers >>>= 1;
