@@ -10,7 +10,7 @@ import { Hyperloop } from "../../Hyperloop";
 export class PlayerArmNode extends AsepriteNode<Hyperloop> {
     @asset("sprites/spacesuitarm.aseprite.json")
     private static sprite: Aseprite;
-
+    // public flashlight: FlashlightNode;
 
     public constructor(args?: SceneNodeArgs) {
         super({
@@ -22,6 +22,7 @@ export class PlayerArmNode extends AsepriteNode<Hyperloop> {
             y: 40,
             ...args
         });
+        // this.flashlight = new FlashlightNode();
     }
 
     protected updateBoundsPolygon(bounds: Polygon2): void {

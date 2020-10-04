@@ -8,6 +8,7 @@ import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { CharacterNode } from "./CharacterNode";
 import { EnemyNode } from "./EnemyNode";
+import { FlashlightNode } from "./player/FlashlightNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
 import { PlayerLegsNode } from "./player/PlayerLegsNode";
 
@@ -28,7 +29,7 @@ export class PlayerNode extends CharacterNode {
 
     // Character settings
     private readonly shootingRange = 250;
-    private readonly speed = 150;
+    private readonly speed = 60;
     private readonly acceleration = 1200;
     private readonly deceleration = 1800;
     private readonly jumpPower = 380;
@@ -50,6 +51,7 @@ export class PlayerNode extends CharacterNode {
         this.appendChild(this.playerArm);
         window.addEventListener("pointermove", event => this.mouseMoved(event));
         (<any>window)["player"] = this;
+        this.appendChild(new FlashlightNode());
     }
 
     public getShootingRange(): number {

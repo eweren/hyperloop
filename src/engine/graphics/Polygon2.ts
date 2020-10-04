@@ -184,4 +184,16 @@ export class Polygon2 {
         }
         return this.bounds;
     }
+
+    /**
+     * Checks if this polygon collides with the given one.
+     *
+     * @param other - The other polygon to check collision with.
+     * @return True if polygons collide, false if not.
+     */
+    public collidesWith(other: Polygon2): boolean {
+        // TODO Only bounding box collision is checked for now. Need real polygon check performed when bounding box
+        // collides
+        return this.getBounds().collidesWith(other.getBounds());
+    }
 }

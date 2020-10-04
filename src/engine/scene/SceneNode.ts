@@ -98,6 +98,12 @@ export interface SceneNodeArgs {
 
     /** Optional parameter used to identify the connected TiledObject. */
     tiledObject?: TiledObject;
+
+    /**
+     * Optional initial collision mask. Only objects with the same bits set can collide with each other.
+     * Defaults to 0 (No collision detection)
+     */
+    collisionMask?: number;
 }
 
 /**
@@ -204,11 +210,20 @@ export class SceneNode<T extends Game = Game> {
     private valid: number = 0;
 
     /**
+     * Collision mask. Only objects with the same bits set can collide with each other.
+     * Defaults to 0 (No collision detection)
+     */
+    protected collisionMask: number = 0;
+
+    /** List of nodes this node is currently colliding with. */
+    protected collidingWith: SceneNode[] = [];
+
+    /**
      * Creates a new scene node with the given initial settings.
      */
     public constructor({ id = null, x = 0, y = 0, width = 0, height = 0, anchor = Direction.CENTER,
-            childAnchor = Direction.CENTER, opacity = 1, showBounds = false, layer = null, hidden = false }:
-            SceneNodeArgs = {}) {
+            childAnchor = Direction.CENTER, opacity = 1, showBounds = false, layer = null, hidden = false,
+            collisionMask = 0 }: SceneNodeArgs = {}) {
         this.id = id;
         this.position.setComponents(x, y);
         this.size.setDimensions(width, height);
@@ -218,6 +233,7 @@ export class SceneNode<T extends Game = Game> {
         this.showBounds = showBounds;
         this.layer = layer == null ? null : (1 << layer);
         this.hidden = hidden;
+        this.collisionMask = collisionMask;
     }
 
     /**
@@ -1470,6 +1486,16 @@ export class SceneNode<T extends Game = Game> {
         } else {
             return this.layer;
         }
+    }
+
+    /**
+     * Checks if this node collides with the given node.
+     *
+     * @param node - The other node to check collision with.
+     * @return True if nodes collide, false if not.
+     */
+    public collidesWithNode(node: SceneNode): boolean {
+        return this.getSceneBoundsPolygon().collidesWith(node.getSceneBoundsPolygon());
     }
 
     /**
