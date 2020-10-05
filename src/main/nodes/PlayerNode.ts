@@ -403,7 +403,7 @@ export class PlayerNode extends CharacterNode {
                     layer: this.getLayer(),
                 }).insertBefore(this);
                 // TODO Jump to dialog sequence in train
-                this.getGame().spawnNewPlayer();
+                this.getGame().startRespawnSequence();
             });
         }
     }
