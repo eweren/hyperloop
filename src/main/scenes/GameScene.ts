@@ -75,6 +75,10 @@ export class GameScene extends Scene<Hyperloop> {
                 layer: HUD_LAYER
             }));
         }
+
+        setTimeout(() => {
+            this.game.setupScene();
+        });
     }
 
     public cleanup() {
