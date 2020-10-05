@@ -216,7 +216,7 @@ export abstract class EnemyNode extends CharacterNode {
         }
     }
 
-    protected autoJump(threshold = 1.5): void {
+    protected autoJump(threshold = 0.7): void {
         if (this.consecutiveXCollisions > threshold) {
             this.jump();
         }
