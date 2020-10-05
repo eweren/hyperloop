@@ -439,8 +439,8 @@ export class Hyperloop extends Game {
                 }
             }
         } else {
-            this.getCamera().moveTo(this.getTrain().getX() - 225, 370); // hacky workaround
-            this.handleCamera(0, 1);
+            this.getCamera().moveTo(this.getTrain().getX(), 370); // hacky workaround
+            // this.handleCamera(0, 0);
         }
     }
 
