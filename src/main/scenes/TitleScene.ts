@@ -10,6 +10,7 @@ import { FadeToBlackTransition } from "../../engine/transitions/FadeToBlackTrans
 import { MusicManager } from "../MusicManager";
 import { FadeTransition } from "../../engine/transitions/FadeTransition";
 import { GAME_HEIGHT, GAME_WIDTH } from "../constants";
+import { Sound } from "../../engine/assets/Sound";
 
 export class TitleScene extends Scene<Hyperloop> {
     @asset("images/title-image.png")
@@ -17,6 +18,9 @@ export class TitleScene extends Scene<Hyperloop> {
 
     @asset("images/start-overlay.png")
     private static overlayImage: HTMLImageElement;
+
+    @asset("sounds/interface/ticket.ogg")
+    private static confirmSound: Sound;
 
     private imageNode: ImageNode = new ImageNode({ image: TitleScene.titleImage, anchor: Direction.TOP_LEFT});
     private overlayImageNode: ImageNode = new ImageNode({ image: TitleScene.overlayImage, anchor: Direction.BOTTOM});
@@ -48,6 +52,7 @@ export class TitleScene extends Scene<Hyperloop> {
 
     private handleButton(event: ControllerEvent): void {
         if (event.intents & ControllerIntent.CONFIRM) {
+            TitleScene.confirmSound.play();
             this.startGame();
         }
     }
