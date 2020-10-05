@@ -5,7 +5,7 @@ import { createCanvas, getRenderingContext } from "./util/graphics";
 import { GamepadInput } from "./input/GamepadInput";
 import { Keyboard } from "./input/Keyboard";
 import { Scenes } from "./scene/Scenes";
-import { GAME_HEIGHT, GAME_WIDTH } from '../main/constants';
+import { GAME_HEIGHT, GAME_WIDTH } from "../main/constants";
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want
