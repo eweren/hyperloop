@@ -10,6 +10,7 @@ import { SceneNode } from "../engine/scene/SceneNode";
 import { clamp } from "../engine/util/math";
 import { rnd } from "../engine/util/random";
 import { Dialog } from "./Dialog";
+import { FxManager } from "./FxManager";
 import { MusicManager } from "./MusicManager";
 import { CharacterNode } from "./nodes/CharacterNode";
 import { CollisionNode } from "./nodes/CollisionNode";
@@ -364,6 +365,7 @@ export class Hyperloop extends Game {
         player.remove().moveTo(pos.x, pos.y).appendTo(train.getParent() as SceneNode<Hyperloop>);
         train.hideInner();
         MusicManager.getInstance().loopTrack(1);
+        FxManager.getInstance().playSounds();
         // Power switch behavior
         const powerSwitch = this.getGameScene().getNodeById("PowerSwitch");
         if (powerSwitch && powerSwitch instanceof SwitchNode) {
@@ -455,6 +457,7 @@ export class Hyperloop extends Game {
         player.moveTo(pos.x - trainPos.x, pos.y - trainPos.y);
         player.remove().appendTo(train);
         train.showInner();
+        FxManager.getInstance().stop();
         MusicManager.getInstance().loopTrack(3);
         // TODO player follow NPC
     }
