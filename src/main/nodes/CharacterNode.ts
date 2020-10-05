@@ -9,7 +9,6 @@ import { rnd } from "../../engine/util/random";
 import { Hyperloop } from "../Hyperloop";
 import { CollisionNode } from "./CollisionNode";
 import { InteractiveNode } from "./InteractiveNode";
-import { MarkNode } from "./MarkNode";
 import { ParticleNode, valueCurves } from "./ParticleNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
 import { PlayerLegsNode } from "./player/PlayerLegsNode";
