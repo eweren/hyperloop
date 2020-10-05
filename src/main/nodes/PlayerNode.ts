@@ -163,7 +163,7 @@ export class PlayerNode extends CharacterNode {
             - (input.currentActiveIntents & ControllerIntent.PLAYER_MOVE_LEFT ? 1 : 0);
         this.setDirection(direction);
         // Jump
-        if (this.canInteract(ControllerIntent.PLAYER_JUMP)) {
+        if (this.isOnGround && this.canInteract(ControllerIntent.PLAYER_JUMP)) {
             this.jump();
         }
         if (this.getTag() === "walk") {
@@ -219,7 +219,7 @@ export class PlayerNode extends CharacterNode {
      */
     private canInteract(intent: ControllerIntent): boolean {
         const input = this.getGame().input;
-        return this.previouslyPressed !== intent && input.currentActiveIntents === intent;
+        return (this.previouslyPressed & intent) === 0 && (input.currentActiveIntents & intent) !== 0;
     }
 
     public shoot(): void {
