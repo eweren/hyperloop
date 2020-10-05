@@ -1,6 +1,6 @@
 {
     "image": "headline.png",
-    "characterHeight": "14",
+    "characterHeight": 14,
     "characterMapping": [
         {
             "char": "A",

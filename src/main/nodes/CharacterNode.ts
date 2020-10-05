@@ -3,13 +3,13 @@ import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { Sound } from "../../engine/assets/Sound";
 import { ReadonlyVector2, Vector2, Vector2Like } from "../../engine/graphics/Vector2";
 import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
-import { TextNode } from "../../engine/scene/TextNode";
 import { cacheResult } from "../../engine/util/cache";
 import { clamp } from "../../engine/util/math";
 import { rnd } from "../../engine/util/random";
 import { Layer, STANDARD_FONT } from "../constants";
 import { Hyperloop } from "../Hyperloop";
 import { CollisionNode } from "./CollisionNode";
+import { DialogNode } from "./DialogNode";
 import { InteractiveNode } from "./InteractiveNode";
 import { MarkLineNode } from "./MarkLineNode";
 import { MarkNode } from "./MarkNode";
@@ -66,7 +66,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     private particleOffset: Vector2 = new Vector2(0, 0);
     private particleAngle = 0;
 
-    private textNode: TextNode;
+    private dialogNode: DialogNode;
 
     public constructor(args: AsepriteNodeArgs) {
         super(args);
@@ -109,11 +109,11 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         }).appendTo(this);
 
-        this.textNode = new TextNode({
+        this.dialogNode = new DialogNode({
             font: CharacterNode.dialogFont,
             color: "white",
             outlineColor: "black",
-            y: -20,
+            y: -30,
             layer: Layer.OVERLAY
         }).appendTo(this);
     }
@@ -204,9 +204,9 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         if (this.speakLine && this.gameTime > this.speakSince && this.gameTime < this.speakUntil) {
             const progress = (this.gameTime - this.speakSince);
             const line = this.speakLine.substr(0, Math.ceil(28 * progress));
-            this.textNode.setText(line);
+            this.dialogNode.setText(line);
         } else {
-            this.textNode.setText("");
+            this.dialogNode.setText("");
         }
 
         if (this.getPlayerCollisionAt(this.x, this.y)) {
