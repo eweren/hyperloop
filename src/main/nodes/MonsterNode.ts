@@ -7,6 +7,7 @@ import { Sound } from "../../engine/assets/Sound";
 import { asset } from "../../engine/assets/Assets";
 import { rnd } from "../../engine/util/random";
 import { Rect } from "../../engine/geom/Rect";
+import { Layer } from "../constants";
 
 export class MonsterNode extends EnemyNode {
     @asset("sprites/monster.aseprite.json")
@@ -28,6 +29,7 @@ export class MonsterNode extends EnemyNode {
             anchor: Direction.BOTTOM,
             tag: "idle",
             sourceBounds: new Rect(8, 6, 16, 34),
+            layer: Layer.FOREGROUND,
             ...args
         });
         this.targetPosition = this.getPosition();
