@@ -92,6 +92,9 @@ export class Scenes<T extends Game> {
         if (currentScene.outTransition) {
             currentScene.currentTransition = currentScene.outTransition;
             outTransitionPromise = currentScene.currentTransition.start("out");
+            if (currentScene.outTransition.isExclusive()) {
+                await outTransitionPromise;
+            }
         }
 
         const currentSceneIndex = this.scenes.length - 1;

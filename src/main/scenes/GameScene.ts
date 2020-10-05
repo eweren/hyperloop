@@ -23,6 +23,7 @@ import { FuseboxNode } from "../nodes/FuseboxNode";
 import { SoundNode } from "../../engine/scene/SoundNode";
 import { Sound } from "../../engine/assets/Sound";
 import { TiledSoundNode } from "../nodes/TiledSoundNode";
+import { FadeToBlackTransition } from "../../engine/transitions/FadeToBlackTransition";
 
 export class GameScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -52,6 +53,7 @@ export class GameScene extends Scene<Hyperloop> {
     }});
 
     public setup() {
+        this.inTransition = new FadeToBlackTransition({ duration: 2, delay: 1 });
         this.mapNode.moveTo(0, 0).appendTo(this.rootNode).transform(m => m.scale(1));
         const player = this.mapNode.getDescendantById("Player");
         this.camera.setFollow(player);
