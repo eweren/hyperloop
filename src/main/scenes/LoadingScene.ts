@@ -1,8 +1,7 @@
 import { Hyperloop } from "../Hyperloop";
 import { Scene } from "../../engine/scene/Scene";
 import { ProgressBarNode } from "../../engine/scene/ProgressBarNode";
-// import { TitleScene } from "./TitleScene";
-import { GameScene } from "./GameScene";
+import { TitleScene } from "./TitleScene";
 
 export class LoadingScene extends Scene<Hyperloop> {
     private progressBar!: ProgressBarNode;
@@ -20,7 +19,7 @@ export class LoadingScene extends Scene<Hyperloop> {
 
     public async activate(): Promise<void> {
         await this.game.assets.load(this.updateProgress.bind(this));
-        this.game.scenes.setScene(GameScene);
+        this.game.scenes.setScene(TitleScene);
     }
 
     private updateProgress(total: number, loaded: number): void {

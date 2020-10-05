@@ -7,7 +7,8 @@ import { asset } from "../../engine/assets/Assets";
 import { Direction } from "../../engine/geom/Direction";
 import { ImageNode } from "../../engine/scene/ImageNode";
 import { GameScene } from "./GameScene";
-// import { ControllerIntent } from "../../engine/input/ControllerIntent";
+import { Sound } from "../../engine/assets/Sound";
+import { ControllerIntent } from "../../engine/input/ControllerIntent";
 
 export class TitleScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -15,6 +16,9 @@ export class TitleScene extends Scene<Hyperloop> {
 
     @asset("images/title-image.png")
     private static titleImage: HTMLImageElement;
+
+    @asset("music/01-riding-the-hyperloop.ogg")
+    private static bgm: Sound;
 
     private imageNode: ImageNode = new ImageNode({ image: TitleScene.titleImage, anchor: Direction.TOP_LEFT});
     private textNode = new TextNode({ font: TitleScene.font, anchor: Direction.BOTTOM });
@@ -25,6 +29,8 @@ export class TitleScene extends Scene<Hyperloop> {
             .setText("PRESS ENTER TO START")
             .moveTo(GAME_WIDTH / 2, GAME_HEIGHT - 64)
             .appendTo(this.rootNode);
+
+        TitleScene.bgm.play();
     }
     public cleanup(): void {
         this.rootNode.clear();
@@ -38,8 +44,8 @@ export class TitleScene extends Scene<Hyperloop> {
         super.update(dt, time);
         const input = this.game.input;
 
-        if (input.currentActiveIntents) {
-            console.log(input.currentActiveIntents);
+        if (input.currentActiveIntents & ControllerIntent.CONFIRM) {
+            this.startGame();
         }
     }
 }
