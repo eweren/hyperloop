@@ -31,7 +31,7 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt3W9O2zAYx3G\/YFxk2z3KOQYS2y0AaXt2grFXwJvtAsAZeFU6DtJdY45wRZQ5tuM4tV1\/P8Kq+OXfUylUjuNQpQAAAAAAwKH5ELHNjVKrW9PudEtdE7BPF\/ocvjTtivMZldPns7o07SpzLcBcur+hbk27y1wLsHP89io56wAA+K3NZ7Vv3OP9a5N+FjNWAgAA2vbMdSJmWumfE8s9iiXy47fXJ1vu2s\/U+ktzM3Jvk7y93HW\/u6Q6XfnFyL1N8vZy1\/3ukuq05UemD\/VJZ2cmPyI\/6Lyvn7\/rZaem2Zblrt+V996XOhu+WfIm8y47Nc22rJQ6XXk3B8U294S8vdw1H6mkOl15NwfFNveEvL3cNR+ppDpdOfZjpdtJBfmYqesDAAAAAID6Se4CgIQkdwEo2vA5INtzQev9luQkuQtA0c51+7zwMUKfk9sErCMz6sDh+6rbt9xFGNuAdWTpIoA9ktwFoGnPjmUfI\/YnkXUAPjn+f4RkOCYwdK3bz167jjw1ozYCEnv8\/3eJ2c93z3LbeGMnZOwE9fONP+cee47pY9uEjJ2gfudq+fHnVH7nLgDFc40\/f9lnIQEkcrsXvekfut7Nk9wFDEjuAlA117XX2jPnYyjF9ZjzABausW9gznhziusxSbAPtKu06y+ZuL7uM6v7BepAnX7lLmBALNlmEA\/7Pg+LVgTEE0u2DfzYvqe7gsLIjG1\/cD5jYf0xkpBrTfGuAdRDHMvoT7QnZJy4ZOJY9lDx+0JaY3N+fHOBbMtj5g\/9fW3iO4Zvbl2n9r9ZAAAAYEx3P\/plwvpT77\/3+95812W7cj+TMkZyF4AqpHqmac7xQ+bc9xfmeLYc2Ak5\/3z9CUlQB9qxVeppyvqpxp93fPP5Spvvh7JtJp7PKawt37EKAACAdvwDnANSQw==",
+         "data":"eJzt3VFO2zAYwHE\/MC6y9R7lHAOJ7RaAxL6dYOwJeNkuADsDT6XjIOUac4QrosyxncSJ7fr\/E1bFZ6f5IpnKsR2qFAAAAAAAODSfRhxzq9T6zpR7XWLnBCzpQvfhS1Ou6M8onO7P6tKUq8S5AFPp8Ya6M+U+cS7A3vH7q6TMAwDgtzGf1b55j49vRdqxMXMlAACgbs\/cJ2Kitf45saxRzBE\/fn99ssVd7zM0\/9zc9qxtEq8v7lrvzilPV\/yiZ22TeH1x13p3Tnna4kdmDPVZx85M\/Ij4Qcfb2vEPrdipKba61Pm74q3rUmfdiyV+cPFVK7bqad\/ETk2x1eV4XV3NHhTb3hPi9cVd+5FyytMVb\/ag2PaeEK8v7tqPlFOerjiWsdblpIB4n6HtAQAAAABA+SR1AkBEkjoBZK37HJDtuaDNsik5SeoEkLVzXb7MfI7Q5+S2AW1kQh44fNe6fEudhLELaCNzJwEsSFIngKo9O+pWjro+MjIPwCfF\/4+QBOcEum50+dkqNyO75qiDgMj+\/P+7jHmf755623xjI2TuBOXzzT+nnnseM8a2CZk7QfnO1fzzz7H8Tp0Asueaf\/66ZCIBZORxL\/rQvwy9qyepE+iQ1AmgaK57r41nz0dXjPsx5wksXHPfwJT55hj3YxLhPVCv3O6\/ZGB7PWZWDzPkgTL9Sp1Ah1hi2064O\/Z5nDUjYDyxxHaBH9sPDFeQGZlw7A\/6M2bWniMJudcUbwugHOKoYzxRn5B54pyJo+6x4OtCXH17fnx7gWz1Y\/YPvb4V8Z3Dt7euUfrfLAAAANCnWY9+GdB+6Pp7e+zNd13WK\/UzKX0kdQIoQqxnmqacP2TPfbsyxbPlwF5I\/\/ONJyRCHqjHTqmnIe1jzT\/v+fbz5bbfD3nbDuzPMWws37EKAACAevwDoqNSjQ==",
          "encoding":"base64",
          "height":64,
          "id":3,
@@ -1774,7 +1774,7 @@
                  "value":0
                 }],
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -3322,6 +3322,52 @@
                  "width":0,
                  "x":2511,
                  "y":211
+                }, 
+                {
+                 "height":0,
+                 "id":272,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff4040"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":2241,
+                 "y":351
+                }, 
+                {
+                 "height":0,
+                 "id":273,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff4040"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":2295,
+                 "y":351
                 }],
          "opacity":1,
          "properties":[
@@ -3356,7 +3402,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":271,
+ "nextobjectid":274,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.1",

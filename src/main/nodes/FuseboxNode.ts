@@ -12,6 +12,9 @@ export class FuseboxNode extends InteractiveNode {
     @asset("sounds/fx/electricLever.ogg")
     private static readonly leverSound: Sound;
 
+    @asset("sounds/fx/metalDoorOpen.ogg")
+    private static readonly doorSound: Sound;
+
     private isOpen = false;
     private isOn = false;
 
@@ -30,13 +33,14 @@ export class FuseboxNode extends InteractiveNode {
                 this.isOpen = true;
                 this.setTag("open-off");
                 this.caption = "PRESS E TO TURN ON";
+                FuseboxNode.doorSound.play();
             } else {
                 this.isOn = true;
                 this.setTag("open-on");
                 this.getGame().fuseboxOn = true;
+                FuseboxNode.doorSound.stop();
+                FuseboxNode.leverSound.play();
             }
-            FuseboxNode.leverSound.stop();
-            FuseboxNode.leverSound.play();
         }
     }
 
