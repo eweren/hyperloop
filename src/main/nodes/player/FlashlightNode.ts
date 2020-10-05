@@ -15,10 +15,6 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
             layer: Layer.LIGHT,
             ...args
         });
-        // Debug code to add flashlight to DOM to see raw data
-        // FlashlightNode.image.style.position = "fixed";
-        // FlashlightNode.image.style.zIndex = "999";
-        // document.body.appendChild(FlashlightNode.image);
     }
 
     public draw(context: CanvasRenderingContext2D): void {

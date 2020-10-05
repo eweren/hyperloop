@@ -8,26 +8,7 @@ import { TiledSceneArgs } from "../../engine/scene/TiledMapNode";
 import { createCanvas, getRenderingContext } from "../../engine/util/graphics";
 import { now } from "../../engine/util/time";
 import { Hyperloop } from "../Hyperloop";
-
-function intensifyColor(color: RGBColor, f: number): Color {
-    let r = f * color.getRed(), g = f * color.getGreen(), b = f * color.getBlue();
-    if (r > 1) {
-        g += (r - 1) / 2;
-        b += (r - 1) / 2;
-        r = 1;
-    }
-    if (g > 1) {
-        r += (g - 1) / 2;
-        b += (b - 1) / 2;
-        g = 1;
-    }
-    if (b > 1) {
-        r += (b - 1) / 2;
-        g += (b - 1) / 2;
-        b = 1;
-    }
-    return new RGBColor(r, g, b);
-}
+import { intensifyColor } from "./LightNode";
 
 export class MuzzleFlashNode extends SceneNode<Hyperloop> {
     private color: Color;

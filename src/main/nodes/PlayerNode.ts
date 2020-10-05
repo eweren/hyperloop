@@ -23,6 +23,7 @@ import { ParticleNode, valueCurves } from "./ParticleNode";
 import { rnd, rndItem, timedRnd } from "../../engine/util/random";
 import { Rect } from "../../engine/geom/Rect";
 import { MuzzleFlashNode } from "./MuzzleFlashNode";
+import { AmbientPlayerNode } from "./player/AmbientPlayerNode";
 
 const groundColors = [
     "#806057",
@@ -103,6 +104,8 @@ export class PlayerNode extends CharacterNode {
         });
         this.appendChild(this.playerLeg);
         this.appendChild(this.playerArm);
+        const ambientPlayerLight = new AmbientPlayerNode();
+        this.playerLeg?.appendChild(ambientPlayerLight);
         this.playerArm?.appendChild(this.flashLight);
         this.flashLight?.appendChild(this.muzzleFlash);
         this.setupMouseKeyHandlers();
