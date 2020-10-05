@@ -11,7 +11,7 @@ const soundMapping: {[index: string]: number} = {
     "loop": 0
 };
 function getAssetIndexForName(name: string): number {
-    return soundMapping[name] || -1;
+    return soundMapping[name] ?? -1;
 }
 
 export class TiledSoundNode extends SoundNode<Hyperloop> {
