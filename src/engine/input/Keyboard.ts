@@ -27,6 +27,7 @@ keyToIntentMappings.set("ShiftLeft", [ControllerIntent.PLAYER_RUN]);
 keyToIntentMappings.set("ShiftRight", [ControllerIntent.PLAYER_RUN]);
 keyToIntentMappings.set("KeyE", [ControllerIntent.PLAYER_INTERACT, ControllerIntent.CONFIRM]);
 keyToIntentMappings.set("KeyF", [ControllerIntent.PLAYER_ACTION]);
+keyToIntentMappings.set("KeyR", [ControllerIntent.PLAYER_RELOAD]);
 keyToIntentMappings.set("Digit1", [ControllerIntent.PLAYER_DANCE_1]);
 keyToIntentMappings.set("Digit2", [ControllerIntent.PLAYER_DANCE_2]);
 keyToIntentMappings.set("Numpad1", [ControllerIntent.PLAYER_DANCE_1]);
