@@ -11,6 +11,7 @@ import { MusicManager } from "../MusicManager";
 import { FadeTransition } from "../../engine/transitions/FadeTransition";
 import { GAME_HEIGHT, GAME_WIDTH } from "../constants";
 import { Sound } from "../../engine/assets/Sound";
+import { SuccessScene } from "./SuccessScene";
 
 export class TitleScene extends Scene<Hyperloop> {
     @asset("images/title-image.png")
@@ -29,7 +30,7 @@ export class TitleScene extends Scene<Hyperloop> {
         this.inTransition = new FadeTransition();
         this.outTransition = new FadeToBlackTransition({ duration: 0.5, exclusive: true });
         this.imageNode.appendTo(this.rootNode);
-        this.overlayImageNode.moveTo(GAME_WIDTH / 2, GAME_HEIGHT - 20).appendTo(this.rootNode);
+        this.overlayImageNode.moveTo(GAME_WIDTH / 2, GAME_HEIGHT).appendTo(this.rootNode);
 
         MusicManager.getInstance().loopTrack(0);
     }
@@ -40,6 +41,10 @@ export class TitleScene extends Scene<Hyperloop> {
 
     public startGame (): void {
         this.game.scenes.setScene(GameScene);
+    }
+
+    public gotoCredits (): void {
+        this.game.scenes.setScene(SuccessScene);
     }
 
     public activate(): void {
@@ -54,6 +59,10 @@ export class TitleScene extends Scene<Hyperloop> {
         if (event.intents & ControllerIntent.CONFIRM) {
             TitleScene.confirmSound.play();
             this.startGame();
+        }
+        if (event.intents & ControllerIntent.PLAYER_RELOAD) {
+            TitleScene.confirmSound.play();
+            this.gotoCredits();
         }
     }
 }

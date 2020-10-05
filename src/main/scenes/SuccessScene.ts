@@ -12,6 +12,7 @@ import { FadeToBlackTransition } from "../../engine/transitions/FadeToBlackTrans
 import { FadeTransition } from "../../engine/transitions/FadeTransition";
 import { TitleScene } from "./TitleScene";
 import { MusicManager } from "../MusicManager";
+import { FxManager } from "../FxManager";
 
 export class SuccessScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -34,6 +35,7 @@ export class SuccessScene extends Scene<Hyperloop> {
             .moveTo(GAME_WIDTH - 56, GAME_HEIGHT - 64)
             .appendTo(this.rootNode);
         MusicManager.getInstance().loopTrack(3);
+        FxManager.getInstance().stop();
     }
 
     public buildCredits (): void {
