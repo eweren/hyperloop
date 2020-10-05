@@ -199,6 +199,10 @@ export class PlayerNode extends CharacterNode {
         }
         if (this.getParent() instanceof TrainNode) {
             this.setOpacity(0);
+            const door = this.getGame().getTrainDoorCoordinate();
+            const parent = this.getParent();
+            this.setX(door.x - (parent?.x ?? 0));
+            this.setY(door.y - (parent?.y ?? 0));
             return;
         }
         this.setOpacity(1);
@@ -254,6 +258,10 @@ export class PlayerNode extends CharacterNode {
         this.updatePreviouslyPressed();
 
         this.updateCrosshair();
+    }
+
+    public setAmmoToFull() {
+        this.ammo = this.magazineSize;
     }
 
     private updatePreviouslyPressed(): void {
@@ -366,8 +374,6 @@ export class PlayerNode extends CharacterNode {
     public hurt(damage: number, origin: ReadonlyVector2): boolean {
         this.lastHitTimestamp = now();
         const { centerX, centerY } = this.getSceneBounds();
-        const damageFromRight = origin.x - centerX > 0;
-        this.setX(centerX + (damageFromRight ? -1 : 1));
         this.emitBlood(centerX, centerY, Math.random() * Math.PI * 2, damage);
         return super.hurt(damage, origin);
     }
@@ -399,6 +405,11 @@ export class PlayerNode extends CharacterNode {
                 this.getGame().spawnNewPlayer();
             });
         }
+    }
+
+    public reset(): void {
+        super.reset();
+        this.ammo = 12;
     }
 
     public getPersonalEnemies(): EnemyNode[] {
