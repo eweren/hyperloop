@@ -225,7 +225,7 @@ export class PlayerNode extends CharacterNode {
         } else {
             this.setTag("idle");
         }
-        this.playerLeg?.setMirrorX(this.isMirrorX());
+        this.playerLeg?.setMirrorX(this.direction === 0 ? this.isMirrorX() : (this.direction === -1));
     }
 
 
