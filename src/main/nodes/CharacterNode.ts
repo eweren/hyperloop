@@ -128,9 +128,12 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
         // Death animation
         if (!this.isAlive()) {
-            this.setTag("die");
             if (this.getTimesPlayed("die") > 0 && this.removeOnDie) {
                 this.remove();
+            } else if (this.getTimesPlayed("die") === 1 || this.getTag() === "dead") {
+                this.setTag("dead");
+            } else {
+                this.setTag("die");
             }
             return;
         }
@@ -205,6 +208,25 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         } else {
             this.textNode.setText("");
         }
+
+        if (this.getPlayerCollisionAt(this.x, this.y)) {
+            this.unstuck();
+        }
+    }
+
+    private unstuck(): this {
+        for (let i = 1; i < 100; i++) {
+            if (!this.getPlayerCollisionAt(this.x, this.y - i)) {
+                return this.moveTo(this.x, this.y - i);
+            } else if (!this.getPlayerCollisionAt(this.x, this.y + i)) {
+                return this.moveTo(this.x, this.y + i);
+            } else if (!this.getPlayerCollisionAt(this.x - i, this.y)) {
+                return this.moveTo(this.x - i, this.y);
+            } else if (!this.getPlayerCollisionAt(this.x + i, this.y)) {
+                return this.moveTo(this.x + i, this.y);
+            }
+        }
+        return this;
     }
 
     public setDirection(direction = 0): void {
