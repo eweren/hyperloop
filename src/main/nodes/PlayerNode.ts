@@ -8,7 +8,6 @@ import { GameScene } from "../scenes/GameScene";
 import { MonsterNode } from "./MonsterNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
 import { PlayerLegsNode } from "./player/PlayerLegsNode";
-import { Polygon2 } from "../../engine/graphics/Polygon2";
 import { RatNode } from "./RatNode";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { ScenePointerMoveEvent } from "../../engine/scene/events/ScenePointerMoveEvent";
@@ -22,6 +21,7 @@ import { isDev } from "../../engine/util/env";
 import { now, sleep } from "../../engine/util/time";
 import { ParticleNode, valueCurves } from "./ParticleNode";
 import { rnd, rndItem, timedRnd } from "../../engine/util/random";
+import { Rect } from "../../engine/geom/Rect";
 import { MuzzleFlashNode } from "./MuzzleFlashNode";
 
 const groundColors = [
@@ -88,6 +88,7 @@ export class PlayerNode extends CharacterNode {
             childAnchor: Direction.CENTER,
             tag: "idle",
             id: "player",
+            sourceBounds: new Rect(6, 6, 8, 26),
             ...args
         });
         this.removeOnDie = false;
@@ -139,18 +140,6 @@ export class PlayerNode extends CharacterNode {
     }
     public getMagazineSize(): number {
         return this.magazineSize;
-    }
-
-    public updateBoundsPolygon(bounds: Polygon2): void {
-        const boundsWidth = 8;
-        const boundsHeight = 26;
-        const offsetX = this.getWidth() / 2 - boundsWidth / 2;
-        const offsetY = 6;
-        bounds.clear();
-        bounds.addVertex(new Vector2(offsetX, offsetY));
-        bounds.addVertex(new Vector2(offsetX + boundsWidth, offsetY));
-        bounds.addVertex(new Vector2(offsetX + boundsWidth, boundsHeight + offsetY));
-        bounds.addVertex(new Vector2(offsetX, boundsHeight + offsetY));
     }
 
     public update(dt: number, time: number) {
