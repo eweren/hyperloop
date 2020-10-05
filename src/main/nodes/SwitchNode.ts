@@ -7,7 +7,7 @@ import { asset } from "../../engine/assets/Assets";
 
 export interface SwitchNodeArgs extends SceneNodeArgs {
     onlyOnce?: boolean;
-    onUpdate?: (state: boolean) => void;
+    onUpdate?: (state: boolean) => boolean | undefined;
 }
 
 export class SwitchNode extends InteractiveNode {
@@ -20,7 +20,7 @@ export class SwitchNode extends InteractiveNode {
     private turnedOn: boolean = false;
     private onlyOnce: boolean;
     private stateChanges = 0;
-    private onUpdate?: (state: boolean) => void;
+    private onUpdate?: (state: boolean) => boolean | undefined;
 
     public constructor({ onlyOnce = false, onUpdate, ...args }: SwitchNodeArgs) {
         super({
@@ -28,21 +28,29 @@ export class SwitchNode extends InteractiveNode {
             anchor: Direction.CENTER,
             tag: "off",
             ...args
-        }, "Press E to press switch");
+        }, "Press E to pull lever");
         this.onlyOnce = onlyOnce;
         this.onUpdate = onUpdate;
     }
 
+    public setOnUpdate(func: (state: boolean) => boolean): void {
+        this.onUpdate = func;
+    }
+
+    public setOnlyOnce(once: boolean): void {
+        this.onlyOnce = once;
+    }
+
     public interact(): void {
         if (this.canInteract()) {
-            SwitchNode.clickSound.stop();
-            SwitchNode.clickSound.play();
-            this.turnedOn = !this.turnedOn;
-            this.setTag(this.turnedOn ? "on" : "off");
-            if (this.onUpdate != null) {
-                this.onUpdate(this.turnedOn);
+            const newState = !this.turnedOn;
+            if (!this.onUpdate || this.onUpdate(newState) !== false) {
+                SwitchNode.clickSound.stop();
+                SwitchNode.clickSound.play();
+                this.turnedOn = newState;
+                this.setTag(this.turnedOn ? "on" : "off");
+                this.stateChanges++;
             }
-            this.stateChanges++;
         }
     }
 

@@ -427,10 +427,10 @@ export class PlayerNode extends CharacterNode {
 
     protected updateCrosshair(): void {
         let tag = "idle";
-        if (this.ammo === 0) {
-            if (!this.isReloading) {
-                tag = "reload";
-            }
+        if (this.isReloading) {
+            tag = "reload";
+        } else if (this.ammo === 0) {
+            tag = "empty";
         } else if (this.battlemode) {
             tag = "battle";
         }

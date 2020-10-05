@@ -1,5 +1,6 @@
 import { DialogJSON } from "*.dialog.json";
 import { asset } from "../engine/assets/Assets";
+import { Sound } from '../engine/assets/Sound';
 import { RGBColor } from "../engine/color/RGBColor";
 import { Game } from "../engine/Game";
 import { Camera } from "../engine/scene/Camera";
@@ -13,6 +14,8 @@ import { CollisionNode } from "./nodes/CollisionNode";
 import { LightNode } from "./nodes/LightNode";
 import { NpcNode } from "./nodes/NpcNode";
 import { PlayerNode } from "./nodes/PlayerNode";
+import { SpawnNode } from "./nodes/SpawnNode";
+import { SwitchNode } from "./nodes/SwitchNode";
 import { TrainNode } from "./nodes/TrainNode";
 import { GameScene } from "./scenes/GameScene";
 import { LoadingScene } from "./scenes/LoadingScene";
@@ -27,6 +30,13 @@ export enum GameStage {
 }
 
 export class Hyperloop extends Game {
+
+    @asset("sounds/fx/hyperloopBrakes.ogg")
+    private static brakeSound: Sound;
+
+    @asset("sounds/loops/hyperloopDrone.ogg")
+    private static droneSound: Sound;
+
     private stageStartTime = 0;
     private stageTime = 0;
     private trainSpeed = 1000; // px per second
@@ -63,12 +73,16 @@ export class Hyperloop extends Game {
     public setupScene(): void {
         this.spawnNPCs();
         this.setStage(GameStage.INTRO);
-        // Assets cannot be loaded in constructor because the LoadingScene 
+        // Assets cannot be loaded in constructor because the LoadingScene
         // is not inistalized at constructor time and Assets are loaded in the LoadingScene
         this.dialogs = [
             new Dialog(Hyperloop.trainDialog),
             new Dialog(Hyperloop.train2Dialog)
         ];
+
+        Hyperloop.droneSound.setVolume(0.5);
+        Hyperloop.droneSound.setLoop(true);
+        Hyperloop.droneSound.play();
     }
 
     public update(dt: number, time: number): void {
@@ -151,6 +165,17 @@ export class Hyperloop extends Game {
         }
     }
 
+    public turnOnAllLights() {
+        const lights = this.getAllLights();
+        for (const light of lights) {
+            light.setColor(new RGBColor(0.8, 0.8, 1));
+        }
+        const ambients = this.getAmbientLights();
+        for (const ambient of ambients) {
+            ambient.setColor(new RGBColor(0.3, 0.3, 0.35));
+        }
+    }
+
     private updateDialog(): void {
         // Any key to proceed with next line
         const pressed = this.input.currentActiveIntents ?? 0;
@@ -194,6 +219,8 @@ export class Hyperloop extends Game {
 
     private updateDrive(): void {
         if (!this.currentDialog) {
+            Hyperloop.droneSound.stop();
+            Hyperloop.brakeSound.play();
             this.setStage(GameStage.BRAKE);
             // Compute total break time so that train ends up in desired position
             const train = this.getTrain();
@@ -273,6 +300,17 @@ export class Hyperloop extends Game {
         player.remove().moveTo(pos.x, pos.y).appendTo(train.getParent() as SceneNode<Hyperloop>);
         train.hideInner();
         MusicManager.getInstance().loopTrack(1);
+        // Power switch behavior
+        const powerSwitch = this.getGameScene().getNodeById("PowerSwitch");
+        if (powerSwitch && powerSwitch instanceof SwitchNode) {
+            powerSwitch.setOnlyOnce(true);
+            powerSwitch.setOnUpdate((state: boolean) => {
+                player.say("Doesn't appear to do anything... yet", 4, 0.5);
+                return false;
+            });
+        } else {
+            throw new Error("No PowerSwitch found! Game not beatable that way :(");
+        }
     }
 
     public spawnNewPlayer(): void {
@@ -290,6 +328,26 @@ export class Hyperloop extends Game {
             // TODO leave remains of old player
         } else {
             // Game Over or sequence of new train replacing old one
+        }
+    }
+
+    public turnOnFuseBox() {
+        this.fuseboxOn = true;
+        this.turnAllLightsRed();
+        this.getCamera().setZoom(1);
+        // Enable power switch
+        const powerSwitch = this.getGameScene().getNodeById("PowerSwitch");
+        if (powerSwitch && powerSwitch instanceof SwitchNode) {
+            powerSwitch.setOnUpdate((state: boolean) => {
+                this.turnOnAllLights();
+                const player = this.getPlayer();
+                player.say("Great. Time to go home.", 4, 1);
+                // Spawn the enemies
+                SpawnNode.getForTrigger(player, "afterSwitch", true).forEach(s => s.spawnEnemy());
+                return false;
+            });
+        } else {
+            throw new Error("No PowerSwitch found! Game not beatable that way :(");
         }
     }
 
