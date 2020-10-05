@@ -23,7 +23,7 @@ export class NpcNode extends CharacterNode {
     private readonly deceleration = 800;
     private readonly jumpPower = 295;
 
-    public constructor(spriteIndex: number, variant: number, args?: SceneNodeArgs) {
+    public constructor(spriteIndex: number, args?: SceneNodeArgs) {
         super({
             aseprite: NpcNode.sprites[spriteIndex] ? NpcNode.sprites[spriteIndex] : NpcNode.sprites[0],
             anchor: Direction.BOTTOM,
