@@ -171,6 +171,17 @@ export class Hyperloop extends Game {
         }
     }
 
+    public turnAllLightsRed() {
+        const lights = this.getAllLights();
+        for (const light of lights) {
+            light.setColor(new RGBColor(1, 0.1, 0.08));
+        }
+        const ambients = this.getAmbientLights();
+        for (const ambient of ambients) {
+            ambient.setColor(new RGBColor(0.05, 0.03, 0.03));
+        }
+    }
+
     private updateDialog(): void {
         // Any key to proceed with next line
         const pressed = this.input.currentActiveIntents ?? 0;
