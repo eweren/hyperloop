@@ -4,6 +4,7 @@ import { Scene } from "../Scene";
 
 export class ScenePointerEvent<T extends Game = Game, A = void> {
     private readonly position: ReadonlyVector2;
+    private readonly screenPosition: ReadonlyVector2;
 
     public constructor(
         protected readonly scene: Scene<T, A>,
@@ -14,6 +15,7 @@ export class ScenePointerEvent<T extends Game = Game, A = void> {
         const scaleY = canvas.height / canvas.offsetHeight;
         const cameraTransformation = scene.camera.getSceneTransformation();
         this.position = new Vector2(event.offsetX, event.offsetY).scale(scaleX, scaleY).div(cameraTransformation);
+        this.screenPosition = new Vector2(event.offsetX, event.offsetY).scale(scaleX, scaleY);
     }
 
     public getX(): number {
@@ -26,5 +28,17 @@ export class ScenePointerEvent<T extends Game = Game, A = void> {
 
     public getPosition(): ReadonlyVector2 {
         return this.position;
+    }
+
+    public getScreenX(): number {
+        return this.screenPosition.x;
+    }
+
+    public getScreenY(): number {
+        return this.screenPosition.y;
+    }
+
+    public getScreenPosition(): ReadonlyVector2 {
+        return this.screenPosition;
     }
 }
