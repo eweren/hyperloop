@@ -3,9 +3,11 @@ import { asset } from "../engine/assets/Assets";
 import { Sound } from "../engine/assets/Sound";
 import { RGBColor } from "../engine/color/RGBColor";
 import { Game } from "../engine/Game";
+import { Vector2 } from "../engine/graphics/Vector2";
 import { Camera } from "../engine/scene/Camera";
 import { FadeToBlack } from "../engine/scene/camera/FadeToBlack";
 import { SceneNode } from "../engine/scene/SceneNode";
+import { clamp } from "../engine/util/math";
 import { rnd } from "../engine/util/random";
 import { Dialog } from "./Dialog";
 import { MusicManager } from "./MusicManager";
@@ -26,7 +28,8 @@ export enum GameStage {
     DRIVE = 2,
     BRAKE = 3,
     DIALOG = 4,
-    STUCK = 5
+    STUCK = 5,
+    RETURN = 6 // all done, returned into train
 }
 
 export class Hyperloop extends Game {
@@ -103,6 +106,9 @@ export class Hyperloop extends Game {
             case GameStage.STUCK:
                 this.updateStuck();
                 break;
+            case GameStage.RETURN:
+                this.updateReturn(dt);
+                break;
         }
         if (this.currentDialog) {
             this.updateDialog();
@@ -128,6 +134,8 @@ export class Hyperloop extends Game {
                     break;
                 case GameStage.STUCK:
                     this.initStuck();
+                    break;
+                case GameStage.RETURN:
                     break;
             }
         }
@@ -253,7 +261,6 @@ export class Hyperloop extends Game {
         if (!this.currentDialog) {
             this.setStage(GameStage.STUCK);
         }
-        // TODO braking sequence with extreme cam shake
     }
 
     private updateStuck(): void {
@@ -272,6 +279,23 @@ export class Hyperloop extends Game {
                 player.setX(player.getX() + move);
             }
         }
+    }
+
+    private updateReturn(dt: number) {
+        const train = this.getTrain();
+        // Drive off
+        if (this.stageTime > 5) {
+            const progress = clamp((this.stageTime - 5.5) / 10, 0, 1);
+            const speed = this.trainSpeed * progress;
+            train.setX(train.getX() + speed * dt);
+            this.applyCamShake(1);
+        }
+        // Driving illusion
+        const pos = train.getScenePosition().x;
+        if (pos > 2800) {
+            train.setX(pos - this.teleportStep * 2);
+        }
+        this.applyCamShake(1);
     }
 
     public initIntro(): void {
@@ -322,22 +346,27 @@ export class Hyperloop extends Game {
             this.charactersAvailable--;
             // TODO get proper spawn position
             const player = this.getPlayer();
-            const spawnPoint = this.getTrain().getScenePosition();
+            const spawnPoint = this.getTrainDoorCoordinate();
             // TODO leave remains of old player
-            player.moveTo(spawnPoint.x - 170, spawnPoint.y - 10);
+            player.moveTo(spawnPoint.x, spawnPoint.y);
             player.setHitpoints(100);
             player.reset();
             this.getCamera().setFollow(player);
             // Spawn enemies at random subset of spawn points behind "first encounter"
             SpawnNode.getForTrigger(player, "after", true).forEach(s => {
-                if (rnd() < 0.4) s.spawnEnemy();
+                if (rnd() < 0.25) s.spawnEnemy();
             });
             SpawnNode.getForTrigger(player, "before", true).forEach(s => {
-                if (rnd() < 0.4) s.spawnEnemy();
+                if (rnd() < 0.25) s.spawnEnemy();
             });
         } else {
             // Game Over or sequence of new train replacing old one
         }
+    }
+
+    public getTrainDoorCoordinate(): Vector2 {
+        const coord = this.getTrain().getScenePosition();
+        return new Vector2(coord.x - 170, coord.y - 10);
     }
 
     public turnOnFuseBox() {
@@ -351,6 +380,19 @@ export class Hyperloop extends Game {
                 this.turnOnAllLights();
                 const player = this.getPlayer();
                 player.say("Great. Time to go home.", 4, 1);
+                // Activate game end zone
+                const doorPos = this.getTrainDoorCoordinate();
+                const endSwitch = new SwitchNode({
+                    x: doorPos.x,
+                    y: doorPos.y,
+                    onlyOnce: true,
+                    onUpdate: () => {
+                        this.winGame();
+                        return true;
+                    }
+                });
+                endSwitch.setCaption("PRESS E TO ENTER");
+                player.getParent()?.appendChild(endSwitch);
                 // Spawn the enemies
                 SpawnNode.getForTrigger(player, "afterSwitch", true).forEach(s => s.spawnEnemy());
                 return true;
@@ -358,6 +400,21 @@ export class Hyperloop extends Game {
         } else {
             throw new Error("No PowerSwitch found! Game not beatable that way :(");
         }
+    }
+
+    public winGame(): void {
+        // Kill all enemies
+        this.getPlayer().getPersonalEnemies().forEach(e => e.die());
+        this.setStage(GameStage.RETURN);
+        // Move player into train
+        const player = this.getPlayer();
+        const train = this.getTrain();
+        const pos = player.getScenePosition();
+        const trainPos = train.getScenePosition();
+        player.moveTo(pos.x - trainPos.x, pos.y - trainPos.y);
+        player.remove().appendTo(train);
+        train.showInner();
+        // TODO player follow NPC
     }
 
     public getPlayer(): PlayerNode {

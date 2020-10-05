@@ -16,6 +16,10 @@ export abstract class InteractiveNode extends AsepriteNode<Hyperloop> {
         this.caption = caption;
     }
 
+    public setCaption(caption: string): void {
+        this.caption = caption;
+    }
+
     protected getRange(): number {
         return 50;
     }
