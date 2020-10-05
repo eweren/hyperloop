@@ -24,6 +24,7 @@ import { rnd, rndItem, timedRnd } from "../../engine/util/random";
 import { Rect } from "../../engine/geom/Rect";
 import { MuzzleFlashNode } from "./MuzzleFlashNode";
 import { AmbientPlayerNode } from "./player/AmbientPlayerNode";
+import { TrainNode } from "./TrainNode";
 
 const groundColors = [
     "#806057",
@@ -145,6 +146,9 @@ export class PlayerNode extends CharacterNode {
     public getMagazineSize(): number {
         return this.magazineSize;
     }
+    public getLastShotTime(): number {
+        return this.lastShotTime;
+    }
 
     public update(dt: number, time: number) {
         super.update(dt, time);
@@ -158,6 +162,11 @@ export class PlayerNode extends CharacterNode {
             this.setDirection(0);
             return;
         }
+        if (this.getParent() instanceof TrainNode) {
+            this.setOpacity(0);
+            return;
+        }
+        this.setOpacity(1);
 
         // Controls
         const input = this.getScene()!.game.input;

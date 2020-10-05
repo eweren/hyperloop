@@ -42,7 +42,7 @@ export class Hyperloop extends Game {
     public fuseboxOn = false;
 
     // Dialog
-    private dialogKeyPressed = true;
+    private dialogKeyPressed = false;
     private currentDialogLine = 0;
     private currentDialog: Dialog | null = null;
 
@@ -93,7 +93,6 @@ export class Hyperloop extends Game {
                 // "3 Of course!"
             ])
         ];
-        this.currentDialog = this.dialogs[0];
     }
 
     // Called by GameScene
@@ -174,7 +173,7 @@ export class Hyperloop extends Game {
 
     private updateDialog(): void {
         // Any key to proceed with next line
-        const pressed = this.input.currentActiveIntents;
+        const pressed = this.input.currentActiveIntents ?? 0;
         const prevPressed = this.dialogKeyPressed;
         this.dialogKeyPressed = pressed !== 0;
         if (pressed && !prevPressed) {
@@ -293,6 +292,7 @@ export class Hyperloop extends Game {
         const train = this.getTrain();
         const pos = player.getScenePosition();
         player.remove().moveTo(pos.x, pos.y).appendTo(train.getParent() as SceneNode<Hyperloop>);
+        train.hideInner();
     }
 
     public spawnNewPlayer(): void {

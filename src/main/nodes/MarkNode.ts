@@ -11,7 +11,7 @@ export class MarkNode extends SceneNode<Hyperloop> {
         super({
             width: 1,
             height: 1,
-            layer: Layer.FOREGROUND,
+            layer: Layer.OVERLAY,
             ... args
         });
     }
@@ -19,7 +19,7 @@ export class MarkNode extends SceneNode<Hyperloop> {
     public update(dt: number, time: number): void {
         if (this.startTime === 0) {
             this.startTime = time;
-            this.killTime = this.startTime + 5000;
+            this.killTime = this.startTime + 5;
         } else if (time > this.killTime) {
             super.remove();
         }
