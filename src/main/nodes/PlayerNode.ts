@@ -20,6 +20,15 @@ import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { STANDARD_FONT, HUD_LAYER } from "../constants";
 import { isDev } from "../../engine/util/env";
 import { sleep } from "../../engine/util/time";
+import { ParticleNode, valueCurves } from "./ParticleNode";
+import { rnd, rndItem, timedRnd } from "../../engine/util/random";
+
+const groundColors = [
+    "#806057",
+    "#504336",
+    "#3C8376",
+    "#908784"
+];
 
 export class PlayerNode extends CharacterNode {
 
@@ -60,6 +69,8 @@ export class PlayerNode extends CharacterNode {
     private readonly reloadDelay = 2200;
     private leftMouseDown = false;
 
+    private dustEmitter: ParticleNode;
+
     public constructor(args?: SceneNodeArgs) {
         super({
             aseprite: PlayerNode.sprite,
@@ -83,6 +94,16 @@ export class PlayerNode extends CharacterNode {
         this.playerArm?.appendChild(this.flashLight);
         this.setupMouseKeyHandlers();
         (<any>window)["player"] = this;
+
+        this.dustEmitter = new ParticleNode({
+            y: 20, // TODO Warum greift das nicht!
+            velocity: () => ({ x: rnd(-1, 1) * 26, y: rnd(0.7, 1) * 45 }),
+            color: () => rndItem(groundColors),
+            size: rnd(1, 2),
+            gravity: {x: 0, y: -100},
+            lifetime: () => rnd(0.5, 0.8),
+            alphaCurve: valueCurves.trapeze(0.05, 0.2)
+        }).appendTo(this);
     }
 
     public getShootingRange(): number {
@@ -171,6 +192,15 @@ export class PlayerNode extends CharacterNode {
         }
 
         this.syncArmAndLeg();
+
+        // Spawn random dust particles while walking
+        if (this.isVisible()) {
+            if (this.getTag() === "walk") {
+                if (timedRnd(dt, 0.2)) {
+                    this.dustEmitter.emit(1);
+                }
+            }
+        }
     }
 
     public async shoot(): Promise<void> {
