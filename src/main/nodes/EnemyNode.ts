@@ -26,7 +26,7 @@ export abstract class EnemyNode extends CharacterNode {
     protected squaredViewDistance = 120 ** 2;
 
     /** How far enemy can hear player while idling */
-    protected squaredHearDistance = 160 ** 2;
+    protected squaredHearDistance = 200 ** 2;
 
     /** If a shot was fired within the hearDuration from now, the enemy shall start chasing */
     protected hearDuration = 500;
@@ -42,6 +42,10 @@ export abstract class EnemyNode extends CharacterNode {
 
     /** ms it takes for enemy to attack player */
     protected attackDelay = 0.3;
+
+    protected alertedBy: "VIEW" | "SOUND" = "VIEW";
+    private timeOfAlert = 0;
+    private readonly stopFollowBySoundDelay = 2000;
 
     protected state: AiState = AiState.BORED;
 
@@ -134,7 +138,7 @@ export abstract class EnemyNode extends CharacterNode {
         // Check distance to player
         const player = this.getPlayer();
         if (player) {
-            if (this.canSeePlayer(player)) {
+            if (this.canSeeOrHearPlayer(player)) {
                 // Player spotted!
                 this.setState(AiState.FOLLOW);
                 this.targetPosition = player.getPosition();
@@ -168,7 +172,8 @@ export abstract class EnemyNode extends CharacterNode {
         if (player) {
             // Update target if in sight
             const squaredDistance = player.getPosition().getSquareDistance(this.getPosition());
-            if (squaredDistance < this.squaredAlertViewDistance) {
+            if ((this.alertedBy === "SOUND" && now() - this.timeOfAlert < this.stopFollowBySoundDelay)
+                || squaredDistance < this.squaredAlertViewDistance) {
                 // Player spotted!
                 this.setState(AiState.FOLLOW);
                 this.targetPosition = player.getPosition();
@@ -285,7 +290,7 @@ export abstract class EnemyNode extends CharacterNode {
         return player != null && ((this.getX() > player.getPosition().x) === this.isMirrorX());
     }
 
-    public canSeePlayer(player = this.getPlayer()): boolean {
+    public canSeeOrHearPlayer(player = this.getPlayer()): boolean {
         if (!player) {
             return false;
         }
@@ -293,8 +298,11 @@ export abstract class EnemyNode extends CharacterNode {
         const origin = this.getHeadPosition(), target = player.getHeadPosition();
         const couldHearPlayer = (now() - player.getLastShotTime()) < this.hearDuration && squaredDistance < this.squaredHearDistance;
         const couldViewPlayer = this.isLookingInPlayerDirection(player) && squaredDistance < this.squaredViewDistance;
-
-        return (couldViewPlayer || couldHearPlayer) &&
-                this.getLineCollision(origin.x, origin.y, target.x - origin.x, target.y - origin.y) === player;
+        const isColliding = this.getLineCollision(origin.x, origin.y, target.x - origin.x, target.y - origin.y) === player;
+        if (isColliding) {
+            this.alertedBy = couldHearPlayer ? "SOUND" : "VIEW";
+            this.timeOfAlert = now();
+        }
+        return (couldViewPlayer || couldHearPlayer) && isColliding;
     }
 }
