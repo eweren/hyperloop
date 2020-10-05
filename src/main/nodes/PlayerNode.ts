@@ -240,10 +240,6 @@ export class PlayerNode extends CharacterNode {
                 node.interact();
             }
         }
-        // Battlemode
-        if (this.battlemode) {
-            this.crosshairNode.setTag("battle");
-        }
 
         // Spawn random dust particles while walking
         if (this.isVisible()) {
@@ -254,6 +250,8 @@ export class PlayerNode extends CharacterNode {
             }
         }
         this.updatePreviouslyPressed();
+
+        this.updateCrosshair();
     }
 
     private updatePreviouslyPressed(): void {
@@ -427,9 +425,16 @@ export class PlayerNode extends CharacterNode {
         this.crosshairNode.remove();
     }
 
-    protected endBattlemode(): void {
-        super.endBattlemode();
-        this.crosshairNode.setTag("idle");
+    protected updateCrosshair(): void {
+        let tag = "idle";
+        if (this.ammo === 0) {
+            if (!this.isReloading) {
+                tag = "reload";
+            }
+        } else if (this.battlemode) {
+            tag = "battle";
+        }
+        this.crosshairNode.setTag(tag);
     }
 
     private setupMouseKeyHandlers(): void {
