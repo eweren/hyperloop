@@ -8,19 +8,24 @@ import { asset } from "../../engine/assets/Assets";
 import { Rect } from "../../engine/geom/Rect";
 
 export class NpcNode extends CharacterNode {
-    @asset("sprites/male.aseprite.json")
-    private static maleSprite: Aseprite;
-    @asset("sprites/female.aseprite.json")
-    private static femaleSprite: Aseprite;
+    @asset([
+        "sprites/male.aseprite.json",
+        "sprites/female.aseprite.json",
+        "sprites/male2.aseprite.json",
+        "sprites/male3.aseprite.json",
+        "sprites/female2.aseprite.json",
+        "sprites/female3.aseprite.json"
+    ])
+    private static sprites: Aseprite[];
 
     // Character settings
     private readonly acceleration = 600;
     private readonly deceleration = 800;
     private readonly jumpPower = 295;
 
-    public constructor(female: boolean, args?: SceneNodeArgs) {
+    public constructor(spriteIndex: number, args?: SceneNodeArgs) {
         super({
-            aseprite: female ? NpcNode.femaleSprite : NpcNode.maleSprite,
+            aseprite: NpcNode.sprites[spriteIndex] ? NpcNode.sprites[spriteIndex] : NpcNode.sprites[0],
             anchor: Direction.BOTTOM,
             childAnchor: Direction.CENTER,
             tag: "idle",

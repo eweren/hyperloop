@@ -56,6 +56,7 @@ export class Hyperloop extends Game {
     private gameStage = GameStage.NONE;
     public keyTaken = false; // key taken from corpse
     public fuseboxOn = false;
+    private fadeOutInitiated = false;
 
     // Dialog
     private dialogKeyPressed = false;
@@ -143,7 +144,7 @@ export class Hyperloop extends Game {
 
     private spawnNPCs(): void {
         const train = this.getTrain();
-        const chars = [ new NpcNode(false), new NpcNode(true), new NpcNode(true), new NpcNode(true), new NpcNode(false) ];
+        const chars = [ new NpcNode(0), new NpcNode(1), new NpcNode(2), new NpcNode(3), new NpcNode(4) ];
         const positions = [ -80, -40, 24, 60, 132 ];
         for (let i = 0; i < chars.length; i++) {
             chars[i].moveTo(positions[i], -20).appendTo(train);
@@ -292,10 +293,15 @@ export class Hyperloop extends Game {
         }
         // Driving illusion
         const pos = train.getScenePosition().x;
-        if (pos > 2800) {
+        if (pos > 3100) {
             train.setX(pos - this.teleportStep * 2);
         }
-        this.applyCamShake(1);
+        // Fade out
+        if (this.stageTime > 12 && !this.fadeOutInitiated) {
+            this.fadeOutInitiated = true;
+            this.getFader().fadeOut({ duration: 12 });
+            // TODO switch to credits scene here
+        }
     }
 
     public initIntro(): void {
@@ -414,6 +420,7 @@ export class Hyperloop extends Game {
         player.moveTo(pos.x - trainPos.x, pos.y - trainPos.y);
         player.remove().appendTo(train);
         train.showInner();
+        MusicManager.getInstance().loopTrack(0);
         // TODO player follow NPC
     }
 

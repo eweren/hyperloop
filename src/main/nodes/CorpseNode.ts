@@ -44,7 +44,8 @@ export class CorpseNode extends InteractiveNode {
                 fader.fadeOut({ duration: 0.1 }).then(() => {
                     fader.fadeIn({ duration: 2 });
                 });
-                game.getCamera().setZoom(1.5);
+                // Deactivated until better solution? 1.5 looks really shitty
+                // game.getCamera().setZoom(1.5);
                 player?.say("Uh oh...", 3, 1.5);
             }, 5000);
         }
