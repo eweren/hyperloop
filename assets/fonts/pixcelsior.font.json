@@ -540,6 +540,11 @@
             ]
         },
         {
+            "char": "|",
+            "width": 1,
+            "compactablePrecursors": []
+        },
+        {
             "char": "}",
             "width": 3,
             "compactablePrecursors": [
