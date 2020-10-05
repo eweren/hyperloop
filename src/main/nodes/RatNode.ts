@@ -81,6 +81,10 @@ export class RatNode extends EnemyNode {
             this.setState(AiState.ALERT);
             this.squeak();
         }
+        if (this.getDistanceToPlayerSquared() < this.squaredSafetyDistance || this.canSeeOrHearPlayer()) {
+            this.setState(AiState.ALERT);
+            this.squeak();
+        }
     }
 
     private escapeDistanceMin = 150;
