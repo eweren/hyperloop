@@ -10,6 +10,8 @@ export class MusicManager {
     private static music1: Sound;
     @asset("music/03-uncertainty-ahead.ogg")
     private static music2: Sound;
+    @asset("music/04-down-in-the-tunnel-with-lyrics.ogg")
+    private static music3: Sound;
 
     private tracks: Sound[] = [];
     private volumes: number[] = [];
@@ -34,7 +36,7 @@ export class MusicManager {
     private checkLoaded() {
         if (MusicManager.music0) {
             this.loaded = true;
-            this.tracks = [ MusicManager.music0, MusicManager.music1, MusicManager.music2 ];
+            this.tracks = [ MusicManager.music0, MusicManager.music1, MusicManager.music2, MusicManager.music3 ];
             this.volumes = [1, 0.5, 1];
 
             clearInterval(this.loadInterval);
