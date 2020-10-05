@@ -10,8 +10,11 @@ export class CorpseNode extends InteractiveNode {
     @asset("sprites/corpse.aseprite.json")
     private static readonly sprite: Aseprite;
 
-    @asset("sounds/fx/heavyLightSwitch.ogg")
+    @asset("sounds/fx/breakerSwitch.ogg")
     private static readonly lightSound: Sound;
+
+    @asset("sounds/fx/pickupKey.ogg")
+    private static readonly pickupSound: Sound;
 
     private keyTaken = false;
 
@@ -29,12 +32,15 @@ export class CorpseNode extends InteractiveNode {
             // TODO play some neat key take sound
             this.keyTaken = true;
             this.getGame().keyTaken = true;
-            console.log("Key taken");
+            CorpseNode.pickupSound.play();
+            const player = this.getTarget();
+            player?.say("This key will surely be useful", 3, 0.5);
             setTimeout(() => {
                 CorpseNode.lightSound.play();
                 this.getGame().turnOffAllLights();
                 MusicManager.getInstance().loopTrack(2);
-            }, 2000);
+                player?.say("Oh oh...", 3, 0.5);
+            }, 5000);
         }
     }
 
