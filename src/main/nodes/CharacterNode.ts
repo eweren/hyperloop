@@ -261,7 +261,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public draw(context: CanvasRenderingContext2D): void {
         super.draw(context);
         // TODO put this into proper text node
-        if (this.speakLine) {
+        if (this.speakLine && this.gameTime > this.speakSince && this.gameTime < this.speakUntil) {
             const progress = (this.gameTime - this.speakSince);
             const line = this.speakLine.substr(0, Math.ceil(28 * progress));
             context.save();
@@ -299,9 +299,9 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         return false;
     }
 
-    public say(line = "", duration = 0): void {
-        this.speakSince = this.gameTime;
-        this.speakUntil = this.gameTime + duration;
+    public say(line = "", duration = 0, delay = 0): void {
+        this.speakSince = this.gameTime + delay;
+        this.speakUntil = this.speakSince + duration;
         this.speakLine = line;
     }
 

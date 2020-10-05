@@ -5,6 +5,7 @@ import { FadeToBlack } from "../engine/scene/camera/FadeToBlack";
 import { SceneNode } from "../engine/scene/SceneNode";
 import { rnd } from "../engine/util/random";
 import { Dialog } from "./Dialog";
+import { MusicManager } from "./MusicManager";
 import { CharacterNode } from "./nodes/CharacterNode";
 import { CollisionNode } from "./nodes/CollisionNode";
 import { LightNode } from "./nodes/LightNode";
@@ -97,7 +98,6 @@ export class Hyperloop extends Game {
 
     // Called by GameScene
     public setupScene(): void {
-        this.getFader().fadeOut({ duration: 0.001 });
         this.spawnNPCs();
         this.setStage(GameStage.INTRO);
     }
@@ -207,7 +207,6 @@ export class Hyperloop extends Game {
         // Proceed to next stage
         if (this.stageTime > 1) {
             // Fade in
-            this.getFader().fadeIn({ duration: 1     });
             this.setStage(GameStage.DRIVE);
             return;
         }
@@ -293,6 +292,7 @@ export class Hyperloop extends Game {
         const pos = player.getScenePosition();
         player.remove().moveTo(pos.x, pos.y).appendTo(train.getParent() as SceneNode<Hyperloop>);
         train.hideInner();
+        MusicManager.getInstance().loopTrack(1);
     }
 
     public spawnNewPlayer(): void {

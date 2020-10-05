@@ -7,8 +7,11 @@ import { asset } from "../../engine/assets/Assets";
 import { Direction } from "../../engine/geom/Direction";
 import { ImageNode } from "../../engine/scene/ImageNode";
 import { GameScene } from "./GameScene";
-import { Sound } from "../../engine/assets/Sound";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
+import { ControllerEvent } from "../../engine/input/ControllerEvent";
+import { FadeToBlackTransition } from "../../engine/transitions/FadeToBlackTransition";
+import { MusicManager } from "../MusicManager";
+import { FadeTransition } from "../../engine/transitions/FadeTransition";
 
 export class TitleScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -17,22 +20,21 @@ export class TitleScene extends Scene<Hyperloop> {
     @asset("images/title-image.png")
     private static titleImage: HTMLImageElement;
 
-    @asset("music/01-riding-the-hyperloop.ogg")
-    private static bgm: Sound;
-
     private imageNode: ImageNode = new ImageNode({ image: TitleScene.titleImage, anchor: Direction.TOP_LEFT});
     private textNode = new TextNode({ font: TitleScene.font, anchor: Direction.BOTTOM });
 
     public setup() {
+        this.inTransition = new FadeTransition();
+        this.outTransition = new FadeToBlackTransition({ duration: 0.5, exclusive: true });
         this.imageNode.appendTo(this.rootNode);
         this.textNode
             .setText("PRESS ENTER TO START")
             .moveTo(GAME_WIDTH / 2, GAME_HEIGHT - 64)
             .appendTo(this.rootNode);
 
-        TitleScene.bgm.setLoop(true);
-        TitleScene.bgm.play();
+        MusicManager.getInstance().loopTrack(0);
     }
+
     public cleanup(): void {
         this.rootNode.clear();
     }
@@ -41,11 +43,16 @@ export class TitleScene extends Scene<Hyperloop> {
         this.game.scenes.setScene(GameScene);
     }
 
-    public update(dt: number, time: number): void {
-        super.update(dt, time);
-        const input = this.game.input;
+    public activate(): void {
+        this.game.input.onButtonPress.connect(this.handleButton, this);
+    }
 
-        if (input.currentActiveIntents & ControllerIntent.CONFIRM) {
+    public deactivate(): void {
+        this.game.input.onButtonPress.disconnect(this.handleButton, this);
+    }
+
+    private handleButton(event: ControllerEvent): void {
+        if (event.intents & ControllerIntent.CONFIRM) {
             this.startGame();
         }
     }

@@ -1,6 +1,6 @@
-import { Line2 } from '../../engine/graphics/Line2';
+import { Line2 } from "../../engine/graphics/Line2";
 import { Vector2 } from "../../engine/graphics/Vector2";
-import { SceneNode, SceneNodeArgs } from "../../engine/scene/SceneNode";
+import { SceneNode } from "../../engine/scene/SceneNode";
 import { Layer } from "../constants";
 import { Hyperloop } from "../Hyperloop";
 
