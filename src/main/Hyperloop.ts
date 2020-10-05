@@ -77,7 +77,7 @@ export class Hyperloop extends Game {
         this.spawnNPCs();
         this.setStage(GameStage.INTRO);
         // Assets cannot be loaded in constructor because the LoadingScene
-        // is not inistalized at constructor time and Assets are loaded in the LoadingScene
+        // is not initialized at constructor time and Assets are loaded in the LoadingScene
         this.dialogs = [
             new Dialog(Hyperloop.trainDialog),
             new Dialog(Hyperloop.train2Dialog)
