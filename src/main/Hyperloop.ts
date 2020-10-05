@@ -293,9 +293,12 @@ export class Hyperloop extends Game {
     }
 
     private updateStuck(): void {
+        let player: PlayerNode;
+        try {
+            player = this.getPlayer();
+        } catch (e) { return; }
         // This is the main game, with gameplay and stuff
         // Ensure player doesn't reach end of tunnel
-        const player = this.getPlayer();
         const pos = player.getScenePosition();
         if (Math.abs(pos.y - this.getTrain().getScenePosition().y) < this.teleportMyTrainYDistance) {
             let move = 0;
