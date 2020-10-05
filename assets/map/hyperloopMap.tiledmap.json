@@ -1726,6 +1726,18 @@
                  "width":17,
                  "x":2287,
                  "y":257
+                }, 
+                {
+                 "height":0,
+                 "id":274,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":1033,
+                 "y":819
                 }],
          "opacity":1,
          "properties":[
@@ -1735,7 +1747,7 @@
                  "value":0
                 }],
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -3377,7 +3389,7 @@
                  "value":1
                 }],
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -3402,7 +3414,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":274,
+ "nextobjectid":275,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.1",
