@@ -356,6 +356,7 @@ export class Hyperloop extends Game {
             // TODO leave remains of old player
             player.moveTo(spawnPoint.x, spawnPoint.y);
             player.setHitpoints(100);
+            player.setAmmoToFull();
             player.reset();
             this.getCamera().setFollow(player);
             // Spawn enemies at random subset of spawn points behind "first encounter"

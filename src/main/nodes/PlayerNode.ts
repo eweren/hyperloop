@@ -256,6 +256,10 @@ export class PlayerNode extends CharacterNode {
         this.updateCrosshair();
     }
 
+    public setAmmoToFull() {
+        this.ammo = this.magazineSize;
+    }
+
     private updatePreviouslyPressed(): void {
         const input = this.getGame().input;
         this.previouslyPressed = input.currentActiveIntents;
