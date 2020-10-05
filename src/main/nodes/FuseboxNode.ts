@@ -43,7 +43,7 @@ export class FuseboxNode extends InteractiveNode {
                 this.setTag("open-on");
                 const game = this.getGame();
                 game.turnOnFuseBox();
-                this.getTarget()?.say("Time to find that switch", 8);
+                this.getTarget()?.say("Time to find that switch", 5, 8);
                 FuseboxNode.doorSound.stop();
                 FuseboxNode.leverSound.play();
             }

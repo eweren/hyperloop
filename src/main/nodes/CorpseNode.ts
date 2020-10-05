@@ -45,7 +45,7 @@ export class CorpseNode extends InteractiveNode {
                     fader.fadeIn({ duration: 2 });
                 });
                 game.getCamera().setZoom(1.5);
-                player?.say("Oh oh...", 3, 1.5);
+                player?.say("Uh oh...", 3, 1.5);
             }, 5000);
         }
     }

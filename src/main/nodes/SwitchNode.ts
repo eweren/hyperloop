@@ -14,8 +14,11 @@ export class SwitchNode extends InteractiveNode {
     @asset("sprites/wallLever.aseprite.json")
     private static readonly sprite: Aseprite;
 
-    @asset("sounds/fx/heavyLightSwitch.ogg")
+    @asset("sounds/fx/breakerSwitch.ogg")
     private static readonly clickSound: Sound;
+
+    @asset("sounds/fx/stuck.ogg")
+    private static readonly stuckSound: Sound;
 
     private turnedOn: boolean = false;
     private onlyOnce: boolean;
@@ -49,7 +52,12 @@ export class SwitchNode extends InteractiveNode {
                 SwitchNode.clickSound.play();
                 this.turnedOn = newState;
                 this.setTag(this.turnedOn ? "on" : "off");
+                console.log(this, this.getTag(), this.turnedOn);
                 this.stateChanges++;
+            } else {
+                // Switch blocked
+                SwitchNode.stuckSound.stop();
+                SwitchNode.stuckSound.play();
             }
         }
     }
