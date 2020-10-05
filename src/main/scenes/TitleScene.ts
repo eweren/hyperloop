@@ -11,6 +11,7 @@ import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { ControllerEvent } from "../../engine/input/ControllerEvent";
 import { FadeToBlackTransition } from "../../engine/transitions/FadeToBlackTransition";
 import { MusicManager } from "../MusicManager";
+import { FadeTransition } from "../../engine/transitions/FadeTransition";
 
 export class TitleScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -23,6 +24,7 @@ export class TitleScene extends Scene<Hyperloop> {
     private textNode = new TextNode({ font: TitleScene.font, anchor: Direction.BOTTOM });
 
     public setup() {
+        this.inTransition = new FadeTransition();
         this.outTransition = new FadeToBlackTransition({ duration: 0.5, exclusive: true });
         this.imageNode.appendTo(this.rootNode);
         this.textNode
