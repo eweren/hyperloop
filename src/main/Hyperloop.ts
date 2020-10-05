@@ -40,6 +40,9 @@ export class Hyperloop extends Game {
     @asset("sounds/loops/hyperloopDrone.ogg")
     private static droneSound: Sound;
 
+    @asset("sounds/voice/trainAnnouncement.ogg")
+    private static introSound: Sound;
+
     private stageStartTime = 0;
     private stageTime = 0;
     private trainSpeed = 1000; // px per second
@@ -84,9 +87,6 @@ export class Hyperloop extends Game {
             new Dialog(Hyperloop.train2Dialog)
         ];
 
-        Hyperloop.droneSound.setVolume(0.5);
-        Hyperloop.droneSound.setLoop(true);
-        Hyperloop.droneSound.play();
     }
 
     public update(dt: number, time: number): void {
@@ -217,9 +217,8 @@ export class Hyperloop extends Game {
     }
 
     private updateIntro(): void {
-        // TODO have proper intro with text and/or sound to explain situation to player
         // Proceed to next stage
-        if (this.stageTime > 1) {
+        if (this.stageTime > 12) {
             // Fade in
             this.setStage(GameStage.DRIVE);
             return;
@@ -331,6 +330,9 @@ export class Hyperloop extends Game {
     }
 
     public initIntro(): void {
+        // Play sound
+        Hyperloop.introSound.play();
+        MusicManager.getInstance().setVolume(0.3);
         // Place player into train initially
         const player = this.getPlayer();
         const train = this.getTrain();
@@ -338,9 +340,15 @@ export class Hyperloop extends Game {
         // Make him stuck
         const col = new CollisionNode({ width: 400, height: 20 });
         col.moveTo(-20, -20).appendTo(train);
+        this.getFader().fadeOut({duration: 0});
     }
 
     public initDrive(): void {
+        this.getFader().fadeIn({duration: 3});
+        MusicManager.getInstance().setVolume(1);
+        Hyperloop.droneSound.setVolume(0.5);
+        Hyperloop.droneSound.setLoop(true);
+        Hyperloop.droneSound.play();
         this.startDialog(0);
     }
 
