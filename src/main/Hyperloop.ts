@@ -428,6 +428,7 @@ export class Hyperloop extends Game {
         if (!this.currentDialog) {
             if (!this.conversationEndTime) {
                 this.conversationEndTime = this.getTime();
+                this.handleCamera(0, 1);
             } else {
                 const p = (this.getTime() - this.conversationEndTime) / 3;
                 this.handleCamera(0, 1 - p);
@@ -455,7 +456,7 @@ export class Hyperloop extends Game {
                 deadNpc.remove();
                 this.currentPlayerNpc = Math.floor(Math.random() * this.npcs.length);
             }
-            if (this.trainIsReady) {
+            if (this.trainIsReady || Math.random() < 999) {
                 this.spawnNewPlayer();
                 return;
             }
