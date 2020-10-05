@@ -20,7 +20,6 @@ import { MonsterNode } from "../nodes/MonsterNode";
 import { RatNode } from "../nodes/RatNode";
 import { CorpseNode } from "../nodes/CorpseNode";
 import { FuseboxNode } from "../nodes/FuseboxNode";
-import { EnemyNode } from '../nodes/EnemyNode';
 
 export class GameScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
