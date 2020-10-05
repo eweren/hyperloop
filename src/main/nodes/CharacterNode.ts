@@ -95,12 +95,12 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
                 };
             },
             color: () => {
-                const g = rnd(160, 255), r = g + rnd(rnd(255 - g)), b = rnd(g);
+                const g = rnd(130, 255), r = g + rnd(rnd(255 - g)), b = rnd(g);
                 return `rgb(${r}, ${g}, ${b})`;
             },
-            size: rnd(0.5, 1.5),
+            size: rnd(0.7, 1.8),
             gravity: {x: 0, y: -100},
-            lifetime: () => rnd(0.2, 0.6),
+            lifetime: () => rnd(0.4, 0.8),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         }).appendTo(this);
     }
@@ -225,14 +225,14 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public emitBlood(x: number, y: number, angle: number, count = 1): void {
         const pos = this.getScenePosition();
         this.particleOffset = new Vector2(x - pos.x, y - pos.y);
-        this.particleAngle = angle;
+        this.particleAngle = -angle;
         this.bloodEmitter.emit(count);
     }
 
     public emitSparks(x: number, y: number, angle: number): void {
         const pos = this.getScenePosition();
         this.particleOffset = new Vector2(x - pos.x, y - pos.y);
-        this.particleAngle = angle;
+        this.particleAngle = -angle;
         this.sparkEmitter.emit(rnd(4, 10));
     }
 

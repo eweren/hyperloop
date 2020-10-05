@@ -26,7 +26,7 @@ export enum GameStage {
 export class Hyperloop extends Game {
     private stageStartTime = 0;
     private stageTime = 0;
-    private trainSpeed = 400; // px per second
+    private trainSpeed = 1000; // px per second
     private totalBrakeTime = 0; // calculated later; seconds train requires to brake down to standstill
     private playerTeleportLeft = 1100; // leftest point in tunnel where player is teleported
     private playerTeleportRight = 2970; // rightest point in tunnel where player is teleported
