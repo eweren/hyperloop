@@ -316,8 +316,8 @@ export class Hyperloop extends Game {
             pl.moveTo(spawnPoint.x, spawnPoint.y - 10);
             this.getCamera().setFollow(pl);
             const root = this.getGameScene().rootNode;
-            root.appendChild(pl);
             oldPlayer.remove();
+            root.appendChild(pl);
             // TODO leave remains of old player
         } else {
             // Game Over or sequence of new train replacing old one
