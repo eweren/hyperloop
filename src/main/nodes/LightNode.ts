@@ -37,7 +37,7 @@ export class LightNode extends SceneNode<Hyperloop> {
     private gradient: CanvasGradient | null = null;
 
     public constructor(args?: TiledSceneArgs) {
-        super({ anchor: Direction.TOP_LEFT, showBounds: true, ...args });
+        super({ anchor: Direction.TOP_LEFT, ...args });
         this.color = args?.tiledObject?.getOptionalProperty("color", "color")?.getValue() ?? new RGBColor(1, 1, 1);
         this.polygon = args?.tiledObject?.getPolygon() ?? null;
         this.intensity = args?.tiledObject?.getOptionalProperty("intensity", "int")?.getValue() ?? 100;
