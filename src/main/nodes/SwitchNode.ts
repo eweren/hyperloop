@@ -7,12 +7,16 @@ import { asset } from "../../engine/assets/Assets";
 
 export interface SwitchNodeArgs extends SceneNodeArgs {
     onlyOnce?: boolean;
+    spriteHidden?: boolean;
     onUpdate?: (state: boolean) => boolean | undefined;
 }
 
 export class SwitchNode extends InteractiveNode {
     @asset("sprites/wallLever.aseprite.json")
     private static readonly sprite: Aseprite;
+
+    @asset("sprites/empty.aseprite.json")
+    private static readonly noSprite: Aseprite;
 
     @asset("sounds/fx/breakerSwitch.ogg")
     private static readonly clickSound: Sound;
@@ -25,9 +29,9 @@ export class SwitchNode extends InteractiveNode {
     private stateChanges = 0;
     private onUpdate?: (state: boolean) => boolean | undefined;
 
-    public constructor({ onlyOnce = false, onUpdate, ...args }: SwitchNodeArgs) {
+    public constructor({ onlyOnce = false, onUpdate, spriteHidden = false, ...args }: SwitchNodeArgs) {
         super({
-            aseprite: SwitchNode.sprite,
+            aseprite: spriteHidden ? SwitchNode.noSprite : SwitchNode.sprite,
             anchor: Direction.CENTER,
             tag: "off",
             ...args

@@ -316,7 +316,7 @@ export class Hyperloop extends Game {
         if (this.stageTime > 12 && !this.fadeOutInitiated) {
             this.fadeOutInitiated = true;
             // this.getFader().fadeOut({ duration: 12 });
-            this.scenes.setScene(SuccessScene);
+            this.scenes.setScene(SuccessScene as any);
         }
     }
 
@@ -440,7 +440,8 @@ export class Hyperloop extends Game {
                     onUpdate: () => {
                         this.winGame();
                         return true;
-                    }
+                    },
+                    spriteHidden: true
                 });
                 endSwitch.setCaption("PRESS E TO ENTER");
                 player.getParent()?.appendChild(endSwitch);
