@@ -18,8 +18,9 @@ export class LoadingScene extends Scene<Hyperloop> {
     }
 
     public async activate(): Promise<void> {
-        await this.game.assets.load(this.updateProgress.bind(this));
-        this.game.scenes.setScene(TitleScene);
+        this.game.assets.load(this.updateProgress.bind(this)).then(() => {
+            this.game.scenes.setScene(TitleScene);
+        });
     }
 
     private updateProgress(total: number, loaded: number): void {
