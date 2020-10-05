@@ -381,6 +381,7 @@ export class PlayerNode extends CharacterNode {
 
     public die(): void {
         super.die();
+        this.playerArm?.hide();
         PlayerNode.dieScream.stop();
         PlayerNode.dieScream.play();
         // Slow fade out, then play as different character
@@ -404,6 +405,7 @@ export class PlayerNode extends CharacterNode {
                 }).insertBefore(this);
                 // TODO Jump to dialog sequence in train
                 this.getGame().startRespawnSequence();
+                this.playerArm?.show();
             });
         }
     }
