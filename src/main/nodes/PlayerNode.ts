@@ -203,9 +203,12 @@ export class PlayerNode extends CharacterNode {
             const parent = this.getParent()?.getScenePosition();
             this.setX(door.x - (parent?.x ?? 0));
             this.setY(door.y - (parent?.y ?? 0) + 40);
+            this.crosshairNode.hide();
             return;
         }
+        this.crosshairNode.show();
         this.setOpacity(1);
+        this.updateCrosshair();
 
         // Controls
         const input = this.getScene()!.game.input;
@@ -256,8 +259,6 @@ export class PlayerNode extends CharacterNode {
             }
         }
         this.updatePreviouslyPressed();
-
-        this.updateCrosshair();
     }
 
     public setAmmoToFull() {
