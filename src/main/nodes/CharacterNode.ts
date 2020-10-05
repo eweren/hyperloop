@@ -61,8 +61,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     private particleOffset: Vector2 = new Vector2(0, 0);
     private particleAngle = 0;
 
-
-
     public constructor(args: AsepriteNodeArgs) {
         super(args);
         this.velocity = new Vector2(0, 0);

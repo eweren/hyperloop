@@ -90,6 +90,7 @@ export class PlayerNode extends CharacterNode {
             tag: "idle",
             id: "player",
             sourceBounds: new Rect(6, 6, 8, 26),
+            cameraTargetOffset: new Vector2(0, -26),
             ...args
         });
         this.removeOnDie = false;

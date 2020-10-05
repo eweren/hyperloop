@@ -3,7 +3,7 @@ import { Game } from "../Game";
 import { Direction } from "../geom/Direction";
 import { AffineTransform, ReadonlyAffineTransform } from "../graphics/AffineTransform";
 import { Polygon2 } from "../graphics/Polygon2";
-import { Vector2, ReadonlyVector2 } from "../graphics/Vector2";
+import { Vector2, ReadonlyVector2, ReadonlyVector2Like } from "../graphics/Vector2";
 import { Bounds2 } from "../graphics/Bounds2";
 import { Animation } from "./animations/Animation";
 import { Size2 } from "../graphics/Size2";
@@ -43,7 +43,10 @@ export enum SceneNodeAspect {
     BOUNDS = 8,
 
     /** The scene bounds (in scene coordinate system) polygon must be recalculated. */
-    SCENE_BOUNDS = 16
+    SCENE_BOUNDS = 16,
+
+    /** Camera target position must be recalculated. */
+    CAMERA_TARGET = 32
 }
 
 /**
@@ -104,6 +107,12 @@ export interface SceneNodeArgs {
      * Defaults to 0 (No collision detection)
      */
     collisionMask?: number;
+
+    /**
+     * Optional camera target offset. When camera follows this node then it focuses the scene position plus this
+     * offset.
+     */
+    cameraTargetOffset?: ReadonlyVector2Like;
 }
 
 /**
@@ -141,12 +150,20 @@ export class SceneNode<T extends Game = Game> {
     /** The node position within the scene. */
     private scenePosition = new Vector2();
 
+    /** The position the camera focuses when following this node. */
+    private cameraTarget = new Vector2();
+
     /**
      * The anchor defining the origin of this scene node. When set to TOP_LEFT for example then the X/Y coordinates of
      * this node define where to display the upper left corner of it. When set to CENTER then the node is centered at
      * its X/Y coordinates.
      */
     private anchor: Direction;
+
+    /**
+     * The camera target offset. When the camera follows this node then it focuses the scene position plus this offset.
+     */
+    private readonly cameraTargetOffset: Vector2 = new Vector2();
 
     /**
      * The anchor of the local coordinate system. When set to CENTER for example then the X/Y coordinates or child
@@ -223,7 +240,7 @@ export class SceneNode<T extends Game = Game> {
      */
     public constructor({ id = null, x = 0, y = 0, width = 0, height = 0, anchor = Direction.CENTER,
             childAnchor = Direction.CENTER, opacity = 1, showBounds = false, layer = null, hidden = false,
-            collisionMask = 0 }: SceneNodeArgs = {}) {
+            collisionMask = 0, cameraTargetOffset }: SceneNodeArgs = {}) {
         this.id = id;
         this.position.setComponents(x, y);
         this.size.setDimensions(width, height);
@@ -234,6 +251,9 @@ export class SceneNode<T extends Game = Game> {
         this.layer = layer == null ? null : (1 << layer);
         this.hidden = hidden;
         this.collisionMask = collisionMask;
+        if (cameraTargetOffset != null) {
+            this.cameraTargetOffset.setVector(cameraTargetOffset);
+        }
     }
 
     /**
@@ -345,6 +365,20 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
+     * Returns the camera target point. This is the same as the scene position but uses the camera anchor instead of
+     * the normal node anchor.
+     *
+     * @return The camera target position.
+     */
+    public getCameraTarget(): ReadonlyVector2 {
+        if ((this.valid & SceneNodeAspect.CAMERA_TARGET) === 0) {
+            this.cameraTarget.setVector(this.getScenePosition()).add(this.cameraTargetOffset);
+            this.valid |= SceneNodeAspect.CAMERA_TARGET;
+        }
+        return this.cameraTarget;
+    }
+
+    /**
      * Invalidates the given scene node aspect. Depending on the aspect other aspects of this node, its parent node
      * or its child nodes are also invalidated.
      *
@@ -365,6 +399,7 @@ export class SceneNode<T extends Game = Game> {
         // When scene position is invalidated then scene transformation must also be invalidated
         if ((aspect & SceneNodeAspect.SCENE_POSITION) !== 0) {
             aspect |= SceneNodeAspect.SCENE_TRANSFORMATION;
+            aspect |= SceneNodeAspect.CAMERA_TARGET;
         }
 
         // When scene transformation is invalidated then scene bounds and rendering and scene positions of children
