@@ -40,7 +40,6 @@ export class Hyperloop extends Game {
     }
 
     public update(dt: number, time: number): void {
-        super.update(dt, time);
         this.stageTime = time - this.stageStartTime;
         switch (this.gameStage) {
             case GameStage.INTRO:
@@ -59,6 +58,7 @@ export class Hyperloop extends Game {
                 this.updateStuck();
                 break;
         }
+        super.update(dt, time);
     }
 
     public setStage(stage: GameStage): void {
@@ -101,7 +101,6 @@ export class Hyperloop extends Game {
         const train = this.getTrain();
         const offsetX = this.getTime() * this.trainSpeed;
         train.setX(450 + (offsetX % 324)); // 108px between two tunnel lights
-        this.getCamera().update(0);
         this.applyCamShake(1);
     }
 
@@ -192,7 +191,7 @@ export class Hyperloop extends Game {
         const angle = rnd(Math.PI * 2);
         const distance = rnd(force) ** 3;
         const dx = distance * Math.sin(angle), dy = distance * Math.cos(angle);
-        this.getCamera().moveBy(dx, dy);
+        this.getCamera().transform(m => m.setTranslation(dx, dy));
     }
 }
 
