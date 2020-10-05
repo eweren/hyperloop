@@ -26,7 +26,7 @@ export class FxManager {
     private loaded = false;
     private loadInterval: number;
     private currentSoundToPlay = -1;
-    private active = true;
+    private active = false;
 
     public constructor() {
         this.loaded = false;
@@ -47,6 +47,7 @@ export class FxManager {
     }
 
     public playSounds(): void {
+        this.active = true;
         if (this.loaded) {
             this.setupNewTimeout();
         }
