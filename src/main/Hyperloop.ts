@@ -4,9 +4,11 @@ import { Sound } from "../engine/assets/Sound";
 import { RGBColor } from "../engine/color/RGBColor";
 import { Game } from "../engine/Game";
 import { Vector2 } from "../engine/graphics/Vector2";
+import { ControllerIntent } from "../engine/input/ControllerIntent";
 import { Camera } from "../engine/scene/Camera";
 import { FadeToBlack } from "../engine/scene/camera/FadeToBlack";
 import { SceneNode } from "../engine/scene/SceneNode";
+import { isDev } from "../engine/util/env";
 import { clamp } from "../engine/util/math";
 import { rnd, rndItem } from "../engine/util/random";
 import { Dialog } from "./Dialog";
@@ -56,6 +58,7 @@ export class Hyperloop extends Game {
     private dialogs: Dialog[] = [];
     private npcs: CharacterNode[] = [];
     private currentPlayerNpc = 2;
+    private debug = false;
 
     // Game progress
     private charactersAvailable = 4;
@@ -194,9 +197,16 @@ export class Hyperloop extends Game {
     private updateDialog(): void {
         // Any key to proceed with next line
         const pressed = this.input.currentActiveIntents ?? 0;
+        const moveButtonPressed = (this.input.currentActiveIntents & ControllerIntent.PLAYER_MOVE_LEFT) > 0
+            || (this.input.currentActiveIntents & ControllerIntent.PLAYER_MOVE_RIGHT) > 0
+            || (this.input.currentActiveIntents & ControllerIntent.PLAYER_JUMP) > 0
+            || (this.input.currentActiveIntents & ControllerIntent.PLAYER_DROP) > 0;
+        if (moveButtonPressed) {
+            return;
+        }
         const prevPressed = this.dialogKeyPressed;
         this.dialogKeyPressed = pressed !== 0;
-        if (pressed && !prevPressed) {
+        if (pressed && !prevPressed || isDev() && this.debug) {
             this.nextDialogLine();
         }
     }
