@@ -1,3 +1,5 @@
+import { DialogJSON } from "*.dialog.json";
+import { asset } from "../engine/assets/Assets";
 import { RGBColor } from "../engine/color/RGBColor";
 import { Game } from "../engine/Game";
 import { Camera } from "../engine/scene/Camera";
@@ -33,7 +35,7 @@ export class Hyperloop extends Game {
     private playerTeleportRight = 2970; // rightest point in tunnel where player is teleported
     private teleportStep = 108; // distance between two tunnel lights
     private teleportMyTrainYDistance = 50; // only teleport when player is on roughly same height as train, not in rest of level
-    private dialogs: Dialog[];
+    private dialogs: Dialog[] = [];
     private npcs: CharacterNode[] = [];
 
     // Game progress
@@ -47,59 +49,26 @@ export class Hyperloop extends Game {
     private currentDialogLine = 0;
     private currentDialog: Dialog | null = null;
 
+    @asset("dialog/train.dialog.json")
+    private static readonly trainDialog: DialogJSON;
+
+    @asset("dialog/train2.dialog.json")
+    private static readonly train2Dialog: DialogJSON;
+
     public constructor() {
         super();
-
-        // TODO get from JSON instead
-        this.dialogs = [
-            new Dialog(["3 What a nice day!",
-            "1 Oh is it?",
-            // "3 You have no idea how excited I am!",
-            // "3 This is the first time I'm riding the hyperloop",
-            // "1 Oh...",
-            // "2 Well good luck with that",
-            // "4 Right? Always technical issues...",
-            // "3 Like what?",
-            // "4 Yeah I don't know. Let's just hope today is better.",
-            // "1 Everything's going to be fine. I can feel it.",
-            // "3 It's so fast!",
-            // "1 And so shaky",
-            // "3 Yeah but look at how fast it is though",
-            // "1 I'm sure we'll arrive in no time.",
-            // "5 Sure",
-            // "4 What could possibly go wrong",
-            // "2 Right?",
-            // "5 Is it just me or is the ride a little more rough than usual?"
-            ]),
-            new Dialog([
-                "1 What was that?",
-                "2 Was that a power failure?",
-                // "3 Well it surely doesn't look like a station...",
-                // "1 Maybe it was just a fuse?",
-                // "3 What about the pilot? Isn't there a pilot on board?",
-                // "5 No. Everything is automated, so nothing can go wrong.",
-                // "2 That's right. Humans make mistakes - machines don't!",
-                // "4 Should we go outside and look?",
-                // "5 I'm sure it will be fine. Let's just wait.",
-                // "1 No no. We need to fix this!",
-                // "1 If we wait too long another pod will crash right into us!",
-                // "5 You convinced me! You go outside",
-                // "1 But there's a vacuum!",
-                // "2 Look, we got these fancy suits. It will be fine!",
-                // "4 I'm afraid of spiders! I can't go out there!",
-                // "2 There are no spiders in a vacuum",
-                // "2 What about you, firstie",
-                // "3 Me?",
-                // "2 Yes yes. Go fix it!",
-                // "3 Of course!"
-            ])
-        ];
     }
 
     // Called by GameScene
     public setupScene(): void {
         this.spawnNPCs();
         this.setStage(GameStage.INTRO);
+        // Assets cannot be loaded in constructor because the LoadingScene 
+        // is not inistalized at constructor time and Assets are loaded in the LoadingScene
+        this.dialogs = [
+            new Dialog(Hyperloop.trainDialog),
+            new Dialog(Hyperloop.train2Dialog)
+        ];
     }
 
     public update(dt: number, time: number): void {
