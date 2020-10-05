@@ -11,7 +11,7 @@
  "layers":[
         {
          "compression":"zlib",
-         "data":"eJztnFtuEzEUhp2wA3hDokx3wUtLl5ZNcb8Vmh1wCQJVCGgXAIQ7SNjKmJ669vg+tif\/L30KLZmpk3zxeM6cZI8xtgdAJcSm9PgBoMSm9PgBoMSm9PhBWh5xHmfiyQjjj03p5x+k5S3nPudBYh5yjkcYf2xKP\/8gLcLn15x9xg5S8obBZzA+0ueOO5gS+AxKQHxOCnwGJSDrjaTAZ1AC4fM3ztUZY7vsDP7zgv+K2fhu4Acbx2cAKD85Tzl\/ODcJfzmHnF8R\/B7+24eVUPw1AGkRc7TO5+MKxgaAL1vu82GC7VOAMSQ6Xgb4HDPGVI87yfOW69ooKMc7Zva59Nhyk\/q6KKiDG5v6xoGE\/7woPaYx2OdzNQBToQNgQswBmBYMgKnQATAh9gGYEKb+E1dmBmL3izHUh+4xxTxu07Yxz1tMfwoAtZHi+ioAAAAAAADbQom8mDjPxYPkJ+kzzpxzifMycp9IvQl5PW9xbntwJ\/DvwGfEN6GOHHGW\/e2R5ucluX3F\/PwPRfe+gc\/blVCf33vwjLm7L28\/cD5uWJzw21OHbXWewuftSsjrueZcm5nxcd2EdJCzkB7atoHPSMjreZk78Znl5R6Dz4h\/Yl5XX3zOI1cMPiP+GdNn07pbrJVPyb9PeuAz4psafGbEV9Z7Nw9YP+vqKKt+n9TnkHoLrZ0g9Sb3uoF6sGZ6D3e4Y7uzs393Pdc3LLr+\/23nn6Y6iurzkl1E1lPUWoqudoLUm9B51lRnow6oHuQ4jxTnjbZ5W\/U55D7wuY2kXDe4rmlTIub8odqhYIe4aprnd\/rjgTwWwOc2k8uhsXx2mfNl7U\/4fNdyX9OcD5\/bSA6HqA+qz769Hyl6QMTxRPrs8v7SHX\/gcxvJMWdSH9Ragqg3qGtsWa9Tr2HTc7SYeR4+b09y+0ydFL0Yp+yiK7ReZzpHg8+IS3L7TJ0UtWSTt2P7PLTuWTH43Gpy+Lxm+rqBqCXr6guy\/jxUl0jts\/jdUP0ZPreZHD6nqjPTukQOn03HAtSf200On1NhWvfaaiRqLcTFZ7X+rB4r4HMbKe1siM\/y+qTpGqU6l7v4bKtLfyH7Q+qNzanQenEKZM+ozmd1PUDR1QhtPottXGvcSL1xmSPFuZJwgZ4v6fp+dP0btL681Nx36HdiuxCfVXT7Efug1zHF+nmo7w79dW3ExWfZw2nr6TFhqse5bJfCZ91+PrHz1zFtPXhYP7cRX59tvZumXh\/fbdRa31dm99mlH4l6uWb6v0XHKvcNn9uIr88u\/Tw5uDI7G5M6t0pMYzPV\/UL7UJB64+tz7n45F8Q5qu0ankudxHbuuzLsG6k3vj67fFYp9\/chmdYbsT6L+3WGtT58biO+Puu+20WtUfjUvsb2eej9KOZjeT6orsHp+h2pN74+u9Q3xOf4Qj5z6lOXDvWZ9vqdkH4\/2b8hH5+6Fqfrd6Te2Hxes825\/9xw\/m\/6TiT62VRdf\/NQvZp+51fv3rm6N9\/3ItRn2us3J\/1+Pt9pgNQbm8+un2camq9j6s+244JpTaC+J0mP3\/9ev470+6n1OvjcZlKsZ4UvuerP3Wz4uEDXBXRN4PueHOrXgM\/tJIXPY3yfXYh3uUDqzdguTAGk3pR2o0UQt\/wDNMrIDw==",
+         "data":"eJztnVty0zAUhk\/CDuCNGVp3F7y0dGnZFPcChXYHXMKU4VbaBQABCgMzlSYRPVUl62LJlpz\/n\/mmaSZ2neSLIh8fu9tEtA1AIXTN0NsPAKdrht5+ADhdM\/T2g7Q8ETzNxLMetr9rhn79QVreCR4JHidmT\/C+h+3vmqFff5AW6fNbwQ7RbkqOCD6D\/lE+N8LBlMBnMATM56TAZzAEbL6RFPgMhkD6\/FNwc0K0RReI32fiLnLxy8IZ9eMzAJzfgueCv4I7jH+Utu6xd\/Vv7xfC4O8BSIsco00++9Y9jsXjvghOBKeCQwNHBTxPsB44fHayISYem4JGzlkEtwwU7PN+guVTgG1I9H1p87nLvFrnLP3zTvK65To2CobjI5l9\/tRyvw8fCnhuLlIfFwVlcHs5Du8qxO+ztvvHwo4YqwEYCw0AI2IKwLggAMZCA8CI2AFgRNj6T3yZWOi6XmxDeZieU5fnbVu2y+v2B4ARkeL4KgAAAAAAAOvCEHk1cl7KJyl20ieCqeCa4HXHdSLlJub9vCu4F8D9yL8Dn5HQxDpyQMtzfQ4Yh4bb8ucbCvM\/FtPnBj6vV2J9\/hzAC\/J3X\/08puV5c4KZOnfOtazJU\/i8Xol5PxdkPo9NEeK6DeWgYKY8dC0Dn5GY9\/O6cOIb5eUhwWckPF3e11BC9iPnBJ+R8PTps23eLefKp+z2yQr4jISmBJ+J+Uor76YR82dTHWW+Wif3OabewmsnSLnJPW\/gHizI7KG8ZsrW5OJ2s2JzyayZ2K+lwvc\/bXUU3WfTNYZUPUWvpZhqJ0i5iR1nbXU27oDuQY79SLnf6Bq3dZ9jHgOf60jKeYPvnDYlcsxvqx1KNpirtnFev64WfK4zuRzqy2efMV\/V\/qTPDxyPtY358LmO5HCI+6D7HNr7kaIHRH6fKJ99Pl+m7x\/4XEdyjJncB72WIOsN+hxb1ev0Y9h8H63LOA+f1ye5feZOyl6MU7rqCq\/X2fbR4DPik9w+cydlLdnmbd8+t8175gSfa00OnxdkrhvIWrKpvqDqz211idQ+y\/va6s\/wuc7k8DlVnZnXJXL4bPsuQP253uTwORW2ea+rRqLXQnx8dv1fB\/hcR4Z2NsZndXzSdoxSH8t9fHbVpb+z9SHlxuVUbL04Bapn1OSzPh\/gmGqELp\/lMr41bqTc+IyRcl9JuqD\/3zC9Z8fUv8Hry4eGx7bdJ5eL8VnHtB65Dn4cU86f2\/ru0F9XR3x8Vj2crp4eG7Z6nM9yKXw2recrXT6O6erBw\/y5joT67OrdtPX6hC6j1\/p+kNtnn34k7uWCzH+Lb6taN3yuI6E++\/Tz5ODG5GKb9LFVYds2W90vtg8FKTehPuful\/NB7qO6juH51Elc+75zy7qRchPqs8+5Srmvh2Sbb3T1WT6uscz14XMdCfXZdG0XvUYRUvvq2+e2z6Mcj9X+oD4H5\/N3pNyE+uxT35Dn8cWccxpSl471mff6nbB+P9W\/oZ6fPhfn83ek3Lh8XtBy339q2f+3XROJn5tq6m9uq1fza36t3LtU9xbrnsX6zHv9pqzfL+SaBki5cfnsez5T23jdpf7s+l6wzQn0zyTr8fvf69ewfj+9Xgef60yK+az0JVf9uZm0fy\/weQGfE4R+Jtv6NeBzPUnhcx\/Xs4vxLhdIuenbhTGAlJuh3agRxC\/npjbA2g==",
          "encoding":"base64",
          "height":64,
          "id":2,
@@ -31,7 +31,7 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt3W9O2zAYx3G\/YFxk7B7lHIDEdgtAYg8nGLwC3mwXgJ2BV6XjIOUac9RUVMGxHceJ7fr7EVbF4\/z5IQXkOG5RCgAAAAAA7JujgH3ulVo8tO1Rt9iZgDld6Gv4sm1XXM8onL6e1WXbrhJnAcbS4w310LbHxFmArcOPV0mZAwAAAAAA7JeF\/jo2PKOYon748foy9DhD8+fmvufZJvX66rbn3TnltNUvep5tUq+vbnvenVNOU\/2gnWs\/0bWztn5Avcr6F7XR1E7bZupLndNW39J1daY+o15fvamdts3Ul0tOW71Zg2Jae0K9vrptPVJOOW31Zg2Kae0J9frqtvVIOeW01TGPhW7HBdT7DN0eAAAAAACUT1IHACKS1AGQta+bJn3fN5bzRrKS1AGQtXPdvk98Dt\/PFFp5bCMjcmD\/Xev2M3WI1tpjG5k6BDAjSR0AVXu19H0LOJ4E5gBcQj5rcyxJcE6g61a3u512G3hpBu0ERPb38\/cScpwbR79pvrHhM3eC8rnmn1PPPYeMsU185k5QvnM1\/fxzLH9SB0D2bPPPP+YM4kEC93vTu\/5j6F09SR2gQ1IHQNFs915Lx5qPrhj3Y9YTGNjmvoEx880x7sckwjFQr9zuv2Tg9nrMrJ4myIEy\/U4doEMMtVWn3B37PE+aCAgnhtra88\/2E8MVZEZG7PuL6xkT250j8bnXFOcWQDnE0sd4oj4+88Q5E0vfc8E\/F+LqW\/PjWgtk6g9ZP\/S+aeI6h2ttXaP031kAAACgT\/M8+m3A9kOfv++OvV8ZU1cr9XtS+kjqAChCrPc0jTm\/z5r73c4U7y0HtnyuP9d4QiLkQD3WSr0M2T7W\/POWaz1fbuv9kLfVwOs5hqXhf+4CAACgHv8BmVRO6g==",
+         "data":"eJzt3W9O2zAYx3G\/YFxk2z3KOQYS2y0AaXt2grFXwJvtAsAZeFU6DtJdY45wRZQ5tuM4tV1\/P8Kq+OXfUylUjuNQpQAAAAAAwKH5ELHNjVKrW9PudEtdE7BPF\/ocvjTtivMZldPns7o07SpzLcBcur+hbk27y1wLsHP89io56wAA+K3NZ7Vv3OP9a5N+FjNWAgAA2vbMdSJmWumfE8s9iiXy47fXJ1vu2s\/U+ktzM3Jvk7y93HW\/u6Q6XfnFyL1N8vZy1\/3ukuq05UemD\/VJZ2cmPyI\/6Lyvn7\/rZaem2Zblrt+V996XOhu+WfIm8y47Nc22rJQ6XXk3B8U294S8vdw1H6mkOl15NwfFNveEvL3cNR+ppDpdOfZjpdtJBfmYqesDAAAAAID6Se4CgIQkdwEo2vA5INtzQev9luQkuQtA0c51+7zwMUKfk9sErCMz6sDh+6rbt9xFGNuAdWTpIoA9ktwFoGnPjmUfI\/YnkXUAPjn+f4RkOCYwdK3bz167jjw1ozYCEnv8\/3eJ2c93z3LbeGMnZOwE9fONP+cee47pY9uEjJ2gfudq+fHnVH7nLgDFc40\/f9lnIQEkcrsXvekfut7Nk9wFDEjuAlA117XX2jPnYyjF9ZjzABausW9gznhziusxSbAPtKu06y+ZuL7uM6v7BepAnX7lLmBALNlmEA\/7Pg+LVgTEE0u2DfzYvqe7gsLIjG1\/cD5jYf0xkpBrTfGuAdRDHMvoT7QnZJy4ZOJY9lDx+0JaY3N+fHOBbMtj5g\/9fW3iO4Zvbl2n9r9ZAAAAYEx3P\/plwvpT77\/3+95812W7cj+TMkZyF4AqpHqmac7xQ+bc9xfmeLYc2Ak5\/3z9CUlQB9qxVeppyvqpxp93fPP5Spvvh7JtJp7PKawt37EKAACAdvwDnANSQw==",
          "encoding":"base64",
          "height":64,
          "id":3,
@@ -51,7 +51,7 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt3MERgjAQBdDtBSrRRqARpIRYllblzsCZU0xA35v5p1x+AX8TAQAAAPyT8eBt2LI2qgJfdcvce5eASqbM3LsEVLJkHr1LAAAAAAAAAE3YbwCc0xT2SPwOeyQAAAAAAAAAAAAAuKaSee4p\/kQGAAAAAAAAAAAAAAAAAAC4rHfE+nI3DgAANPYB8nwKxg==",
+         "data":"eJzt27ENwjAUBNC\/CwyCYJGwCGSEhEHYI0zFl2iQC2hMjOE96ZQiLq5IkeIcAQAAAPyT7Yt3m0fGlarAR+0zh9YloJIhc2xdAio5Zc6tSwAAAAAA0I1r6wJQke+ZXzJF7OZ8Xt6cs98A+E5D2CPRh\/zniLnIVGyd7ZEAAAAAAAAAAAAAoE\/Pe+FyJwwAAAAAAAAAAAAAAAAAAEA\/bhHj4t44AACwsjs91RH5",
          "encoding":"base64",
          "height":64,
          "id":5,
@@ -63,6 +63,20 @@
                  "type":"int",
                  "value":0
                 }],
+         "type":"tilelayer",
+         "visible":true,
+         "width":180,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "compression":"zlib",
+         "data":"eJztzrEJACAQBMEv3RK0EWv0g0+NDASdgYULLwIAAAAAAAAAAAAAAAAAgJf0bFS52903cGZuNgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf1klugQf",
+         "encoding":"base64",
+         "height":64,
+         "id":8,
+         "name":"assets3",
+         "opacity":1,
          "type":"tilelayer",
          "visible":true,
          "width":180,
@@ -138,7 +152,7 @@
                  "rotation":0,
                  "type":"collision",
                  "visible":true,
-                 "width":1044,
+                 "width":36,
                  "x":2196,
                  "y":162
                 }, 
@@ -415,8 +429,8 @@
                  "type":"powerswitch",
                  "visible":true,
                  "width":0,
-                 "x":2322,
-                 "y":378
+                 "x":2538,
+                 "y":221
                 }, 
                 {
                  "height":54,
@@ -1578,6 +1592,140 @@
                  "width":0,
                  "x":1426,
                  "y":711
+                }, 
+                {
+                 "height":11,
+                 "id":253,
+                 "name":"maintenanceCollision",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":112,
+                 "x":2257,
+                 "y":385
+                }, 
+                {
+                 "height":18,
+                 "id":254,
+                 "name":"maintenanceCollision",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":58,
+                 "x":2311,
+                 "y":367
+                }, 
+                {
+                 "height":4,
+                 "id":255,
+                 "name":"maintenanceCollision",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":41,
+                 "x":2239,
+                 "y":331
+                }, 
+                {
+                 "height":43,
+                 "id":256,
+                 "name":"maintenanceCollision",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":4,
+                 "x":2239,
+                 "y":288
+                }, 
+                {
+                 "height":54,
+                 "id":257,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":18,
+                 "x":2232,
+                 "y":234
+                }, 
+                {
+                 "height":54,
+                 "id":258,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":936,
+                 "x":2304,
+                 "y":234
+                }, 
+                {
+                 "height":36,
+                 "id":259,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":360,
+                 "x":2232,
+                 "y":162
+                }, 
+                {
+                 "height":36,
+                 "id":260,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":36,
+                 "x":2556,
+                 "y":198
+                }, 
+                {
+                 "height":6,
+                 "id":261,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":11,
+                 "x":2250,
+                 "y":282
+                }, 
+                {
+                 "height":11,
+                 "id":264,
+                 "name":"",
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":17,
+                 "x":2287,
+                 "y":257
                 }],
          "opacity":1,
          "properties":[
@@ -1587,7 +1735,7 @@
                  "value":0
                 }],
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -1789,29 +1937,6 @@
                  "width":0,
                  "x":2158.667,
                  "y":331.666666666667
-                }, 
-                {
-                 "height":0,
-                 "id":25,
-                 "name":"Light 3",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"color",
-                         "type":"color",
-                         "value":"#ffb4ffff"
-                        }, 
-                        {
-                         "name":"intensity",
-                         "type":"int",
-                         "value":500
-                        }],
-                 "rotation":0,
-                 "type":"light",
-                 "visible":true,
-                 "width":0,
-                 "x":2266.667,
-                 "y":332.333666666667
                 }, 
                 {
                  "height":0,
@@ -3128,6 +3253,75 @@
                  "width":0,
                  "x":3240,
                  "y":333
+                }, 
+                {
+                 "height":0,
+                 "id":266,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffff4040"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":2430,
+                 "y":208
+                }, 
+                {
+                 "height":0,
+                 "id":269,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":2277,
+                 "y":211
+                }, 
+                {
+                 "height":0,
+                 "id":270,
+                 "name":"Light 5",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#fffbffaf"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":400
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":2511,
+                 "y":211
                 }],
          "opacity":1,
          "properties":[
@@ -3161,8 +3355,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":8,
- "nextobjectid":252,
+ "nextlayerid":9,
+ "nextobjectid":271,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.1",
