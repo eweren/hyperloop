@@ -569,6 +569,21 @@ export class SceneNode<T extends Game = Game> {
     }
 
     /**
+     * Get the vertical center position of the scene node.
+     *
+     * @return The vertical center of the scene node.
+     */
+    public getCenterY(): number {
+        if (Direction.isTop(this.anchor)) {
+            return this.position.y + this.size.height / 2;
+        } else if (Direction.isBottom(this.anchor)) {
+            return this.position.y - this.size.height / 2;
+        } else {
+            return this.position.y;
+        }
+    }
+
+    /**
      * Get the bottom edge of the scene node.
      *
      * @return The bottom edge of the scene node.

@@ -26,6 +26,7 @@ import { MuzzleFlashNode } from "./MuzzleFlashNode";
 import { AmbientPlayerNode } from "./player/AmbientPlayerNode";
 import { TrainNode } from "./TrainNode";
 import { HealthNode } from "./player/HealthNode";
+import { AsepriteNode } from "../../engine/scene/AsepriteNode";
 
 const groundColors = [
     "#806057",
@@ -52,7 +53,10 @@ export class PlayerNode extends CharacterNode {
     private static readonly reloadSound: Sound;
 
     @asset("sprites/spacesuitbody.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
+
+    @asset("sprites/crosshair.aseprite.json")
+    private static readonly crossHairSprite: Aseprite;
 
     private flashLight: FlashlightNode;
 
@@ -86,6 +90,7 @@ export class PlayerNode extends CharacterNode {
     private lastHitTimestamp = 0;
 
     private dustParticles: ParticleNode;
+    private crosshairNode: AsepriteNode;
 
     public constructor(args?: SceneNodeArgs) {
         super({
@@ -130,6 +135,12 @@ export class PlayerNode extends CharacterNode {
             gravity: {x: 0, y: -100},
             lifetime: () => rnd(0.5, 0.8),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
+        }).appendTo(this);
+
+        this.crosshairNode = new AsepriteNode({
+            aseprite: PlayerNode.crossHairSprite,
+            tag: "idle",
+            layer: Layer.OVERLAY
         }).appendTo(this);
     }
 
@@ -223,7 +234,7 @@ export class PlayerNode extends CharacterNode {
         }
         // Battlemode
         if (this.battlemode) {
-            this.getScene()!.game.canvas.style.cursor = "none";
+            this.crosshairNode.setTag("battle");
         }
 
         // Spawn random dust particles while walking
@@ -378,7 +389,6 @@ export class PlayerNode extends CharacterNode {
         }
     }
 
-
     public getPersonalEnemies(): EnemyNode[] {
         const monsters = this.getScene()?.rootNode.getDescendantsByType(MonsterNode) ?? [];
         const rats = this.getScene()?.rootNode.getDescendantsByType(RatNode) ?? [];
@@ -391,6 +401,7 @@ export class PlayerNode extends CharacterNode {
     }
 
     private handlePointerMove(event: ScenePointerMoveEvent): void {
+        this.crosshairNode.moveTo(event.getX() - this.getX(), event.getY() - this.getCenterY());
         this.aimingAngle = new Vector2(event.getX(), event.getY())
             .sub(this.playerArm ? this.playerArm.getScenePosition() : this.getScenePosition())
             .getAngle();
@@ -398,15 +409,17 @@ export class PlayerNode extends CharacterNode {
 
     protected activate(): void {
         this.getScene()?.onPointerMove.connect(this.handlePointerMove, this);
+        this.getGame().canvas.style.cursor = "none";
     }
 
     protected deactivate(): void {
+        this.getGame().canvas.style.cursor = "";
         this.getScene()?.onPointerMove.disconnect(this.handlePointerMove, this);
     }
 
     protected endBattlemode(): void {
         super.endBattlemode();
-        this.getGame().canvas.style.cursor = "crosshair";
+        this.crosshairNode.setTag("idle");
     }
 
     private setupMouseKeyHandlers(): void {
