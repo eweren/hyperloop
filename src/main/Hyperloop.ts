@@ -255,7 +255,7 @@ export class Hyperloop extends Game {
 
     private updateIntro(): void {
         // Proceed to next stage
-        if (this.stageTime > 12) {
+        if (this.stageTime > 13) {
             // Fade in
             this.setStage(GameStage.DRIVE);
             return;
@@ -353,7 +353,7 @@ export class Hyperloop extends Game {
         // Fade out
         if (this.stageTime > 12 && !this.fadeOutInitiated) {
             this.fadeOutInitiated = true;
-           this.getFader().fadeOut({ duration: 12 }).then(() => this.scenes.setScene(SuccessScene as any));
+           this.getFader().fadeOut({ duration: 24 }).then(() => this.scenes.setScene(SuccessScene as any));
         }
     }
 
