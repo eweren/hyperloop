@@ -4,7 +4,7 @@ import { FadeToBlack } from "../engine/scene/camera/FadeToBlack";
 import { SceneNode } from "../engine/scene/SceneNode";
 import { rnd } from "../engine/util/random";
 import { Dialog } from "./Dialog";
-import { CharacterNode } from './nodes/CharacterNode';
+import { CharacterNode } from "./nodes/CharacterNode";
 import { CollisionNode } from "./nodes/CollisionNode";
 import { NpcNode } from "./nodes/NpcNode";
 import { PlayerNode } from "./nodes/PlayerNode";
@@ -72,6 +72,22 @@ export class Hyperloop extends Game {
             "4 What could possibly go wrong",
             "2 Right?",
             "5 Is it just me or is the ride a little more rough than usual?"
+            ]),
+            new Dialog([
+                "1 What was that?",
+                "2 Was that a power failure?",
+                "3 Everything is dark out there...",
+                "1 Maybe it was just a fuse?",
+                "3 What about the pilot? Isn't there a pilot on board?",
+                "5 No. Everything is automated, so nothing can go wrong.",
+                "2 That's right. Humans make mistakes - machines don't!",
+                "4 We have some maintanance overalls on board",
+                "5 Someone must go out there and fix this",
+                "4 I'm afraid of spiders! I can't go out there!",
+                "1 I think its just rats out there... Don't you hear them sqeak?",
+                "2 Should we draw straws?",
+                "3 I have a meeting at 11AM.",
+                "5 I've got a gun. I'll go."
             ])
         ];
         this.currentDialog = this.dialogs[0];
@@ -109,6 +125,14 @@ export class Hyperloop extends Game {
             switch(this.gameStage) {
                 case GameStage.INTRO:
                     this.initIntro();
+                    break;
+                case GameStage.DRIVE:
+                    this.initDrive();
+                    break;
+                case GameStage.BRAKE:
+                    break;
+                case GameStage.DIALOG:
+                    this.initConversation();
                     break;
                 case GameStage.STUCK:
                     this.initStuck();
@@ -230,7 +254,14 @@ export class Hyperloop extends Game {
         // Make him stuck
         const col = new CollisionNode({ width: 400, height: 20 });
         col.moveTo(-20, -20).appendTo(train);
+    }
+
+    public initDrive(): void {
         this.startDialog(0);
+    }
+
+    public initConversation(): void {
+        this.startDialog(1);
     }
 
     public initStuck(): void {
