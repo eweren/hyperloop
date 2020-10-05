@@ -30,6 +30,7 @@ export class TitleScene extends Scene<Hyperloop> {
             .moveTo(GAME_WIDTH / 2, GAME_HEIGHT - 64)
             .appendTo(this.rootNode);
 
+        TitleScene.bgm.setLoop(true);
         TitleScene.bgm.play();
     }
     public cleanup(): void {
