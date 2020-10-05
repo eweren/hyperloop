@@ -27,7 +27,7 @@ export class RatNode extends EnemyNode {
             aseprite: RatNode.sprite,
             anchor: Direction.BOTTOM,
             tag: "idle",
-            sourceBounds: new Rect(3, 6, 11, 6),
+            sourceBounds: new Rect(3, 6, 8, 4),
             ...args
         });
         this.targetPosition = this.getPosition();
