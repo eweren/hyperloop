@@ -9,6 +9,8 @@ import { ImageNode } from "../../engine/scene/ImageNode";
 import { GameScene } from "./GameScene";
 import { Sound } from "../../engine/assets/Sound";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
+import { ControllerEvent } from "../../engine/input/ControllerEvent";
+import { FadeToBlackTransition } from "../../engine/transitions/FadeToBlackTransition";
 
 export class TitleScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -24,6 +26,7 @@ export class TitleScene extends Scene<Hyperloop> {
     private textNode = new TextNode({ font: TitleScene.font, anchor: Direction.BOTTOM });
 
     public setup() {
+        this.outTransition = new FadeToBlackTransition({ duration: 0.5, exclusive: true });
         this.imageNode.appendTo(this.rootNode);
         this.textNode
             .setText("PRESS ENTER TO START")
@@ -33,6 +36,7 @@ export class TitleScene extends Scene<Hyperloop> {
         TitleScene.bgm.setLoop(true);
         TitleScene.bgm.play();
     }
+
     public cleanup(): void {
         this.rootNode.clear();
     }
@@ -41,11 +45,16 @@ export class TitleScene extends Scene<Hyperloop> {
         this.game.scenes.setScene(GameScene);
     }
 
-    public update(dt: number, time: number): void {
-        super.update(dt, time);
-        const input = this.game.input;
+    public activate(): void {
+        this.game.input.onButtonPress.connect(this.handleButton, this);
+    }
 
-        if (input.currentActiveIntents & ControllerIntent.CONFIRM) {
+    public deactivate(): void {
+        this.game.input.onButtonPress.disconnect(this.handleButton, this);
+    }
+
+    private handleButton(event: ControllerEvent): void {
+        if (event.intents & ControllerIntent.CONFIRM) {
             this.startGame();
         }
     }

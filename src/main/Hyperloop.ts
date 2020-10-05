@@ -97,7 +97,6 @@ export class Hyperloop extends Game {
 
     // Called by GameScene
     public setupScene(): void {
-        this.getFader().fadeOut({ duration: 0.001 });
         this.spawnNPCs();
         this.setStage(GameStage.INTRO);
     }
@@ -207,7 +206,6 @@ export class Hyperloop extends Game {
         // Proceed to next stage
         if (this.stageTime > 1) {
             // Fade in
-            this.getFader().fadeIn({ duration: 1     });
             this.setStage(GameStage.DRIVE);
             return;
         }
