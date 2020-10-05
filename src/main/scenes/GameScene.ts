@@ -22,6 +22,7 @@ import { CorpseNode } from "../nodes/CorpseNode";
 import { FuseboxNode } from "../nodes/FuseboxNode";
 import { SoundNode } from "../../engine/scene/SoundNode";
 import { Sound } from "../../engine/assets/Sound";
+import { TiledSoundNode } from "../nodes/TiledSoundNode";
 
 export class GameScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -46,7 +47,8 @@ export class GameScene extends Scene<Hyperloop> {
         "door": DoorNode,
         "corpse": CorpseNode,
         "powerswitch": SwitchNode,
-        "fusebox": FuseboxNode
+        "fusebox": FuseboxNode,
+        "sound": TiledSoundNode
     }});
 
     public setup() {
