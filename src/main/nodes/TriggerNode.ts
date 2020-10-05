@@ -31,6 +31,9 @@ export class TriggerNode extends InteractiveNode {
             case "fallDownTrigger":
                 this.spawnEnemies("firstEncounter");
                 break;
+            case "dropTrigger":
+                this.spawnEnemies("dropEncounter");
+                break;
             default:
                 this.spawnEnemies(this.getId() ?? "");
         }

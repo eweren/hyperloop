@@ -2230,6 +2230,41 @@
                  "width":0,
                  "x":882,
                  "y":573
+                }, 
+                {
+                 "height":0,
+                 "id":302,
+                 "name":"dropTrigger",
+                 "point":true,
+                 "rotation":0,
+                 "type":"trigger",
+                 "visible":true,
+                 "width":0,
+                 "x":1584,
+                 "y":715
+                }, 
+                {
+                 "height":0,
+                 "id":303,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"hitpoints",
+                         "type":"int",
+                         "value":140
+                        }, 
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"dropEncounter"
+                        }],
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":1585,
+                 "y":564
                 }],
          "opacity":1,
          "properties":[
@@ -3929,7 +3964,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":302,
+ "nextobjectid":304,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.1",
