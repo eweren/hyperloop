@@ -9,6 +9,7 @@ import { rnd } from "../../engine/util/random";
 import { Hyperloop } from "../Hyperloop";
 import { CollisionNode } from "./CollisionNode";
 import { InteractiveNode } from "./InteractiveNode";
+import { MarkNode } from "./MarkNode";
 import { ParticleNode, valueCurves } from "./ParticleNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
 import { PlayerLegsNode } from "./player/PlayerLegsNode";
@@ -72,7 +73,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             offset: () => this.particleOffset,
             velocity: () => {
                 const speed = rnd(20, 50);
-                const angle = this.particleAngle + rnd(-1, 1) * rnd(0, Math.PI / 2) ** 2;
+                const angle = this.particleAngle + rnd(-1, 1) * rnd(0, Math.PI / 2) * rnd(0, 1) ** 2;
                 return {
                     x: speed * Math.cos(angle),
                     y: speed * Math.sin(angle)
@@ -87,8 +88,8 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         this.sparkEmitter = new ParticleNode({
             offset: () => this.particleOffset,
             velocity: () => {
-                const speed = rnd(30, 60);
-                const angle = this.particleAngle + Math.PI + rnd(-1, 1) * rnd(0, Math.PI / 2) ** 2;
+                const speed = rnd(40, 80);
+                const angle = this.particleAngle + Math.PI + rnd(-1, 1) * rnd(0, Math.PI / 2) * rnd(0, 1) ** 2;
                 return {
                     x: speed * Math.cos(angle),
                     y: speed * Math.sin(angle)
@@ -100,7 +101,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             },
             size: rnd(0.7, 1.8),
             gravity: {x: 0, y: -100},
-            lifetime: () => rnd(0.4, 0.8),
+            lifetime: () => rnd(0.5, 0.9),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         }).appendTo(this);
     }
@@ -224,14 +225,14 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     public emitBlood(x: number, y: number, angle: number, count = 1): void {
         const pos = this.getScenePosition();
-        this.particleOffset = new Vector2(x - pos.x, y - pos.y);
+        this.particleOffset = new Vector2(x - pos.x, y - pos.y + 20);
         this.particleAngle = -angle;
         this.bloodEmitter.emit(count);
     }
 
     public emitSparks(x: number, y: number, angle: number): void {
         const pos = this.getScenePosition();
-        this.particleOffset = new Vector2(x - pos.x, y - pos.y);
+        this.particleOffset = new Vector2(x - pos.x, y - pos.y + 20);
         this.particleAngle = -angle;
         this.sparkEmitter.emit(rnd(4, 10));
     }
