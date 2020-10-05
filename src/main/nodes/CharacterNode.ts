@@ -6,9 +6,11 @@ import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode"
 import { cacheResult } from "../../engine/util/cache";
 import { clamp } from "../../engine/util/math";
 import { rnd } from "../../engine/util/random";
+import { Layer } from '../constants';
 import { Hyperloop } from "../Hyperloop";
 import { CollisionNode } from "./CollisionNode";
 import { InteractiveNode } from "./InteractiveNode";
+import { MarkNode } from './MarkNode';
 import { ParticleNode, valueCurves } from "./ParticleNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
 import { PlayerLegsNode } from "./player/PlayerLegsNode";
@@ -209,6 +211,8 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         const isColliding = this.getLineCollision(origin.x, origin.y, diffX, diffY, PROJECTILE_STEP_SIZE);
         if (isColliding) {
             const coord = this.storedCollisionCoordinate;
+            const markNode = new MarkNode({x: coord.x, y: coord.y});
+            this.getParent()?.appendChild(markNode);
             if (isColliding instanceof CharacterNode) {
                 const bounds = isColliding.getSceneBounds();
                 const headshot = (coord.y < bounds.minY + 0.25 * (bounds.height));
