@@ -1867,6 +1867,24 @@
                  "width":0,
                  "x":846,
                  "y":569
+                }, 
+                {
+                 "height":0,
+                 "id":282,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"fusebox"
+                        }],
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":1218,
+                 "y":681
                 }],
          "opacity":1,
          "properties":[
@@ -3543,7 +3561,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":282,
+ "nextobjectid":283,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.1",
