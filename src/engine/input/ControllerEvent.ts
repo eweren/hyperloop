@@ -90,6 +90,10 @@ export class ControllerEvent extends Object {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_RUN) === ControllerIntent.PLAYER_RUN;
     }
 
+    get isPlayerReload(): boolean {
+        return (this[intentsSymbol] & ControllerIntent.PLAYER_RELOAD) === ControllerIntent.PLAYER_RELOAD;
+    }
+
     get isPlayerDance1(): boolean {
         return (this[intentsSymbol] & ControllerIntent.PLAYER_DANCE_1) === ControllerIntent.PLAYER_DANCE_1;
     }
