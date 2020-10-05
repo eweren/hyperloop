@@ -84,8 +84,8 @@ export class Hyperloop extends Game {
 
     private spawnNPCs(): void {
         const train = this.getTrain();
-        const chars = [ new NpcNode(false), new NpcNode(true) ];
-        const positions = [ -50, 50 ];
+        const chars = [ new NpcNode(false), new NpcNode(true), new NpcNode(true), new NpcNode(false) ];
+        const positions = [ -80, -40, 60, 132 ];
         for (let i = 0; i < chars.length; i++) {
             chars[i].moveTo(positions[i], -20).appendTo(train);
         }
@@ -159,10 +159,10 @@ export class Hyperloop extends Game {
         // Place player into train initially
         const player = this.getPlayer();
         const train = this.getTrain();
-        player.moveTo(0, 50).appendTo(train);
+        player.moveTo(25, 50).appendTo(train);
         // Make him stuck
-        const col = new CollisionNode({ width: 20, height: 20 });
-        col.moveTo(-10, 40).appendTo(train);
+        const col = new CollisionNode({ width: 400, height: 20 });
+        col.moveTo(-20, -20).appendTo(train);
     }
 
     public initStuck(): void {
