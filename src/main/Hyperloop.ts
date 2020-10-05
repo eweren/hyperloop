@@ -10,7 +10,7 @@ import { FadeToBlack } from "../engine/scene/camera/FadeToBlack";
 import { SceneNode } from "../engine/scene/SceneNode";
 import { isDev } from "../engine/util/env";
 import { clamp } from "../engine/util/math";
-import { rnd, rndItem } from "../engine/util/random";
+import { rnd } from "../engine/util/random";
 import { Dialog } from "./Dialog";
 import { FxManager } from "./FxManager";
 import { MusicManager } from "./MusicManager";
@@ -22,6 +22,7 @@ import { PlayerNode } from "./nodes/PlayerNode";
 import { SpawnNode } from "./nodes/SpawnNode";
 import { SwitchNode } from "./nodes/SwitchNode";
 import { TrainNode } from "./nodes/TrainNode";
+import { GameOverScene } from "./scenes/GameOverScene";
 import { GameScene } from "./scenes/GameScene";
 import { LoadingScene } from "./scenes/LoadingScene";
 import { SuccessScene } from "./scenes/SuccessScene";
@@ -329,8 +330,7 @@ export class Hyperloop extends Game {
         // Fade out
         if (this.stageTime > 12 && !this.fadeOutInitiated) {
             this.fadeOutInitiated = true;
-            // this.getFader().fadeOut({ duration: 12 });
-            this.scenes.setScene(SuccessScene as any);
+           this.getFader().fadeOut({ duration: 12 }).then(() => this.scenes.setScene(SuccessScene as any));
         }
     }
 
@@ -402,12 +402,13 @@ export class Hyperloop extends Game {
         });
     }
 
-    public spawnRespawnSequence(): void {
+    public startRespawnSequence(): void {
         if (this.charactersAvailable > 0) {
             // TODO actual sequence before respawning
             this.spawnNewPlayer();
         } else {
             // Game Over or sequence of new train replacing old one
+            this.scenes.setScene(GameOverScene as any);
         }
     }
 
@@ -436,7 +437,8 @@ export class Hyperloop extends Game {
             // Remove NPC from scene
             const deadNpc = this.npcs.splice(this.currentPlayerNpc)[0];
             deadNpc.remove();
-            this.currentPlayerNpc = rndItem(this.npcs);
+            this.currentPlayerNpc = Math.floor(Math.random() * this.npcs.length);
+        }
     }
 
     public getTrainDoorCoordinate(): Vector2 {
