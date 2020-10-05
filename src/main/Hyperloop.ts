@@ -66,6 +66,7 @@ export class Hyperloop extends Game {
     public keyTaken = false; // key taken from corpse
     public fuseboxOn = false;
     private fadeOutInitiated = false;
+    private trainIsReady = false; // game basically won when this is true
 
     // Dialog
     private dialogKeyPressed = false;
@@ -403,6 +404,7 @@ export class Hyperloop extends Game {
 
     public spawnNewPlayer(): void {
         if (this.charactersAvailable > 0) {
+            // If everything has been done, then player died but still won
             this.charactersAvailable--;
             // TODO get proper spawn position
             const player = this.getPlayer();
@@ -412,13 +414,17 @@ export class Hyperloop extends Game {
             player.setAmmoToFull();
             player.reset();
             this.getCamera().setFollow(player);
-            // Spawn enemies at random subset of spawn points behind "first encounter"
-            SpawnNode.getForTrigger(player, "after", true).forEach(s => {
-                if (rnd() < 0.25) s.spawnEnemy();
-            });
-            SpawnNode.getForTrigger(player, "before", true).forEach(s => {
-                if (rnd() < 0.25) s.spawnEnemy();
-            });
+            if (this.trainIsReady) {
+                this.winGame();
+            } else {
+                // Spawn enemies at random subset of spawn points behind "first encounter"
+                SpawnNode.getForTrigger(player, "after", true).forEach(s => {
+                    if (rnd() < 0.25) s.spawnEnemy();
+                });
+                SpawnNode.getForTrigger(player, "before", true).forEach(s => {
+                    if (rnd() < 0.25) s.spawnEnemy();
+                });
+            }
             // Remove NPC from scene
             const deadNpc = this.npcs.splice(this.currentPlayerNpc)[0];
             deadNpc.remove();
@@ -458,6 +464,7 @@ export class Hyperloop extends Game {
                 });
                 endSwitch.setCaption("PRESS E TO ENTER");
                 player.getParent()?.appendChild(endSwitch);
+                this.trainIsReady = true;
                 // Spawn the enemies
                 SpawnNode.getForTrigger(player, "afterSwitch", true).forEach(s => s.spawnEnemy());
                 return true;
