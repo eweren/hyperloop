@@ -9,18 +9,19 @@ import { ImageNode } from "../../engine/scene/ImageNode";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { ControllerEvent } from "../../engine/input/ControllerEvent";
 import { FadeToBlackTransition } from "../../engine/transitions/FadeToBlackTransition";
+import { MusicManager } from "../MusicManager";
 import { FadeTransition } from "../../engine/transitions/FadeTransition";
 import { TitleScene } from "./TitleScene";
 
-export class GameOverScene extends Scene<Hyperloop> {
+export class SuccessScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
     private static font: BitmapFont;
 
-    @asset("images/gameover-image.png")
+    @asset("images/success-image.png")
     private static image: HTMLImageElement;
 
-    private imageNode: ImageNode = new ImageNode({ image: GameOverScene.image, anchor: Direction.TOP_LEFT});
-    private textNode = new TextNode({ font: GameOverScene.font, anchor: Direction.BOTTOM });
+    private imageNode: ImageNode = new ImageNode({ image: SuccessScene.image, anchor: Direction.TOP_LEFT});
+    private textNode = new TextNode({ font: SuccessScene.font, anchor: Direction.BOTTOM });
 
     public setup() {
         this.inTransition = new FadeTransition();
@@ -30,6 +31,7 @@ export class GameOverScene extends Scene<Hyperloop> {
             .setText("PRESS ENTER TO RETURN TO MENU")
             .moveTo(GAME_WIDTH / 2, GAME_HEIGHT - 64)
             .appendTo(this.rootNode);
+        MusicManager.getInstance().loopTrack(0);
     }
 
     public cleanup(): void {

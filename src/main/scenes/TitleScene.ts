@@ -45,11 +45,9 @@ export class TitleScene extends Scene<Hyperloop> {
 
     public activate(): void {
         this.game.input.onButtonPress.connect(this.handleButton, this);
-        this.onPointerDown.connect(this.startGame, this);
     }
 
     public deactivate(): void {
-        this.onPointerDown.disconnect(this.startGame, this);
         this.game.input.onButtonPress.disconnect(this.handleButton, this);
     }
 
