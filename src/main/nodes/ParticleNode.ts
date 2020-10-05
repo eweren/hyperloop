@@ -93,8 +93,8 @@ export class ParticleNode extends SceneNode<Hyperloop> {
 
         const particle = new Particle(
             this,
-            this.x + off.x,
-            this.y + off.y,
+            off.x,
+            off.y,
             v.x,
             v.y,
             this.angleGenerator(),
@@ -180,7 +180,7 @@ export class Particle {
 
         // Movement
         this.x += this.vx * dt;
-        this.y += this.vy * dt;
+        this.y -= this.vy * dt;
         this.angle += this.angleSpeed * dt;
 
         return false;
@@ -189,7 +189,7 @@ export class Particle {
     public draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.globalAlpha = this.alpha * this.emitter.alphaCurve.get(this.progress);
-        ctx.translate(this.x, -this.y);
+        ctx.translate(this.x, this.y);
 
         if (this.angle) {
             ctx.rotate(this.angle);

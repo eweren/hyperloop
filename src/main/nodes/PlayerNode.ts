@@ -104,7 +104,7 @@ export class PlayerNode extends CharacterNode {
         (<any>window)["player"] = this;
 
         this.dustEmitter = new ParticleNode({
-            y: 20, // TODO Warum greift das nicht!
+            y: this.getHeight() / 2,
             velocity: () => ({ x: rnd(-1, 1) * 26, y: rnd(0.7, 1) * 45 }),
             color: () => rndItem(groundColors),
             size: rnd(1, 2),
