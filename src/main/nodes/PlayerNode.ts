@@ -77,7 +77,7 @@ export class PlayerNode extends CharacterNode {
     private readonly reloadDelay = 2200;
     private leftMouseDown = false;
 
-    private dustEmitter: ParticleNode;
+    private dustParticles: ParticleNode;
 
     public constructor(args?: SceneNodeArgs) {
         super({
@@ -103,7 +103,7 @@ export class PlayerNode extends CharacterNode {
         this.setupMouseKeyHandlers();
         (<any>window)["player"] = this;
 
-        this.dustEmitter = new ParticleNode({
+        this.dustParticles = new ParticleNode({
             y: this.getHeight() / 2,
             velocity: () => ({ x: rnd(-1, 1) * 26, y: rnd(0.7, 1) * 45 }),
             color: () => rndItem(groundColors),
@@ -209,7 +209,7 @@ export class PlayerNode extends CharacterNode {
         if (this.isVisible()) {
             if (this.getTag() === "walk") {
                 if (timedRnd(dt, 0.2)) {
-                    this.dustEmitter.emit(1);
+                    this.dustParticles.emit(1);
                 }
             }
         }
