@@ -1634,12 +1634,6 @@
                  "id":246,
                  "name":"Enemy",
                  "point":true,
-                 "properties":[
-                        {
-                         "name":"trigger",
-                         "type":"string",
-                         "value":"after"
-                        }],
                  "rotation":0,
                  "type":"rat",
                  "visible":true,
@@ -2121,6 +2115,42 @@
                  "width":0,
                  "x":1946,
                  "y":390
+                }, 
+                {
+                 "height":0,
+                 "id":294,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"after"
+                        }],
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":1692,
+                 "y":950
+                }, 
+                {
+                 "height":0,
+                 "id":295,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"after"
+                        }],
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":1831,
+                 "y":721
                 }],
          "opacity":1,
          "properties":[
@@ -2146,7 +2176,7 @@
                  "rotation":0,
                  "type":"cameraLimit",
                  "visible":true,
-                 "width":2952,
+                 "width":3240,
                  "x":0,
                  "y":54
                 }, 
@@ -3797,7 +3827,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":294,
+ "nextobjectid":296,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.1",
