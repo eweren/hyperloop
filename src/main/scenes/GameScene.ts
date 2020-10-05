@@ -23,6 +23,7 @@ import { FuseboxNode } from "../nodes/FuseboxNode";
 import { TiledSoundNode } from "../nodes/TiledSoundNode";
 import { FadeToBlackTransition } from "../../engine/transitions/FadeToBlackTransition";
 import { SpawnNode } from "../nodes/SpawnNode";
+import { TriggerNode } from "../nodes/TriggerNode";
 
 export class GameScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -46,7 +47,8 @@ export class GameScene extends Scene<Hyperloop> {
         "powerswitch": SwitchNode,
         "fusebox": FuseboxNode,
         "sound": TiledSoundNode,
-        "enemySpawn": SpawnNode
+        "enemySpawn": SpawnNode,
+        "trigger": TriggerNode
     }});
 
     public setup() {
