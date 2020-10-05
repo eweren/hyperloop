@@ -189,6 +189,7 @@ export class PlayerNode extends CharacterNode {
         if (this.canInteract(ControllerIntent.PLAYER_RELOAD)) {
             this.reload();
         }
+        this.syncArmAndLeg();
         // Shoot
         if (this.canInteract(ControllerIntent.PLAYER_ACTION) || this.leftMouseDown) {
             this.leftMouseDown = false;
@@ -208,8 +209,6 @@ export class PlayerNode extends CharacterNode {
         if (this.battlemode) {
             this.getScene()!.game.canvas.style.cursor = "none";
         }
-
-        this.syncArmAndLeg();
 
         // Spawn random dust particles while walking
         if (this.isVisible()) {
@@ -243,7 +242,7 @@ export class PlayerNode extends CharacterNode {
             this.lastShotTime = now();
             this.ammo--;
             this.muzzleFlash.fire();
-            super.shoot(this.aimingAngleNonNegative, 35, this.flashLight.getScenePosition());
+            super.shoot(this.aimingAngleNonNegative, 35, this.muzzleFlash.getScenePosition());
         }
     }
 
@@ -300,6 +299,7 @@ export class PlayerNode extends CharacterNode {
             const backwards = this.direction === 1 && this.aimingAngle < 0 || this.direction === -1 && this.aimingAngle >= 0;
             this.playerLeg?.getAseprite().setDirection(backwards ? "reverse" : "forward");
             // Transform flashlight to match scaling and rotation of the arm.
+
             this.flashLight.transform(f => {
                 if (this.isMirrorX()) {
                     this.flashLight.setY(-3);
