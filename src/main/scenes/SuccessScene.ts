@@ -9,7 +9,6 @@ import { ImageNode } from "../../engine/scene/ImageNode";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { ControllerEvent } from "../../engine/input/ControllerEvent";
 import { FadeToBlackTransition } from "../../engine/transitions/FadeToBlackTransition";
-import { MusicManager } from "../MusicManager";
 import { FadeTransition } from "../../engine/transitions/FadeTransition";
 import { TitleScene } from "./TitleScene";
 
