@@ -2130,7 +2130,7 @@
                  "value":1
                 }],
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -2146,7 +2146,7 @@
                  "rotation":0,
                  "type":"cameraLimit",
                  "visible":true,
-                 "width":2952,
+                 "width":3240,
                  "x":0,
                  "y":54
                 }, 
@@ -2169,7 +2169,7 @@
                  "value":0
                 }],
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
