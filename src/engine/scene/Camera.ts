@@ -24,7 +24,7 @@ function getCameraTargetPosition(target: CameraTarget): ReadonlyVector2Like {
     if (target instanceof Function) {
         return getCameraTargetPosition(target());
     } else if (target instanceof SceneNode) {
-        return target.getScenePosition();
+        return target.getCameraTarget();
     } else {
         return target;
     }
