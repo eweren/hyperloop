@@ -8,6 +8,7 @@ import { Layer, STANDARD_FONT } from "../constants";
 import { Hyperloop } from "../Hyperloop";
 import { CharacterNode } from "./CharacterNode";
 import { PlayerNode } from "./PlayerNode";
+import { TrainNode } from "./TrainNode";
 
 export abstract class InteractiveNode extends AsepriteNode<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -86,7 +87,8 @@ export abstract class InteractiveNode extends AsepriteNode<Hyperloop> {
     }
 
     protected getPlayer(): PlayerNode | undefined {
-        return this.getScene()?.rootNode.getDescendantsByType(PlayerNode)[0];
+        return this.getScene()?.rootNode.getDescendantsByType(PlayerNode)
+                .filter(p => p.isAlive() && !(p.getParent() instanceof TrainNode))[0];
     }
 
     public draw(context: CanvasRenderingContext2D): void {
