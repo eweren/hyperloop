@@ -51,7 +51,7 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt27ENwjAUBNC\/CwyCYJGwCGSEhEHYI0zFl2iQC2hMjOE96ZQiLq5IkeIcAQAAAPyT7Yt3m0fGlarAR+0zh9YloJIhc2xdAio5Zc6tSwAAAAAA0I1r6wJQke+ZXzJF7OZ8Xt6cs98A+E5D2CPRh\/zniLnIVGyd7ZEAAAAAAAAAAAAAoE\/Pe+FyJwwAAAAAAAAAAAAAAAAAAEA\/bhHj4t44AACwsjs91RH5",
+         "data":"eJzt27ENwjAUBNC\/CwwSwSJhEcgICYOwR5gKSxEScgGNE2N4TzqlcIorUri4RAAAAAD\/ZP\/mbLdk2KgKrOqQcqxdAgrpU061S0Ah55RL7RIAAAAAADTjVrsAFOR75peMEd2UntcP79lvAHynPuyRaEO6c8SUZcy2zvZIAAAAAAAAAAAAANCm171wvhMGAADKeN65AQAAAAAAAAAAAAAAYE33iGH23zgAALCxB\/ziExs=",
          "encoding":"base64",
          "height":64,
          "id":5,
@@ -1850,6 +1850,23 @@
                  "width":0,
                  "x":2169,
                  "y":143
+                }, 
+                {
+                 "height":27,
+                 "id":280,
+                 "name":"maintenanceCollision",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":36,
+                 "x":1566,
+                 "y":745
                 }],
          "opacity":1,
          "properties":[
@@ -3526,7 +3543,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":280,
+ "nextobjectid":281,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.1",
