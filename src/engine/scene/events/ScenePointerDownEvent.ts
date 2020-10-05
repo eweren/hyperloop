@@ -37,4 +37,8 @@ export class ScenePointerDownEvent<T extends Game = Game, A = void> extends Scen
         canvas.addEventListener("pointercancel", listener);
         return cleanup;
     }
+
+    public getButton(): number {
+        return this.event.button;
+    }
 }

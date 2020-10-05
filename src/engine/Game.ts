@@ -44,6 +44,9 @@ export abstract class Game {
         document.body.appendChild(this.canvas);
         this.updateCanvasSize();
         window.addEventListener("resize", () => this.updateCanvasSize());
+        canvas.addEventListener("contextmenu", event => {
+            event.preventDefault();
+        });
 
         // Use Alt+Enter to toggle fullscreen mode.
         window.addEventListener("keydown", async (event) => {

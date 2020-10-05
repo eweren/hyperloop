@@ -1,6 +1,6 @@
 import { DialogJSON } from "*.dialog.json";
 import { asset } from "../engine/assets/Assets";
-import { Sound } from '../engine/assets/Sound';
+import { Sound } from "../engine/assets/Sound";
 import { RGBColor } from "../engine/color/RGBColor";
 import { Game } from "../engine/Game";
 import { Camera } from "../engine/scene/Camera";
