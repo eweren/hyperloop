@@ -15,15 +15,12 @@ export class TriggerNode extends InteractiveNode {
             aseprite: TriggerNode.sprite,
             ...args
         }, "");
-        console.log("yes");
-        console.log(this);
     }
 
     public update(dt: number, time: number): void {
         super.update(dt, time);
         const target = this.getTarget();
         if (target && !this.triggered) {
-            console.log("Triggered!");
             this.trigger();
         }
     }
