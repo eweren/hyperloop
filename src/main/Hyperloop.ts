@@ -49,7 +49,7 @@ export class Hyperloop extends Game {
 
     private stageStartTime = 0;
     private stageTime = 0;
-    private trainSpeed = 1000; // px per second
+    private trainSpeed = 400; // px per second
     private totalBrakeTime = 0; // calculated later; seconds train requires to brake down to standstill
     private playerTeleportLeft = 1100; // leftest point in tunnel where player is teleported
     private playerTeleportRight = 2970; // rightest point in tunnel where player is teleported
@@ -86,7 +86,7 @@ export class Hyperloop extends Game {
     // Called by GameScene
     public setupScene(): void {
         this.spawnNPCs();
-        this.setStage(GameStage.DIALOG); // TODO INTRO
+        this.setStage(GameStage.INTRO);
         // Assets cannot be loaded in constructor because the LoadingScene
         // is not initialized at constructor time and Assets are loaded in the LoadingScene
         this.dialogs = [
@@ -235,7 +235,7 @@ export class Hyperloop extends Game {
 
     private updateIntro(): void {
         // Proceed to next stage
-        if (this.stageTime > 2) { // TODO change 2 to 12 for proper intro
+        if (this.stageTime > 12) {
             // Fade in
             this.setStage(GameStage.DRIVE);
             return;
@@ -406,7 +406,6 @@ export class Hyperloop extends Game {
         if (this.charactersAvailable > 0) {
             // If everything has been done, then player died but still won
             this.charactersAvailable--;
-            // TODO get proper spawn position
             const player = this.getPlayer();
             const spawnPoint = this.getTrainDoorCoordinate();
             player.moveTo(spawnPoint.x, spawnPoint.y);
@@ -488,7 +487,6 @@ export class Hyperloop extends Game {
         train.showInner();
         FxManager.getInstance().stop();
         MusicManager.getInstance().loopTrack(3);
-        // TODO player follow NPC
     }
 
     public getPlayer(): PlayerNode {
