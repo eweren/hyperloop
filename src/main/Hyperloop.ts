@@ -457,7 +457,7 @@ export class Hyperloop extends Game {
 
     public startRespawnSequence(): void {
         console.log("starting respawn with ", this.charactersAvailable, " remaining");
-        if (this.charactersAvailable > 0) {
+        if (this.charactersAvailable > 1) {
             // Remove NPC from scene
             this.charactersAvailable--;
             const deadNpc = this.npcs.splice(this.currentPlayerNpc, 1)[0];
