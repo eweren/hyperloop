@@ -1738,6 +1738,118 @@
                  "width":0,
                  "x":1033,
                  "y":819
+                }, 
+                {
+                 "height":0,
+                 "id":275,
+                 "name":"Fan",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":0.2
+                        }, 
+                        {
+                         "name":"range",
+                         "type":"float",
+                         "value":150
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"fan"
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":2430,
+                 "y":355
+                }, 
+                {
+                 "height":0,
+                 "id":276,
+                 "name":"Halogen",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":0.8
+                        }, 
+                        {
+                         "name":"range",
+                         "type":"float",
+                         "value":150
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"halogen"
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":2430,
+                 "y":217
+                }, 
+                {
+                 "height":0,
+                 "id":278,
+                 "name":"ElektroMotor",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":1
+                        }, 
+                        {
+                         "name":"range",
+                         "type":"float",
+                         "value":300
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"electronicmotor"
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":2025,
+                 "y":379
+                }, 
+                {
+                 "height":0,
+                 "id":279,
+                 "name":"Halogen",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":0.8
+                        }, 
+                        {
+                         "name":"range",
+                         "type":"float",
+                         "value":150
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"halogen"
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":2169,
+                 "y":143
                 }],
          "opacity":1,
          "properties":[
@@ -3414,10 +3526,10 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":275,
+ "nextobjectid":280,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.4.2",
+ "tiledversion":"1.4.1",
  "tileheight":18,
  "tilesets":[
         {
