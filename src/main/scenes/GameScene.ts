@@ -64,9 +64,9 @@ export class GameScene extends Scene<Hyperloop> {
         // new SwitchNode({ onlyOnce: false, onUpdate: (state) => door.setLocked(!state) }).moveTo(1130, 380).appendTo(this.mapNode);
         // new SwitchNode({ onlyOnce: true }).moveTo(250, 380).appendTo(this.mapNode);
         // Test enemies
-        new MonsterNode().moveTo(2400, 360).appendTo(this.mapNode);
-        new MonsterNode().moveTo(2500, 360).appendTo(this.mapNode);
-        new MonsterNode().moveTo(2800, 360).appendTo(this.mapNode);
+        // new MonsterNode().moveTo(2400, 360).appendTo(this.mapNode);
+        // new MonsterNode().moveTo(2500, 360).appendTo(this.mapNode);
+        // new MonsterNode().moveTo(2800, 360).appendTo(this.mapNode);
 
         if (isDev()) {
             this.rootNode.appendChild(new FpsCounterNode({

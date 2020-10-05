@@ -27,6 +27,7 @@ import { AmbientPlayerNode } from "./player/AmbientPlayerNode";
 import { TrainNode } from "./TrainNode";
 import { HealthNode } from "./player/HealthNode";
 import { AsepriteNode } from "../../engine/scene/AsepriteNode";
+import { ScenePointerDownEvent } from "../../engine/scene/events/ScenePointerDownEvent";
 
 const groundColors = [
     "#806057",
@@ -87,6 +88,7 @@ export class PlayerNode extends CharacterNode {
     private readonly reloadDelay = 2200;
     private readonly timeoutForRecover = 3000;
     private leftMouseDown = false;
+    private rightMouseDown = false;
     private lastHitTimestamp = 0;
 
     private dustParticles: ParticleNode;
@@ -124,7 +126,6 @@ export class PlayerNode extends CharacterNode {
         this.playerLeg?.appendChild(ambientPlayerLight);
         this.playerArm?.appendChild(this.flashLight);
         this.flashLight?.appendChild(this.muzzleFlash);
-        this.setupMouseKeyHandlers();
         (<any>window)["player"] = this;
 
         this.dustParticles = new ParticleNode({
@@ -220,7 +221,8 @@ export class PlayerNode extends CharacterNode {
             PlayerNode.footsteps.stop(0.3);
         }
         // Reload
-        if (this.canInteract(ControllerIntent.PLAYER_RELOAD)) {
+        if (this.canInteract(ControllerIntent.PLAYER_RELOAD) || this.rightMouseDown) {
+            this.rightMouseDown = false;
             this.reload();
         }
         this.syncArmAndLeg();
@@ -413,15 +415,31 @@ export class PlayerNode extends CharacterNode {
             .getAngle();
     }
 
+    private handlePointerDown(event: ScenePointerDownEvent): void {
+        if (event.getButton() === 0) {
+            this.leftMouseDown = true;
+            event.onPointerEnd.connect(() => {
+                this.leftMouseDown = false;
+            });
+        } else if (event.getButton() === 2) {
+            this.rightMouseDown = true;
+            event.onPointerEnd.connect(() => {
+                this.rightMouseDown = false;
+            });
+        }
+    }
+
     protected activate(): void {
         this.crosshairNode.appendTo(this.getScene()!.rootNode);
         this.getScene()?.onPointerMove.connect(this.handlePointerMove, this);
+        this.getScene()?.onPointerDown.connect(this.handlePointerDown, this);
         this.getGame().canvas.style.cursor = "none";
     }
 
     protected deactivate(): void {
         this.getGame().canvas.style.cursor = "";
         this.getScene()?.onPointerMove.disconnect(this.handlePointerMove, this);
+        this.getScene()?.onPointerDown.disconnect(this.handlePointerDown, this);
         this.crosshairNode.remove();
     }
 
@@ -435,18 +453,5 @@ export class PlayerNode extends CharacterNode {
             tag = "battle";
         }
         this.crosshairNode.setTag(tag);
-    }
-
-    private setupMouseKeyHandlers(): void {
-        window.addEventListener("mousedown", event => {
-            if (event.button === 0) {
-                this.leftMouseDown = true;
-            }
-        });
-        window.addEventListener("mouseup", event => {
-            if (event.button === 0) {
-                this.leftMouseDown = false;
-            }
-        });
     }
 }
