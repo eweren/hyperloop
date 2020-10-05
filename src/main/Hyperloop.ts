@@ -8,7 +8,7 @@ import { Camera } from "../engine/scene/Camera";
 import { FadeToBlack } from "../engine/scene/camera/FadeToBlack";
 import { SceneNode } from "../engine/scene/SceneNode";
 import { clamp } from "../engine/util/math";
-import { rnd } from "../engine/util/random";
+import { rnd, rndItem } from "../engine/util/random";
 import { Dialog } from "./Dialog";
 import { FxManager } from "./FxManager";
 import { MusicManager } from "./MusicManager";
@@ -22,6 +22,7 @@ import { SwitchNode } from "./nodes/SwitchNode";
 import { TrainNode } from "./nodes/TrainNode";
 import { GameScene } from "./scenes/GameScene";
 import { LoadingScene } from "./scenes/LoadingScene";
+import { SuccessScene } from "./scenes/SuccessScene";
 
 export enum GameStage {
     NONE = 0,
@@ -54,6 +55,7 @@ export class Hyperloop extends Game {
     private teleportMyTrainYDistance = 50; // only teleport when player is on roughly same height as train, not in rest of level
     private dialogs: Dialog[] = [];
     private npcs: CharacterNode[] = [];
+    private currentPlayerNpc = 2;
 
     // Game progress
     private charactersAvailable = 4;
@@ -146,9 +148,12 @@ export class Hyperloop extends Game {
     private spawnNPCs(): void {
         const train = this.getTrain();
         const chars = [ new NpcNode(0), new NpcNode(1), new NpcNode(2), new NpcNode(3), new NpcNode(4) ];
-        const positions = [ -80, -40, 24, 60, 123 ];
+        const positions = [ -80, -40, 24, 60, 125 ];
         for (let i = 0; i < chars.length; i++) {
             chars[i].moveTo(positions[i], -20).appendTo(train);
+        }
+        for (let i = 3; i < chars.length; i++) {
+            chars[i].setMirrorX(true);
         }
         this.npcs = chars;
     }
@@ -219,7 +224,7 @@ export class Hyperloop extends Game {
 
     private updateIntro(): void {
         // Proceed to next stage
-        if (this.stageTime > 12) {
+        if (this.stageTime > 2) { // TODO change 2 to 12 for proper intro
             // Fade in
             this.setStage(GameStage.DRIVE);
             return;
@@ -310,8 +315,8 @@ export class Hyperloop extends Game {
         // Fade out
         if (this.stageTime > 12 && !this.fadeOutInitiated) {
             this.fadeOutInitiated = true;
-            this.getFader().fadeOut({ duration: 12 });
-            // TODO switch to credits scene here
+            // this.getFader().fadeOut({ duration: 12 });
+            this.scenes.setScene(SuccessScene);
         }
     }
 
@@ -332,7 +337,7 @@ export class Hyperloop extends Game {
 
     public initIntro(): void {
         // Play sound
-        Hyperloop.introSound.play();
+        setTimeout(() => Hyperloop.introSound.play(), 1000);
         MusicManager.getInstance().setVolume(0.3);
         // Place player into train initially
         const player = this.getPlayer();
@@ -389,7 +394,6 @@ export class Hyperloop extends Game {
             // TODO get proper spawn position
             const player = this.getPlayer();
             const spawnPoint = this.getTrainDoorCoordinate();
-            // TODO leave remains of old player
             player.moveTo(spawnPoint.x, spawnPoint.y);
             player.setHitpoints(100);
             player.setAmmoToFull();
@@ -402,6 +406,10 @@ export class Hyperloop extends Game {
             SpawnNode.getForTrigger(player, "before", true).forEach(s => {
                 if (rnd() < 0.25) s.spawnEnemy();
             });
+            // Remove NPC from scene
+            const deadNpc = this.npcs.splice(this.currentPlayerNpc)[0];
+            deadNpc.remove();
+            this.currentPlayerNpc = rndItem(this.npcs);
         } else {
             // Game Over or sequence of new train replacing old one
         }
@@ -409,7 +417,7 @@ export class Hyperloop extends Game {
 
     public getTrainDoorCoordinate(): Vector2 {
         const coord = this.getTrain().getScenePosition();
-        return new Vector2(coord.x - 170, coord.y + 38);
+        return new Vector2(coord.x - 170, coord.y - 2);
     }
 
     public turnOnFuseBox() {

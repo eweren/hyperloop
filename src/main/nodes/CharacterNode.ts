@@ -208,6 +208,25 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         } else {
             this.textNode.setText("");
         }
+
+        if (this.getPlayerCollisionAt(this.x, this.y)) {
+            this.unstuck();
+        }
+    }
+
+    private unstuck(): this {
+        for (let i = 1; i < 100; i++) {
+            if (!this.getPlayerCollisionAt(this.x, this.y - i)) {
+                return this.moveTo(this.x, this.y - i);
+            } else if (!this.getPlayerCollisionAt(this.x, this.y + i)) {
+                return this.moveTo(this.x, this.y + i);
+            } else if (!this.getPlayerCollisionAt(this.x - i, this.y)) {
+                return this.moveTo(this.x - i, this.y);
+            } else if (!this.getPlayerCollisionAt(this.x + i, this.y)) {
+                return this.moveTo(this.x + i, this.y);
+            }
+        }
+        return this;
     }
 
     public setDirection(direction = 0): void {

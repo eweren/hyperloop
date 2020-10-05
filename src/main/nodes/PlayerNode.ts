@@ -200,9 +200,9 @@ export class PlayerNode extends CharacterNode {
         if (this.getParent() instanceof TrainNode) {
             this.setOpacity(0);
             const door = this.getGame().getTrainDoorCoordinate();
-            const parent = this.getParent();
+            const parent = this.getParent()?.getScenePosition();
             this.setX(door.x - (parent?.x ?? 0));
-            this.setY(door.y - (parent?.y ?? 0));
+            this.setY(door.y - (parent?.y ?? 0) + 40);
             return;
         }
         this.setOpacity(1);
