@@ -1925,6 +1925,11 @@
                  "point":true,
                  "properties":[
                         {
+                         "name":"hitpoints",
+                         "type":"int",
+                         "value":140
+                        }, 
+                        {
                          "name":"trigger",
                          "type":"string",
                          "value":"fusebox"
@@ -1998,6 +2003,11 @@
                  "name":"EnemySpawn",
                  "point":true,
                  "properties":[
+                        {
+                         "name":"hitpoints",
+                         "type":"int",
+                         "value":140
+                        }, 
                         {
                          "name":"trigger",
                          "type":"string",
