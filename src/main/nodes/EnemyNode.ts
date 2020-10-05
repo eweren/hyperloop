@@ -169,6 +169,7 @@ export abstract class EnemyNode extends CharacterNode {
 
     protected updateFollow(time: number): void {
         const player = this.getPlayer();
+        this.autoJump();
         // Update target position if seeing player
         if (player) {
             // Update target if in sight
@@ -199,6 +200,7 @@ export abstract class EnemyNode extends CharacterNode {
     }
 
     protected updateAttack(time: number): void {
+        this.autoJump();
         if (time > this.lastStateChange + this.attackDelay) {
             // Hurt player
             const player = this.getPlayer();
@@ -211,6 +213,12 @@ export abstract class EnemyNode extends CharacterNode {
             }
             // Return to follow state
             this.setState(AiState.FOLLOW);
+        }
+    }
+
+    protected autoJump(threshold = 0.7): void {
+        if (this.consecutiveXCollisions > threshold) {
+            this.jump();
         }
     }
 

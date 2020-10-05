@@ -55,6 +55,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     private battlemodeTimeout = 2000;
     private battlemodeTimeoutTimerId: number | null = null;
     private storedCollisionCoordinate: Vector2 = new Vector2(0, 0);
+    protected consecutiveXCollisions = 0;
 
     // Talking/Thinking
     private speakSince = 0;
@@ -169,6 +170,9 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             if (this.getPlayerCollisionAt(newX, y)) {
                 newX = x;
                 this.velocity = new Vector2(0, this.velocity.y);
+                this.consecutiveXCollisions += dt;
+            } else {
+                this.consecutiveXCollisions = 0;
             }
             // Y collision
             if (this.getPlayerCollisionAt(newX, newY)) {

@@ -62,7 +62,7 @@ export class SuccessScene extends Scene<Hyperloop> {
             "Vladimir Sakhovski",
             "Christina Schneider",
             "Lisa Tsakiris",
-            "Jenniffer van Veen",
+            "Jennifer van Veen",
             "Moritz Vieth",
             "Matthias Wetter",
         ];
