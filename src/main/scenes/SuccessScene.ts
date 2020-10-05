@@ -11,6 +11,7 @@ import { ControllerEvent } from "../../engine/input/ControllerEvent";
 import { FadeToBlackTransition } from "../../engine/transitions/FadeToBlackTransition";
 import { FadeTransition } from "../../engine/transitions/FadeTransition";
 import { TitleScene } from "./TitleScene";
+import { MusicManager } from "../MusicManager";
 
 export class SuccessScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -20,16 +21,58 @@ export class SuccessScene extends Scene<Hyperloop> {
     private static image: HTMLImageElement;
 
     private imageNode: ImageNode = new ImageNode({ image: SuccessScene.image, anchor: Direction.TOP_LEFT});
-    private textNode = new TextNode({ font: SuccessScene.font, anchor: Direction.BOTTOM });
+    private creditNodes: TextNode[] = [];
+    private textNode = new TextNode({ font: SuccessScene.font, anchor: Direction.RIGHT });
 
     public setup() {
         this.inTransition = new FadeTransition();
         this.outTransition = new FadeToBlackTransition({ duration: 0.5, exclusive: true });
         this.imageNode.appendTo(this.rootNode);
+        this.buildCredits();
         this.textNode
-            .setText("PRESS ENTER TO RETURN TO MENU")
-            .moveTo(GAME_WIDTH / 2, GAME_HEIGHT - 64)
+            .setText("Press Enter to exit")
+            .moveTo(GAME_WIDTH - 56, GAME_HEIGHT - 64)
             .appendTo(this.rootNode);
+        MusicManager.getInstance().loopTrack(3);
+    }
+
+    public buildCredits (): void {
+
+        const lineHeight = 12;
+        const lines: string [] = [
+            "Thank you for playing!",
+            "",
+            "This game was made for",
+            "Ludum Dare 47 in three days!",
+            "",
+            "",
+            "Credits",
+            "",
+            "Eduard But",
+            "Nico Hülscher",
+            "Stephanie Jahn",
+            "Benjamin Jung",
+            "Nils Kreutzer",
+            "Ranjit Mevius",
+            "Klaus Reimer",
+            "Christina Schneider",
+            "Lisa Tsakiris",
+            "Jenniffer van Veen",
+            "Moritz Vieth",
+            "Matthias Wetter",
+        ];
+
+        lines.forEach((l, i) => {
+            this.creditNodes.push(new TextNode({ font: SuccessScene.font, text: l, color: "white", anchor: Direction.TOP_LEFT }).moveTo(16, GAME_HEIGHT + lineHeight * i).appendTo(this.rootNode));
+        });
+    }
+
+    public update (dt: number, time: number): void {
+        super.update(dt, time);
+
+        this.creditNodes.forEach( n => {
+            n.moveBy(0, -12 * dt);
+        });
     }
 
     public cleanup(): void {

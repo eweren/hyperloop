@@ -35,6 +35,10 @@ export class NpcNode extends CharacterNode {
         });
     }
 
+    protected unstuck(): this {
+        return this;
+    }
+
     public getShootingRange(): number {
         return 1;
     }

@@ -4,9 +4,11 @@ import { Sound } from "../engine/assets/Sound";
 import { RGBColor } from "../engine/color/RGBColor";
 import { Game } from "../engine/Game";
 import { Vector2 } from "../engine/graphics/Vector2";
+import { ControllerIntent } from "../engine/input/ControllerIntent";
 import { Camera } from "../engine/scene/Camera";
 import { FadeToBlack } from "../engine/scene/camera/FadeToBlack";
 import { SceneNode } from "../engine/scene/SceneNode";
+import { isDev } from "../engine/util/env";
 import { clamp } from "../engine/util/math";
 import { rnd, rndItem } from "../engine/util/random";
 import { Dialog } from "./Dialog";
@@ -56,6 +58,7 @@ export class Hyperloop extends Game {
     private dialogs: Dialog[] = [];
     private npcs: CharacterNode[] = [];
     private currentPlayerNpc = 2;
+    private debug = false;
 
     // Game progress
     private charactersAvailable = 4;
@@ -63,6 +66,7 @@ export class Hyperloop extends Game {
     public keyTaken = false; // key taken from corpse
     public fuseboxOn = false;
     private fadeOutInitiated = false;
+    private trainIsReady = false; // game basically won when this is true
 
     // Dialog
     private dialogKeyPressed = false;
@@ -82,7 +86,7 @@ export class Hyperloop extends Game {
     // Called by GameScene
     public setupScene(): void {
         this.spawnNPCs();
-        this.setStage(GameStage.INTRO);
+        this.setStage(GameStage.DIALOG); // TODO INTRO
         // Assets cannot be loaded in constructor because the LoadingScene
         // is not initialized at constructor time and Assets are loaded in the LoadingScene
         this.dialogs = [
@@ -194,9 +198,16 @@ export class Hyperloop extends Game {
     private updateDialog(): void {
         // Any key to proceed with next line
         const pressed = this.input.currentActiveIntents ?? 0;
+        const moveButtonPressed = (this.input.currentActiveIntents & ControllerIntent.PLAYER_MOVE_LEFT) > 0
+            || (this.input.currentActiveIntents & ControllerIntent.PLAYER_MOVE_RIGHT) > 0
+            || (this.input.currentActiveIntents & ControllerIntent.PLAYER_JUMP) > 0
+            || (this.input.currentActiveIntents & ControllerIntent.PLAYER_DROP) > 0;
+        if (moveButtonPressed) {
+            return;
+        }
         const prevPressed = this.dialogKeyPressed;
         this.dialogKeyPressed = pressed !== 0;
-        if (pressed && !prevPressed) {
+        if (pressed && !prevPressed || isDev() && this.debug) {
             this.nextDialogLine();
         }
     }
@@ -299,7 +310,10 @@ export class Hyperloop extends Game {
     }
 
     private updateReturn(dt: number) {
-        const train = this.getTrain();
+        let train: TrainNode;
+        try {
+            train = this.getTrain();
+        } catch (e) { return; }
         // Drive off
         if (this.stageTime > 5) {
             const progress = clamp((this.stageTime - 5.5) / 10, 0, 1);
@@ -390,6 +404,7 @@ export class Hyperloop extends Game {
 
     public spawnNewPlayer(): void {
         if (this.charactersAvailable > 0) {
+            // If everything has been done, then player died but still won
             this.charactersAvailable--;
             // TODO get proper spawn position
             const player = this.getPlayer();
@@ -399,13 +414,17 @@ export class Hyperloop extends Game {
             player.setAmmoToFull();
             player.reset();
             this.getCamera().setFollow(player);
-            // Spawn enemies at random subset of spawn points behind "first encounter"
-            SpawnNode.getForTrigger(player, "after", true).forEach(s => {
-                if (rnd() < 0.25) s.spawnEnemy();
-            });
-            SpawnNode.getForTrigger(player, "before", true).forEach(s => {
-                if (rnd() < 0.25) s.spawnEnemy();
-            });
+            if (this.trainIsReady) {
+                this.winGame();
+            } else {
+                // Spawn enemies at random subset of spawn points behind "first encounter"
+                SpawnNode.getForTrigger(player, "after", true).forEach(s => {
+                    if (rnd() < 0.25) s.spawnEnemy();
+                });
+                SpawnNode.getForTrigger(player, "before", true).forEach(s => {
+                    if (rnd() < 0.25) s.spawnEnemy();
+                });
+            }
             // Remove NPC from scene
             const deadNpc = this.npcs.splice(this.currentPlayerNpc)[0];
             deadNpc.remove();
@@ -445,6 +464,7 @@ export class Hyperloop extends Game {
                 });
                 endSwitch.setCaption("PRESS E TO ENTER");
                 player.getParent()?.appendChild(endSwitch);
+                this.trainIsReady = true;
                 // Spawn the enemies
                 SpawnNode.getForTrigger(player, "afterSwitch", true).forEach(s => s.spawnEnemy());
                 return true;
