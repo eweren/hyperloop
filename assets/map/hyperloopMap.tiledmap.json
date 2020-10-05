@@ -1786,7 +1786,7 @@
                 {
                  "height":504,
                  "id":18,
-                 "name":"Ambient Tunnel",
+                 "name":"ambientTunnel",
                  "properties":[
                         {
                          "name":"color",
@@ -2067,7 +2067,7 @@
                 {
                  "height":648,
                  "id":37,
-                 "name":"Ambient Tunnel",
+                 "name":"ambientMaintenance",
                  "properties":[
                         {
                          "name":"color",
@@ -3377,7 +3377,7 @@
                  "value":1
                 }],
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
