@@ -1,7 +1,6 @@
-import { Hyperloop } from "../../main/Hyperloop";
 import { Sound } from "../assets/Sound";
 import { Game } from "../Game";
-import { Scene } from "./Scene";
+import { Vector2 } from "../graphics/Vector2";
 import { SceneNode, SceneNodeArgs, SceneNodeAspect } from "./SceneNode";
 
 /**
@@ -113,9 +112,9 @@ export class SoundNode<T extends Game = Game> extends SceneNode<T> {
     public update(dt: number, time: number) {
         super.update(dt, time);
         let distance = 0;
-        const scene = this.getScene() as Scene<Hyperloop>;
+        const scene = this.getScene();
         if (scene) {
-            distance = this.getScenePosition().getDistance(scene.game.getPlayer().getScenePosition());
+            distance = this.getScenePosition().getDistance(new Vector2(scene.camera.getX(), scene.camera.getY()));
         }
         const volume = Math.max(0, this.range - distance) / this.range * this.intensity;
         if (volume > 0) {

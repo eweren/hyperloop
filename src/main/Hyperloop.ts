@@ -48,11 +48,6 @@ export class Hyperloop extends Game {
 
     public constructor() {
         super();
-        setTimeout(() => {
-            this.getFader().fadeOut({ duration: 0.001 });
-            this.spawnNPCs();
-            this.setStage(GameStage.INTRO);
-        }, 2000);
 
         // TODO get from JSON instead
         this.dialogs = [
@@ -99,6 +94,13 @@ export class Hyperloop extends Game {
             ])
         ];
         this.currentDialog = this.dialogs[0];
+    }
+
+    // Called by GameScene
+    public setupScene(): void {
+        this.getFader().fadeOut({ duration: 0.001 });
+        this.spawnNPCs();
+        this.setStage(GameStage.INTRO);
     }
 
     public update(dt: number, time: number): void {
