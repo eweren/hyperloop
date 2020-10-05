@@ -248,12 +248,14 @@ export class PlayerNode extends CharacterNode {
                     this.reloadStart = now();
                 }
                 const reloadProgress = (now() - this.reloadStart) / this.reloadDelay;
+                let factor = Math.sin(Math.PI * reloadProgress) ** 0.4;
+                factor = 0.5 - 0.5 * Math.cos(Math.PI * factor);
                 if (this.aimingAngle < 0) {
                     const aimingDiff = this.aimingAngleNonNegative - angleAimRight;
-                    c.setRotation(this.aimingAngleNonNegative - aimingDiff * Math.sin(Math.PI * reloadProgress));
+                    c.setRotation(this.aimingAngleNonNegative - aimingDiff * factor);
                 } else {
                     const aimingDiff = this.aimingAngleNonNegative - angleAimLeft;
-                    c.setRotation(this.aimingAngleNonNegative - aimingDiff * Math.sin(Math.PI * reloadProgress));
+                    c.setRotation(this.aimingAngleNonNegative - aimingDiff * factor);
                 }
             } else if (now() - this.lastShotTime < this.shotDelay * 1000) {
                 const shotProgress = (now() - this.lastShotTime) / (this.shotDelay * 1000);
