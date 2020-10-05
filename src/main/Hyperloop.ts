@@ -13,6 +13,7 @@ import { CollisionNode } from "./nodes/CollisionNode";
 import { LightNode } from "./nodes/LightNode";
 import { NpcNode } from "./nodes/NpcNode";
 import { PlayerNode } from "./nodes/PlayerNode";
+import { SwitchNode } from "./nodes/SwitchNode";
 import { TrainNode } from "./nodes/TrainNode";
 import { GameScene } from "./scenes/GameScene";
 import { LoadingScene } from "./scenes/LoadingScene";
@@ -273,6 +274,17 @@ export class Hyperloop extends Game {
         player.remove().moveTo(pos.x, pos.y).appendTo(train.getParent() as SceneNode<Hyperloop>);
         train.hideInner();
         MusicManager.getInstance().loopTrack(1);
+        // Power switch behavior
+        const powerSwitch = this.getGameScene().getNodeById("PowerSwitch");
+        if (powerSwitch && powerSwitch instanceof SwitchNode) {
+            powerSwitch.setOnlyOnce(false);
+            powerSwitch.setOnUpdate((state: boolean) => {
+                player.say("Doesn't appear to do anything... yet", 4, 0.5);
+                return false;
+            });
+        } else {
+            throw new Error("No PowerSwitch found! Game not beatable that way :(");
+        }
     }
 
     public spawnNewPlayer(): void {
