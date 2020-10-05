@@ -9,7 +9,7 @@ import { createCanvas, getRenderingContext } from "../../engine/util/graphics";
 import { radians } from "../../engine/util/math";
 import { Hyperloop } from "../Hyperloop";
 
-function intensifyColor(color: RGBColor, f: number): Color {
+export function intensifyColor(color: RGBColor, f: number): Color {
     let r = f * color.getRed(), g = f * color.getGreen(), b = f * color.getBlue();
     if (r > 1) {
         g += (r - 1) / 2;
