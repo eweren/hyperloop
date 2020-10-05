@@ -34,7 +34,8 @@ export enum GameStage {
     BRAKE = 3,
     DIALOG = 4,
     STUCK = 5,
-    RETURN = 6 // all done, returned into train
+    RETURN = 6, // all done, returned into train,
+    PRESPAWN = 7
 }
 
 export class Hyperloop extends Game {
@@ -62,7 +63,7 @@ export class Hyperloop extends Game {
     private debug = false;
 
     // Game progress
-    private charactersAvailable = 4;
+    private charactersAvailable = 5;
     private gameStage = GameStage.NONE;
     public keyTaken = false; // key taken from corpse
     public fuseboxOn = false;
@@ -79,6 +80,14 @@ export class Hyperloop extends Game {
 
     @asset("dialog/train2.dialog.json")
     private static readonly train2Dialog: DialogJSON;
+    @asset("dialog/train3.dialog.json")
+    private static readonly train3Dialog: DialogJSON;
+    @asset("dialog/train4.dialog.json")
+    private static readonly train4Dialog: DialogJSON;
+    @asset("dialog/train5.dialog.json")
+    private static readonly train5Dialog: DialogJSON;
+    @asset("dialog/train6.dialog.json")
+    private static readonly train6Dialog: DialogJSON;
 
     public constructor() {
         super();
@@ -92,7 +101,11 @@ export class Hyperloop extends Game {
         // is not initialized at constructor time and Assets are loaded in the LoadingScene
         this.dialogs = [
             new Dialog(Hyperloop.trainDialog),
-            new Dialog(Hyperloop.train2Dialog)
+            new Dialog(Hyperloop.train2Dialog),
+            new Dialog(Hyperloop.train3Dialog),
+            new Dialog(Hyperloop.train4Dialog),
+            new Dialog(Hyperloop.train5Dialog),
+            new Dialog(Hyperloop.train6Dialog)
         ];
 
     }
@@ -118,6 +131,9 @@ export class Hyperloop extends Game {
             case GameStage.RETURN:
                 this.updateReturn(dt);
                 break;
+            case GameStage.PRESPAWN:
+                this.updatePrespawn();
+                break;
         }
         if (this.currentDialog) {
             this.updateDialog();
@@ -129,7 +145,7 @@ export class Hyperloop extends Game {
         if (stage !== this.gameStage) {
             this.gameStage = stage;
             this.stageStartTime = this.getTime();
-            switch(this.gameStage) {
+            switch (this.gameStage) {
                 case GameStage.INTRO:
                     this.initIntro();
                     break;
@@ -145,6 +161,9 @@ export class Hyperloop extends Game {
                     this.initStuck();
                     break;
                 case GameStage.RETURN:
+                    break;
+                case GameStage.PRESPAWN:
+                    this.initPrespawn();
                     break;
             }
         }
@@ -236,7 +255,7 @@ export class Hyperloop extends Game {
 
     private updateIntro(): void {
         // Proceed to next stage
-        if (this.stageTime > 12) {
+        if (this.stageTime > 2) {
             // Fade in
             this.setStage(GameStage.DRIVE);
             return;
@@ -405,10 +424,43 @@ export class Hyperloop extends Game {
         });
     }
 
+    private updatePrespawn(): void {
+        if (!this.currentDialog) {
+            if (!this.conversationEndTime) {
+                this.conversationEndTime = this.getTime();
+            } else {
+                const p = (this.getTime() - this.conversationEndTime) / 3;
+                this.handleCamera(0, 1 - p);
+                if (p >= 1.3) {
+                    this.spawnNewPlayer();
+                    this.setStage(GameStage.STUCK);
+                }
+            }
+        } else {
+            this.handleCamera(0, 1);
+        }
+    }
+
+    private initPrespawn(): void {
+        this.startDialog(6 - this.npcs.length);
+        this.getTrain().showInner();
+    }
+
     public startRespawnSequence(): void {
         if (this.charactersAvailable > 0) {
-            // TODO actual sequence before respawning
-            this.spawnNewPlayer();
+            // Remove NPC from scene
+            this.charactersAvailable--;
+            const deadNpc = this.npcs.splice(this.currentPlayerNpc, 1)[0];
+            if (deadNpc) {
+                deadNpc.remove();
+                this.currentPlayerNpc = Math.floor(Math.random() * this.npcs.length);
+            }
+            if (this.trainIsReady) {
+                this.spawnNewPlayer();
+                return;
+            }
+            // Show debate sequence
+            this.setStage(GameStage.PRESPAWN);
         } else {
             // Game Over or sequence of new train replacing old one
             this.scenes.setScene(GameOverScene as any);
@@ -418,7 +470,6 @@ export class Hyperloop extends Game {
     public spawnNewPlayer(): void {
         if (this.charactersAvailable > 0) {
             // If everything has been done, then player died but still won
-            this.charactersAvailable--;
             const player = this.getPlayer();
             const spawnPoint = this.getTrainDoorCoordinate();
             player.moveTo(spawnPoint.x, spawnPoint.y);
@@ -437,10 +488,6 @@ export class Hyperloop extends Game {
                     if (rnd() < 0.25) s.spawnEnemy();
                 });
             }
-            // Remove NPC from scene
-            const deadNpc = this.npcs.splice(this.currentPlayerNpc)[0];
-            deadNpc.remove();
-            this.currentPlayerNpc = Math.floor(Math.random() * this.npcs.length);
         }
     }
 
