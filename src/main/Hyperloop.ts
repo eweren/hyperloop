@@ -1,5 +1,6 @@
 import { DialogJSON } from "*.dialog.json";
 import { asset } from "../engine/assets/Assets";
+import { Sound } from '../engine/assets/Sound';
 import { RGBColor } from "../engine/color/RGBColor";
 import { Game } from "../engine/Game";
 import { Camera } from "../engine/scene/Camera";
@@ -28,6 +29,13 @@ export enum GameStage {
 }
 
 export class Hyperloop extends Game {
+
+    @asset("sounds/fx/hyperloopBrakes.ogg")
+    private static brakeSound: Sound;
+
+    @asset("sounds/loops/hyperloopDrone.ogg")
+    private static droneSound: Sound;
+
     private stageStartTime = 0;
     private stageTime = 0;
     private trainSpeed = 1000; // px per second
@@ -70,6 +78,10 @@ export class Hyperloop extends Game {
             new Dialog(Hyperloop.trainDialog),
             new Dialog(Hyperloop.train2Dialog)
         ];
+
+        Hyperloop.droneSound.setVolume(0.5);
+        Hyperloop.droneSound.setLoop(true);
+        Hyperloop.droneSound.play();
     }
 
     public update(dt: number, time: number): void {
@@ -195,6 +207,8 @@ export class Hyperloop extends Game {
 
     private updateDrive(): void {
         if (!this.currentDialog) {
+            Hyperloop.droneSound.stop();
+            Hyperloop.brakeSound.play();
             this.setStage(GameStage.BRAKE);
             // Compute total break time so that train ends up in desired position
             const train = this.getTrain();
