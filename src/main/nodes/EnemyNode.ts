@@ -1,5 +1,6 @@
 import { ReadonlyVector2, Vector2 } from "../../engine/graphics/Vector2";
 import { rnd } from "../../engine/util/random";
+import { now } from "../../engine/util/time";
 import { CharacterNode } from "./CharacterNode";
 import { PlayerNode } from "./PlayerNode";
 
@@ -23,6 +24,12 @@ export abstract class EnemyNode extends CharacterNode {
 
     /** How far enemy can see player while idling */
     protected squaredViewDistance = 120 ** 2;
+
+    /** How far enemy can hear player while idling */
+    protected squaredHearDistance = 160 ** 2;
+
+    /** If a shot was fired within the hearDuration from now, the enemy shall start chasing */
+    protected hearDuration = 500;
 
     /** How far enemy can see player while chasing him */
     protected squaredAlertViewDistance = 160 ** 2;
@@ -109,6 +116,8 @@ export abstract class EnemyNode extends CharacterNode {
             } else {
                 this.setDirection(1);
             }
+        } else {
+            this.setDirection(0);
         }
     }
 
@@ -282,7 +291,10 @@ export abstract class EnemyNode extends CharacterNode {
         }
         const squaredDistance = player.getPosition().getSquareDistance(this.getPosition());
         const origin = this.getHeadPosition(), target = player.getHeadPosition();
-        return this.isLookingInPlayerDirection(player) && squaredDistance < this.squaredViewDistance &&
+        const couldHearPlayer = (now() - player.getLastShotTime()) < this.hearDuration && squaredDistance < this.squaredHearDistance;
+        const couldViewPlayer = this.isLookingInPlayerDirection(player) && squaredDistance < this.squaredViewDistance;
+
+        return (couldViewPlayer || couldHearPlayer) &&
                 this.getLineCollision(origin.x, origin.y, target.x - origin.x, target.y - origin.y) === player;
     }
 }

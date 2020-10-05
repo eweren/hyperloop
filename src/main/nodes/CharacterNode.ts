@@ -6,11 +6,10 @@ import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode"
 import { cacheResult } from "../../engine/util/cache";
 import { clamp } from "../../engine/util/math";
 import { rnd } from "../../engine/util/random";
-import { Layer } from '../constants';
 import { Hyperloop } from "../Hyperloop";
 import { CollisionNode } from "./CollisionNode";
 import { InteractiveNode } from "./InteractiveNode";
-import { MarkNode } from './MarkNode';
+import { MarkNode } from "./MarkNode";
 import { ParticleNode, valueCurves } from "./ParticleNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
 import { PlayerLegsNode } from "./player/PlayerLegsNode";

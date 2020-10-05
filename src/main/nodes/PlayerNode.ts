@@ -145,6 +145,9 @@ export class PlayerNode extends CharacterNode {
     public getMagazineSize(): number {
         return this.magazineSize;
     }
+    public getLastShotTime(): number {
+        return this.lastShotTime;
+    }
 
     public update(dt: number, time: number) {
         super.update(dt, time);
