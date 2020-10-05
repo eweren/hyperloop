@@ -28,7 +28,7 @@ export class SwitchNode extends InteractiveNode {
             anchor: Direction.CENTER,
             tag: "off",
             ...args
-        }, "Press E to press switch");
+        }, "Press E to pull lever");
         this.onlyOnce = onlyOnce;
         this.onUpdate = onUpdate;
     }
