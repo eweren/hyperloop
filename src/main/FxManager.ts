@@ -62,9 +62,12 @@ export class FxManager {
     }
 
     public stop(): void {
-        if (this.playScreamInterval && this.currentSoundToPlay > -1) {
-            this.sounds[this.currentSoundToPlay].stop();
+        if (this.playScreamInterval) {
             clearInterval(this.playScreamInterval);
+        }
+
+        if (this.currentSoundToPlay > -1) {
+            this.sounds[this.currentSoundToPlay].stop();
         }
     }
 
