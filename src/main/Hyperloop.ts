@@ -4,6 +4,7 @@ import { FadeToBlack } from "../engine/scene/camera/FadeToBlack";
 import { SceneNode } from "../engine/scene/SceneNode";
 import { rnd } from "../engine/util/random";
 import { CollisionNode } from "./nodes/CollisionNode";
+import { NpcNode } from "./nodes/NpcNode";
 import { PlayerNode } from "./nodes/PlayerNode";
 import { TrainNode } from "./nodes/TrainNode";
 import { GameScene } from "./scenes/GameScene";
@@ -39,6 +40,7 @@ export class Hyperloop extends Game {
         super();
         setTimeout(() => {
             this.getFader().fadeOut({ duration: 0.001 });
+            this.spawnNPCs();
             this.setStage(GameStage.INTRO);
         }, 2000);
     }
@@ -77,6 +79,15 @@ export class Hyperloop extends Game {
                     this.initStuck();
                     break;
             }
+        }
+    }
+
+    private spawnNPCs(): void {
+        const train = this.getTrain();
+        const chars = [ new NpcNode(false), new NpcNode(true) ];
+        const positions = [ -50, 50 ];
+        for (let i = 0; i < chars.length; i++) {
+            chars[i].moveTo(positions[i], -20).appendTo(train);
         }
     }
 
