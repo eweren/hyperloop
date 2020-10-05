@@ -2,6 +2,7 @@ import { Line2 } from "./Line2";
 import { ReadonlyVector2, Vector2 } from "./Vector2";
 import { ReadonlyAffineTransform } from "./AffineTransform";
 import { Bounds2 } from "./Bounds2";
+import { Rect } from "../geom/Rect";
 
 /**
  * A polygon with any number of vertices.
@@ -51,6 +52,19 @@ export class Polygon2 {
             edge.end = this.vertices[0];
         }
         this.bounds.reset();
+        return this;
+    }
+
+    /**
+     * Adds the four corner vertices (Starting with top-left corner and then moving clockwise) of the given rectangle.
+     *
+     * @param rect - The rectangle to add.
+     */
+    public addRect(rect: Rect): this {
+        this.addVertex(new Vector2(rect.getLeft(), rect.getTop()));
+        this.addVertex(new Vector2(rect.getRight(), rect.getTop()));
+        this.addVertex(new Vector2(rect.getRight(), rect.getBottom()));
+        this.addVertex(new Vector2(rect.getLeft(), rect.getBottom()));
         return this;
     }
 

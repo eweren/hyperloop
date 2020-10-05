@@ -1,11 +1,12 @@
 import { AiState, EnemyNode } from "./EnemyNode";
 import { Aseprite } from "../../engine/assets/Aseprite";
 import { Direction } from "../../engine/geom/Direction";
-import { Polygon2 } from "../../engine/graphics/Polygon2";
-import { ReadonlyVector2, Vector2 } from "../../engine/graphics/Vector2";
+import { ReadonlyVector2 } from "../../engine/graphics/Vector2";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { Sound } from "../../engine/assets/Sound";
 import { asset } from "../../engine/assets/Assets";
+import { Rect } from "../../engine/geom/Rect";
+import { rnd } from "../../engine/util/random";
 
 export class RatNode extends EnemyNode {
     @asset("sprites/mouse.aseprite.json")
@@ -20,30 +21,24 @@ export class RatNode extends EnemyNode {
     protected targetPosition: ReadonlyVector2;
 
     /** minimum distance between enemy and player to stop escaping */
-    private squaredSafetyDistance = 50 ** 2;
+    private squaredSafetyDistance = 100 ** 2;
 
     public constructor(args?: SceneNodeArgs) {
         super({
             aseprite: RatNode.sprite,
             anchor: Direction.BOTTOM,
             tag: "idle",
+            sourceBounds: new Rect(3, 6, 8, 4),
             ...args
         });
+        this.updateMoveAroundAnchor();
+        this.setState(AiState.MOVE_AROUND);
         this.targetPosition = this.getPosition();
-        this.moveAroundAfterChase = true;
         this.hitpoints = 1;
     }
 
-    protected updateBoundsPolygon(bounds: Polygon2): void {
-        const boundsWidth = 11;
-        const boundsHeight = 5;
-        const offsetX = this.getWidth() / 2 - boundsWidth / 2;
-        const offsetY = 6;
-        bounds.clear();
-        bounds.addVertex(new Vector2(offsetX, offsetY));
-        bounds.addVertex(new Vector2(offsetX + boundsWidth, offsetY));
-        bounds.addVertex(new Vector2(offsetX + boundsWidth, boundsHeight + offsetY));
-        bounds.addVertex(new Vector2(offsetX, boundsHeight + offsetY));
+    public updateMoveAroundAnchor(position = this.getPosition()): void {
+        this.moveAroundAnchor.setVector(position);
     }
 
     protected updateAi(dt: number, time: number) {
@@ -54,7 +49,6 @@ export class RatNode extends EnemyNode {
         }
         // AI
         switch (this.state) {
-            case AiState.BORED:
             case AiState.ALERT:
                 this.updateAlert(time);
                 break;
@@ -64,40 +58,44 @@ export class RatNode extends EnemyNode {
         }
     }
 
+    private moveTimeMin = 0.3;
+    private moveTimeMax = 1;
+    private waitTimeMin = 2;
+    private waitTimeMax = 5;
+    private moveDelay = rnd(this.moveTimeMin, this.moveTimeMax);
+    private waitTime = rnd(this.waitTimeMin, this.waitTimeMax);
+
     protected updateMoveAround(time: number): void {
-        if (this.getPosition().getSquareDistance(this.moveAroundAnchor) > this.squaredMoveAroundDistance) {
-            if (this.stopAndWaitTs === 0) {
-                if (this.moveTs + this.moveDelaySec < time) {
-                    this.setTag("idle");
-                    this.setDirection(0);
-                    this.stopAndWaitTs = time;
-                }
-            } else if (this.stopAndWaitTs + this.stopAndWaitDelaySec < time) {
-                this.setTag("walk");
-                if (this.getX() > this.moveAroundAnchor.x) {
-                    this.setDirection(-1);
-                } else {
-                    this.setDirection(1);
-                }
-                this.stopAndWaitTs = 0;
-                this.moveTs = time;
+        if (this.stopAndWaitTs === 0) {
+            if (this.moveTs + this.moveDelay < time) {
+                this.setDirection(0);
+                this.stopAndWaitTs = time;
+                this.waitTime = rnd(this.waitTimeMin, this.waitTimeMax);
             }
+        } else if (this.stopAndWaitTs + this.waitTime < time) {
+            this.setDirection(this.getX() >= this.moveAroundAnchor.x ? -1 : 1);
+            this.stopAndWaitTs = 0;
+            this.moveTs = time;
+            this.moveDelay = rnd(this.moveTimeMin, this.moveTimeMax);
         }
         if (this.getDistanceToPlayerSquared() < this.squaredSafetyDistance) {
+            this.escapeDistanceSquared = rnd(this.escapeDistanceMin, this.escapeDistanceMax) ** 2;
             this.setState(AiState.ALERT);
             this.stopSounds();
             RatNode.ratSoundAttack.play();
         }
     }
 
+    private escapeDistanceMin = 150;
+    private escapeDistanceMax = 250;
+    private escapeDistanceSquared = rnd(this.escapeDistanceMin, this.escapeDistanceMax) ** 2;
+
     private updateAlert(time: number): void {
         const player = this.getPlayer();
-        if (player && this.getDistanceToPlayerSquared() < this.squaredSafetyDistance) {
-            this.setTag("walk");
+        if (player && this.getDistanceToPlayerSquared() < this.squaredSafetyDistance + this.escapeDistanceSquared) {
             this.setDirection(this.getX() < player.getX() ? -1 : 1);
         } else {
-            this.targetPosition = this.getPosition();
-            this.moveAroundAnchor.setVector(this.targetPosition);
+            this.updateMoveAroundAnchor();
             this.setState(AiState.MOVE_AROUND);
         }
     }
@@ -120,5 +118,4 @@ export class RatNode extends EnemyNode {
     private isSoundPlaying() {
         return RatNode.ratSoundAttack.isPlaying() || RatNode.ratSoundFollow.isPlaying();
     }
-
 }

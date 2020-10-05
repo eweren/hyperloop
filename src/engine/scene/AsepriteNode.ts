@@ -1,5 +1,7 @@
 import { Aseprite } from "../assets/Aseprite";
 import { Game } from "../Game";
+import { Rect } from "../geom/Rect";
+import { Polygon2 } from "../graphics/Polygon2";
 import { SceneNode, SceneNodeArgs, SceneNodeAspect } from "./SceneNode";
 
 /**
@@ -14,6 +16,9 @@ export interface AsepriteNodeArgs extends SceneNodeArgs {
 
     /** Optional initial X mirroring of the sprite. */
     mirrorX?: boolean;
+
+    /** Optional forced source bounds. If not set then bounds are read from the sprite. */
+    sourceBounds?: Rect;
 }
 
 /**
@@ -38,10 +43,13 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
     private tagPlayTime = 0;
     private tagStartTime = 0;
 
+    /** Forcers source bounds. Null to read bounds from sprite. */
+    private sourceBounds: Rect | null;
+
     /**
      * Creates a new scene node displaying the given Aseprite.
      */
-    public constructor({ aseprite, ...args }: AsepriteNodeArgs) {
+    public constructor({ aseprite, sourceBounds, ...args }: AsepriteNodeArgs) {
         super({
             ...args,
             width: aseprite.width,
@@ -50,6 +58,22 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
         this.aseprite = aseprite;
         this.tag = args.tag ?? null;
         this.mirrorX = args.mirrorX ?? false;
+        this.sourceBounds = sourceBounds ?? null;
+    }
+
+    /** @inheritDoc */
+    protected updateBoundsPolygon(bounds: Polygon2): void {
+        if (this.sourceBounds != null) {
+            bounds.addRect(this.sourceBounds);
+        } else {
+            if (this.aseprite.hasTag("bounds")) {
+                bounds.addRect(this.aseprite.getTaggedSourceBounds("bounds", 0));
+            } else if (this.tag != null) {
+                bounds.addRect(this.aseprite.getTaggedSourceBounds(this.tag, this.time * 1000));
+            } else {
+                bounds.addRect(this.aseprite.getSourceBounds(this.time * 1000));
+            }
+        }
     }
 
     /**
