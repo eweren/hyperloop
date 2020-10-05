@@ -24,6 +24,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected playerLeg?: PlayerLegsNode;
     protected playerArm?: PlayerArmNode;
     private preventNewTag = false;
+    private gameTime = 0;
 
     // Character settings
     public abstract getShootingRange(): number;
@@ -49,6 +50,11 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     private bulletStartPoint: Vector2 | null = null;
     private bulletEndPoint: Vector2 | null = null;
     private storedCollisionCoordinate: Vector2 = new Vector2(0, 0);
+
+    // Talking/Thinking
+    private speakSince = 0;
+    private speakUntil = 0;
+    private speakLine = "";
 
     protected bloodEmitter: ParticleNode;
     private bloodOffset: Vector2 = new Vector2(0, 0);
@@ -79,6 +85,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     public update(dt: number, time: number): void {
         super.update(dt, time);
+        this.gameTime = time;
         this.updateTime = time;
         this.preventNewTag = this.getTag() === "die" && this.getTimesPlayed("die") === 0
             || this.getTag() === "hurt" && this.getTimesPlayed("hurt") === 0
@@ -148,6 +155,12 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         }
         if (this.isFalling) {
             this.setTag("fall");
+        }
+        // Talking/Thinking
+        if (this.speakLine && time > this.speakUntil) {
+            this.speakLine = "";
+            this.speakUntil = 0;
+            this.speakSince = 0;
         }
     }
 
@@ -221,6 +234,16 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         if (this.debug) {
             this.drawShootingLine(context);
         }
+        // TODO put this into proper text node
+        if (this.speakLine) {
+            const progress = (this.gameTime - this.speakSince);
+            const line = this.speakLine.substr(0, Math.ceil(28 * progress));
+            context.save();
+            context.fillStyle = "white";
+            context.textAlign = "center";
+            context.fillText(line, 0, -15);
+            context.restore();
+        }
     }
 
     private drawShootingLine(context: CanvasRenderingContext2D): void {
@@ -267,6 +290,12 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             this.startBattlemode();
         }
         return false;
+    }
+
+    public say(line = "", duration = 0): void {
+        this.speakSince = this.gameTime;
+        this.speakUntil = this.gameTime + duration;
+        this.speakLine = line;
     }
 
     public setTag(tag: string | null): this {

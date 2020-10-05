@@ -3,6 +3,8 @@ import { Camera } from "../engine/scene/Camera";
 import { FadeToBlack } from "../engine/scene/camera/FadeToBlack";
 import { SceneNode } from "../engine/scene/SceneNode";
 import { rnd } from "../engine/util/random";
+import { Dialog } from "./Dialog";
+import { CharacterNode } from './nodes/CharacterNode';
 import { CollisionNode } from "./nodes/CollisionNode";
 import { NpcNode } from "./nodes/NpcNode";
 import { PlayerNode } from "./nodes/PlayerNode";
@@ -22,19 +24,25 @@ export enum GameStage {
 export class Hyperloop extends Game {
     private stageStartTime = 0;
     private stageTime = 0;
-    private trainSpeed = 800; // px per second
-    private trainDriveTime = 2; // drive time in seconds, bevore braking starts
+    private trainSpeed = 400; // px per second
     private totalBrakeTime = 0; // calculated later; seconds train requires to brake down to standstill
     private playerTeleportLeft = 1100; // leftest point in tunnel where player is teleported
     private playerTeleportRight = 2970; // rightest point in tunnel where player is teleported
     private teleportStep = 108; // distance between two tunnel lights
     private teleportMyTrainYDistance = 50; // only teleport when player is on roughly same height as train, not in rest of level
+    private dialogs: Dialog[];
+    private npcs: CharacterNode[] = [];
 
     // Game progress
     private charactersAvailable = 4;
     private gameStage = GameStage.NONE;
     public keyTaken = false; // key taken from corpse
     public fuseboxOn = false;
+
+    // Dialog
+    private dialogKeyPressed = true;
+    private currentDialogLine = 0;
+    private currentDialog: Dialog | null = null;
 
     public constructor() {
         super();
@@ -43,6 +51,30 @@ export class Hyperloop extends Game {
             this.spawnNPCs();
             this.setStage(GameStage.INTRO);
         }, 2000);
+
+        // TODO get from JSON instead
+        this.dialogs = [
+            new Dialog(["3 What a nice day!",
+            "1 Oh is it?",
+            "3 You have no idea how excited I am!",
+            "3 This is the first time I'm riding the hyperloop",
+            "1 Oh...",
+            "2 Well good luck with that",
+            "4 Right? Always technical issues...",
+            "3 Like what?",
+            "4 Yeah I don't know. Let's just hope today is better.",
+            "1 Everything's going to be fine. I can feel it.",
+            "3 It's so fast!",
+            "1 And so shaky",
+            "3 Yeah but look at how fast it is though",
+            "1 I'm sure we'll arrive in no time.",
+            "5 Sure",
+            "4 What could possibly go wrong",
+            "2 Right?",
+            "5 Is it just me or is the ride a little more rough than usual?"
+            ])
+        ];
+        this.currentDialog = this.dialogs[0];
     }
 
     public update(dt: number, time: number): void {
@@ -58,11 +90,14 @@ export class Hyperloop extends Game {
                 this.updateBrake(dt);
                 break;
             case GameStage.DIALOG:
-                this.updateDialog();
+                this.updateConversation();
                 break;
             case GameStage.STUCK:
                 this.updateStuck();
                 break;
+        }
+        if (this.currentDialog) {
+            this.updateDialog();
         }
         super.update(dt, time);
     }
@@ -84,11 +119,43 @@ export class Hyperloop extends Game {
 
     private spawnNPCs(): void {
         const train = this.getTrain();
-        const chars = [ new NpcNode(false), new NpcNode(true), new NpcNode(true), new NpcNode(false) ];
-        const positions = [ -80, -40, 60, 132 ];
+        const chars = [ new NpcNode(false), new NpcNode(true), new NpcNode(true), new NpcNode(true), new NpcNode(false) ];
+        const positions = [ -80, -40, 24, 60, 132 ];
         for (let i = 0; i < chars.length; i++) {
             chars[i].moveTo(positions[i], -20).appendTo(train);
         }
+        this.npcs = chars;
+    }
+
+    private updateDialog(): void {
+        // Any key to proceed with next line
+        const pressed = this.input.currentActiveIntents;
+        const prevPressed = this.dialogKeyPressed;
+        this.dialogKeyPressed = pressed !== 0;
+        if (pressed && !prevPressed) {
+            this.nextDialogLine();
+        }
+    }
+
+    private nextDialogLine() {
+        // Shut up all characters
+        this.npcs.forEach(npc => npc.say());
+        this.currentDialogLine++;
+        if (this.currentDialog && this.currentDialogLine >= this.currentDialog.lines.length) {
+            this.currentDialog = null;
+            this.currentDialogLine = 0;
+        } else if (this.currentDialog) {
+            // Show line
+            const line = this.currentDialog.lines[this.currentDialogLine];
+            const char = this.npcs[line.charNum];
+            char.say(line.line, Infinity);
+        }
+    }
+
+    private startDialog(num: number) {
+        this.currentDialog = this.dialogs[num];
+        this.currentDialogLine = -1;
+        this.nextDialogLine();
     }
 
     private updateIntro(): void {
@@ -103,7 +170,7 @@ export class Hyperloop extends Game {
     }
 
     private updateDrive(): void {
-        if (this.stageTime > this.trainDriveTime) {
+        if (!this.currentDialog) {
             this.setStage(GameStage.BRAKE);
             // Compute total break time so that train ends up in desired position
             const train = this.getTrain();
@@ -132,7 +199,7 @@ export class Hyperloop extends Game {
         }
     }
 
-    private updateDialog(): void {
+    private updateConversation(): void {
         this.setStage(GameStage.STUCK);
         // TODO braking sequence with extreme cam shake
     }
@@ -163,6 +230,7 @@ export class Hyperloop extends Game {
         // Make him stuck
         const col = new CollisionNode({ width: 400, height: 20 });
         col.moveTo(-20, -20).appendTo(train);
+        this.startDialog(0);
     }
 
     public initStuck(): void {
