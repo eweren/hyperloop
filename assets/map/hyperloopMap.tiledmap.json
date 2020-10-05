@@ -1634,12 +1634,6 @@
                  "id":246,
                  "name":"Enemy",
                  "point":true,
-                 "properties":[
-                        {
-                         "name":"trigger",
-                         "type":"string",
-                         "value":"after"
-                        }],
                  "rotation":0,
                  "type":"rat",
                  "visible":true,
@@ -2121,6 +2115,42 @@
                  "width":0,
                  "x":1946,
                  "y":390
+                }, 
+                {
+                 "height":0,
+                 "id":294,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"after"
+                        }],
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":1692,
+                 "y":950
+                }, 
+                {
+                 "height":0,
+                 "id":295,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"after"
+                        }],
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":1831,
+                 "y":721
                 }],
          "opacity":1,
          "properties":[
@@ -2130,7 +2160,7 @@
                  "value":1
                 }],
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -2169,7 +2199,7 @@
                  "value":0
                 }],
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -3797,7 +3827,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":294,
+ "nextobjectid":296,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.1",

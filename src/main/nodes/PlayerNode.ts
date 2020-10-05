@@ -28,6 +28,7 @@ import { TrainNode } from "./TrainNode";
 import { HealthNode } from "./player/HealthNode";
 import { AsepriteNode } from "../../engine/scene/AsepriteNode";
 import { ScenePointerDownEvent } from "../../engine/scene/events/ScenePointerDownEvent";
+import { DeadSpaceSuitNode } from "./DeadSpaceSuiteNode";
 
 const groundColors = [
     "#806057",
@@ -37,7 +38,6 @@ const groundColors = [
 ];
 
 export class PlayerNode extends CharacterNode {
-
     @asset(STANDARD_FONT)
     private static font: BitmapFont;
 
@@ -390,7 +390,11 @@ export class PlayerNode extends CharacterNode {
                 camera.setZoom(1);
                 camera.setRotation(0);
                 fader.fadeIn({ duration: 3 });
-                // TODO Leave corpse in place
+                new DeadSpaceSuitNode({
+                    x: this.getX(),
+                    y: this.getY(),
+                    layer: this.getLayer(),
+                }).insertBefore(this);
                 // TODO Jump to dialog sequence in train
                 this.getGame().spawnNewPlayer();
             });
