@@ -260,8 +260,8 @@ export abstract class Scene<T extends Game = Game, A = void> {
      * updated.
      */
     public update(dt: number, time: number): void {
-        this.camera.update(dt);
         this.usedLayers = this.updateRootNode(dt, time);
+        this.camera.update(dt);
     }
 
     /**
