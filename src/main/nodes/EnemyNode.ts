@@ -1,4 +1,5 @@
 import { ReadonlyVector2, Vector2 } from "../../engine/graphics/Vector2";
+import { clamp } from "../../engine/util/math";
 import { rnd } from "../../engine/util/random";
 import { now } from "../../engine/util/time";
 import { CharacterNode } from "./CharacterNode";
@@ -201,7 +202,7 @@ export abstract class EnemyNode extends CharacterNode {
         if (time > this.lastStateChange + this.attackDelay) {
             // Hurt player
             const player = this.getPlayer();
-            const playerDied = player?.hurt(0, this.getScenePosition());
+            const playerDied = player?.hurt(clamp(Math.floor(Math.random() * 350), 10, 35), this.getScenePosition());
             this.scream();
             if (playerDied) {
                 this.setState(AiState.BORED);
