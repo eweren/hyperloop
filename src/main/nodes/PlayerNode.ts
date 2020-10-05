@@ -66,7 +66,7 @@ export class PlayerNode extends CharacterNode {
     }
     private ammo = 12;
     private nextShot = 0;
-    private interactPressed = false;
+    private previouslyPressed = 0;
 
     // Character settings
     private readonly shootingRange = 250;
@@ -165,14 +165,16 @@ export class PlayerNode extends CharacterNode {
             this.setDirection(0);
             return;
         }
+
         // Controls
         const input = this.getScene()!.game.input;
+
         // Move left/right
         const direction = (input.currentActiveIntents & ControllerIntent.PLAYER_MOVE_RIGHT ? 1 : 0)
             - (input.currentActiveIntents & ControllerIntent.PLAYER_MOVE_LEFT ? 1 : 0);
         this.setDirection(direction);
         // Jump
-        if (input.currentActiveIntents & ControllerIntent.PLAYER_JUMP) {
+        if (this.canInteract(ControllerIntent.PLAYER_JUMP)) {
             this.jump();
         }
         if (this.getTag() === "walk") {
@@ -182,21 +184,19 @@ export class PlayerNode extends CharacterNode {
             PlayerNode.footsteps.stop(0.3);
         }
         // Reload
-        if (input.currentActiveIntents & ControllerIntent.PLAYER_RELOAD) {
+        if (this.canInteract(ControllerIntent.PLAYER_RELOAD)) {
             this.reload();
         }
         // Shoot
-        if (input.currentActiveIntents & ControllerIntent.PLAYER_ACTION || this.leftMouseDown) {
-            if (time >= this.nextShot) {
+        if (this.canInteract(ControllerIntent.PLAYER_ACTION) || this.leftMouseDown) {
+            this.leftMouseDown = false;
+            if (time >= this.nextShot && !this.isReloading) {
                 this.shoot();
                 this.nextShot = time + this.shotDelay;
             }
         }
         // Interact
-        const interactPressed = (input.currentActiveIntents & ControllerIntent.PLAYER_INTERACT) !== 0;
-        const prevPressed = this.interactPressed;
-        this.interactPressed = interactPressed;
-        if (interactPressed && !prevPressed) {
+        if (this.canInteract(ControllerIntent.PLAYER_INTERACT)) {
             const node = this.getNodeToInteractWith();
             if (node) {
                 node.interact();
@@ -217,6 +217,20 @@ export class PlayerNode extends CharacterNode {
                 }
             }
         }
+        this.updatePreviouslyPressed();
+    }
+
+    private updatePreviouslyPressed(): void {
+        const input = this.getGame().input;
+        this.previouslyPressed = input.currentActiveIntents;
+    }
+
+    /**
+     * Checks if the given intent is the same as the last intent to prevent auto-key-handling on button being hold.
+     */
+    private canInteract(intent: ControllerIntent): boolean {
+        const input = this.getGame().input;
+        return this.previouslyPressed !== intent && input.currentActiveIntents === intent;
     }
 
     public shoot(): void {

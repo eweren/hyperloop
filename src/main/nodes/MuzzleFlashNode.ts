@@ -94,7 +94,6 @@ export class MuzzleFlashNode extends SceneNode<Hyperloop> {
     public update(dt: number) {
         if (this.fireTimeStamp) {
             const fireProgress = (now() - this.fireTimeStamp) / (this.duration * 1000);
-            console.log(fireProgress);
             if (fireProgress > 0.9) {
                 this.fireTimeStamp = null;
                 return;
