@@ -12,7 +12,7 @@ const preventDefaultKeyCodes: string[] = [
 const keyToIntentMappings = new Map<string, ControllerIntent[]>();
 
 keyToIntentMappings.set("Space", [ControllerIntent.PLAYER_JUMP]);
-keyToIntentMappings.set("KeyW", [ControllerIntent.PLAYER_ENTER_DOOR, ControllerIntent.MENU_UP]);
+keyToIntentMappings.set("KeyW", [ControllerIntent.PLAYER_JUMP, ControllerIntent.MENU_UP]);
 keyToIntentMappings.set("KeyA", [ControllerIntent.PLAYER_MOVE_LEFT, ControllerIntent.MENU_LEFT]);
 keyToIntentMappings.set("KeyS", [ControllerIntent.PLAYER_DROP, ControllerIntent.MENU_DOWN]);
 keyToIntentMappings.set("KeyD", [ControllerIntent.PLAYER_MOVE_RIGHT, ControllerIntent.MENU_RIGHT]);
