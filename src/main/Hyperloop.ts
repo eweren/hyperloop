@@ -1,6 +1,6 @@
 import { DialogJSON } from "*.dialog.json";
 import { asset } from "../engine/assets/Assets";
-import { Sound } from '../engine/assets/Sound';
+import { Sound } from "../engine/assets/Sound";
 import { RGBColor } from "../engine/color/RGBColor";
 import { Game } from "../engine/Game";
 import { Camera } from "../engine/scene/Camera";
@@ -321,22 +321,20 @@ export class Hyperloop extends Game {
         if (this.charactersAvailable > 0) {
             this.charactersAvailable--;
             // TODO get proper spawn position
-            const oldPlayer = this.getPlayer();
+            const player = this.getPlayer();
             const spawnPoint = this.getTrain().getScenePosition();
-            const pl = new PlayerNode();
-            pl.moveTo(spawnPoint.x, spawnPoint.y - 10);
-            this.getCamera().setFollow(pl);
-            const root = this.getGameScene().rootNode;
-            oldPlayer.remove();
-            root.appendChild(pl);
-            // Spawn enemies at random subset of spawn points behind "first encounter"
-            SpawnNode.getForTrigger(pl, "after", true).forEach(s => {
-                if (rnd() < 0.4) s.spawnEnemy();
-            });
-            SpawnNode.getForTrigger(pl, "before", true).forEach(s => {
-                if (rnd() < 0.4) s.spawnEnemy();
-            });
             // TODO leave remains of old player
+            player.moveTo(spawnPoint.x - 170, spawnPoint.y - 10);
+            player.setHitpoints(100);
+            player.reset();
+            this.getCamera().setFollow(player);
+            // Spawn enemies at random subset of spawn points behind "first encounter"
+            SpawnNode.getForTrigger(player, "after", true).forEach(s => {
+                if (rnd() < 0.4) s.spawnEnemy();
+            });
+            SpawnNode.getForTrigger(player, "before", true).forEach(s => {
+                if (rnd() < 0.4) s.spawnEnemy();
+            });
         } else {
             // Game Over or sequence of new train replacing old one
         }
