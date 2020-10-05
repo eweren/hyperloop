@@ -30,8 +30,8 @@ export class GameScene extends Scene<Hyperloop> {
     @asset("map/hyperloopMap.tiledmap.json")
     private static map: TiledMap;
 
-    @asset("sounds/fx/wilhelmScream.mp3")
-    private static readonly sound: Sound;
+    @asset("sounds/loops/loop_fan.mp3")
+    private static readonly ambientFanSound: Sound;
 
     private debugMode: boolean = false;
 
@@ -64,7 +64,7 @@ export class GameScene extends Scene<Hyperloop> {
         new MonsterNode().moveTo(2400, 360).appendTo(this.mapNode);
         new MonsterNode().moveTo(2500, 360).appendTo(this.mapNode);
         new MonsterNode().moveTo(2800, 360).appendTo(this.mapNode);
-        new SoundNode({ sound: GameScene.sound, range: 100, intensity: 1 }).moveTo(2252, 395).appendTo(this.mapNode);
+        new SoundNode({ sound: GameScene.ambientFanSound, range: 300, intensity: 0.2 }).moveTo(2430, 355).appendTo(this.mapNode);
 
         if (isDev()) {
             this.rootNode.appendChild(new FpsCounterNode({
