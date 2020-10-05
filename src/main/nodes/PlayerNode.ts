@@ -140,35 +140,43 @@ export class PlayerNode extends CharacterNode {
         this.crosshairNode = new AsepriteNode({
             aseprite: PlayerNode.crossHairSprite,
             tag: "idle",
-            layer: Layer.OVERLAY
-        }).appendTo(this);
+            layer: Layer.HUD
+        });
     }
 
     public getShootingRange(): number {
         return this.shootingRange;
     }
+
     public getSpeed(): number {
         // TODO remove before publishing
         return this.speed * (this.getScene()?.keyboard.isPressed("Shift") ? 2.4 : 1.2);
     }
+
     public getAcceleration(): number {
         return this.acceleration;
     }
+
     public getDeceleration(): number {
         return this.deceleration;
     }
+
     public getJumpPower(): number {
         return this.jumpPower;
     }
+
     public getAmmo(): number {
         return this.ammo;
     }
+
     public getMagazineSize(): number {
         return this.magazineSize;
     }
+
     public getLastShotTime(): number {
         return this.lastShotTime;
     }
+
     public getHitpoints(): number {
         return this.hitpoints;
     }
@@ -401,13 +409,14 @@ export class PlayerNode extends CharacterNode {
     }
 
     private handlePointerMove(event: ScenePointerMoveEvent): void {
-        this.crosshairNode.moveTo(event.getX() - this.getX(), event.getY() - this.getCenterY());
+        this.crosshairNode.moveTo(event.getScreenX(), event.getScreenY());
         this.aimingAngle = new Vector2(event.getX(), event.getY())
             .sub(this.playerArm ? this.playerArm.getScenePosition() : this.getScenePosition())
             .getAngle();
     }
 
     protected activate(): void {
+        this.crosshairNode.appendTo(this.getScene()!.rootNode);
         this.getScene()?.onPointerMove.connect(this.handlePointerMove, this);
         this.getGame().canvas.style.cursor = "none";
     }
@@ -415,6 +424,7 @@ export class PlayerNode extends CharacterNode {
     protected deactivate(): void {
         this.getGame().canvas.style.cursor = "";
         this.getScene()?.onPointerMove.disconnect(this.handlePointerMove, this);
+        this.crosshairNode.remove();
     }
 
     protected endBattlemode(): void {
