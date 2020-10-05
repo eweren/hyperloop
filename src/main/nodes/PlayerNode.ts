@@ -110,7 +110,7 @@ export class PlayerNode extends CharacterNode {
         });
         this.health = new HealthNode({
             font: PlayerNode.font,
-            anchor: Direction.CENTER,
+            anchor: Direction.TOP,
             layer: Layer.HUD
         });
         this.appendChild(this.playerLeg);
