@@ -71,6 +71,10 @@ export class MusicManager {
         }
     }
 
+    public setVolume(factor = 1) {
+        this.tracks[this.currentMusic].setVolume(this.volumes[this.currentMusic] * factor);
+    }
+
     public stop(): void {
         this.loopTrack(-1);
     }
