@@ -1824,8 +1824,25 @@
                  "y":379
                 }, 
                 {
+                 "height":27,
+                 "id":280,
+                 "name":"maintenanceCollision",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":36,
+                 "x":1566,
+                 "y":745
+                }, 
+                {
                  "height":0,
-                 "id":279,
+                 "id":281,
                  "name":"Halogen",
                  "point":true,
                  "properties":[
@@ -1848,25 +1865,8 @@
                  "type":"sound",
                  "visible":true,
                  "width":0,
-                 "x":2169,
-                 "y":143
-                }, 
-                {
-                 "height":27,
-                 "id":280,
-                 "name":"maintenanceCollision",
-                 "properties":[
-                        {
-                         "name":"showBounds",
-                         "type":"bool",
-                         "value":false
-                        }],
-                 "rotation":0,
-                 "type":"collision",
-                 "visible":true,
-                 "width":36,
-                 "x":1566,
-                 "y":745
+                 "x":846,
+                 "y":569
                 }],
          "opacity":1,
          "properties":[
@@ -3543,7 +3543,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":281,
+ "nextobjectid":282,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.1",

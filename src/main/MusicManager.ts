@@ -12,6 +12,7 @@ export class MusicManager {
     private static music2: Sound;
 
     private tracks: Sound[] = [];
+    private volumes: number[] = [];
 
     private currentMusic = -1;
 
@@ -34,6 +35,8 @@ export class MusicManager {
         if (MusicManager.music0) {
             this.loaded = true;
             this.tracks = [ MusicManager.music0, MusicManager.music1, MusicManager.music2 ];
+            this.volumes = [1, 0.5, 1];
+
             clearInterval(this.loadInterval);
             this.loadInterval = 0;
             if (this.currentMusic >= 0) {
@@ -60,6 +63,7 @@ export class MusicManager {
             this.currentMusic = id;
             if (this.currentMusic >= 0) {
                 this.tracks[this.currentMusic].setLoop(true);
+                this.tracks[this.currentMusic].setVolume(this.volumes[this.currentMusic]);
                 this.tracks[this.currentMusic].play();
             }
         }
