@@ -202,7 +202,7 @@ export abstract class EnemyNode extends CharacterNode {
         if (time > this.lastStateChange + this.attackDelay) {
             // Hurt player
             const player = this.getPlayer();
-            const playerDied = player?.hurt(clamp(Math.floor(Math.random() * 350), 10, 35), this.getScenePosition());
+            const playerDied = player?.hurt(clamp(Math.floor(Math.random() * 30), 5, 30), this.getScenePosition());
             this.scream();
             if (playerDied) {
                 this.setState(AiState.BORED);
