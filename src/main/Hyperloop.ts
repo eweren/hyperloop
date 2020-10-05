@@ -85,7 +85,7 @@ export class Hyperloop extends Game {
     // Called by GameScene
     public setupScene(): void {
         this.spawnNPCs();
-        this.setStage(GameStage.INTRO);
+        this.setStage(GameStage.DIALOG); // TODO INTRO
         // Assets cannot be loaded in constructor because the LoadingScene
         // is not initialized at constructor time and Assets are loaded in the LoadingScene
         this.dialogs = [
@@ -309,7 +309,10 @@ export class Hyperloop extends Game {
     }
 
     private updateReturn(dt: number) {
-        const train = this.getTrain();
+        let train: TrainNode;
+        try {
+            train = this.getTrain();
+        } catch (e) { return; }
         // Drive off
         if (this.stageTime > 5) {
             const progress = clamp((this.stageTime - 5.5) / 10, 0, 1);

@@ -214,7 +214,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         }
     }
 
-    private unstuck(): this {
+    protected unstuck(): this {
         for (let i = 1; i < 100; i++) {
             if (!this.getPlayerCollisionAt(this.x, this.y - i)) {
                 return this.moveTo(this.x, this.y - i);
