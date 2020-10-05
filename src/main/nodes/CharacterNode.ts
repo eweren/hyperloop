@@ -128,9 +128,12 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
         // Death animation
         if (!this.isAlive()) {
-            this.setTag("die");
             if (this.getTimesPlayed("die") > 0 && this.removeOnDie) {
                 this.remove();
+            } else if (this.getTimesPlayed("die") === 1 || this.getTag() === "dead") {
+                this.setTag("dead");
+            } else {
+                this.setTag("die");
             }
             return;
         }
