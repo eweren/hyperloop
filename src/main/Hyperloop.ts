@@ -56,6 +56,7 @@ export class Hyperloop extends Game {
     private gameStage = GameStage.NONE;
     public keyTaken = false; // key taken from corpse
     public fuseboxOn = false;
+    private fadeOutInitiated = false;
 
     // Dialog
     private dialogKeyPressed = false;
@@ -292,10 +293,15 @@ export class Hyperloop extends Game {
         }
         // Driving illusion
         const pos = train.getScenePosition().x;
-        if (pos > 2800) {
+        if (pos > 3100) {
             train.setX(pos - this.teleportStep * 2);
         }
-        this.applyCamShake(1);
+        // Fade out
+        if (this.stageTime > 12 && !this.fadeOutInitiated) {
+            this.fadeOutInitiated = true;
+            this.getFader().fadeOut({ duration: 12 });
+            // TODO switch to credits scene here
+        }
     }
 
     public initIntro(): void {
@@ -414,6 +420,7 @@ export class Hyperloop extends Game {
         player.moveTo(pos.x - trainPos.x, pos.y - trainPos.y);
         player.remove().appendTo(train);
         train.showInner();
+        MusicManager.getInstance().loopTrack(0);
         // TODO player follow NPC
     }
 
