@@ -17,7 +17,7 @@ export class MonsterNode extends EnemyNode {
     private static readonly monsterSoundAttack: Sound;
     private attackSound = MonsterNode.monsterSoundAttack.shallowClone();
 
-    @asset("sounds/fx/drip.mp3")
+    @asset("sounds/fx/monsterHit.ogg")
     private static readonly monsterSoundDamage: Sound;
     private damageSound = MonsterNode.monsterSoundDamage.shallowClone();
 
@@ -38,6 +38,7 @@ export class MonsterNode extends EnemyNode {
     }
 
     public hurt(damage: number, origin: ReadonlyVector2): boolean {
+        this.damageSound.stop();
         this.damageSound.play();
         return super.hurt(damage, origin);
     }
