@@ -15,7 +15,6 @@ export class NpcNode extends CharacterNode {
     private static femaleSprite: Aseprite;
 
     // Character settings
-    private readonly speed = 60;
     private readonly acceleration = 600;
     private readonly deceleration = 800;
     private readonly jumpPower = 295;
@@ -35,7 +34,7 @@ export class NpcNode extends CharacterNode {
         return 1;
     }
     public getSpeed(): number {
-        return 1
+        return 1;
     }
     public getAcceleration(): number {
         return this.acceleration;
