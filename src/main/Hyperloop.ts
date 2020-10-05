@@ -242,7 +242,7 @@ export class Hyperloop extends Game {
         const train = this.getTrain();
         const offsetX = this.getTime() * this.trainSpeed;
         train.setX(450 + (offsetX % 324)); // 108px between two tunnel lights
-        this.applyCamShake(1);
+        this.handleCamera(1, this.stageTime / 2);
     }
 
     private updateBrake(dt: number): void {
@@ -254,13 +254,24 @@ export class Hyperloop extends Game {
             const train = this.getTrain();
             train.setX(train.getX() + speed * dt);
             const shakeIntensity = 1 - progress + Math.sin(Math.PI * progress) * 2;
-            this.applyCamShake(shakeIntensity);
+            this.handleCamera(shakeIntensity, 1);
         }
     }
 
+    private conversationEndTime = 0;
     private updateConversation(): void {
         if (!this.currentDialog) {
-            this.setStage(GameStage.STUCK);
+            if (!this.conversationEndTime) {
+                this.conversationEndTime = this.getTime();
+            } else {
+                const p = (this.getTime() - this.conversationEndTime) / 3;
+                this.handleCamera(0, 1 - p);
+                if (p >= 1.3) {
+                    this.setStage(GameStage.STUCK);
+                }
+            }
+        } else {
+            this.handleCamera(0, 1);
         }
     }
 
@@ -289,8 +300,8 @@ export class Hyperloop extends Game {
             const progress = clamp((this.stageTime - 5.5) / 10, 0, 1);
             const speed = this.trainSpeed * progress;
             train.setX(train.getX() + speed * dt);
-            this.applyCamShake(1);
         }
+        this.handleCamera(this.stageTime > 5 ? 1 : 0, this.stageTime / 3);
         // Driving illusion
         const pos = train.getScenePosition().x;
         if (pos > 3100) {
@@ -302,6 +313,21 @@ export class Hyperloop extends Game {
             this.getFader().fadeOut({ duration: 12 });
             // TODO switch to credits scene here
         }
+    }
+
+    private handleCamera(shakeForce = 0, toCenterForce = 1): void {
+        const cam = this.getCamera();
+        // Force towards center
+        toCenterForce = clamp(toCenterForce, 0, 1);
+        const p = 0.5 - 0.5 * Math.cos(toCenterForce * Math.PI);
+        const trainX = this.getTrain().getScenePosition().x;
+        const playerX = this.getPlayer().getScenePosition().x;
+        const diff = playerX - trainX;
+        // Shake
+        const angle = rnd(Math.PI * 2);
+        const distance = rnd(shakeForce) ** 3;
+        const dx = distance * Math.sin(angle), dy = distance * Math.cos(angle);
+        cam.transform(m => m.setTranslation(diff * p + dx, dy));
     }
 
     public initIntro(): void {
@@ -372,7 +398,7 @@ export class Hyperloop extends Game {
 
     public getTrainDoorCoordinate(): Vector2 {
         const coord = this.getTrain().getScenePosition();
-        return new Vector2(coord.x - 170, coord.y - 10);
+        return new Vector2(coord.x - 170, coord.y + 38);
     }
 
     public turnOnFuseBox() {
@@ -446,13 +472,6 @@ export class Hyperloop extends Game {
 
     public getCamera(): Camera {
         return this.getGameScene().camera;
-    }
-
-    public applyCamShake(force = 1): void {
-        const angle = rnd(Math.PI * 2);
-        const distance = rnd(force) ** 3;
-        const dx = distance * Math.sin(angle), dy = distance * Math.cos(angle);
-        this.getCamera().transform(m => m.setTranslation(dx, dy));
     }
 
     public getAmbientLights(lights = this.getAllLights()): LightNode[] {
