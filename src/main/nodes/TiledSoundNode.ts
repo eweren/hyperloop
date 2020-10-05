@@ -44,7 +44,7 @@ export class TiledSoundNode extends SoundNode<Hyperloop> {
         const soundAssetIndex = getAssetIndexForName(soundName);
         let sound: Sound;
         if (soundAssetIndex !== -1) {
-            sound = TiledSoundNode.sounds[soundAssetIndex];
+            sound = TiledSoundNode.sounds[soundAssetIndex].shallowClone();
         } else {
             throw new Error(`Sound '${soundName}' could not be loaded`);
         }

@@ -65,6 +65,18 @@ export class Sound {
         });
     }
 
+    public static shallowClone(sound: Sound): Sound {
+        const cloned = Object.create(sound.constructor.prototype);
+        Object.keys(sound).forEach(key => {
+            cloned[key] = (<any>sound)[key];
+        });
+        return cloned;
+    }
+
+    public shallowClone(): Sound {
+        return Sound.shallowClone(this);
+    }
+
     public isPlaying(): boolean {
         return this.source != null;
     }

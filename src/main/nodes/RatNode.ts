@@ -14,9 +14,7 @@ export class RatNode extends EnemyNode {
 
     @asset("sounds/fx/ratSqueak.mp3")
     private static readonly ratSoundAttack: Sound;
-
-    @asset("sounds/fx/ratSqueak2.mp3")
-    private static readonly ratSoundFollow: Sound;
+    private squeakSound = RatNode.ratSoundAttack.shallowClone();
 
     protected targetPosition: ReadonlyVector2;
 
@@ -81,8 +79,7 @@ export class RatNode extends EnemyNode {
         if (this.getDistanceToPlayerSquared() < this.squaredSafetyDistance) {
             this.escapeDistanceSquared = rnd(this.escapeDistanceMin, this.escapeDistanceMax) ** 2;
             this.setState(AiState.ALERT);
-            this.stopSounds();
-            RatNode.ratSoundAttack.play();
+            this.squeak();
         }
     }
 
@@ -108,14 +105,12 @@ export class RatNode extends EnemyNode {
         return player.getPosition().getSquareDistance(this.getPosition());
     }
 
-    private stopSounds() {
-        if (this.isSoundPlaying()) {
-            RatNode.ratSoundAttack.stop();
-            RatNode.ratSoundFollow.stop();
-        }
+    private stopSounds(): void {
+        this.squeakSound.stop();
     }
 
-    private isSoundPlaying() {
-        return RatNode.ratSoundAttack.isPlaying() || RatNode.ratSoundFollow.isPlaying();
+    private squeak(): void {
+        this.stopSounds();
+        this.squeakSound.play();
     }
 }
