@@ -4,6 +4,7 @@ import { InteractiveNode } from "./InteractiveNode";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { Sound } from "../../engine/assets/Sound";
 import { asset } from "../../engine/assets/Assets";
+import { SpawnNode } from "./SpawnNode";
 
 export class FuseboxNode extends InteractiveNode {
     @asset("sprites/fuse.aseprite.json")
@@ -36,6 +37,7 @@ export class FuseboxNode extends InteractiveNode {
                 FuseboxNode.doorSound.play();
                 this.getTarget()?.say("Just turn it on... and we're good to go", 2);
                 // Spawn enemy in back
+                SpawnNode.getForTrigger(this, "fusebox").forEach(spawn => spawn.spawnEnemy());
             } else {
                 this.isOn = true;
                 this.setTag("open-on");

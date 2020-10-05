@@ -26,6 +26,7 @@ import { MuzzleFlashNode } from "./MuzzleFlashNode";
 import { AmbientPlayerNode } from "./player/AmbientPlayerNode";
 import { TrainNode } from "./TrainNode";
 import { HealthNode } from "./player/HealthNode";
+import { AsepriteNode } from "../../engine/scene/AsepriteNode";
 
 const groundColors = [
     "#806057",
@@ -52,7 +53,10 @@ export class PlayerNode extends CharacterNode {
     private static readonly reloadSound: Sound;
 
     @asset("sprites/spacesuitbody.aseprite.json")
-    private static sprite: Aseprite;
+    private static readonly sprite: Aseprite;
+
+    @asset("sprites/crosshair.aseprite.json")
+    private static readonly crossHairSprite: Aseprite;
 
     private flashLight: FlashlightNode;
 
@@ -86,6 +90,7 @@ export class PlayerNode extends CharacterNode {
     private lastHitTimestamp = 0;
 
     private dustParticles: ParticleNode;
+    private crosshairNode: AsepriteNode;
 
     public constructor(args?: SceneNodeArgs) {
         super({
@@ -131,33 +136,47 @@ export class PlayerNode extends CharacterNode {
             lifetime: () => rnd(0.5, 0.8),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         }).appendTo(this);
+
+        this.crosshairNode = new AsepriteNode({
+            aseprite: PlayerNode.crossHairSprite,
+            tag: "idle",
+            layer: Layer.HUD
+        });
     }
 
     public getShootingRange(): number {
         return this.shootingRange;
     }
+
     public getSpeed(): number {
         // TODO remove before publishing
         return this.speed * (this.getScene()?.keyboard.isPressed("Shift") ? 2.4 : 1.2);
     }
+
     public getAcceleration(): number {
         return this.acceleration;
     }
+
     public getDeceleration(): number {
         return this.deceleration;
     }
+
     public getJumpPower(): number {
         return this.jumpPower;
     }
+
     public getAmmo(): number {
         return this.ammo;
     }
+
     public getMagazineSize(): number {
         return this.magazineSize;
     }
+
     public getLastShotTime(): number {
         return this.lastShotTime;
     }
+
     public getHitpoints(): number {
         return this.hitpoints;
     }
@@ -221,10 +240,6 @@ export class PlayerNode extends CharacterNode {
                 node.interact();
             }
         }
-        // Battlemode
-        if (this.battlemode) {
-            this.getScene()!.game.canvas.style.cursor = "none";
-        }
 
         // Spawn random dust particles while walking
         if (this.isVisible()) {
@@ -235,6 +250,8 @@ export class PlayerNode extends CharacterNode {
             }
         }
         this.updatePreviouslyPressed();
+
+        this.updateCrosshair();
     }
 
     private updatePreviouslyPressed(): void {
@@ -378,7 +395,6 @@ export class PlayerNode extends CharacterNode {
         }
     }
 
-
     public getPersonalEnemies(): EnemyNode[] {
         const monsters = this.getScene()?.rootNode.getDescendantsByType(MonsterNode) ?? [];
         const rats = this.getScene()?.rootNode.getDescendantsByType(RatNode) ?? [];
@@ -391,22 +407,34 @@ export class PlayerNode extends CharacterNode {
     }
 
     private handlePointerMove(event: ScenePointerMoveEvent): void {
+        this.crosshairNode.moveTo(event.getScreenX(), event.getScreenY());
         this.aimingAngle = new Vector2(event.getX(), event.getY())
             .sub(this.playerArm ? this.playerArm.getScenePosition() : this.getScenePosition())
             .getAngle();
     }
 
     protected activate(): void {
+        this.crosshairNode.appendTo(this.getScene()!.rootNode);
         this.getScene()?.onPointerMove.connect(this.handlePointerMove, this);
+        this.getGame().canvas.style.cursor = "none";
     }
 
     protected deactivate(): void {
+        this.getGame().canvas.style.cursor = "";
         this.getScene()?.onPointerMove.disconnect(this.handlePointerMove, this);
+        this.crosshairNode.remove();
     }
 
-    protected endBattlemode(): void {
-        super.endBattlemode();
-        this.getGame().canvas.style.cursor = "crosshair";
+    protected updateCrosshair(): void {
+        let tag = "idle";
+        if (this.ammo === 0) {
+            if (!this.isReloading) {
+                tag = "reload";
+            }
+        } else if (this.battlemode) {
+            tag = "battle";
+        }
+        this.crosshairNode.setTag(tag);
     }
 
     private setupMouseKeyHandlers(): void {

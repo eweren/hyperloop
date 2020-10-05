@@ -35,14 +35,6 @@ export function asset(src: string | string[], options: AssetOptions = {}): Prope
     };
 }
 
-function shallowClone(value: any): any {
-    const cloned = Object.create(value.constructor.prototype);
-    Object.keys(value).forEach(key => {
-        cloned[key] = (<any>value)[key];
-    });
-    return cloned;
-}
-
 export class Assets {
     private async loadAsset(src: string): Promise<unknown> {
         let asset = assets.get(src);
@@ -70,9 +62,7 @@ export class Assets {
 
             assets.set(src, asset);
         }
-        if (asset instanceof Sound) {
-            asset = shallowClone(asset);
-        }
+
         return asset;
     }
 

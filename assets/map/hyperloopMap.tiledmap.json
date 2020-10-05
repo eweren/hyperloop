@@ -1260,6 +1260,12 @@
                  "id":222,
                  "name":"EnemySpawn",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"before"
+                        }],
                  "rotation":0,
                  "type":"enemySpawn",
                  "visible":true,
@@ -1272,6 +1278,12 @@
                  "id":223,
                  "name":"EnemySpawn",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"before"
+                        }],
                  "rotation":0,
                  "type":"enemySpawn",
                  "visible":true,
@@ -1284,6 +1296,12 @@
                  "id":224,
                  "name":"EnemySpawn",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"before"
+                        }],
                  "rotation":0,
                  "type":"enemySpawn",
                  "visible":true,
@@ -1296,6 +1314,12 @@
                  "id":225,
                  "name":"EnemySpawn",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"before"
+                        }],
                  "rotation":0,
                  "type":"enemySpawn",
                  "visible":true,
@@ -1308,6 +1332,12 @@
                  "id":226,
                  "name":"EnemySpawn",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"after"
+                        }],
                  "rotation":0,
                  "type":"enemySpawn",
                  "visible":true,
@@ -1320,6 +1350,12 @@
                  "id":227,
                  "name":"EnemySpawn",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"after"
+                        }],
                  "rotation":0,
                  "type":"enemySpawn",
                  "visible":true,
@@ -1332,6 +1368,12 @@
                  "id":228,
                  "name":"EnemySpawn",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"after"
+                        }],
                  "rotation":0,
                  "type":"enemySpawn",
                  "visible":true,
@@ -1344,6 +1386,12 @@
                  "id":229,
                  "name":"EnemySpawn",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"after"
+                        }],
                  "rotation":0,
                  "type":"enemySpawn",
                  "visible":true,
@@ -1356,6 +1404,12 @@
                  "id":230,
                  "name":"EnemySpawn",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"after"
+                        }],
                  "rotation":0,
                  "type":"enemySpawn",
                  "visible":true,
@@ -1562,6 +1616,12 @@
                  "id":244,
                  "name":"Enemy",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"before"
+                        }],
                  "rotation":0,
                  "type":"rat",
                  "visible":true,
@@ -1574,6 +1634,12 @@
                  "id":246,
                  "name":"Enemy",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"after"
+                        }],
                  "rotation":0,
                  "type":"rat",
                  "visible":true,
@@ -1586,6 +1652,12 @@
                  "id":247,
                  "name":"Enemy",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"after"
+                        }],
                  "rotation":0,
                  "type":"rat",
                  "visible":true,
@@ -1732,6 +1804,12 @@
                  "id":274,
                  "name":"EnemySpawn",
                  "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"before"
+                        }],
                  "rotation":0,
                  "type":"enemySpawn",
                  "visible":true,
@@ -1776,7 +1854,7 @@
                         {
                          "name":"intensity",
                          "type":"float",
-                         "value":0.8
+                         "value":1
                         }, 
                         {
                          "name":"range",
@@ -1792,8 +1870,8 @@
                  "type":"sound",
                  "visible":true,
                  "width":0,
-                 "x":2430,
-                 "y":217
+                 "x":2171,
+                 "y":141
                 }, 
                 {
                  "height":0,
@@ -1842,14 +1920,37 @@
                 }, 
                 {
                  "height":0,
-                 "id":281,
+                 "id":282,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"hitpoints",
+                         "type":"int",
+                         "value":140
+                        }, 
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"fusebox"
+                        }],
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":1218,
+                 "y":681
+                }, 
+                {
+                 "height":0,
+                 "id":283,
                  "name":"Halogen",
                  "point":true,
                  "properties":[
                         {
                          "name":"intensity",
                          "type":"float",
-                         "value":0.8
+                         "value":1
                         }, 
                         {
                          "name":"range",
@@ -1865,26 +1966,161 @@
                  "type":"sound",
                  "visible":true,
                  "width":0,
-                 "x":846,
-                 "y":569
+                 "x":2429,
+                 "y":210
                 }, 
                 {
                  "height":0,
-                 "id":282,
+                 "id":284,
+                 "name":"Halogen",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":1
+                        }, 
+                        {
+                         "name":"range",
+                         "type":"float",
+                         "value":150
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"halogen"
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":2160,
+                 "y":356
+                }, 
+                {
+                 "height":0,
+                 "id":285,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"hitpoints",
+                         "type":"int",
+                         "value":140
+                        }, 
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"firstEncounter"
+                        }],
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":1652,
+                 "y":1075
+                }, 
+                {
+                 "height":0,
+                 "id":287,
+                 "name":"fallDownTrigger",
+                 "point":true,
+                 "rotation":0,
+                 "type":"trigger",
+                 "visible":true,
+                 "width":0,
+                 "x":1584,
+                 "y":972
+                }, 
+                {
+                 "height":0,
+                 "id":288,
                  "name":"EnemySpawn",
                  "point":true,
                  "properties":[
                         {
                          "name":"trigger",
                          "type":"string",
-                         "value":"fusebox"
+                         "value":"afterSwitch"
                         }],
                  "rotation":0,
                  "type":"enemySpawn",
                  "visible":true,
                  "width":0,
-                 "x":1218,
-                 "y":681
+                 "x":2265,
+                 "y":376
+                }, 
+                {
+                 "height":0,
+                 "id":289,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"afterSwitch"
+                        }],
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":2358,
+                 "y":361
+                }, 
+                {
+                 "height":0,
+                 "id":290,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"afterSwitch"
+                        }],
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":2100,
+                 "y":390
+                }, 
+                {
+                 "height":0,
+                 "id":291,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"afterSwitch"
+                        }],
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":1973,
+                 "y":389
+                }, 
+                {
+                 "height":0,
+                 "id":292,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"afterSwitch"
+                        }],
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":1946,
+                 "y":390
                 }],
          "opacity":1,
          "properties":[
@@ -3561,7 +3797,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":283,
+ "nextobjectid":294,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.1",

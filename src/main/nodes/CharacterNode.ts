@@ -299,6 +299,10 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         return false;
     }
 
+    public setHitpoints(hp: number): void {
+        this.hitpoints = hp;
+    }
+
     public say(line = "", duration = 0, delay = 0): void {
         this.speakSince = this.gameTime + delay;
         this.speakUntil = this.speakSince + duration;
