@@ -22,6 +22,7 @@ import { isDev } from "../../engine/util/env";
 import { now, sleep } from "../../engine/util/time";
 import { ParticleNode, valueCurves } from "./ParticleNode";
 import { rnd, rndItem, timedRnd } from "../../engine/util/random";
+import { MuzzleFlashNode } from "./MuzzleFlashNode";
 
 const groundColors = [
     "#806057",
@@ -59,10 +60,11 @@ export class PlayerNode extends CharacterNode {
     private reloadStart: number | null = null;
     private lastShotTime: number = 0;
     private shotRecoil = 0.2;
+    private muzzleFlash: MuzzleFlashNode;
     private get aimingAngleNonNegative(): number {
         return -this.aimingAngle + Math.PI / 2;
     }
-    private ammo = 6;
+    private ammo = 12;
     private nextShot = 0;
     private interactPressed = false;
 
@@ -73,7 +75,7 @@ export class PlayerNode extends CharacterNode {
     private readonly deceleration = 800;
     private readonly jumpPower = 295;
     private readonly shotDelay = 0.2;
-    private readonly magazineSize = 6;
+    private readonly magazineSize = 12;
     private readonly reloadDelay = 2200;
     private leftMouseDown = false;
 
@@ -92,6 +94,7 @@ export class PlayerNode extends CharacterNode {
         this.playerArm = new PlayerArmNode();
         this.playerLeg = new PlayerLegsNode();
         this.flashLight = new FlashlightNode();
+        this.muzzleFlash = new MuzzleFlashNode(this.shotRecoil, {y: -3});
         this.ammoCounter = new AmmoCounterNode({
             font: PlayerNode.font,
             anchor: Direction.TOP_RIGHT,
@@ -100,6 +103,7 @@ export class PlayerNode extends CharacterNode {
         this.appendChild(this.playerLeg);
         this.appendChild(this.playerArm);
         this.playerArm?.appendChild(this.flashLight);
+        this.flashLight?.appendChild(this.muzzleFlash);
         this.setupMouseKeyHandlers();
         (<any>window)["player"] = this;
 
@@ -222,6 +226,7 @@ export class PlayerNode extends CharacterNode {
         } else if (this.ammo > 0 && !this.isReloading) {
             this.lastShotTime = now();
             this.ammo--;
+            this.muzzleFlash.fire();
             super.shoot(this.aimingAngleNonNegative, 35, this.flashLight.getScenePosition());
         }
     }
