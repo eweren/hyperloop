@@ -2,11 +2,13 @@ import { Hyperloop } from "../Hyperloop";
 import { Scene } from "../../engine/scene/Scene";
 import { ProgressBarNode } from "../../engine/scene/ProgressBarNode";
 import { TitleScene } from "./TitleScene";
+import { FadeTransition } from "../../engine/transitions/FadeTransition";
 
 export class LoadingScene extends Scene<Hyperloop> {
     private progressBar!: ProgressBarNode;
 
     public setup(): void {
+        this.outTransition = new FadeTransition();
         this.progressBar = new ProgressBarNode({
             x: this.game.width >> 1,
             y: this.game.height >> 1
@@ -18,8 +20,9 @@ export class LoadingScene extends Scene<Hyperloop> {
     }
 
     public async activate(): Promise<void> {
-        await this.game.assets.load(this.updateProgress.bind(this));
-        this.game.scenes.setScene(TitleScene);
+        this.game.assets.load(this.updateProgress.bind(this)).then(() => {
+            this.game.scenes.setScene(TitleScene);
+        });
     }
 
     private updateProgress(total: number, loaded: number): void {

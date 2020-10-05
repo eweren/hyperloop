@@ -12,7 +12,7 @@ import { RatNode } from "./RatNode";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { ScenePointerMoveEvent } from "../../engine/scene/events/ScenePointerMoveEvent";
 import { Sound } from "../../engine/assets/Sound";
-import { Vector2 } from "../../engine/graphics/Vector2";
+import { ReadonlyVector2, Vector2 } from "../../engine/graphics/Vector2";
 import { asset } from "../../engine/assets/Assets";
 import { AmmoCounterNode } from "./player/AmmoCounterNode";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
@@ -25,6 +25,7 @@ import { Rect } from "../../engine/geom/Rect";
 import { MuzzleFlashNode } from "./MuzzleFlashNode";
 import { AmbientPlayerNode } from "./player/AmbientPlayerNode";
 import { TrainNode } from "./TrainNode";
+import { HealthNode } from "./player/HealthNode";
 
 const groundColors = [
     "#806057",
@@ -63,6 +64,7 @@ export class PlayerNode extends CharacterNode {
     private lastShotTime: number = 0;
     private shotRecoil = 0.2;
     private muzzleFlash: MuzzleFlashNode;
+    private health: HealthNode;
     private get aimingAngleNonNegative(): number {
         return -this.aimingAngle + Math.PI / 2;
     }
@@ -79,7 +81,9 @@ export class PlayerNode extends CharacterNode {
     private readonly shotDelay = 0.2;
     private readonly magazineSize = 12;
     private readonly reloadDelay = 2200;
+    private readonly timeoutForRecover = 3000;
     private leftMouseDown = false;
+    private lastHitTimestamp = 0;
 
     private dustParticles: ParticleNode;
 
@@ -102,6 +106,11 @@ export class PlayerNode extends CharacterNode {
         this.ammoCounter = new AmmoCounterNode({
             font: PlayerNode.font,
             anchor: Direction.TOP_RIGHT,
+            layer: Layer.HUD
+        });
+        this.health = new HealthNode({
+            font: PlayerNode.font,
+            anchor: Direction.TOP,
             layer: Layer.HUD
         });
         this.appendChild(this.playerLeg);
@@ -129,7 +138,7 @@ export class PlayerNode extends CharacterNode {
     }
     public getSpeed(): number {
         // TODO remove before publishing
-        return this.speed * (this.getScene()?.keyboard.isPressed("Shift") ? 4 : 1);
+        return this.speed * (this.getScene()?.keyboard.isPressed("Shift") ? 2.4 : 1.2);
     }
     public getAcceleration(): number {
         return this.acceleration;
@@ -149,6 +158,9 @@ export class PlayerNode extends CharacterNode {
     public getLastShotTime(): number {
         return this.lastShotTime;
     }
+    public getHitpoints(): number {
+        return this.hitpoints;
+    }
 
     public update(dt: number, time: number) {
         super.update(dt, time);
@@ -156,7 +168,10 @@ export class PlayerNode extends CharacterNode {
             const rootNode = this.getGame().getGameScene().rootNode;
             this.ammoCounter.setX(rootNode.getWidth() - 10);
             this.ammoCounter.setY(10);
+            this.health.setX(rootNode.getWidth() / 2);
+            this.health.setY(10);
             rootNode.appendChild(this.ammoCounter);
+            rootNode.appendChild(this.health);
         }
         if (!this.isAlive()) {
             this.setDirection(0);
@@ -189,6 +204,8 @@ export class PlayerNode extends CharacterNode {
         if (this.canInteract(ControllerIntent.PLAYER_RELOAD)) {
             this.reload();
         }
+        this.syncArmAndLeg();
+        this.recover();
         // Shoot
         if (this.canInteract(ControllerIntent.PLAYER_ACTION) || this.leftMouseDown) {
             this.leftMouseDown = false;
@@ -208,8 +225,6 @@ export class PlayerNode extends CharacterNode {
         if (this.battlemode) {
             this.getScene()!.game.canvas.style.cursor = "none";
         }
-
-        this.syncArmAndLeg();
 
         // Spawn random dust particles while walking
         if (this.isVisible()) {
@@ -243,7 +258,7 @@ export class PlayerNode extends CharacterNode {
             this.lastShotTime = now();
             this.ammo--;
             this.muzzleFlash.fire();
-            super.shoot(this.aimingAngleNonNegative, 35, this.flashLight.getScenePosition());
+            super.shoot(this.aimingAngleNonNegative, 35, this.muzzleFlash.getScenePosition());
         }
     }
 
@@ -300,6 +315,7 @@ export class PlayerNode extends CharacterNode {
             const backwards = this.direction === 1 && this.aimingAngle < 0 || this.direction === -1 && this.aimingAngle >= 0;
             this.playerLeg?.getAseprite().setDirection(backwards ? "reverse" : "forward");
             // Transform flashlight to match scaling and rotation of the arm.
+
             this.flashLight.transform(f => {
                 if (this.isMirrorX()) {
                     this.flashLight.setY(-3);
@@ -322,6 +338,20 @@ export class PlayerNode extends CharacterNode {
         this.playerLeg?.setMirrorX(this.direction === 0 ? this.isMirrorX() : (this.direction === -1));
     }
 
+    private recover(): void {
+        if (this.isAlive() && this.hitpoints < 100 && now() - this.lastHitTimestamp > this.timeoutForRecover) {
+            this.hitpoints++;
+        }
+    }
+
+    public hurt(damage: number, origin: ReadonlyVector2): boolean {
+        this.lastHitTimestamp = now();
+        const { centerX, centerY } = this.getSceneBounds();
+        const damageFromRight = origin.x - centerX > 0;
+        this.setX(centerX + (damageFromRight ? -1 : 1));
+        this.emitBlood(centerX, centerY, Math.random() * Math.PI * 2, damage);
+        return super.hurt(damage, origin);
+    }
 
     public die(): void {
         super.die();

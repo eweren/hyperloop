@@ -1,6 +1,5 @@
 import { asset } from "../../engine/assets/Assets";
 import { Sound } from "../../engine/assets/Sound";
-import { Line2 } from "../../engine/graphics/Line2";
 import { ReadonlyVector2, Vector2, Vector2Like } from "../../engine/graphics/Vector2";
 import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
 import { cacheResult } from "../../engine/util/cache";
@@ -49,8 +48,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected battlemode = false;
     private battlemodeTimeout = 2000;
     private battlemodeTimeoutTimerId: number | null = null;
-    private bulletStartPoint: Vector2 | null = null;
-    private bulletEndPoint: Vector2 | null = null;
     private storedCollisionCoordinate: Vector2 = new Vector2(0, 0);
 
     // Talking/Thinking
@@ -209,10 +206,12 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         const isColliding = this.getLineCollision(origin.x, origin.y, diffX, diffY, PROJECTILE_STEP_SIZE);
         if (isColliding) {
             const coord = this.storedCollisionCoordinate;
-            const markNode = new MarkNode({x: coord.x, y: coord.y});
-            const markLineNode = new MarkLineNode(new Vector2(origin.x, origin.y), coord);
-            this.getParent()?.appendChild(markNode);
-            this.getParent()?.appendChild(markLineNode);
+            if (this.debug) {
+                const markNode = new MarkNode({x: coord.x, y: coord.y});
+                const markLineNode = new MarkLineNode(new Vector2(origin.x, origin.y), coord);
+                this.getParent()?.appendChild(markNode);
+                this.getParent()?.appendChild(markLineNode);
+            }
             if (isColliding instanceof CharacterNode) {
                 const bounds = isColliding.getSceneBounds();
                 const headshot = (coord.y < bounds.minY + 0.25 * (bounds.height));
@@ -251,10 +250,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         for (let i = 0; i <= steps; i++) {
             isColliding = this.getPointCollision(nextCheckPoint.x, nextCheckPoint.y, enemies, colliders);
             nextCheckPoint.add({ x: stepX, y: stepY });
-            if (this.debug) {
-                this.bulletStartPoint = this.bulletStartPoint!.add({ x: stepX, y: stepY });
-                this.bulletEndPoint = this.bulletEndPoint!.add({ x: stepX, y: stepY });
-            }
             if (isColliding) {
                 this.storedCollisionCoordinate = nextCheckPoint;
                 return isColliding;
@@ -265,36 +260,14 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     public draw(context: CanvasRenderingContext2D): void {
         super.draw(context);
-        if (this.debug) {
-            this.drawShootingLine(context);
-        }
         // TODO put this into proper text node
-        if (this.speakLine) {
+        if (this.speakLine && this.gameTime > this.speakSince && this.gameTime < this.speakUntil) {
             const progress = (this.gameTime - this.speakSince);
             const line = this.speakLine.substr(0, Math.ceil(28 * progress));
             context.save();
             context.fillStyle = "white";
             context.textAlign = "center";
             context.fillText(line, 0, -15);
-            context.restore();
-        }
-    }
-
-    private drawShootingLine(context: CanvasRenderingContext2D): void {
-        // Draw shot line
-        if (this.bulletStartPoint && this.bulletEndPoint) {
-            context.save();
-            const line = new Line2(
-                this.bulletStartPoint,
-                this.bulletEndPoint
-            );
-            context.save();
-            context.beginPath();
-            line.draw(context);
-            context.strokeStyle = "#ffffff";
-            context.stroke();
-            context.closePath();
-            context.restore();
             context.restore();
         }
     }
@@ -326,9 +299,9 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         return false;
     }
 
-    public say(line = "", duration = 0): void {
-        this.speakSince = this.gameTime;
-        this.speakUntil = this.gameTime + duration;
+    public say(line = "", duration = 0, delay = 0): void {
+        this.speakSince = this.gameTime + delay;
+        this.speakUntil = this.speakSince + duration;
         this.speakLine = line;
     }
 
