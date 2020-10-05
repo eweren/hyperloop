@@ -76,12 +76,8 @@ export class RatNode extends EnemyNode {
             this.moveTs = time;
             this.moveDelay = rnd(this.moveTimeMin, this.moveTimeMax);
         }
-        if (this.getDistanceToPlayerSquared() < this.squaredSafetyDistance) {
-            this.escapeDistanceSquared = rnd(this.escapeDistanceMin, this.escapeDistanceMax) ** 2;
-            this.setState(AiState.ALERT);
-            this.squeak();
-        }
         if (this.getDistanceToPlayerSquared() < this.squaredSafetyDistance || this.canSeeOrHearPlayer()) {
+            this.escapeDistanceSquared = rnd(this.escapeDistanceMin, this.escapeDistanceMax) ** 2;
             this.setState(AiState.ALERT);
             this.squeak();
         }
