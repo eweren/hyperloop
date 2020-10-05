@@ -3,10 +3,15 @@ import { Direction } from "../../engine/geom/Direction";
 import { InteractiveNode } from "./InteractiveNode";
 import { asset } from "../../engine/assets/Assets";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
+import { Sound } from "../../engine/assets/Sound";
+import { MusicManager } from "../MusicManager";
 
 export class CorpseNode extends InteractiveNode {
     @asset("sprites/corpse.aseprite.json")
     private static readonly sprite: Aseprite;
+
+    @asset("sounds/fx/heavyLightSwitch.ogg")
+    private static readonly lightSound: Sound;
 
     private keyTaken = false;
 
@@ -26,7 +31,9 @@ export class CorpseNode extends InteractiveNode {
             this.getGame().keyTaken = true;
             console.log("Key taken");
             setTimeout(() => {
+                CorpseNode.lightSound.play();
                 this.getGame().turnOffAllLights();
+                MusicManager.getInstance().loopTrack(2);
             }, 2000);
         }
     }
