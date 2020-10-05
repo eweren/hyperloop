@@ -71,7 +71,7 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJztzrEJACAQBMEv3RK0EWv0g08NRcQZWLjwIgAAAAAAAAAAAAAAAAAAgFf0bFS52903cMbcbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP6yAAfZBB8=",
+         "data":"eJztzrEJACAQBEEz27YEbcQa\/cBUMFBEmIGFCy8lAAAAAAAAAAAAAAAAAADgFzVqs9jl7Ru4oy82AAAAAAAAAAAAAAAAAAAAAMCO\/PoAAAAAAAAAAAAAAAAAAMcMg1QEJg==",
          "encoding":"base64",
          "height":64,
          "id":8,
@@ -2202,6 +2202,34 @@
                  "width":0,
                  "x":755,
                  "y":1055
+                }, 
+                {
+                 "height":0,
+                 "id":301,
+                 "name":"Halogen",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":1
+                        }, 
+                        {
+                         "name":"range",
+                         "type":"float",
+                         "value":150
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"halogen"
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":882,
+                 "y":573
                 }],
          "opacity":1,
          "properties":[
@@ -3901,7 +3929,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":301,
+ "nextobjectid":302,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.1",
