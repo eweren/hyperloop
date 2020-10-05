@@ -37,8 +37,8 @@ export class TiledSoundNode extends SoundNode<Hyperloop> {
     private static sounds: Sound[];
 
     public constructor(args?: TiledSceneArgs) {
-        const range = args?.tiledObject?.getOptionalProperty("range", "int")?.getValue() ?? 10;
-        const intensity = args?.tiledObject?.getOptionalProperty("intensity", "int")?.getValue() ?? 1.0;
+        const range = args?.tiledObject?.getOptionalProperty("range", "float")?.getValue() ?? 10.0;
+        const intensity = args?.tiledObject?.getOptionalProperty("intensity", "float")?.getValue() ?? 1.0;
         const soundName = args?.tiledObject?.getOptionalProperty("sound", "string")?.getValue() ?? "";
 
         const soundAssetIndex = getAssetIndexForName(soundName);
