@@ -1,32 +1,45 @@
 import { Hyperloop } from "../Hyperloop";
 import { Scene } from "../../engine/scene/Scene";
-import { PlayerNode } from "../nodes/PlayerNode";
 import { GAME_HEIGHT, GAME_WIDTH, STANDARD_FONT } from "../constants";
 import { TextNode } from "../../engine/scene/TextNode";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { asset } from "../../engine/assets/Assets";
 import { Direction } from "../../engine/geom/Direction";
-import { TrainNode } from "../nodes/TrainNode";
-import { MonsterNode } from "../nodes/MonsterNode";
+import { ImageNode } from "../../engine/scene/ImageNode";
+import { GameScene } from "./GameScene";
+// import { ControllerIntent } from "../../engine/input/ControllerIntent";
 
 export class TitleScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
     private static font: BitmapFont;
 
-    private playerNode = new PlayerNode();
-    private enemyNode = new MonsterNode();
-    private trainNode = new TrainNode();
+    @asset("images/title-image.png")
+    private static titleImage: HTMLImageElement;
 
-    private titleNode = new TextNode({ font: TitleScene.font, anchor: Direction.TOP });
+    private imageNode: ImageNode = new ImageNode({ image: TitleScene.titleImage, anchor: Direction.TOP_LEFT});
+    private textNode = new TextNode({ font: TitleScene.font, anchor: Direction.BOTTOM });
 
     public setup() {
-        this.titleNode
-            .setText("Hyperloop")
-            .moveTo(GAME_WIDTH / 2, 10)
+        this.imageNode.appendTo(this.rootNode);
+        this.textNode
+            .setText("PRESS ENTER TO START")
+            .moveTo(GAME_WIDTH / 2, GAME_HEIGHT - 64)
             .appendTo(this.rootNode);
+    }
+    public cleanup(): void {
+        this.rootNode.clear();
+    }
 
-        this.playerNode.moveTo(GAME_WIDTH / 2, GAME_HEIGHT - 10).appendTo(this.rootNode);
-        this.enemyNode.moveTo(GAME_WIDTH * 0.9, GAME_HEIGHT - 10).appendTo(this.rootNode);
-        this.trainNode.moveTo(GAME_WIDTH * 0.1, GAME_HEIGHT - 10).appendTo(this.rootNode);
+    public startGame (): void {
+        this.game.scenes.setScene(GameScene);
+    }
+
+    public update(dt: number, time: number): void {
+        super.update(dt, time);
+        const input = this.game.input;
+
+        if (input.currentActiveIntents) {
+            console.log(input.currentActiveIntents);
+        }
     }
 }

@@ -1,6 +1,7 @@
 import { Hyperloop } from "../Hyperloop";
 import { Scene } from "../../engine/scene/Scene";
 import { ProgressBarNode } from "../../engine/scene/ProgressBarNode";
+// import { TitleScene } from "./TitleScene";
 import { GameScene } from "./GameScene";
 
 export class LoadingScene extends Scene<Hyperloop> {
