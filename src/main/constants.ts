@@ -11,7 +11,12 @@ export const STANDARD_FONT = "fonts/pixcelsior.font.json";
 export const GRAVITY = 35;
 
 /** Layers */
-export const LIGHT_LAYER = 1;
-export const FOREGROUND_LAYER = 2;
-export const DIALOG_LAYER = 3;
-export const HUD_LAYER = 4;
+export enum Layer {
+    BACKGROUND = 0,
+    DEFAULT = 1,
+    FOREGROUND = 2,
+    LIGHT = 3,
+    OVERLAY = 4,
+    DIALOG = 5,
+    HUD = 6
+}

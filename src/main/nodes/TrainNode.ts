@@ -5,7 +5,7 @@ import { Direction } from "../../engine/geom/Direction";
 import { AsepriteNode } from "../../engine/scene/AsepriteNode";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { clamp } from "../../engine/util/math";
-import { LIGHT_LAYER, FOREGROUND_LAYER } from "../constants";
+import { Layer } from "../constants";
 import { Hyperloop } from "../Hyperloop";
 import { LightNode } from "./LightNode";
 
@@ -26,21 +26,22 @@ export class TrainNode extends AsepriteNode<Hyperloop> {
         super({
             aseprite: TrainNode.sprite,
             anchor: Direction.BOTTOM,
-            ...args
+            ...args,
+            layer: Layer.BACKGROUND
         });
         this.interiorLight = new LightNode({
             x: -200,
             y: -30,
             width: 390,
             height: 80,
-            layer: LIGHT_LAYER
+            layer: Layer.LIGHT
         });
         this.interiorLight.setColor(new RGBColor(255, 255,255));
         this.interiorLight.appendTo(this);
         this.foreground = new AsepriteNode({
             aseprite: TrainNode.foregroundSprite,
             anchor: Direction.CENTER,
-            layer: FOREGROUND_LAYER
+            layer: Layer.DEFAULT
         });
         this.appendChild(this.foreground);
         this.foreground.setOpacity(Infinity);
@@ -52,6 +53,7 @@ export class TrainNode extends AsepriteNode<Hyperloop> {
             const direction = this.targetOpacity > this.visibility ? 1 : -1;
             this.visibility = clamp(this.visibility + dt * this.opacitySpeed * direction, 0, 1);
             this.foreground.setOpacity(this.visibility);
+            this.interiorLight.setOpacity(1 - this.visibility);
         }
     }
 
@@ -62,5 +64,4 @@ export class TrainNode extends AsepriteNode<Hyperloop> {
     public hideInner(): void {
         this.targetOpacity = 1;
     }
-
 }

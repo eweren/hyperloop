@@ -16,7 +16,7 @@ import { Vector2 } from "../../engine/graphics/Vector2";
 import { asset } from "../../engine/assets/Assets";
 import { AmmoCounterNode } from "./player/AmmoCounterNode";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
-import { STANDARD_FONT, HUD_LAYER } from "../constants";
+import { Layer, STANDARD_FONT } from "../constants";
 import { isDev } from "../../engine/util/env";
 import { now, sleep } from "../../engine/util/time";
 import { ParticleNode, valueCurves } from "./ParticleNode";
@@ -99,7 +99,7 @@ export class PlayerNode extends CharacterNode {
         this.ammoCounter = new AmmoCounterNode({
             font: PlayerNode.font,
             anchor: Direction.TOP_RIGHT,
-            layer: HUD_LAYER
+            layer: Layer.HUD
         });
         this.appendChild(this.playerLeg);
         this.appendChild(this.playerArm);

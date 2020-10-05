@@ -8,7 +8,7 @@ import { CollisionNode } from "../nodes/CollisionNode";
 import { TrainNode } from "../nodes/TrainNode";
 import { LightNode } from "../nodes/LightNode";
 import { SwitchNode } from "../nodes/SwitchNode";
-import { GAME_HEIGHT, GAME_WIDTH, HUD_LAYER, LIGHT_LAYER, STANDARD_FONT } from "../constants";
+import { GAME_HEIGHT, GAME_WIDTH, Layer, STANDARD_FONT } from "../constants";
 import { CameraLimitNode } from "../nodes/CameraLimitNode";
 import { DoorNode } from "../nodes/DoorNode";
 import { ScenePointerDownEvent } from "../../engine/scene/events/ScenePointerDownEvent";
@@ -53,8 +53,8 @@ export class GameScene extends Scene<Hyperloop> {
         this.mapNode.moveTo(0, 0).appendTo(this.rootNode).transform(m => m.scale(1));
         const player = this.mapNode.getDescendantById("Player");
         this.camera.setFollow(player);
-        this.setLightLayers([ LIGHT_LAYER ]);
-        this.setHudLayers([ HUD_LAYER ]);
+        this.setLightLayers([ Layer.LIGHT ]);
+        this.setHudLayers([ Layer.HUD ]);
 
         // const door = new DoorNode();
         // door.moveTo(1040, 380).setLocked(true).appendTo(this.mapNode);
@@ -72,7 +72,7 @@ export class GameScene extends Scene<Hyperloop> {
                 anchor: Direction.TOP_LEFT,
                 x: 10,
                 y: 10,
-                layer: HUD_LAYER
+                layer: Layer.HUD
             }));
         }
     }

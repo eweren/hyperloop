@@ -1,6 +1,7 @@
 
 import { Direction } from "../../../engine/geom/Direction";
 import { SceneNode, SceneNodeArgs } from "../../../engine/scene/SceneNode";
+import { Layer } from "../../constants";
 import { Hyperloop } from "../../Hyperloop";
 import { PlayerNode } from "../PlayerNode";
 
@@ -11,7 +12,7 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
         super({
             anchor: Direction.CENTER,
             id: "flashlight",
-            layer: 1,
+            layer: Layer.LIGHT,
             ...args
         });
         // Debug code to add flashlight to DOM to see raw data
