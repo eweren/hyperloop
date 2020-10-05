@@ -21,6 +21,7 @@ import { SwitchNode } from "./nodes/SwitchNode";
 import { TrainNode } from "./nodes/TrainNode";
 import { GameScene } from "./scenes/GameScene";
 import { LoadingScene } from "./scenes/LoadingScene";
+import { SuccessScene } from "./scenes/SuccessScene";
 
 export enum GameStage {
     NONE = 0,
@@ -310,8 +311,8 @@ export class Hyperloop extends Game {
         // Fade out
         if (this.stageTime > 12 && !this.fadeOutInitiated) {
             this.fadeOutInitiated = true;
-            this.getFader().fadeOut({ duration: 12 });
-            // TODO switch to credits scene here
+            // this.getFader().fadeOut({ duration: 12 });
+            this.scenes.setScene(SuccessScene);
         }
     }
 

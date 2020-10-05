@@ -31,7 +31,6 @@ export class SuccessScene extends Scene<Hyperloop> {
             .setText("PRESS ENTER TO RETURN TO MENU")
             .moveTo(GAME_WIDTH / 2, GAME_HEIGHT - 64)
             .appendTo(this.rootNode);
-        MusicManager.getInstance().loopTrack(0);
     }
 
     public cleanup(): void {
