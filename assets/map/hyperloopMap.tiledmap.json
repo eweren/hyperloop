@@ -11,7 +11,7 @@
  "layers":[
         {
          "compression":"zlib",
-         "data":"eJztnVtu00AUhk\/CDuANCXB3wUtLl5ZNcb8V2h1wKQJxbxcABCgIJM4oGXIYZjwXz9hj5\/+lT02j2HWSL5Px8bG7S0S7AFRC1wy9\/QBIumbo7QdA0jVDbz\/Iy33mQSEe9rD9XTP06w\/y8oq5w9zNzD3mdQ\/b3zVDv\/4gL8rnF8we0X5OXhJ8Bv2jfW7YwZzAZzAEwueswGcwBGK+kRX4DIZA+fyNuTgj2qEN\/PuC7yIf3x2cMW+o\/3oH2G5+MI+YX8w1wW\/KW\/ew1DsOKmHw9wDkRY3RNp9D6x4f+HEfmRPmlDmy0Nf8AwCPz14u88TjCtOoOQtzyULFPh9kWD4H2IZM35cun7vMq03ONj7net5ZXrdSx0bBcLwlu8\/vWu5PZejnapL7uCiog6urcXhfw78v2u6fCns8VgMwFRoAJsQcgGlBAEyFBoAJsQfAhHD1n4Qyc9B1vdiG+rA9py7P27Vsl9ftJwATIsfxVQAAAAAAALaFIfJ04jxRT5J30mfMnDnHPOu4TqTepLyf15kbEdxM\/DvwGYlNqiOHtDrX51BwZLmtfj6nOP9TsX1u4PN2JdXn9xE8pnD39c8PtDpvjlnoc+d8y9o8hc\/blZT3c0n289g0Ma670A4yC+2hbxn4jKS8n+fZic9UltsEn5H4dHlfY4nZjzwm+IzEp0+fXfNuNVc+FbdP1sBnJDY1+EzCV1p7N0+YP9vqKMfrdUqfU+otsnaC1JvS8wbpwZLsHqprpuzMNrebNVdWLJqZ+1oqcv\/TVUcxfbZdY0jXU8xaiq12gtSb1HHWVWeTDpgelNiPVPuNvnHb9DnlMfB5HMk5bwid0+ZEjflttUPFZeGqa5w3r6sFn8eZUg715XPImK9rf8rnW57HusZ8+DyOlHBI+mD6HNv7kaMHRH2faJ9DPl+27x\/4PI6UGDOlD2YtQdUbzDm2rteZx7DlPlqXcR4+b09K+yydVL0Yp\/S\/K7Je59pHg89ISEr7LJ1UtWSXt3373DbvOSb4PNaU8HlJ9rqBqiXb6gu6\/txWl8jts7qvrf4Mn8eZEj7nqjPLukQJn13fBag\/jzclfM6Fa97rq5GYtZAQn33\/1wE+jyNDO5visz4+6TpGaY7lIT776tJfxPqQeuNzKrVenAPdM2rz2ZwPSGw1Qp\/PapnQGjdSb0LGSLWvpFww\/2+Y2bNj69+Q9eUjy2Pb7lPLpfhsYluPWoc8jqnmz219d+ivG0dCfNY9nL6eHheuelzIcjl8tq3nE\/17HNPXg4f58zgS67Ovd9PV6xO7jFnr+0p+n0P6kaSXS7L\/Lbmtet3weRyJ9Tmkn6cEF2abbTLHVo1r21x1v9Q+FKTexPpcul8uBLWP6juGF1In8e37HjvWjdSbWJ9DzlUqfT0k13yjq8\/qcY1jrg+fx5FYn23XdjFrFDG1r759bvs8qvFY7w+ac3A5f0fqTazPIfUNdR5fyjmnMXXpVJ9lr9+J6PfT\/Rv6+ZlzcTl\/R+qNz+clrfb95479f9c1keS5qbb+5rZ6tbzm19q9f+revO5Fqs+y128u+v1irmmA1Bufz6HnM7WN113qz77vBdecwPxMih6\/v71+jej3M+t18HmcyTGfVb6Uqj83s\/bvBTkvkHOC2M9kW78GfB5Pcvjcx\/XsUrwrBVJv+nZhCiD1Zmg3xggSlj+EE8Xq",
+         "data":"eJztnVtuEzEUhs+EHcAbEu10F7y0dGnZFPdbod0BlyAQt9IuAEihIJCwlVg9Nfb4MvaMPfl\/6VPbKJlOmi+OfebMdJeIdgEohL4Ze\/8B4PTN2PsPAKdvxt5\/kJbHgieZeDrA\/vfN2H9\/kJZ3ggeCh4l5JHg\/wP73zdh\/f5AW6fMbwR7RfkreEnwGw6N8boWDKYHPYAyYz0mBz2AM2HwjKfAZjIH0+YfgekO0QxeIn+fiJnLx08K54AMNX+8Am80vwTPBH8Etxl9KW\/cw1DsOCmH01wCkRY7RJp996x7H4n5fBCeCU8GRgaHmHwA4fHayJSYe24JWzlkENwwU7PNBgsenAPuQ6PPS5nOfebXO+YXPqZ53kr9brmOjYDw+ktnnTx23xzL2c9VJfVwUlMHN1Ti8rxA\/z7tunwp7YqwGYCq0AEyIGQDTggCYCi0AE2IPgAlh6z\/xpbHQd7vYh\/IwPac+z9v22D5\/t98ATIgUx1cBAAAAAADYFMbIy4nzQj5JsUhvBDPBFcGrnttEyk3M63lbcCeAu5G\/Bz4joYl15JBW5\/ocMo4M38uvrynM\/1hM7xv4vFmJ9flzAM\/J33319ZhW580J5urcOddjTZ7C581KzOu5JPN5bIoQ120oBwVz5aHrMfAZiXk9rwonvlFe7hN8RsLT53UNJWQduSD4jIRnSJ9t8245Vz5l35+sgc9IaErwmZivtPZuFjF\/NtVRFuttcp9j6i28doKUm9zzBu7Bksweymum7DQX37drtlfM28Z+LRW+\/rTVUXSfTdcYUvUUvZZiqp0g5SZ2nLXV2bgDugc51pFy3egat3WfY+4Dn+tIynmD75w2JXLM76odSraYq7ZxXr+uFnyuM7kcGspnnzFf1f6kz\/cc97WN+fC5juRwiPug+xza+5GiB0R+niiffd5fps8f+FxHcoyZ3Ae9liDrDfocW9Xr9GPYfI3WZ5yHz5uT3D5zJ2Uvxin97wqv19nWaPAZ8Ulun7mTspZs83Zon7vmPQuCz7Umh89LMtcNZC3ZVF9Q9eeuukRqn+VtXfVn+Fxncvicqs7M6xI5fLZ9FqD+XG9y+JwK7qFcV6oah6tGotdCfHx2\/V8H+FxHxnbW12c5F+Audp0LoI\/lPj676tLf2faQcuNyKrZenALVM6p6k2wu6phqhC6f+fjvAik3PmOkXCupMZL\/3zC9Z8fUv8Hry0eG+3bdJh8X47MO3w7fBj+OSU133x366+qIj8\/EnPLt3dTXWqGP0ddofXw21f2+0uXjmK4ePMyf60ioz67eTVuvT+hjDLU+OqNun336kbiXSzL\/Lr6vatvwuY6E+uzTz5OLa415bFXY9s1W94vtQ0HKTajPufvlfJBrVNcxPFd9w2ftu7BsGyk3oT77nKuU+3pItvlGX5\/l\/doGx1NqTqjPpmu76DWKkNrX0D53vR\/leKzWg\/oc\/IxtDyk3oT771DfkeXwx55yG1KVjfea9fies30\/1b6jnp8\/F1dwdPpcdl89LWq39Z5b1v+2aSPzcVFN\/c1e9ml\/za+3epbq32PY81mfe6zdj\/X4h1zRAyo3LZ9\/zmbrG6z71Z9fngm1OoL8ned1P9fq1rN9Pr9fB5zqTYj4rfclVf26b7s8FPi\/gc4LQ92RXvwZ8ricpfB7ienYx3uUCKTdDuzAFkHIzths1gvjlH1b\/wtE=",
          "encoding":"base64",
          "height":64,
          "id":2,
@@ -31,7 +31,7 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt3VFO2zAYwHE\/MC6y9R7lHAOJ7RaAxL6dYOwJeNkuADsDT6XjIOUac4QrosyxncSJ7fr\/E1bFZ6f5IpnKsR2qFAAAAAAAODSfRhxzq9T6zpR7XWLnBCzpQvfhS1Ou6M8onO7P6tKUq8S5AFPp8Ya6M+U+cS7A3vH7q6TMAwDgtzGf1b55j49vRdqxMXMlAACgbs\/cJ2Kitf45saxRzBE\/fn99ssVd7zM0\/9zc9qxtEq8v7lrvzilPV\/yiZ22TeH1x13p3Tnna4kdmDPVZx85M\/Ij4Qcfb2vEPrdipKba61Pm74q3rUmfdiyV+cPFVK7bqad\/ETk2x1eV4XV3NHhTb3hPi9cVd+5FyytMVb\/ag2PaeEK8v7tqPlFOerjiWsdblpIB4n6HtAQAAAABA+SR1AkBEkjoBZK37HJDtuaDNsik5SeoEkLVzXb7MfI7Q5+S2AW1kQh44fNe6fEudhLELaCNzJwEsSFIngKo9O+pWjro+MjIPwCfF\/4+QBOcEum50+dkqNyO75qiDgMj+\/P+7jHmf755623xjI2TuBOXzzT+nnnseM8a2CZk7QfnO1fzzz7H8Tp0Asueaf\/66ZCIBZORxL\/rQvwy9qyepE+iQ1AmgaK57r41nz0dXjPsx5wksXHPfwJT55hj3YxLhPVCv3O6\/ZGB7PWZWDzPkgTL9Sp1Ah1hi2064O\/Z5nDUjYDyxxHaBH9sPDFeQGZlw7A\/6M2bWniMJudcUbwugHOKoYzxRn5B54pyJo+6x4OtCXH17fnx7gWz1Y\/YPvb4V8Z3Dt7euUfrfLAAAANCnWY9+GdB+6Pp7e+zNd13WK\/UzKX0kdQIoQqxnmqacP2TPfbsyxbPlwF5I\/\/ONJyRCHqjHTqmnIe1jzT\/v+fbz5bbfD3nbDuzPMWws37EKAACAevwDoqNSjQ==",
+         "data":"eJzt3VFO2zAYwHE\/MC6y9R7lHAOJ7RaAtH07wRgvwMt2AdgZeCodB+muMUe4Isoc20mc2K7\/P2FVfHaSr5KpHNuhSgEAAAAAgEPzYcQxt0qt70y51yV2TsCSLnQfvjTliv6Mwun+rC5NuUqcCzCVHm+oO1PuE+cC7B2\/vUrKPAAAfhvzWe2b93j\/WqQdGzNXAgAA6vbMfSImWuufE8saxRzx47fXJ1vcdZ6h+efmtmdtk3h9cdd6d055uuIXPWubxOuLu9a7c8rTFj8yY6iPOnZm4kfEDzre1o6\/a8VOTbHVpc7fFW+9L3XWfbPEDy6+asVWPe2b2Kkptroc31dXswfFtveEeH1x136knPJ0xZs9KLa9J8Tri7v2I+WUpyuOZax1OSkg3mdoewAAAAAAUD5JnQAQkaROAFnrPgdkey5os2xKTpI6AWTtXJdPM18j9Dm5bUAbmZAHDt8XXb6mTsLYBbSRuZMAFiSpE0DVnh11K0ddHxmZB+CT4v9HSIJrAl3XuvxoleuRXXPUQUBkv\/\/\/Xcac55un3jbf2AiZO0H5fPPPqeeex4yxbULmTlC+czX\/\/HMsv1IngOy55p8\/L5lIABl53Is+9A9D7+pJ6gQ6JHUCKJrr3mvj2fPRFeN+zHkBC9fcNzBlvjnG\/ZhEOAfqldv9lwxsr8fM6mGGPFCmn6kT6BBLbNsJd8c+j7NmBIwnltgu8GP7geEKIrqJ0J+mnOA7\/Rkza8+RhNxrircFML+bSOcRRx3jifqEzBPnTBx1jwW\/L8TVt+fHtxfIVt93zH6\/qM3f1yK+a\/j21jVK\/5tFGbr7RQEAAJbQrEe\/DGg\/dP29Pfbmuy7rlfqZlD6SOgEUIdYzTVOuH7Lnvl2Z4tlyYC+k\/\/nGExIhD9Rjp9TTkPZD5p9D+Pbz5bbfD3nbDuzPMWws37EKAACAevwDVmdWAA==",
          "encoding":"base64",
          "height":64,
          "id":3,
@@ -717,8 +717,8 @@
                  "rotation":0,
                  "type":"collision",
                  "visible":true,
-                 "width":72,
-                 "x":1278,
+                 "width":55,
+                 "x":1295,
                  "y":864
                 }, 
                 {
@@ -2118,24 +2118,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":294,
-                 "name":"EnemySpawn",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"trigger",
-                         "type":"string",
-                         "value":"after"
-                        }],
-                 "rotation":0,
-                 "type":"enemySpawn",
-                 "visible":true,
-                 "width":0,
-                 "x":1692,
-                 "y":950
-                }, 
-                {
-                 "height":0,
                  "id":295,
                  "name":"EnemySpawn",
                  "point":true,
@@ -2151,6 +2133,57 @@
                  "width":0,
                  "x":1831,
                  "y":721
+                }, 
+                {
+                 "height":23,
+                 "id":296,
+                 "name":"maintenanceCollision",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":27,
+                 "x":1268,
+                 "y":925
+                }, 
+                {
+                 "height":6,
+                 "id":297,
+                 "name":"maintenanceCollision",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":12,
+                 "x":1242,
+                 "y":888
+                }, 
+                {
+                 "height":6,
+                 "id":298,
+                 "name":"maintenanceCollision",
+                 "properties":[
+                        {
+                         "name":"showBounds",
+                         "type":"bool",
+                         "value":false
+                        }],
+                 "rotation":0,
+                 "type":"collision",
+                 "visible":true,
+                 "width":12,
+                 "x":1266,
+                 "y":852
                 }],
          "opacity":1,
          "properties":[
@@ -3827,7 +3860,7 @@
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":296,
+ "nextobjectid":299,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.1",
