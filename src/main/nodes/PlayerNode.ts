@@ -129,7 +129,7 @@ export class PlayerNode extends CharacterNode {
     }
     public getSpeed(): number {
         // TODO remove before publishing
-        return this.speed * (this.getScene()?.keyboard.isPressed("Shift") ? 4 : 1);
+        return this.speed * (this.getScene()?.keyboard.isPressed("Shift") ? 2.4 : 1.2);
     }
     public getAcceleration(): number {
         return this.acceleration;
