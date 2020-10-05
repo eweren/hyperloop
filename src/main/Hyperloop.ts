@@ -83,11 +83,11 @@ export class Hyperloop extends Game {
                 "2 That's right. Humans make mistakes - machines don't!",
                 "4 Should we go outside and look?",
                 "5 I'm sure it will be fine. Let's just wait.",
-                "1 No no. We need to fix this!"
-                "1 If we wait too long another pod will crash right into us!"
-                "5 You convinced me! You go outside"
-                "1 But there's a vacuum!"
-                "2 Look, we got these fancy suits. It will be fine!"
+                "1 No no. We need to fix this!",
+                "1 If we wait too long another pod will crash right into us!",
+                "5 You convinced me! You go outside",
+                "1 But there's a vacuum!",
+                "2 Look, we got these fancy suits. It will be fine!",
                 "4 I'm afraid of spiders! I can't go out there!",
                 "2 There are no spiders in a vacuum",
                 "2 What about you, firstie",
