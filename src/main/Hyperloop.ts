@@ -402,6 +402,15 @@ export class Hyperloop extends Game {
         });
     }
 
+    public spawnRespawnSequence(): void {
+        if (this.charactersAvailable > 0) {
+            // TODO actual sequence before respawning
+            this.spawnNewPlayer();
+        } else {
+            // Game Over or sequence of new train replacing old one
+        }
+    }
+
     public spawnNewPlayer(): void {
         if (this.charactersAvailable > 0) {
             // If everything has been done, then player died but still won
@@ -428,9 +437,6 @@ export class Hyperloop extends Game {
             const deadNpc = this.npcs.splice(this.currentPlayerNpc)[0];
             deadNpc.remove();
             this.currentPlayerNpc = rndItem(this.npcs);
-        } else {
-            // Game Over or sequence of new train replacing old one
-        }
     }
 
     public getTrainDoorCoordinate(): Vector2 {
