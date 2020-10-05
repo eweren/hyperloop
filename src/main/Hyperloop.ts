@@ -5,6 +5,7 @@ import { FadeToBlack } from "../engine/scene/camera/FadeToBlack";
 import { SceneNode } from "../engine/scene/SceneNode";
 import { rnd } from "../engine/util/random";
 import { Dialog } from "./Dialog";
+import { MusicManager } from "./MusicManager";
 import { CharacterNode } from "./nodes/CharacterNode";
 import { CollisionNode } from "./nodes/CollisionNode";
 import { LightNode } from "./nodes/LightNode";
@@ -291,6 +292,7 @@ export class Hyperloop extends Game {
         const pos = player.getScenePosition();
         player.remove().moveTo(pos.x, pos.y).appendTo(train.getParent() as SceneNode<Hyperloop>);
         train.hideInner();
+        MusicManager.getInstance().loopTrack(1);
     }
 
     public spawnNewPlayer(): void {
