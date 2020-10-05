@@ -14,7 +14,7 @@ export class SwitchNode extends InteractiveNode {
     @asset("sprites/wallLever.aseprite.json")
     private static readonly sprite: Aseprite;
 
-    @asset("sounds/fx/switch.mp3")
+    @asset("sounds/fx/heavyLightSwitch.ogg")
     private static readonly clickSound: Sound;
 
     private turnedOn: boolean = false;

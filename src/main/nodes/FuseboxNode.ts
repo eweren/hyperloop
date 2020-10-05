@@ -1,12 +1,19 @@
 import { Aseprite } from "../../engine/assets/Aseprite";
 import { Direction } from "../../engine/geom/Direction";
 import { InteractiveNode } from "./InteractiveNode";
-import { asset } from "../../engine/assets/Assets";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
+import { Sound } from "../../engine/assets/Sound";
+import { asset } from "../../engine/assets/Assets";
 
 export class FuseboxNode extends InteractiveNode {
     @asset("sprites/fuse.aseprite.json")
     private static readonly sprite: Aseprite;
+
+    @asset("sounds/fx/electricLever.ogg")
+    private static readonly leverSound: Sound;
+
+    @asset("sounds/fx/metalDoorOpen.ogg")
+    private static readonly doorSound: Sound;
 
     private isOpen = false;
     private isOn = false;
@@ -26,10 +33,13 @@ export class FuseboxNode extends InteractiveNode {
                 this.isOpen = true;
                 this.setTag("open-off");
                 this.caption = "PRESS E TO TURN ON";
+                FuseboxNode.doorSound.play();
             } else {
                 this.isOn = true;
                 this.setTag("open-on");
                 this.getGame().fuseboxOn = true;
+                FuseboxNode.doorSound.stop();
+                FuseboxNode.leverSound.play();
             }
         }
     }
