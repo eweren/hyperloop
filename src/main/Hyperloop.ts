@@ -26,7 +26,7 @@ export class Hyperloop extends Game {
     private trainDriveTime = 2; // drive time in seconds, bevore braking starts
     private totalBrakeTime = 0; // calculated later; seconds train requires to brake down to standstill
     private playerTeleportLeft = 1100; // leftest point in tunnel where player is teleported
-    private playerTeleportRight = 2700; // rightest point in tunnel where player is teleported
+    private playerTeleportRight = 2970; // rightest point in tunnel where player is teleported
     private teleportStep = 108; // distance between two tunnel lights
     private teleportMyTrainYDistance = 50; // only teleport when player is on roughly same height as train, not in rest of level
 
