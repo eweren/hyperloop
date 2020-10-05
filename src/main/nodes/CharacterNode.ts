@@ -15,7 +15,7 @@ import { PlayerLegsNode } from "./player/PlayerLegsNode";
 
 // TODO define in some constants file
 const GRAVITY = 800;
-const PROJECTILE_STEP_SIZE = 5;
+const PROJECTILE_STEP_SIZE = 2;
 
 export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     @asset("sounds/fx/gunshot.ogg")
@@ -57,8 +57,11 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     private speakLine = "";
 
     protected bloodEmitter: ParticleNode;
-    private bloodOffset: Vector2 = new Vector2(0, 0);
-    private bloodAngle = 0;
+    protected sparkEmitter: ParticleNode;
+    private particleOffset: Vector2 = new Vector2(0, 0);
+    private particleAngle = 0;
+
+
 
     public constructor(args: AsepriteNodeArgs) {
         super(args);
@@ -66,10 +69,10 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         // this.setShowBounds(true);
 
         this.bloodEmitter = new ParticleNode({
-            offset: () => this.bloodOffset,
+            offset: () => this.particleOffset,
             velocity: () => {
                 const speed = rnd(20, 50);
-                const angle = this.bloodAngle + rnd(-1, 1) * rnd(0, Math.PI / 2) ** 2;
+                const angle = this.particleAngle + rnd(-1, 1) * rnd(0, Math.PI / 2) ** 2;
                 return {
                     x: speed * Math.cos(angle),
                     y: speed * Math.sin(angle)
@@ -79,6 +82,25 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             size: rnd(1, 3),
             gravity: {x: 0, y: -100},
             lifetime: () => rnd(0.5, 1),
+            alphaCurve: valueCurves.trapeze(0.05, 0.2)
+        }).appendTo(this);
+        this.sparkEmitter = new ParticleNode({
+            offset: () => this.particleOffset,
+            velocity: () => {
+                const speed = rnd(30, 60);
+                const angle = this.particleAngle + Math.PI + rnd(-1, 1) * rnd(0, Math.PI / 2) ** 2;
+                return {
+                    x: speed * Math.cos(angle),
+                    y: speed * Math.sin(angle)
+                };
+            },
+            color: () => {
+                const g = rnd(160, 255), r = g + rnd(rnd(255 - g)), b = rnd(g);
+                return `rgb(${r}, ${g}, ${b})`;
+            },
+            size: rnd(0.5, 1.5),
+            gravity: {x: 0, y: -100},
+            lifetime: () => rnd(0.2, 0.6),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
         }).appendTo(this);
     }
@@ -186,24 +208,32 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         const diffY = Math.sin(angle) * this.getShootingRange();
         const isColliding = this.getLineCollision(origin.x, origin.y, diffX, diffY, PROJECTILE_STEP_SIZE);
         if (isColliding) {
+            const coord = this.storedCollisionCoordinate;
             if (isColliding instanceof CharacterNode) {
-                const coord = this.storedCollisionCoordinate;
                 const bounds = isColliding.getSceneBounds();
                 const headshot = (coord.y < bounds.minY + 0.25 * (bounds.height));
                 const damage = headshot ? (2.4 * power) : power;
                 isColliding.hurt(damage, this.getScenePosition());
                 // Blood particles at hurt character
                 isColliding.emitBlood(coord.x, coord.y, angle, headshot ? 30 : 10);
+            } else {
+                this.emitSparks(coord.x, coord.y, angle);
             }
         }
     }
 
     public emitBlood(x: number, y: number, angle: number, count = 1): void {
         const pos = this.getScenePosition();
-        this.bloodOffset = new Vector2(x - pos.x, y - pos.y);
-        this.bloodAngle = angle;
-        console.log(angle);
+        this.particleOffset = new Vector2(x - pos.x, y - pos.y);
+        this.particleAngle = angle;
         this.bloodEmitter.emit(count);
+    }
+
+    public emitSparks(x: number, y: number, angle: number): void {
+        const pos = this.getScenePosition();
+        this.particleOffset = new Vector2(x - pos.x, y - pos.y);
+        this.particleAngle = angle;
+        this.sparkEmitter.emit(rnd(4, 10));
     }
 
     protected getLineCollision(x1: number, y1: number, dx: number, dy: number, stepSize = 5): CharacterNode | CollisionNode | null {
