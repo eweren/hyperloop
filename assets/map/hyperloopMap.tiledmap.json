@@ -1776,7 +1776,7 @@
                         {
                          "name":"intensity",
                          "type":"float",
-                         "value":0.8
+                         "value":1
                         }, 
                         {
                          "name":"range",
@@ -1839,34 +1839,6 @@
                  "width":36,
                  "x":1566,
                  "y":745
-                }, 
-                {
-                 "height":0,
-                 "id":281,
-                 "name":"Halogen",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"intensity",
-                         "type":"float",
-                         "value":0.8
-                        }, 
-                        {
-                         "name":"range",
-                         "type":"float",
-                         "value":150
-                        }, 
-                        {
-                         "name":"sound",
-                         "type":"string",
-                         "value":"halogen"
-                        }],
-                 "rotation":0,
-                 "type":"sound",
-                 "visible":true,
-                 "width":0,
-                 "x":846,
-                 "y":569
                 }, 
                 {
                  "height":0,

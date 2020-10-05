@@ -39,7 +39,13 @@ export class CorpseNode extends InteractiveNode {
                 CorpseNode.lightSound.play();
                 this.getGame().turnOffAllLights();
                 MusicManager.getInstance().loopTrack(2);
-                player?.say("Oh oh...", 3, 0.5);
+                const game = this.getGame();
+                const fader = game.getFader();
+                fader.fadeOut({ duration: 0.1 }).then(() => {
+                    fader.fadeIn({ duration: 2 });
+                });
+                game.getCamera().setZoom(1.5);
+                player?.say("Oh oh...", 3, 1.5);
             }, 5000);
         }
     }
