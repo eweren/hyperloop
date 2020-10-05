@@ -26,6 +26,7 @@ export class FxManager {
     private loaded = false;
     private loadInterval: number;
     private currentSoundToPlay = -1;
+    private active = true;
 
     public constructor() {
         this.loaded = false;
@@ -52,16 +53,20 @@ export class FxManager {
     }
 
     private async setupNewTimeout(): Promise<void> {
-        const timeToNextScream = clamp(Math.random() * 20000 + 10000, 15000, 350000);
-        await sleep(timeToNextScream);
-        this.currentSoundToPlay = Math.floor(Math.random() * this.sounds.length);
-        this.sounds[this.currentSoundToPlay];
-        this.sounds[this.currentSoundToPlay].setVolume(clamp(Math.random() + 0.3, 0.3, 1));
-        this.sounds[this.currentSoundToPlay].play();
-        await this.setupNewTimeout();
+        if (this.active) {
+            const timeToNextScream = clamp(Math.random() * 20000 + 10000, 15000, 350000);
+            await sleep(timeToNextScream);
+            this.currentSoundToPlay = Math.floor(Math.random() * this.sounds.length);
+            this.sounds[this.currentSoundToPlay];
+            this.sounds[this.currentSoundToPlay].setVolume(clamp(Math.random() + 0.3, 0.3, 1));
+            this.sounds[this.currentSoundToPlay].play();
+            await this.setupNewTimeout();
+        }
     }
 
     public stop(): void {
+        this.active = false;
+
         if (this.playScreamInterval) {
             clearInterval(this.playScreamInterval);
         }
