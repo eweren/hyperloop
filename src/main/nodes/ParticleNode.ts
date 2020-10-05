@@ -90,11 +90,11 @@ export class ParticleNode extends SceneNode<Hyperloop> {
     public emitSingle(): Particle {
         const v = this.velocityGenerator();
         const off = this.offsetGenerator();
-
+        const pos = this.getScenePosition();
         const particle = new Particle(
             this,
-            off.x,
-            off.y,
+            pos.x + off.x,
+            pos.y + off.y,
             v.x,
             v.y,
             this.angleGenerator(),
@@ -129,6 +129,8 @@ export class ParticleNode extends SceneNode<Hyperloop> {
     public draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
         ctx.globalCompositeOperation = this.blendMode;
+        const pos = this.getScenePosition();
+        ctx.translate(-pos.x, -pos.y);
         this.particles.forEach(p => p.draw(ctx));
         ctx.restore();
     }
