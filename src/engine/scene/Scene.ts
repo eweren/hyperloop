@@ -181,7 +181,7 @@ export abstract class Scene<T extends Game = Game, A = void> {
      * @return The matching scene node or null if none.
      */
     public getNodeById(id: string): SceneNode<T> | null {
-        return null;
+        return this.rootNode.getDescendantById(id);
     }
 
     /**

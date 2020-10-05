@@ -1,8 +1,7 @@
 import { Aseprite } from "../../../engine/assets/Aseprite";
 import { asset } from "../../../engine/assets/Assets";
 import { Direction } from "../../../engine/geom/Direction";
-import { Polygon2 } from "../../../engine/graphics/Polygon2";
-import { Vector2 } from "../../../engine/graphics/Vector2";
+import { Rect } from "../../../engine/geom/Rect";
 import { AsepriteNode } from "../../../engine/scene/AsepriteNode";
 import { SceneNodeArgs } from "../../../engine/scene/SceneNode";
 import { Hyperloop } from "../../Hyperloop";
@@ -17,19 +16,8 @@ export class PlayerLegsNode extends AsepriteNode<Hyperloop> {
             anchor: Direction.CENTER,
             tag: "idle",
             id: "playerlegs",
+            sourceBounds: new Rect(10, 0, 0, 0),
             ...args
         });
-    }
-
-    protected updateBoundsPolygon(bounds: Polygon2): void {
-        const boundsWidth = 0;
-        const boundsHeight = 0;
-        const offsetX = this.getWidth() / 2 - boundsWidth / 2;
-        const offsetY = 0;
-        bounds.clear();
-        bounds.addVertex(new Vector2(offsetX, offsetY));
-        bounds.addVertex(new Vector2(offsetX + boundsWidth, offsetY));
-        bounds.addVertex(new Vector2(offsetX + boundsWidth, boundsHeight + offsetY));
-        bounds.addVertex(new Vector2(offsetX, boundsHeight + offsetY));
     }
 }
