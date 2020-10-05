@@ -407,7 +407,7 @@ export class Hyperloop extends Game {
 
     public getTrainDoorCoordinate(): Vector2 {
         const coord = this.getTrain().getScenePosition();
-        return new Vector2(coord.x - 170, coord.y + 38);
+        return new Vector2(coord.x - 170, coord.y - 2);
     }
 
     public turnOnFuseBox() {
