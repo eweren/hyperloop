@@ -311,6 +311,10 @@ export class Hyperloop extends Game {
         } else {
             throw new Error("No PowerSwitch found! Game not beatable that way :(");
         }
+        // Spawn enemies at random subset of spawn points behind "first encounter"
+        SpawnNode.getForTrigger(player, "after", true).forEach(s => {
+            if (rnd() < 0.6) s.spawnEnemy();
+        });
     }
 
     public spawnNewPlayer(): void {
@@ -325,6 +329,13 @@ export class Hyperloop extends Game {
             const root = this.getGameScene().rootNode;
             oldPlayer.remove();
             root.appendChild(pl);
+            // Spawn enemies at random subset of spawn points behind "first encounter"
+            SpawnNode.getForTrigger(pl, "after", true).forEach(s => {
+                if (rnd() < 0.4) s.spawnEnemy();
+            });
+            SpawnNode.getForTrigger(pl, "before", true).forEach(s => {
+                if (rnd() < 0.4) s.spawnEnemy();
+            });
             // TODO leave remains of old player
         } else {
             // Game Over or sequence of new train replacing old one
@@ -344,7 +355,7 @@ export class Hyperloop extends Game {
                 player.say("Great. Time to go home.", 4, 1);
                 // Spawn the enemies
                 SpawnNode.getForTrigger(player, "afterSwitch", true).forEach(s => s.spawnEnemy());
-                return false;
+                return true;
             });
         } else {
             throw new Error("No PowerSwitch found! Game not beatable that way :(");
