@@ -117,6 +117,10 @@ export abstract class EnemyNode extends CharacterNode {
         return player?.isAlive() ? player : undefined;
     }
 
+    protected scream(): void {
+        // implementation is in the monster nodes
+    }
+
     protected updateSearch(time: number): void {
         // Check distance to player
         const player = this.getPlayer();
@@ -125,6 +129,7 @@ export abstract class EnemyNode extends CharacterNode {
                 // Player spotted!
                 this.setState(AiState.FOLLOW);
                 this.targetPosition = player.getPosition();
+                this.scream();
                 return;
             }
         }
@@ -183,6 +188,7 @@ export abstract class EnemyNode extends CharacterNode {
             // Hurt player
             const player = this.getPlayer();
             const playerDied = player?.hurt(0, this.getScenePosition());
+            this.scream();
             if (playerDied) {
                 this.setState(AiState.BORED);
                 this.setDirection(0);

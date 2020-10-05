@@ -41,7 +41,10 @@ export class PlayerNode extends CharacterNode {
     @asset("sounds/fx/footsteps.ogg")
     private static readonly footsteps: Sound;
 
-    @asset("sounds/fx/switch.mp3")
+    @asset("sounds/fx/dryfire.ogg")
+    private static readonly dryFireSound: Sound;
+
+    @asset("sounds/fx/reload.ogg")
     private static readonly reloadSound: Sound;
 
     @asset("sprites/spacesuitbody.aseprite.json")
@@ -49,8 +52,10 @@ export class PlayerNode extends CharacterNode {
 
     private flashLight: FlashlightNode;
 
+    /** The aimingAngle in radians */
     private aimingAngle = Math.PI / 2;
-    ammoCounter: AmmoCounterNode;
+    private ammoCounter: AmmoCounterNode;
+    private isReloading = false;
     private get aimingAngleNonNegative(): number {
         return -this.aimingAngle + Math.PI / 2;
     }
@@ -155,7 +160,7 @@ export class PlayerNode extends CharacterNode {
         }
         // Controls
         const input = this.getScene()!.game.input;
-        // Run left/right
+        // Move left/right
         const direction = (input.currentActiveIntents & ControllerIntent.PLAYER_MOVE_RIGHT ? 1 : 0)
             - (input.currentActiveIntents & ControllerIntent.PLAYER_MOVE_LEFT ? 1 : 0);
         this.setDirection(direction);
@@ -168,6 +173,10 @@ export class PlayerNode extends CharacterNode {
             PlayerNode.footsteps.play(0.5);
         } else {
             PlayerNode.footsteps.stop(0.3);
+        }
+        // Reload
+        if (input.currentActiveIntents & ControllerIntent.PLAYER_RELOAD) {
+            this.reload();
         }
         // Shoot
         if (input.currentActiveIntents & ControllerIntent.PLAYER_ACTION || this.leftMouseDown) {
@@ -203,28 +212,41 @@ export class PlayerNode extends CharacterNode {
         }
     }
 
-    public async shoot(): Promise<void> {
-        if (this.ammo > 0) {
+    public shoot(): void {
+        if (this.ammo === 0){
+            PlayerNode.dryFireSound.stop();
+            PlayerNode.dryFireSound.play();
+        } else if (this.ammo > 0 && !this.isReloading) {
             this.ammo--;
             super.shoot(this.aimingAngleNonNegative, 35, this.flashLight.getScenePosition());
-            if (this.ammo === 0){
-                PlayerNode.reloadSound.setLoop(true);
-                PlayerNode.reloadSound.play(0,0, 1.5);
-                await sleep(this.reloadDelay);
-                this.reload();
-            }
         }
     }
 
-    public reload(): void {
+    public async reload(): Promise<void> {
+        if (this.isReloading || this.ammo === this.magazineSize) {
+            return;
+        }
+        this.isReloading = true;
+        PlayerNode.reloadSound.setLoop(true);
+        PlayerNode.reloadSound.play();
+        await sleep(this.reloadDelay);
         this.ammo = this.magazineSize;
         PlayerNode.reloadSound.stop();
+        this.isReloading = false;
     }
 
     private syncArmAndLeg(): void {
         this.playerArm?.transform(c => {
             const angleInDegrees = this.aimingAngle / Math.PI * 180;
-            c.setRotation(this.aimingAngleNonNegative);
+            if (this.isReloading) {
+                if (angleInDegrees < 0) {
+                    c.setRotation(105 * Math.PI / 180 * (angleInDegrees < 0 ? 1 : -1));
+                } else {
+                    c.setRotation(-75 * Math.PI / 180 * (angleInDegrees < 0 ? 1 : -1));
+                }
+            } else {
+                c.setRotation(this.aimingAngleNonNegative);
+            }
             // Mirror arm vertically
             if (angleInDegrees < 0) {
                 c.scaleY(-1);
@@ -255,7 +277,7 @@ export class PlayerNode extends CharacterNode {
         } else {
             this.setTag("idle");
         }
-        this.playerLeg?.setMirrorX(this.isMirrorX());
+        this.playerLeg?.setMirrorX(this.direction === 0 ? this.isMirrorX() : (this.direction === -1));
     }
 
 

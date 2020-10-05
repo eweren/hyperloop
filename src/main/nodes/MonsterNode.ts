@@ -1,4 +1,4 @@
-import { AiState, EnemyNode } from "./EnemyNode";
+import { EnemyNode } from "./EnemyNode";
 import { Aseprite } from "../../engine/assets/Aseprite";
 import { Direction } from "../../engine/geom/Direction";
 import { Polygon2 } from "../../engine/graphics/Polygon2";
@@ -32,39 +32,6 @@ export class MonsterNode extends EnemyNode {
         this.hitpoints = rnd(65, 120) + rnd(rnd(100));
     }
 
-    protected updateAi(dt: number, time: number) {
-        if (!this.isAlive()) {
-            this.setDirection(0);
-            return;
-        }
-        // AI
-        switch (this.state) {
-            case AiState.BORED:
-            case AiState.ALERT:
-                this.updateSearch(time);
-                break;
-            case AiState.FOLLOW:
-                this.updateFollow(time);
-                break;
-            case AiState.ATTACK:
-                this.updateAttack(time);
-                this.scream();
-                break;
-            case AiState.MOVE_AROUND:
-                this.updateMoveAround(time);
-                break;
-        }
-
-        // Move to target
-        if (this.getPosition().getSquareDistance(this.targetPosition) > this.squaredPositionThreshold) {
-            if (this.getX() > this.targetPosition.x) {
-                this.setDirection(-1);
-            } else {
-                this.setDirection(1);
-            }
-        }
-    }
-
     protected updateBoundsPolygon(bounds: Polygon2): void {
         const boundsWidth = 16;
         const boundsHeight = 34;
@@ -92,18 +59,10 @@ export class MonsterNode extends EnemyNode {
         return MonsterNode.monsterSoundAttack.isPlaying();
     }
 
-    private scream() {
-        switch (this.state) {
-            case AiState.ATTACK:
-                if (!this.isScreaming()) {
-                    this.staySilent();
-                    MonsterNode.monsterSoundAttack.play();
-                }
-                break;
-            case AiState.BORED:
-            case AiState.FOLLOW:
-            case AiState.MOVE_AROUND:
-                break;
+    protected scream() {
+        if (!this.isScreaming()) {
+            this.staySilent();
+            MonsterNode.monsterSoundAttack.play();
         }
     }
 }
