@@ -195,6 +195,7 @@ export class PlayerNode extends CharacterNode {
         }
         if (!this.isAlive()) {
             this.setDirection(0);
+            this.crosshairNode.hide();
             return;
         }
         if (this.getParent() instanceof TrainNode) {
