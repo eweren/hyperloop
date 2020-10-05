@@ -13,6 +13,7 @@ import { CollisionNode } from "./nodes/CollisionNode";
 import { LightNode } from "./nodes/LightNode";
 import { NpcNode } from "./nodes/NpcNode";
 import { PlayerNode } from "./nodes/PlayerNode";
+import { SpawnNode } from "./nodes/SpawnNode";
 import { SwitchNode } from "./nodes/SwitchNode";
 import { TrainNode } from "./nodes/TrainNode";
 import { GameScene } from "./scenes/GameScene";
@@ -64,7 +65,7 @@ export class Hyperloop extends Game {
     public setupScene(): void {
         this.spawnNPCs();
         this.setStage(GameStage.INTRO);
-        // Assets cannot be loaded in constructor because the LoadingScene 
+        // Assets cannot be loaded in constructor because the LoadingScene
         // is not inistalized at constructor time and Assets are loaded in the LoadingScene
         this.dialogs = [
             new Dialog(Hyperloop.trainDialog),
@@ -149,6 +150,17 @@ export class Hyperloop extends Game {
         const ambients = this.getAmbientLights();
         for (const ambient of ambients) {
             ambient.setColor(new RGBColor(0.05, 0.03, 0.03));
+        }
+    }
+
+    public turnOnAllLights() {
+        const lights = this.getAllLights();
+        for (const light of lights) {
+            light.setColor(new RGBColor(0.8, 0.8, 1));
+        }
+        const ambients = this.getAmbientLights();
+        for (const ambient of ambients) {
+            ambient.setColor(new RGBColor(0.3, 0.3, 0.35));
         }
     }
 
@@ -277,7 +289,7 @@ export class Hyperloop extends Game {
         // Power switch behavior
         const powerSwitch = this.getGameScene().getNodeById("PowerSwitch");
         if (powerSwitch && powerSwitch instanceof SwitchNode) {
-            powerSwitch.setOnlyOnce(false);
+            powerSwitch.setOnlyOnce(true);
             powerSwitch.setOnUpdate((state: boolean) => {
                 player.say("Doesn't appear to do anything... yet", 4, 0.5);
                 return false;
@@ -302,6 +314,26 @@ export class Hyperloop extends Game {
             // TODO leave remains of old player
         } else {
             // Game Over or sequence of new train replacing old one
+        }
+    }
+
+    public turnOnFuseBox() {
+        this.fuseboxOn = true;
+        this.turnAllLightsRed();
+        this.getCamera().setZoom(1);
+        // Enable power switch
+        const powerSwitch = this.getGameScene().getNodeById("PowerSwitch");
+        if (powerSwitch && powerSwitch instanceof SwitchNode) {
+            powerSwitch.setOnUpdate((state: boolean) => {
+                this.turnOnAllLights();
+                const player = this.getPlayer();
+                player.say("Great. Time to go home.", 4, 1);
+                // Spawn the enemies
+                SpawnNode.getForTrigger(player, "afterSwitch", true).forEach(s => s.spawnEnemy());
+                return false;
+            });
+        } else {
+            throw new Error("No PowerSwitch found! Game not beatable that way :(");
         }
     }
 

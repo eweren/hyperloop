@@ -35,15 +35,15 @@ export class FuseboxNode extends InteractiveNode {
                 this.setTag("open-off");
                 this.caption = "PRESS E TO TURN ON";
                 FuseboxNode.doorSound.play();
-                this.getTarget()?.say("Just turn it on... and we're good to go", 2);
+                this.getTarget()?.say("Let's turn it on", 2);
                 // Spawn enemy in back
                 SpawnNode.getForTrigger(this, "fusebox").forEach(spawn => spawn.spawnEnemy());
             } else {
                 this.isOn = true;
                 this.setTag("open-on");
-                this.getGame().fuseboxOn = true;
-                this.getGame().turnAllLightsRed();
-                this.getGame().getCamera().setZoom(1);
+                const game = this.getGame();
+                game.turnOnFuseBox();
+                this.getTarget()?.say("Time to find that switch", 8);
                 FuseboxNode.doorSound.stop();
                 FuseboxNode.leverSound.play();
             }
