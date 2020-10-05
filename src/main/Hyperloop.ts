@@ -24,6 +24,10 @@ export class Hyperloop extends Game {
     private trainSpeed = 800; // px per second
     private trainDriveTime = 2; // drive time in seconds, bevore braking starts
     private totalBrakeTime = 0; // calculated later; seconds train requires to brake down to standstill
+    private playerTeleportLeft = 1100; // leftest point in tunnel where player is teleported
+    private playerTeleportRight = 2700; // rightest point in tunnel where player is teleported
+    private teleportStep = 108; // distance between two tunnel lights
+    private teleportMyTrainYDistance = 50; // only teleport when player is on roughly same height as train, not in rest of level
 
     // Game progress
     private charactersAvailable = 4;
@@ -123,8 +127,21 @@ export class Hyperloop extends Game {
     }
 
     private updateStuck(): void {
-        // This is the main game, with gameplay and stuff; happens automatically in other node update methods
-        // nothing to do for us
+        // This is the main game, with gameplay and stuff
+        // Ensure player doesn't reach end of tunnel
+        const player = this.getPlayer();
+        const pos = player.getScenePosition();
+        if (Math.abs(pos.y - this.getTrain().getScenePosition().y) < this.teleportMyTrainYDistance) {
+            let move = 0;
+            if (pos.x < this.playerTeleportLeft) {
+                move = this.teleportStep;
+            } else if (pos.x > this.playerTeleportRight) {
+                move = -this.teleportStep;
+            }
+            if (move !== 0) {
+                player.setX(player.getX() + move);
+            }
+        }
     }
 
     public initIntro(): void {
