@@ -9,23 +9,20 @@ import { Vector2 } from "../../engine/graphics/Vector2";
 import { asset } from "../../engine/assets/Assets";
 
 export class NpcNode extends CharacterNode {
-    @asset("sprites/spacesuitbody.aseprite.json")
-    private static sprite: Aseprite;
-
-    /** The aimingAngle in radians */
-    private ammo = 6;
+    @asset("sprites/male.aseprite.json")
+    private static maleSprite: Aseprite;
+    @asset("sprites/female.aseprite.json")
+    private static femaleSprite: Aseprite;
 
     // Character settings
-    private readonly shootingRange = 250;
     private readonly speed = 60;
     private readonly acceleration = 600;
     private readonly deceleration = 800;
     private readonly jumpPower = 295;
-    private readonly magazineSize = 6;
 
-    public constructor(args?: SceneNodeArgs) {
+    public constructor(female: boolean, args?: SceneNodeArgs) {
         super({
-            aseprite: NpcNode.sprite,
+            aseprite: female ? NpcNode.femaleSprite : NpcNode.maleSprite,
             anchor: Direction.BOTTOM,
             childAnchor: Direction.CENTER,
             tag: "idle",
@@ -35,11 +32,10 @@ export class NpcNode extends CharacterNode {
     }
 
     public getShootingRange(): number {
-        return this.shootingRange;
+        return 1;
     }
     public getSpeed(): number {
-        // TODO remove before publishing
-        return this.speed * (this.getScene()?.keyboard.isPressed("Shift") ? 4 : 1);
+        return 1
     }
     public getAcceleration(): number {
         return this.acceleration;
@@ -49,12 +45,6 @@ export class NpcNode extends CharacterNode {
     }
     public getJumpPower(): number {
         return this.jumpPower;
-    }
-    public getAmmo(): number {
-        return this.ammo;
-    }
-    public getMagazineSize(): number {
-        return this.magazineSize;
     }
 
     public updateBoundsPolygon(bounds: Polygon2): void {
@@ -81,10 +71,6 @@ export class NpcNode extends CharacterNode {
 
     public getPersonalEnemies(): EnemyNode[] {
         return [];
-        // const monsters = this.getScene()?.rootNode.getDescendantsByType(MonsterNode) ?? [];
-        // const rats = this.getScene()?.rootNode.getDescendantsByType(RatNode) ?? [];
-        // const enemies = [...monsters, ...rats];
-        // return enemies.filter(e => e.isAlive());
     }
 
 }

@@ -84,13 +84,11 @@ export class Hyperloop extends Game {
 
     private spawnNPCs(): void {
         const train = this.getTrain();
-        const char = new NpcNode();
-        console.log(char);
-        // const chars = [ new NpcNode(false), new NpcNode(true) ];
-        // const positions = [ -50, 50 ];
-        // for (let i = 0; i < chars.length; i++) {
-        //     chars[i].moveTo(positions[i], -20).appendTo(train);
-        // }
+        const chars = [ new NpcNode(false), new NpcNode(true) ];
+        const positions = [ -50, 50 ];
+        for (let i = 0; i < chars.length; i++) {
+            chars[i].moveTo(positions[i], -20).appendTo(train);
+        }
     }
 
     private updateIntro(): void {

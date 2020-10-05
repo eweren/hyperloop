@@ -10,7 +10,6 @@ import { CollisionNode } from "./CollisionNode";
 import { InteractiveNode } from "./InteractiveNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
 import { PlayerLegsNode } from "./player/PlayerLegsNode";
-import { PlayerNode } from "./PlayerNode";
 
 // TODO define in some constants file
 const GRAVITY = 800;
@@ -330,11 +329,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             }
         }
         return closest;
-    }
-
-    public getPlayers(): PlayerNode[] {
-        const players = this.getScene()?.rootNode.getDescendantsByType(PlayerNode) ?? [];
-        return players;
     }
 
     public getHeadPosition(): Vector2 {
