@@ -255,7 +255,7 @@ export class Hyperloop extends Game {
 
     private updateIntro(): void {
         // Proceed to next stage
-        if (this.stageTime > 2) {
+        if (this.stageTime > 12) {
             // Fade in
             this.setStage(GameStage.DRIVE);
             return;
@@ -290,6 +290,7 @@ export class Hyperloop extends Game {
             const train = this.getTrain();
             train.setX(train.getX() + speed * dt);
             const shakeIntensity = 1 - progress + Math.sin(Math.PI * progress) * 2;
+            MusicManager.getInstance().setVolume(1 - progress);
             this.handleCamera(shakeIntensity, 1);
         }
     }
@@ -438,6 +439,7 @@ export class Hyperloop extends Game {
                 }
             }
         } else {
+            this.getCamera().moveTo(this.getTrain().getX() - 225, 370); // hacky workaround
             this.handleCamera(0, 1);
         }
     }
@@ -445,9 +447,16 @@ export class Hyperloop extends Game {
     private initPrespawn(): void {
         this.startDialog(6 - this.npcs.length);
         this.getTrain().showInner();
+        // Place player into train initially
+        // const player = this.getPlayer();
+        // const train = this.getTrain();
+        // player.moveTo(25, 50).appendTo(train);
+        // this.getCamera().setFollow(player);
+        this.getCamera().moveTo(1740, 370); // hacky workaround
     }
 
     public startRespawnSequence(): void {
+        console.log("starting respawn with ", this.charactersAvailable, " remaining");
         if (this.charactersAvailable > 0) {
             // Remove NPC from scene
             this.charactersAvailable--;
@@ -456,7 +465,7 @@ export class Hyperloop extends Game {
                 deadNpc.remove();
                 this.currentPlayerNpc = Math.floor(Math.random() * this.npcs.length);
             }
-            if (this.trainIsReady || Math.random() < 999) {
+            if (this.trainIsReady) {
                 this.spawnNewPlayer();
                 return;
             }
