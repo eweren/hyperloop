@@ -19,7 +19,7 @@ import { AmmoCounterNode } from "./player/AmmoCounterNode";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { STANDARD_FONT, HUD_LAYER } from "../constants";
 import { isDev } from "../../engine/util/env";
-import { sleep } from "../../engine/util/time";
+import { now, sleep } from "../../engine/util/time";
 import { ParticleNode, valueCurves } from "./ParticleNode";
 import { rnd, rndItem, timedRnd } from "../../engine/util/random";
 
@@ -56,6 +56,9 @@ export class PlayerNode extends CharacterNode {
     private aimingAngle = Math.PI / 2;
     private ammoCounter: AmmoCounterNode;
     private isReloading = false;
+    private reloadStart: number | null = null;
+    private lastShotTime: number = 0;
+    private shotRecoil = 0.2;
     private get aimingAngleNonNegative(): number {
         return -this.aimingAngle + Math.PI / 2;
     }
@@ -213,10 +216,11 @@ export class PlayerNode extends CharacterNode {
     }
 
     public shoot(): void {
-        if (this.ammo === 0){
+        if (this.ammo === 0) {
             PlayerNode.dryFireSound.stop();
             PlayerNode.dryFireSound.play();
         } else if (this.ammo > 0 && !this.isReloading) {
+            this.lastShotTime = now();
             this.ammo--;
             super.shoot(this.aimingAngleNonNegative, 35, this.flashLight.getScenePosition());
         }
@@ -237,25 +241,40 @@ export class PlayerNode extends CharacterNode {
 
     private syncArmAndLeg(): void {
         this.playerArm?.transform(c => {
-            const angleInDegrees = this.aimingAngle / Math.PI * 180;
             if (this.isReloading) {
-                if (angleInDegrees < 0) {
-                    c.setRotation(105 * Math.PI / 180 * (angleInDegrees < 0 ? 1 : -1));
+                const angleAimRight = 0.15 + Math.PI / 2;
+                const angleAimLeft = -0.15 + Math.PI / 2;
+                if (!this.reloadStart) {
+                    this.reloadStart = now();
+                }
+                const reloadProgress = (now() - this.reloadStart) / this.reloadDelay;
+                if (this.aimingAngle < 0) {
+                    const aimingDiff = this.aimingAngleNonNegative - angleAimRight;
+                    c.setRotation(this.aimingAngleNonNegative - aimingDiff * Math.sin(Math.PI * reloadProgress));
                 } else {
-                    c.setRotation(-75 * Math.PI / 180 * (angleInDegrees < 0 ? 1 : -1));
+                    const aimingDiff = this.aimingAngleNonNegative - angleAimLeft;
+                    c.setRotation(this.aimingAngleNonNegative - aimingDiff * Math.sin(Math.PI * reloadProgress));
+                }
+            } else if (now() - this.lastShotTime < this.shotDelay * 1000) {
+                const shotProgress = (now() - this.lastShotTime) / (this.shotDelay * 1000);
+                if (this.aimingAngle < 0) {
+                    c.setRotation(this.aimingAngleNonNegative + this.shotRecoil * Math.sin(Math.PI * shotProgress));
+                } else {
+                    c.setRotation(this.aimingAngleNonNegative - this.shotRecoil * Math.sin(Math.PI * shotProgress));
                 }
             } else {
+                this.reloadStart = null;
                 c.setRotation(this.aimingAngleNonNegative);
             }
             // Mirror arm vertically
-            if (angleInDegrees < 0) {
+            if (this.aimingAngle < 0) {
                 c.scaleY(-1);
             } else {
                 c.scaleY(1);
             }
             // look in aiming direction
-            this.setMirrorX(angleInDegrees < 0);
-            const backwards = this.direction === 1 && angleInDegrees < 0 || this.direction === -1 && angleInDegrees >= 0;
+            this.setMirrorX(this.aimingAngle < 0);
+            const backwards = this.direction === 1 && this.aimingAngle < 0 || this.direction === -1 && this.aimingAngle >= 0;
             this.playerLeg?.getAseprite().setDirection(backwards ? "reverse" : "forward");
             // Transform flashlight to match scaling and rotation of the arm.
             this.flashLight.transform(f => {
