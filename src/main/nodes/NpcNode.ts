@@ -30,7 +30,7 @@ export class NpcNode extends CharacterNode {
             childAnchor: Direction.CENTER,
             tag: "idle",
             id: "player",
-            sourceBounds: new Rect(6, 6, 8, 26),
+            sourceBounds: new Rect(6, 10, 8, 26),
             ...args
         });
     }
