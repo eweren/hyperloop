@@ -43,6 +43,7 @@ export class PlayerNode extends CharacterNode {
 
     private flashLight: FlashlightNode;
 
+    /** The aimingAngle in radians */
     private aimingAngle = Math.PI / 2;
     private ammoCounter: AmmoCounterNode;
     private isReloading = false;
@@ -207,7 +208,15 @@ export class PlayerNode extends CharacterNode {
     private syncArmAndLeg(): void {
         this.playerArm?.transform(c => {
             const angleInDegrees = this.aimingAngle / Math.PI * 180;
-            c.setRotation(this.aimingAngleNonNegative);
+            if (this.isReloading) {
+                if (angleInDegrees < 0) {
+                    c.setRotation(105 * Math.PI / 180 * (angleInDegrees < 0 ? 1 : -1));
+                } else {
+                    c.setRotation(-75 * Math.PI / 180 * (angleInDegrees < 0 ? 1 : -1));
+                }
+            } else {
+                c.setRotation(this.aimingAngleNonNegative);
+            }
             // Mirror arm vertically
             if (angleInDegrees < 0) {
                 c.scaleY(-1);
