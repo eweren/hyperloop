@@ -37,7 +37,7 @@ export class MusicManager {
         if (MusicManager.music0) {
             this.loaded = true;
             this.tracks = [ MusicManager.music0, MusicManager.music1, MusicManager.music2, MusicManager.music3 ];
-            this.volumes = [1, 0.5, 1];
+            this.volumes = [1, 0.5, 1, 1];
 
             clearInterval(this.loadInterval);
             this.loadInterval = 0;

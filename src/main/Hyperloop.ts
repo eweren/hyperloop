@@ -447,7 +447,7 @@ export class Hyperloop extends Game {
         player.moveTo(pos.x - trainPos.x, pos.y - trainPos.y);
         player.remove().appendTo(train);
         train.showInner();
-        MusicManager.getInstance().loopTrack(0);
+        MusicManager.getInstance().loopTrack(3);
         // TODO player follow NPC
     }
 

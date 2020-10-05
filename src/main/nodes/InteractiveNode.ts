@@ -1,19 +1,35 @@
 
+import { asset } from "../../engine/assets/Assets";
+import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
+import { TextNode } from "../../engine/scene/TextNode";
 import { clamp } from "../../engine/util/math";
+import { Layer, STANDARD_FONT } from "../constants";
 import { Hyperloop } from "../Hyperloop";
 import { CharacterNode } from "./CharacterNode";
 import { PlayerNode } from "./PlayerNode";
 
 export abstract class InteractiveNode extends AsepriteNode<Hyperloop> {
+    @asset(STANDARD_FONT)
+    private static readonly font: BitmapFont;
+
     private target: CharacterNode | null = null;
     protected caption: string;
     private captionOpacity = 0;
     protected hideSprite = false;
+    private textNode: TextNode;
 
     public constructor(args: AsepriteNodeArgs, caption: string = "") {
         super(args);
         this.caption = caption;
+
+        this.textNode = new TextNode({
+            font: InteractiveNode.font,
+            color: "white",
+            outlineColor: "black",
+            y: 20,
+            layer: Layer.OVERLAY
+        }).appendTo(this);
     }
 
     public setCaption(caption: string): void {
@@ -42,6 +58,9 @@ export abstract class InteractiveNode extends AsepriteNode<Hyperloop> {
         } else {
             this.captionOpacity = clamp(this.captionOpacity - dt * 2, 0, 1);
         }
+
+        this.textNode.setOpacity(this.captionOpacity);
+        this.textNode.setText(this.caption);
     }
 
     public abstract interact(): void;
@@ -73,19 +92,6 @@ export abstract class InteractiveNode extends AsepriteNode<Hyperloop> {
     public draw(context: CanvasRenderingContext2D): void {
         if (!this.hideSprite) {
             super.draw(context);
-        }
-        // Draw Caption
-        if (this.caption !== "" && this.captionOpacity > 0) {
-            context.save();
-            context.font = "8px Arial";
-            context.textAlign = "center";
-            context.fillStyle = "black";
-            context.strokeStyle = "white";
-            context.globalAlpha *= this.captionOpacity;
-            const offY = -12;
-            context.strokeText(this.caption, 0, offY);
-            context.fillText(this.caption, 0, offY);
-            context.restore();
         }
     }
 }

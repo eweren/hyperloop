@@ -1,10 +1,13 @@
 import { asset } from "../../engine/assets/Assets";
+import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { Sound } from "../../engine/assets/Sound";
 import { ReadonlyVector2, Vector2, Vector2Like } from "../../engine/graphics/Vector2";
 import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
+import { TextNode } from "../../engine/scene/TextNode";
 import { cacheResult } from "../../engine/util/cache";
 import { clamp } from "../../engine/util/math";
 import { rnd } from "../../engine/util/random";
+import { Layer, STANDARD_FONT } from "../constants";
 import { Hyperloop } from "../Hyperloop";
 import { CollisionNode } from "./CollisionNode";
 import { InteractiveNode } from "./InteractiveNode";
@@ -21,6 +24,9 @@ const PROJECTILE_STEP_SIZE = 2;
 export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     @asset("sounds/fx/gunshot.ogg")
     private static readonly shootSound: Sound;
+
+    @asset(STANDARD_FONT)
+    private static readonly dialogFont: BitmapFont;
 
     protected playerLeg?: PlayerLegsNode;
     protected playerArm?: PlayerArmNode;
@@ -59,6 +65,8 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected sparkEmitter: ParticleNode;
     private particleOffset: Vector2 = new Vector2(0, 0);
     private particleAngle = 0;
+
+    private textNode: TextNode;
 
     public constructor(args: AsepriteNodeArgs) {
         super(args);
@@ -99,6 +107,14 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             gravity: {x: 0, y: -100},
             lifetime: () => rnd(0.5, 0.9),
             alphaCurve: valueCurves.trapeze(0.05, 0.2)
+        }).appendTo(this);
+
+        this.textNode = new TextNode({
+            font: CharacterNode.dialogFont,
+            color: "white",
+            outlineColor: "black",
+            y: -20,
+            layer: Layer.OVERLAY
         }).appendTo(this);
     }
 
@@ -181,6 +197,14 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             this.speakUntil = 0;
             this.speakSince = 0;
         }
+
+        if (this.speakLine && this.gameTime > this.speakSince && this.gameTime < this.speakUntil) {
+            const progress = (this.gameTime - this.speakSince);
+            const line = this.speakLine.substr(0, Math.ceil(28 * progress));
+            this.textNode.setText(line);
+        } else {
+            this.textNode.setText("");
+        }
     }
 
     public setDirection(direction = 0): void {
@@ -256,20 +280,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             }
         }
         return null;
-    }
-
-    public draw(context: CanvasRenderingContext2D): void {
-        super.draw(context);
-        // TODO put this into proper text node
-        if (this.speakLine && this.gameTime > this.speakSince && this.gameTime < this.speakUntil) {
-            const progress = (this.gameTime - this.speakSince);
-            const line = this.speakLine.substr(0, Math.ceil(28 * progress));
-            context.save();
-            context.fillStyle = "white";
-            context.textAlign = "center";
-            context.fillText(line, 0, -15);
-            context.restore();
-        }
     }
 
     /**
