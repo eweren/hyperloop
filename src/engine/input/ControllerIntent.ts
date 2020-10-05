@@ -53,7 +53,9 @@ export enum ControllerIntent {
     /** Run modifier */
     PLAYER_RUN = 0b0001_0000_0000_0000_0000,
 
-    UNUSED_1 = 0b0010_0000_0000_0000_0000,
+    /** Reload modifier */
+    PLAYER_RELOAD = 0b0010_0000_0000_0000_0000,
+
     UNUSED_2 = 0b0100_0000_0000_0000_0000,
     UNUSED_3 = 0b1000_0000_0000_0000_0000,
 }

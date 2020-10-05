@@ -5,12 +5,13 @@ import { ReadonlyVector2, Vector2, Vector2Like } from "../../engine/graphics/Vec
 import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
 import { cacheResult } from "../../engine/util/cache";
 import { clamp } from "../../engine/util/math";
+import { rnd } from "../../engine/util/random";
 import { Hyperloop } from "../Hyperloop";
 import { CollisionNode } from "./CollisionNode";
 import { InteractiveNode } from "./InteractiveNode";
+import { ParticleNode, valueCurves } from "./ParticleNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
 import { PlayerLegsNode } from "./player/PlayerLegsNode";
-import { PlayerNode } from "./PlayerNode";
 
 // TODO define in some constants file
 const GRAVITY = 800;
@@ -23,6 +24,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected playerLeg?: PlayerLegsNode;
     protected playerArm?: PlayerArmNode;
     private preventNewTag = false;
+    private gameTime = 0;
 
     // Character settings
     public abstract getShootingRange(): number;
@@ -49,14 +51,41 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     private bulletEndPoint: Vector2 | null = null;
     private storedCollisionCoordinate: Vector2 = new Vector2(0, 0);
 
+    // Talking/Thinking
+    private speakSince = 0;
+    private speakUntil = 0;
+    private speakLine = "";
+
+    protected bloodEmitter: ParticleNode;
+    private bloodOffset: Vector2 = new Vector2(0, 0);
+    private bloodAngle = 0;
+
     public constructor(args: AsepriteNodeArgs) {
         super(args);
         this.velocity = new Vector2(0, 0);
         // this.setShowBounds(true);
+
+        this.bloodEmitter = new ParticleNode({
+            offset: () => this.bloodOffset,
+            velocity: () => {
+                const speed = rnd(20, 50);
+                const angle = this.bloodAngle + rnd(-1, 1) * rnd(0, Math.PI / 2) ** 2;
+                return {
+                    x: speed * Math.cos(angle),
+                    y: speed * Math.sin(angle)
+                };
+            },
+            color: () => `rgb(${rnd(100,240)}, ${rnd(0, 30)}, 0)`,
+            size: rnd(1, 3),
+            gravity: {x: 0, y: -100},
+            lifetime: () => rnd(0.5, 1),
+            alphaCurve: valueCurves.trapeze(0.05, 0.2)
+        }).appendTo(this);
     }
 
     public update(dt: number, time: number): void {
         super.update(dt, time);
+        this.gameTime = time;
         this.updateTime = time;
         this.preventNewTag = this.getTag() === "die" && this.getTimesPlayed("die") === 0
             || this.getTag() === "hurt" && this.getTimesPlayed("hurt") === 0
@@ -127,6 +156,12 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         if (this.isFalling) {
             this.setTag("fall");
         }
+        // Talking/Thinking
+        if (this.speakLine && time > this.speakUntil) {
+            this.speakLine = "";
+            this.speakUntil = 0;
+            this.speakSince = 0;
+        }
     }
 
     public setDirection(direction = 0): void {
@@ -157,8 +192,18 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
                 const headshot = (coord.y < bounds.minY + 0.25 * (bounds.height));
                 const damage = headshot ? (2.4 * power) : power;
                 isColliding.hurt(damage, this.getScenePosition());
+                // Blood particles at hurt character
+                isColliding.emitBlood(coord.x, coord.y, angle, headshot ? 30 : 10);
             }
         }
+    }
+
+    public emitBlood(x: number, y: number, angle: number, count = 1): void {
+        const pos = this.getScenePosition();
+        this.bloodOffset = new Vector2(x - pos.x, y - pos.y);
+        this.bloodAngle = angle;
+        console.log(angle);
+        this.bloodEmitter.emit(count);
     }
 
     protected getLineCollision(x1: number, y1: number, dx: number, dy: number, stepSize = 5): CharacterNode | CollisionNode | null {
@@ -188,6 +233,16 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         super.draw(context);
         if (this.debug) {
             this.drawShootingLine(context);
+        }
+        // TODO put this into proper text node
+        if (this.speakLine) {
+            const progress = (this.gameTime - this.speakSince);
+            const line = this.speakLine.substr(0, Math.ceil(28 * progress));
+            context.save();
+            context.fillStyle = "white";
+            context.textAlign = "center";
+            context.fillText(line, 0, -15);
+            context.restore();
         }
     }
 
@@ -235,6 +290,12 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             this.startBattlemode();
         }
         return false;
+    }
+
+    public say(line = "", duration = 0): void {
+        this.speakSince = this.gameTime;
+        this.speakUntil = this.gameTime + duration;
+        this.speakLine = line;
     }
 
     public setTag(tag: string | null): this {
@@ -330,11 +391,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             }
         }
         return closest;
-    }
-
-    public getPlayers(): PlayerNode[] {
-        const players = this.getScene()?.rootNode.getDescendantsByType(PlayerNode) ?? [];
-        return players;
     }
 
     public getHeadPosition(): Vector2 {
