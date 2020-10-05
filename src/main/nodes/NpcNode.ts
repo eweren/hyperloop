@@ -3,10 +3,9 @@ import { CharacterNode } from "./CharacterNode";
 import { Direction } from "../../engine/geom/Direction";
 import { EnemyNode } from "./EnemyNode";
 
-import { Polygon2 } from "../../engine/graphics/Polygon2";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
-import { Vector2 } from "../../engine/graphics/Vector2";
 import { asset } from "../../engine/assets/Assets";
+import { Rect } from "../../engine/geom/Rect";
 
 export class NpcNode extends CharacterNode {
     @asset("sprites/male.aseprite.json")
@@ -26,6 +25,7 @@ export class NpcNode extends CharacterNode {
             childAnchor: Direction.CENTER,
             tag: "idle",
             id: "player",
+            sourceBounds: new Rect(6, 6, 8, 26),
             ...args
         });
     }
@@ -44,18 +44,6 @@ export class NpcNode extends CharacterNode {
     }
     public getJumpPower(): number {
         return this.jumpPower;
-    }
-
-    public updateBoundsPolygon(bounds: Polygon2): void {
-        const boundsWidth = 8;
-        const boundsHeight = 26;
-        const offsetX = this.getWidth() / 2 - boundsWidth / 2;
-        const offsetY = 6;
-        bounds.clear();
-        bounds.addVertex(new Vector2(offsetX, offsetY));
-        bounds.addVertex(new Vector2(offsetX + boundsWidth, offsetY));
-        bounds.addVertex(new Vector2(offsetX + boundsWidth, boundsHeight + offsetY));
-        bounds.addVertex(new Vector2(offsetX, boundsHeight + offsetY));
     }
 
     public update(dt: number, time: number) {

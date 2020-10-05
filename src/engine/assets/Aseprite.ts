@@ -1,6 +1,7 @@
 import type {
     AsepriteDirection, AsepriteFrameJSON, AsepriteFrameTagJSON, AsepriteJSON, AsepriteLayerJSON
 } from "*.aseprite.json";
+import { Rect } from "../geom/Rect";
 import { loadImage } from "../util/graphics";
 import { now } from "../util/time";
 
@@ -10,6 +11,7 @@ import { now } from "../util/time";
  */
 export class Aseprite {
     private readonly frames: AsepriteFrameJSON[];
+    private readonly frameSourceBounds: Rect[];
     private readonly frameTags: Record<string, AsepriteFrameTagJSON> = {};
     private readonly frameTagDurations: Record<string, number> = {};
     private readonly duration: number;
@@ -19,6 +21,8 @@ export class Aseprite {
 
     private constructor(private readonly json: AsepriteJSON, private readonly image: HTMLImageElement) {
         this.frames = Object.values(json.frames);
+        this.frameSourceBounds = this.frames.map(frame => new Rect(
+            frame.spriteSourceSize.x, frame.spriteSourceSize.y, frame.spriteSourceSize.w, frame.spriteSourceSize.h));
         this.duration = this.frames.reduce((duration, frame) => duration + frame.duration, 0);
 
         for (const frameTag of json.meta.frameTags ?? []) {
@@ -166,6 +170,16 @@ export class Aseprite {
     }
 
     /**
+     * Checks if sprite has the given tag.
+     *
+     * @param tag - The tag to look for.
+     * @return True if sprite has the given tag, false if not.
+     */
+    public hasTag(tag: string): boolean {
+        return tag in this.frameTags;
+    }
+
+    /**
      * Draws a tagged sprite animation.
      *
      * @param ctx  - The canvas context to draw to.
@@ -179,6 +193,17 @@ export class Aseprite {
     }
 
     /**
+     * Returns the source bounds of the tagged sprite animation at the given time index.
+     *
+     * @param time - Optional time index of the animation. Current system time is used if not specified.
+     * @return The source bounds of the frame played at the given time.
+     */
+    public getTaggedSourceBounds(tag: string,time: number = now()): Rect {
+        const frameIndex = this.getTaggedFrameIndex(tag, time);
+        return this.frameSourceBounds[frameIndex];
+    }
+
+    /**
      * Draws the untagged sprite animation (Simply all defined frames).
      *
      * @param ctx  - The canvas context to draw to.
@@ -189,6 +214,17 @@ export class Aseprite {
     public draw(ctx: CanvasRenderingContext2D, x: number, y: number, time: number = now()): void {
         const frameIndex = this.calculateFrameIndex(time);
         this.drawFrame(ctx, frameIndex, x, y);
+    }
+
+    /**
+     * Returns the source bounds of the untagged sprite animation (All defined frames) at the given time index.
+     *
+     * @param time - Optional time index of the animation. Current system time is used if not specified.
+     * @return The source bounds of the frame played at the given time.
+     */
+    public getSourceBounds(time: number = now()): Rect {
+        const frameIndex = this.calculateFrameIndex(time);
+        return this.frameSourceBounds[frameIndex];
     }
 
     /**
