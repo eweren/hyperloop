@@ -5,6 +5,7 @@ import { createCanvas, getRenderingContext } from "./util/graphics";
 import { GamepadInput } from "./input/GamepadInput";
 import { Keyboard } from "./input/Keyboard";
 import { Scenes } from "./scene/Scenes";
+import { GAME_HEIGHT, GAME_WIDTH } from '../main/constants';
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want
@@ -28,7 +29,7 @@ export abstract class Game {
     private lastUpdateTime: number = performance.now();
     protected currentTime: number = 0;
 
-    public constructor(public readonly width: number = 480, public readonly height: number = 270) {
+    public constructor(public readonly width: number = GAME_WIDTH, public readonly height: number = GAME_HEIGHT) {
         const canvas = this.canvas = createCanvas(width, height);
         // Desynchronized sounds like a good idea but unfortunately it prevents pixelated graphics
         // on some systems (Chrome+Windows+NVidia for example which forces bilinear filtering). So

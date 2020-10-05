@@ -25,6 +25,9 @@ export class CorpseNode extends InteractiveNode {
             this.keyTaken = true;
             this.getGame().keyTaken = true;
             console.log("Key taken");
+            setTimeout(() => {
+                this.getGame().turnOffAllLights();
+            }, 2000);
         }
     }
 
