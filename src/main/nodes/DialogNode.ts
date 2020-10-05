@@ -33,13 +33,13 @@ export class DialogNode extends TextNode<Hyperloop> {
             const h2 = h >> 1;
 
             ctx.beginPath();
-            ctx.moveTo(-5, h / 2);
+            ctx.moveTo(-5, h2 - 1);
             ctx.lineTo(-5, h + 2);
             ctx.lineTo(w2 - 3, h + 2);
             ctx.lineTo(w2, h + 6);
             ctx.lineTo(w2 + 3, h + 2);
             ctx.lineTo(w + 4, h + 2);
-            ctx.lineTo(w + 4, h / 2);
+            ctx.lineTo(w + 4, h2 - 1);
             ctx.strokeStyle = "white";
             ctx.stroke();
 
