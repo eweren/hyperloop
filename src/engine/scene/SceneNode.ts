@@ -201,7 +201,7 @@ export class SceneNode<T extends Game = Game> {
     private layer: number | null;
 
     /** True if node is hidden, false if not. A hidden node also hides all its child nodes. */
-    private spriteHidden: boolean;
+    private hidden: boolean;
 
     /**
      * The aspects of the scene node (like rendering, scene transformation, ...) which are currently valid.
@@ -232,7 +232,7 @@ export class SceneNode<T extends Game = Game> {
         this.childAnchor = childAnchor;
         this.showBounds = showBounds;
         this.layer = layer == null ? null : (1 << layer);
-        this.spriteHidden = hidden;
+        this.hidden = hidden;
         this.collisionMask = collisionMask;
     }
 
@@ -606,8 +606,8 @@ export class SceneNode<T extends Game = Game> {
      * @param hidden - True to hide the node, false to show it.
      */
     public setHidden(hidden: boolean): this {
-        if (hidden !== this.spriteHidden) {
-            this.spriteHidden = hidden;
+        if (hidden !== this.hidden) {
+            this.hidden = hidden;
             this.invalidate();
         }
         return this;
@@ -628,7 +628,7 @@ export class SceneNode<T extends Game = Game> {
      * @return True if node is hidden, false if not.
      */
     public isHidden(): boolean {
-        return this.spriteHidden;
+        return this.hidden;
     }
 
     /**
@@ -637,7 +637,7 @@ export class SceneNode<T extends Game = Game> {
      * @return True if node is visible, false if not.
      */
     public isVisible(): boolean {
-        return !this.spriteHidden;
+        return !this.hidden;
     }
 
     /**
@@ -1656,7 +1656,7 @@ export class SceneNode<T extends Game = Game> {
      * @return Hints which suggests further actions after drawing.
      */
     protected drawAll(ctx: CanvasRenderingContext2D, layer: number, width: number, height: number): PostDrawHints {
-        if (this.spriteHidden) {
+        if (this.hidden) {
             this.valid |= SceneNodeAspect.RENDERING;
             return 0;
         }
