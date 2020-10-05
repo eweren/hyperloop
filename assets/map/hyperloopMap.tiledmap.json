@@ -11,7 +11,7 @@
  "layers":[
         {
          "compression":"zlib",
-         "data":"eJztnVtuEzEUhs+EHcAbEu10F7y0dGnZFPdbod0BlyAQt9IuAEihIJCwlVg9Nfb4MvaMPfl\/6VPbKJlOmi+OfebMdJeIdgEohL4Ze\/8B4PTN2PsPAKdvxt5\/kJbHgieZeDrA\/vfN2H9\/kJZ3ggeCh4l5JHg\/wP73zdh\/f5AW6fMbwR7RfkreEnwGw6N8boWDKYHPYAyYz0mBz2AM2HwjKfAZjIH0+YfgekO0QxeIn+fiJnLx08K54AMNX+8Am80vwTPBH8Etxl9KW\/cw1DsOCmH01wCkRY7RJp996x7H4n5fBCeCU8GRgaHmHwA4fHayJSYe24JWzlkENwwU7PNBgsenAPuQ6PPS5nOfebXO+YXPqZ53kr9brmOjYDw+ktnnTx23xzL2c9VJfVwUlMHN1Ti8rxA\/z7tunwp7YqwGYCq0AEyIGQDTggCYCi0AE2IPgAlh6z\/xpbHQd7vYh\/IwPac+z9v22D5\/t98ATIgUx1cBAAAAAADYFMbIy4nzQj5JsUhvBDPBFcGrnttEyk3M63lbcCeAu5G\/Bz4joYl15JBW5\/ocMo4M38uvrynM\/1hM7xv4vFmJ9flzAM\/J33319ZhW580J5urcOddjTZ7C581KzOu5JPN5bIoQ120oBwVz5aHrMfAZiXk9rwonvlFe7hN8RsLT53UNJWQduSD4jIRnSJ9t8245Vz5l35+sgc9IaErwmZivtPZuFjF\/NtVRFuttcp9j6i28doKUm9zzBu7Bksweymum7DQX37drtlfM28Z+LRW+\/rTVUXSfTdcYUvUUvZZiqp0g5SZ2nLXV2bgDugc51pFy3egat3WfY+4Dn+tIynmD75w2JXLM76odSraYq7ZxXr+uFnyuM7kcGspnnzFf1f6kz\/cc97WN+fC5juRwiPug+xza+5GiB0R+niiffd5fps8f+FxHcoyZ3Ae9liDrDfocW9Xr9GPYfI3WZ5yHz5uT3D5zJ2Uvxin97wqv19nWaPAZ8Ulun7mTspZs83Zon7vmPQuCz7Umh89LMtcNZC3ZVF9Q9eeuukRqn+VtXfVn+Fxncvicqs7M6xI5fLZ9FqD+XG9y+JwK7qFcV6oah6tGotdCfHx2\/V8H+FxHxnbW12c5F+Audp0LoI\/lPj676tLf2faQcuNyKrZenALVM6p6k2wu6phqhC6f+fjvAik3PmOkXCupMZL\/3zC9Z8fUv8Hry0eG+3bdJh8X47MO3w7fBj+OSU133x366+qIj8\/EnPLt3dTXWqGP0ddofXw21f2+0uXjmK4ePMyf60ioz67eTVuvT+hjDLU+OqNun336kbiXSzL\/Lr6vatvwuY6E+uzTz5OLa415bFXY9s1W94vtQ0HKTajPufvlfJBrVNcxPFd9w2ftu7BsGyk3oT77nKuU+3pItvlGX5\/l\/doGx1NqTqjPpmu76DWKkNrX0D53vR\/leKzWg\/oc\/IxtDyk3oT771DfkeXwx55yG1KVjfea9fies30\/1b6jnp8\/F1dwdPpcdl89LWq39Z5b1v+2aSPzcVFN\/c1e9ml\/za+3epbq32PY81mfe6zdj\/X4h1zRAyo3LZ9\/zmbrG6z71Z9fngm1OoL8ned1P9fq1rN9Pr9fB5zqTYj4rfclVf26b7s8FPi\/gc4LQ92RXvwZ8ricpfB7ienYx3uUCKTdDuzAFkHIzths1gvjlH1b\/wtE=",
+         "data":"eJztnVlu1EAURZ+bHcAfEomzC34SsrTeFPNMsgOGRqAwhGQBQIdJIFFFdykvRc2usl3ue8VRklbbaeNju\/z87OwS0S4AI6FUhl4uADilMvRyAcAplaGXC+TloeBRIR738PlLZej1AvLyVnBPcD8zDwRHPXz+Uhl6vYC8SM9fC\/aI9nPyhuA5GA\/K81a4mRN4DsYE8zwr8ByMCTZuyQo8B2NCev5NcLUh2qFzxM9z8RL5+G7hh+Ad9V9\/AcDET8FTwW\/BDcYfyluHMdRfnoycwdcNyIvcp5s8D63DHIv3fRKcCE4Fhwb6GscAYMPjuZctMYDZFrRy7CO4ZqBCz59kmD4H+AyZjq82z7uM23XkeP0o73KX4t\/\/SalrxGA43pPZ8w+O11MZellDyX19GIyD66v99r5C\/Dx3vT519sS+HYCp0wKwAcwA2AwIgKnTArAB7AGwAdj6dkJpLHSdLz7D+DAtU5fltk1rm77L\/+cvADaAHNeZAQAAAAAAAHkYIi8mznO5kI34J5gJLgledpwnUl9S1vNNwa0Ibif+HniO5EqqOwe0umfrgHFo+F5+fUVx20Uqpu0JniMyqZ5\/jOAZhW8T6usxre6LFMzVvZG+aU3+wnNEJmU9L8l8n6IiZhuwodwUzJWfvmngOWJLynq+LFz5QmW5S\/AcyZcu6zuWmPPXBcFzJF\/69Nw2rpdj8VP2\/ckaeI7kyhg8J+YxrX2cJYzPTXWdxXqe3POU+g+v5SD1pfT4g\/uxJLOf8lk8O8359+2a7RXztrE\/o4ef99rqOrrnpmdaqfqOXtsx1XKQ+pK6X7bVA7kbuh8lzl\/l+apvP697nvIeeF53co4\/QsfMOZHHCFeNU7LFHLYdF\/Tnu8HzaaWUW315HnKMUDVK6fkdz3ttxwh4XndKuMU90T2P7Y3J0SMjjz\/K85DtznS8gud1p8Q+lnui1zZk\/UMfw6u6on4tn58bdjkuwHOktOfcVdmrckr\/O8TrirZzQ3iOdElpz7mrshZu87lvz13jpwXB86mlhOdLMtcxZC3cVO9Q9XNXnSS35\/I1V\/0cnk8rJTzPVSfndZISntuOHaifTy8lPM8F91Oez6qai69mo9dmQjz3\/X0UeF53hnY51HM5puCOuu7R0Pf9IZ776upf2fyQ+uJzLbXenQPVm6t6umyO6phqmT7P+fHCB1JfQvap8hxN7VP53\/fTe51M\/S28Pn5oeK\/rNTldiuc6fD58Hvy6LTXuPkb0K9adEM+JuRbaI6uf48VOo58bdvHcVJ\/8TBev2\/p6GjE+rzuxnvt6ZG09UrHTGGqSdEZuz0P6uLivSzL\/Lv5Z1bzhed2J9TykD6oUVxrzvlhh+2y2+mRqnw5SX2I9L91\/GII8N\/Zds\/TVW0LOuReWeSP1JdbzkHvOSj9\/yzZu6eq5fF\/b4DrRFBPruemZQXrNJKZG17fnru1U7r\/Veag+xj9j80PqS6znIfUWeZ9myr3GMXX1VM957+QJ659U\/S1q+fSxvjo3gOd1xuf5kla1iJmlHmF7Bhe\/J9nUX+6qt\/Nnz62dvFC3F\/Oep3rOeydnrH8y5tkXSH3xeR56X5pr\/96lfu47jtjGFvq2yuuTqneyZf2Tel0Rnk8rOcbL0qNS9fO2cR9H+PiCjy1it1VXPws8rz85PO\/jeYspPpYCqS99OzIFkPoytDM1gnTLX2VR\/jU=",
          "encoding":"base64",
          "height":64,
          "id":2,
@@ -25,13 +25,13 @@
                 }],
          "type":"tilelayer",
          "visible":true,
-         "width":180,
+         "width":186,
          "x":0,
          "y":0
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt3VFO2zAYwHE\/MC6y9R7lHAOJ7RaAtH07wRgvwMt2AdgZeCodB+muMUe4Isoc20mc2K7\/P2FVfHaSr5KpHNuhSgEAAAAAgEPzYcQxt0qt70y51yV2TsCSLnQfvjTliv6Mwun+rC5NuUqcCzCVHm+oO1PuE+cC7B2\/vUrKPAAAfhvzWe2b93j\/WqQdGzNXAgAA6vbMfSImWuufE8saxRzx47fXJ1vcdZ6h+efmtmdtk3h9cdd6d055uuIXPWubxOuLu9a7c8rTFj8yY6iPOnZm4kfEDzre1o6\/a8VOTbHVpc7fFW+9L3XWfbPEDy6+asVWPe2b2Kkptroc31dXswfFtveEeH1x136knPJ0xZs9KLa9J8Tri7v2I+WUpyuOZax1OSkg3mdoewAAAAAAUD5JnQAQkaROAFnrPgdkey5os2xKTpI6AWTtXJdPM18j9Dm5bUAbmZAHDt8XXb6mTsLYBbSRuZMAFiSpE0DVnh11K0ddHxmZB+CT4v9HSIJrAl3XuvxoleuRXXPUQUBkv\/\/\/Xcac55un3jbf2AiZO0H5fPPPqeeex4yxbULmTlC+czX\/\/HMsv1IngOy55p8\/L5lIABl53Is+9A9D7+pJ6gQ6JHUCKJrr3mvj2fPRFeN+zHkBC9fcNzBlvjnG\/ZhEOAfqldv9lwxsr8fM6mGGPFCmn6kT6BBLbNsJd8c+j7NmBIwnltgu8GP7geEKIrqJ0J+mnOA7\/Rkza8+RhNxrircFML+bSOcRRx3jifqEzBPnTBx1jwW\/L8TVt+fHtxfIVt93zH6\/qM3f1yK+a\/j21jVK\/5tFGbr7RQEAAJbQrEe\/DGg\/dP29Pfbmuy7rlfqZlD6SOgEUIdYzTVOuH7Lnvl2Z4tlyYC+k\/\/nGExIhD9Rjp9TTkPZD5p9D+Pbz5bbfD3nbDuzPMWws37EKAACAevwDVmdWAA==",
+         "data":"eJzt3VFO3DAQgGE\/UC7S7j2WcxQk2lsAUjs9QSkvwEt7AegZeFq2HGS5Bo4IIkod2\/E6mTj5P2GtGDvJBJmV4zi7xgAAAAAAAOTxKWGba2PWN3W5tSV3TsAUnNm+fV6XC\/o5Zsr2c3NelwvlXICh2HGLuanLrXIuQMjh+6to5gEAyG9Tv7eH5mE+vhZpxlLmbgAAAHJ45PoUA1nbnyPHvZch4ofvrw+uuG8\/ffMvxXXHPV7iy4v77vtPKc+U+FnHPV7iy4v77vtPKc8+8YN6jPbZxk7q+AHxWcebmvEPjdhxXVx12vmnxBvna07afwTis4uvGrFVR\/sqdlwXV90Uzys2Xq3dca3ZIb68uG8d15TyTIlXa3dca3aILy\/uW8c1pTxT4hjH2pajAuJd+rYHAAAAAADITbQTAEYg2gmgSO3nuVzPd23GTclLtBNAkU5t+TLwMWKfg9xGtJE98sByfbPlu3YStV1EGxk6CWACRDsBwOHRU7fy1HWRxDyAVBqfPyIKxwRiXdryq1EuE7ts0kbASP7+\/7uk7OdHoN41L1qJmcvBfIXmz7XnzlPG8C4xczmYr1Mz\/Px5Ln+0E0CxfPPnX8dMJIIkbvdkN\/3H0B4dRDuBFtFOALPku+bbBNbEtOW4DvQewME3dw902We+PMd1oGTYB9A2tes+6dnejsnN3QB5YF5+ayfQIo7YthVuj6HuB80IyE8csV3k2\/wdwx6M4CpDP9tnBz\/p51DSnLOJucaVYAtAz1Wm\/YinjnEJ3sTMc0+ZeOruCz4vjKNrrVRoDZWrvmubt3W5Ls+vRULHCK1VrJT+v4yytdflAgAAlKS6L\/\/Uo33fdQjNsT3fYYs27WeIuoh2AiharmfT9jl+zLMQzUqNzxoAQmL6ZWhcIhnyAHbGPPRp32f+PEZofeTU1k+iTNue\/TyHjeM7lQEAAIBcXgD+u13A",
          "encoding":"base64",
          "height":64,
          "id":3,
@@ -45,13 +45,13 @@
                 }],
          "type":"tilelayer",
          "visible":true,
-         "width":180,
+         "width":186,
          "x":0,
          "y":0
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt27ENwjAUBNC\/CwwSwSJhEcgICYOwR5gKSxEScgGNE2N4TzqlcIorUri4RAAAAAD\/ZP\/mbLdk2KgKrOqQcqxdAgrpU061S0Ah55RL7RIAAAAAADTjVrsAFOR75peMEd2UntcP79lvAHynPuyRaEO6c8SUZcy2zvZIAAAAAAAAAAAAANCm171wvhMGAADKeN65AQAAAAAAAAAAAAAAYE33iGH23zgAALCxB\/ziExs=",
+         "data":"eJzt3LENgkAYBeB\/Fx3EyCK4iDICOIh74FReYkjMFRqKuwvyfckLxVG8guKKFyIAAAAAyjt+OTu8M1SqAk2cU7rWJaCwPuXSugQUdk25tS4BAAAAAACVPFoXgAp85+zBGHGa0vP+4z37FoD\/0IcdF9uW7i4xZRmzrbkdFwAAAAAAAAAAAADAep977XynDQAAbMNypwcAAAAAAAAAAAAAAABYPCOG2X8EAACAnXgBO5YTGw==",
          "encoding":"base64",
          "height":64,
          "id":5,
@@ -65,13 +65,13 @@
                 }],
          "type":"tilelayer",
          "visible":true,
-         "width":180,
+         "width":186,
          "x":0,
          "y":0
         }, 
         {
          "compression":"zlib",
-         "data":"eJztzrEJACAQBMEv3RK0EWv0g0+NDASdgYULLwIAAAAAAAAAAAAAAAAAgJf0bFS52903cGZuNgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf1klugQf",
+         "data":"eJztzrEJACAQBMEv3RK0EWv0g08NRcQZWLjwIgAAAAAAAAAAAAAAAAAAgFf0bFS52903cMbcbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP6yAAfZBB8=",
          "encoding":"base64",
          "height":64,
          "id":8,
@@ -79,7 +79,7 @@
          "opacity":1,
          "type":"tilelayer",
          "visible":true,
-         "width":180,
+         "width":186,
          "x":0,
          "y":0
         }, 
@@ -113,7 +113,7 @@
                  "rotation":0,
                  "type":"collision",
                  "visible":true,
-                 "width":3240,
+                 "width":3348,
                  "x":0,
                  "y":396
                 }, 
@@ -1745,7 +1745,7 @@
                  "rotation":0,
                  "type":"collision",
                  "visible":true,
-                 "width":936,
+                 "width":1044,
                  "x":2304,
                  "y":234
                 }, 
@@ -2193,7 +2193,7 @@
                  "value":1
                 }],
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -2209,7 +2209,7 @@
                  "rotation":0,
                  "type":"cameraLimit",
                  "visible":true,
-                 "width":3240,
+                 "width":3348,
                  "x":0,
                  "y":54
                 }, 
@@ -2254,7 +2254,7 @@
                  "rotation":0,
                  "type":"light",
                  "visible":true,
-                 "width":3240,
+                 "width":3348,
                  "x":0,
                  "y":0
                 }, 
@@ -3826,6 +3826,29 @@
                  "width":0,
                  "x":2295,
                  "y":351
+                }, 
+                {
+                 "height":0,
+                 "id":299,
+                 "name":"Light 3",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"color",
+                         "type":"color",
+                         "value":"#ffb4ffff"
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"int",
+                         "value":500
+                        }],
+                 "rotation":0,
+                 "type":"light",
+                 "visible":true,
+                 "width":0,
+                 "x":3348,
+                 "y":333
                 }],
          "opacity":1,
          "properties":[
@@ -3835,13 +3858,13 @@
                  "value":3
                 }],
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
         {
          "compression":"zlib",
-         "data":"eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAODXALQAAAE=",
+         "data":"eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAvgy6AAAB",
          "encoding":"base64",
          "height":64,
          "id":1,
@@ -3855,12 +3878,12 @@
                 }],
          "type":"tilelayer",
          "visible":true,
-         "width":180,
+         "width":186,
          "x":0,
          "y":0
         }],
  "nextlayerid":9,
- "nextobjectid":299,
+ "nextobjectid":300,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.1",
@@ -3882,5 +3905,5 @@
  "tilewidth":18,
  "type":"map",
  "version":1.4,
- "width":180
+ "width":186
 }
