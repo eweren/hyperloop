@@ -111,7 +111,7 @@ export class Sound {
             this.gainNode.gain.setValueAtTime(0, this.source.context.currentTime);
             this.gainNode.gain.linearRampToValueAtTime(1, this.source.context.currentTime + fadeIn);
             if (direction) {
-                this.panNode.pan.setValueAtTime(direction, this.source.context.currentTime);
+                this.setDirection(direction);
             }
             source.start(this.source.context.currentTime, delay, duration);
         }
@@ -144,19 +144,33 @@ export class Sound {
     }
 
     /**
-     * 
-     * @param volume 
-     * @param direction 
+     * Sets the volume and if given also the direction of a sound.
+     *
+     * @param volume    - The volume of the sound. Can have values between 0 and 1.
+     * @param direction - The direction-channel of the sound. Can be from -1 (left) to 1 (right).
      */
     public setVolume(volume: number, direction?: number): void {
         if (direction !== undefined) {
-            this.panNode.pan.setValueAtTime(direction, getAudioContext().currentTime);
+            this.setDirection(direction);
         }
         const gain = this.gainNode.gain;
         gain.value = clamp(volume, gain.minValue, gain.maxValue);
     }
 
     public getVolume(): number {
+        return this.gainNode.gain.value;
+    }
+
+    /**
+     * Sets the direction of a sound.
+     *
+     * @param direction - The direction-channel of the sound. Can be from -1 (left) to 1 (right).
+     */
+    public setDirection(direction: number): void {
+        this.panNode.pan.setValueAtTime(direction, getAudioContext().currentTime);
+    }
+
+    public getDirection(): number {
         return this.panNode.pan.value;
     }
 }

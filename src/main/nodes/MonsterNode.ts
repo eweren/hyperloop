@@ -53,9 +53,12 @@ export class MonsterNode extends EnemyNode {
         return this.attackSound.isPlaying();
     }
 
-    protected scream() {
+    protected scream(direction?: number) {
         if (!this.isScreaming()) {
             this.staySilent();
+            if (direction) {
+                this.attackSound.setDirection(direction);
+            }
             this.attackSound.play();
         }
     }

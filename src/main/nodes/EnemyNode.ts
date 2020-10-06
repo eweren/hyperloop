@@ -131,7 +131,7 @@ export abstract class EnemyNode extends CharacterNode {
         return player?.isAlive() ? player : undefined;
     }
 
-    protected scream(): void {
+    protected scream(direction?: number): void {
         // implementation is in the monster nodes
     }
 
@@ -143,7 +143,12 @@ export abstract class EnemyNode extends CharacterNode {
                 // Player spotted!
                 this.setState(AiState.FOLLOW);
                 this.targetPosition = player.getPosition();
-                this.scream();
+                const distanceToPlayer = this.getX() - player.getX();
+                let screamDirection = distanceToPlayer > 0 ? 1 : -1;
+                if (Math.abs(distanceToPlayer) < 20) {
+                    screamDirection = screamDirection * (Math.abs(distanceToPlayer) + 20) / 40;
+                }
+                this.scream(screamDirection);
                 return;
             }
         }
