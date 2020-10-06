@@ -58,7 +58,8 @@ export class FxManager {
             await sleep(timeToNextScream);
             this.currentSoundToPlay = Math.floor(Math.random() * this.sounds.length);
             this.sounds[this.currentSoundToPlay];
-            this.sounds[this.currentSoundToPlay].setVolume(clamp(Math.random() + 0.3, 0.3, 1));
+            // Randomize direction of random sounds
+            this.sounds[this.currentSoundToPlay].setVolume(clamp(Math.random() + 0.3, 0.3, 1), (Math.random() * 2) - 1);
             this.sounds[this.currentSoundToPlay].play();
             await this.setupNewTimeout();
         }
