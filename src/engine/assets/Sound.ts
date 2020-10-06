@@ -45,13 +45,16 @@ export function getGlobalGainNode(): GainNode {
 }
 
 export class Sound {
-    private readonly gainNode: GainNode;
     private source: AudioBufferSourceNode | null = null;
     private loop: boolean = false;
+    private readonly panNode: StereoPannerNode;
+    private readonly gainNode: GainNode;
 
     private constructor(private readonly buffer: AudioBuffer) {
         this.gainNode = getAudioContext().createGain();
+        this.panNode = getAudioContext().createStereoPanner();
         this.gainNode.connect(getGlobalGainNode());
+        this.panNode.connect(this.gainNode);
     }
 
     public static async load(url: string): Promise<Sound> {
@@ -81,12 +84,22 @@ export class Sound {
         return this.source != null;
     }
 
-    public play(fadeIn = 0, delay = 0, duration?: number): void {
+    /**
+     * Plays the sound with the given parameters.
+     *
+     * @param fadeIn    - Duration of the fadeIn in seconds.
+     * @param delay     - The delay after which to play the sound in seconds.
+     * @param duration  - The duration how long the sound should be played in seconds.
+     * @param direction - The direction (left/right channel) and its dimension to play the sound.
+     *                    Values between -1 (left) and 1 (right) are possible.
+     */
+    public play(fadeIn = 0, delay = 0, duration?: number, direction?: number): void {
         if (!this.isPlaying()) {
             const source = getAudioContext().createBufferSource();
             source.buffer = this.buffer;
             source.loop = this.loop;
-            source.connect(this.gainNode);
+            source.connect(this.panNode);
+            this.panNode.connect(getAudioContext().destination);
 
             source.addEventListener("ended", () => {
                 if (this.source === source) {
@@ -95,9 +108,10 @@ export class Sound {
             });
 
             this.source = source;
-            if (fadeIn > 0) {
-                this.gainNode.gain.setValueAtTime(0, this.source.context.currentTime);
-                this.gainNode.gain.linearRampToValueAtTime(1, this.source.context.currentTime + fadeIn);
+            this.gainNode.gain.setValueAtTime(0, this.source.context.currentTime);
+            this.gainNode.gain.linearRampToValueAtTime(1, this.source.context.currentTime + fadeIn);
+            if (direction) {
+                this.panNode.pan.setValueAtTime(direction, this.source.context.currentTime);
             }
             source.start(this.source.context.currentTime, delay, duration);
         }
@@ -107,7 +121,7 @@ export class Sound {
         if (this.source) {
             if (fadeOut > 0) {
                 const stopTime = this.source.context.currentTime + fadeOut;
-                this.gainNode.gain.linearRampToValueAtTime(0, stopTime);
+                this.panNode.pan.linearRampToValueAtTime(0, stopTime);
                 this.source.stop(stopTime);
             } else {
                 try {
@@ -129,12 +143,20 @@ export class Sound {
         }
     }
 
-    public setVolume(volume: number): void {
+    /**
+     * 
+     * @param volume 
+     * @param direction 
+     */
+    public setVolume(volume: number, direction?: number): void {
+        if (direction !== undefined) {
+            this.panNode.pan.setValueAtTime(direction, getAudioContext().currentTime);
+        }
         const gain = this.gainNode.gain;
         gain.value = clamp(volume, gain.minValue, gain.maxValue);
     }
 
     public getVolume(): number {
-        return this.gainNode.gain.value;
+        return this.panNode.pan.value;
     }
 }

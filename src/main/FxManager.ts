@@ -20,7 +20,6 @@ export class FxManager {
 
     private sounds: Array<Sound> = [];
 
-    private playScreamInterval: NodeJS.Timeout | null = null;
     private static theInstance = new FxManager();
 
     private loaded = false;
@@ -67,10 +66,6 @@ export class FxManager {
 
     public stop(): void {
         this.active = false;
-
-        if (this.playScreamInterval) {
-            clearInterval(this.playScreamInterval);
-        }
 
         if (this.currentSoundToPlay > -1) {
             this.sounds[this.currentSoundToPlay].stop();

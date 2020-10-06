@@ -71,8 +71,8 @@ export class MusicManager {
         }
     }
 
-    public setVolume(factor = 1) {
-        this.tracks[this.currentMusic].setVolume(this.volumes[this.currentMusic] * factor);
+    public setVolume(factor = 1, direction?: number) {
+        this.tracks[this.currentMusic].setVolume(this.volumes[this.currentMusic] * factor, direction);
     }
 
     public stop(): void {
