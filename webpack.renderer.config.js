@@ -1,5 +1,4 @@
-const path = require("path");
-const webpack = require("webpack");
+/* eslint-disable */
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const GenerateJsonPlugin = require("generate-json-webpack-plugin");
 const GitRevisionPlugin = require("git-revision-webpack-plugin");
@@ -24,7 +23,7 @@ module.exports = {
             //{ from: "src/demo/**/*.{html,css}" },
             { from: "assets/", to: "assets/" },
             { from: "index.html", transform(content) {
-                return content.toString().replace("src=\"node_modules/steal/steal.js\" main=\"lib/main/MyGame\"",
+                return content.toString().replace("src=\"node_modules/steal/steal.js\" main=\"lib/main/Hyperloop\"",
                     "src=\"index.js\"");
             }},
             { from: "style.css" }

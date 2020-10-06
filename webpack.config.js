@@ -1,5 +1,5 @@
+/* eslint-disable */
 const path = require("path");
-const webpack = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const GenerateJsonPlugin = require("generate-json-webpack-plugin");
 const GitRevisionPlugin = require("git-revision-webpack-plugin");

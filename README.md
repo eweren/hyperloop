@@ -1,5 +1,7 @@
 # Hyperloop
 
+A small 2D action platformer with handcrafted pixel art, an emphasis on mood, and a blasting original soundtrack.
+
 ## Development
 
 Preview of master branch builds can be found [here](https://hyperloop.vercel.app/).
