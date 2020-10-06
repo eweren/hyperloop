@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package#",
   "name": "hyperloop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A small 2D action platformer with handcrafted pixel art, an emphasis on mood, and a blasting original soundtrack.",
   "homepage": "https://ldjam.com/events/ludum-dare/47/hyperloop-2",
   "author": "The Cat Hive Developers",
