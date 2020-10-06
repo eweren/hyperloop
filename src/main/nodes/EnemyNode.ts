@@ -312,6 +312,6 @@ export abstract class EnemyNode extends CharacterNode {
             this.alertedBy = couldHearPlayer ? "SOUND" : "VIEW";
             this.timeOfAlert = now();
         }
-        return couldHearPlayer || (couldViewPlayer && isColliding);
+        return (couldHearPlayer || couldViewPlayer) && isColliding;
     }
 }
