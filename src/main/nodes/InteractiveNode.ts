@@ -61,7 +61,7 @@ export abstract class InteractiveNode extends AsepriteNode<Hyperloop> {
         }
 
         this.textNode.setOpacity(this.captionOpacity);
-        this.textNode.setText(this.caption);
+        this.textNode.setText(this.captionOpacity > 0 ? this.caption : "");
     }
 
     public abstract interact(): void;

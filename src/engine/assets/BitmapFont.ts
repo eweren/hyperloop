@@ -113,6 +113,11 @@ export class BitmapFont {
         ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, align = 0,
         alpha = 1
     ): void {
+        // Do nothing when no text or alpha is 0
+        if (text === "" || alpha === 0) {
+            return;
+        }
+
         ctx.save();
         ctx.translate(x, y);
 
@@ -126,7 +131,6 @@ export class BitmapFont {
             );
         }
 
-        text = "" + text;
         ctx.globalAlpha *= alpha;
 
         const { width } = this.measureText(text);
