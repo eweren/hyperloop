@@ -35,3 +35,18 @@ export function isDev(): boolean {
 
     return false;
 }
+/**
+ * Figures out if development mode is enabled and if to skip intro.
+ */
+export function skipIntro(): boolean {
+    if (isDev() && !!window.location.search) {
+        return !!window.location.search.substr(1).split("&").find(key => {
+            if (key.toLowerCase().startsWith("skipintro")) {
+                return key.length === 9 || key.endsWith("=true");
+            }
+            return false;
+        });
+    }
+
+    return false;
+}

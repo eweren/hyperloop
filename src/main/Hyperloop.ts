@@ -8,7 +8,7 @@ import { ControllerIntent } from "../engine/input/ControllerIntent";
 import { Camera } from "../engine/scene/Camera";
 import { FadeToBlack } from "../engine/scene/camera/FadeToBlack";
 import { SceneNode } from "../engine/scene/SceneNode";
-import { isDev } from "../engine/util/env";
+import { skipIntro } from "../engine/util/env";
 import { clamp } from "../engine/util/math";
 import { rnd } from "../engine/util/random";
 import { Dialog } from "./Dialog";
@@ -60,7 +60,6 @@ export class Hyperloop extends Game {
     private dialogs: Dialog[] = [];
     private npcs: CharacterNode[] = [];
     private currentPlayerNpc = 2;
-    private debug = false;
 
     // Game progress
     private charactersAvailable = 5;
@@ -227,7 +226,7 @@ export class Hyperloop extends Game {
         }
         const prevPressed = this.dialogKeyPressed;
         this.dialogKeyPressed = pressed !== 0;
-        if (pressed && !prevPressed || isDev() && this.debug) {
+        if (pressed && !prevPressed) {
             this.nextDialogLine();
         }
     }
@@ -373,6 +372,10 @@ export class Hyperloop extends Game {
     }
 
     public initIntro(): void {
+        if (skipIntro()) {
+            this.setStage(GameStage.STUCK);
+            return;
+        }
         // Play sound
         setTimeout(() => Hyperloop.introSound.play(), 1000);
         MusicManager.getInstance().setVolume(0.3);
