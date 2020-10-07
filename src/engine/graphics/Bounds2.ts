@@ -76,7 +76,7 @@ export class Bounds2 {
      * @return True if bounding box contains the point, false if not.
      */
     public containsPoint(x: number, y: number): boolean {
-        return this.minY <= y && this.maxY >= y && this.minX <= y && this.maxX >= y;
+        return this.minY <= y && this.maxY >= y && this.minX <= x && this.maxX >= x;
     }
 
     /**
