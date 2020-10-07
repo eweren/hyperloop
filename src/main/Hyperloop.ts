@@ -53,8 +53,8 @@ export class Hyperloop extends Game {
     private stageTime = 0;
     private trainSpeed = 400; // px per second
     private totalBrakeTime = 0; // calculated later; seconds train requires to brake down to standstill
-    private playerTeleportLeft = 1100; // leftest point in tunnel where player is teleported
-    private playerTeleportRight = 2970; // rightest point in tunnel where player is teleported
+    private playerTeleportLeft = 327; // leftest point in tunnel where player is teleported
+    private playerTeleportRight = 3134; // rightest point in tunnel where player is teleported
     private teleportStep = 108; // distance between two tunnel lights
     private teleportMyTrainYDistance = 50; // only teleport when player is on roughly same height as train, not in rest of level
     private dialogs: Dialog[] = [];
@@ -322,12 +322,12 @@ export class Hyperloop extends Game {
         if (Math.abs(pos.y - this.getTrain().getScenePosition().y) < this.teleportMyTrainYDistance) {
             let move = 0;
             if (pos.x < this.playerTeleportLeft) {
-                move = this.teleportStep;
+                move = this.playerTeleportRight;
             } else if (pos.x > this.playerTeleportRight) {
-                move = -this.teleportStep;
+                move = this.playerTeleportLeft;
             }
             if (move !== 0) {
-                player.setX(player.getX() + move);
+                player.setX(move);
             }
         }
     }
