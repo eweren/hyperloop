@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.2] - 2020-10-07
 
+### Fixed
+
 - Fixed game breaking bug where jump height was too low for low frame rates, such that certain points in the level
   could not be passed by the player.
 
