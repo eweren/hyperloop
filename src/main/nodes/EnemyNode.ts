@@ -145,8 +145,8 @@ export abstract class EnemyNode extends CharacterNode {
                 this.targetPosition = player.getPosition();
                 const distanceToPlayer = this.getX() - player.getX();
                 let screamDirection = distanceToPlayer > 0 ? 1 : -1;
-                if (Math.abs(distanceToPlayer) < 20) {
-                    screamDirection = screamDirection * (Math.abs(distanceToPlayer) + 20) / 40;
+                if (Math.abs(distanceToPlayer) < 200) {
+                    screamDirection = screamDirection * (Math.abs(distanceToPlayer)) / 200;
                 }
                 this.scream(screamDirection);
                 return;

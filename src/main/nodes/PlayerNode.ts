@@ -224,7 +224,7 @@ export class PlayerNode extends CharacterNode {
         }
         if (this.getTag() === "walk") {
             PlayerNode.footsteps.setLoop(true);
-            PlayerNode.footsteps.play(0.5);
+            PlayerNode.footsteps.play({fadeIn: 0.5});
         } else {
             PlayerNode.footsteps.stop(0.3);
         }

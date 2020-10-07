@@ -93,13 +93,12 @@ export class Sound {
      * @param direction - The direction (left/right channel) and its dimension to play the sound.
      *                    Values between -1 (left) and 1 (right) are possible.
      */
-    public play(fadeIn = 0, delay = 0, duration?: number, direction?: number): void {
+    public play(args?: {fadeIn?: number, delay?: number, duration?: number, direction?: number}): void {
         if (!this.isPlaying()) {
             const source = getAudioContext().createBufferSource();
             source.buffer = this.buffer;
             source.loop = this.loop;
             source.connect(this.panNode);
-            this.panNode.connect(getAudioContext().destination);
 
             source.addEventListener("ended", () => {
                 if (this.source === source) {
@@ -109,11 +108,11 @@ export class Sound {
 
             this.source = source;
             this.gainNode.gain.setValueAtTime(0, this.source.context.currentTime);
-            this.gainNode.gain.linearRampToValueAtTime(1, this.source.context.currentTime + fadeIn);
-            if (direction) {
-                this.setDirection(direction);
+            this.gainNode.gain.linearRampToValueAtTime(1, this.source.context.currentTime + (args?.fadeIn ?? 0));
+            if (args?.direction) {
+                this.setDirection(args.direction);
             }
-            source.start(this.source.context.currentTime, delay, duration);
+            source.start(this.source.context.currentTime, args?.delay, args?.duration);
         }
     }
 
