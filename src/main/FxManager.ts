@@ -1,5 +1,6 @@
 import { asset } from "../engine/assets/Assets";
 import { Sound } from "../engine/assets/Sound";
+import { mutedRandomFx } from "../engine/util/env";
 import { clamp } from "../engine/util/math";
 import { sleep } from "../engine/util/time";
 
@@ -53,7 +54,7 @@ export class FxManager {
     }
 
     private async setupNewTimeout(): Promise<void> {
-        if (this.active) {
+        if (this.active && !mutedRandomFx()) {
             const timeToNextScream = clamp(Math.random() * 20000 + 10000, 15000, 350000);
             await sleep(timeToNextScream);
             this.currentSoundToPlay = Math.floor(Math.random() * this.sounds.length);

@@ -35,6 +35,7 @@ export function isDev(): boolean {
 
     return false;
 }
+
 /**
  * Figures out if development mode is enabled and if to skip intro.
  */
@@ -43,6 +44,38 @@ export function skipIntro(): boolean {
         return !!window.location.search.substr(1).split("&").find(key => {
             if (key.toLowerCase().startsWith("skipintro")) {
                 return key.length === 9 || key.endsWith("=true");
+            }
+            return false;
+        });
+    }
+
+    return false;
+}
+
+/**
+ * Figures out if development mode is enabled and if to mute the music.
+ */
+export function mutedMusic(): boolean {
+    if (isDev() && !!window.location.search) {
+        return !!window.location.search.substr(1).split("&").find(key => {
+            if (key.toLowerCase().startsWith("nomusic")) {
+                return key.length === 7 || key.endsWith("=true");
+            }
+            return false;
+        });
+    }
+
+    return false;
+}
+
+/**
+ * Figures out if development mode is enabled and if to mute the random fx sounds.
+ */
+export function mutedRandomFx(): boolean {
+    if (isDev() && !!window.location.search) {
+        return !!window.location.search.substr(1).split("&").find(key => {
+            if (key.toLowerCase().startsWith("norandomfx")) {
+                return key.length === 10 || key.endsWith("=true");
             }
             return false;
         });
