@@ -157,26 +157,29 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         }
 
         // Gravity
-        const vy = this.velocity.y + GRAVITY * dt;
-        this.velocity = new Vector2(vx, vy);
+        const oldvy = this.velocity.y;
+        const newvy = this.velocity.y + GRAVITY * dt;
+        this.velocity = new Vector2(vx, newvy);
+        let vy = (oldvy + newvy) / 2;
 
         // Movement
         this.isOnGround = false;
         const x = this.getX(), y = this.getY();
-        if (this.velocity.x !== 0 || this.velocity.y !== 0) {
-            let newX = x + this.velocity.x * dt,
-                newY = y + this.velocity.y * dt;
+        if (vx !== 0 || vy !== 0) {
+            let newX = x + vx * dt,
+                newY = y + vy * dt;
             // X collision
             if (this.getPlayerCollisionAt(newX, y)) {
                 newX = x;
-                this.velocity = new Vector2(0, this.velocity.y);
+                vx = 0;
+                this.velocity = new Vector2(0, vy);
                 this.consecutiveXCollisions += dt;
             } else {
                 this.consecutiveXCollisions = 0;
             }
             // Y collision
             if (this.getPlayerCollisionAt(newX, newY)) {
-                this.isOnGround = (this.velocity.y > 0);
+                this.isOnGround = (vy > 0);
                 if (this.isOnGround) {
                     this.isJumping = false;
                     this.isFalling = false;
@@ -184,7 +187,8 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
                     this.isFalling = true;
                 }
                 newY = y;
-                this.velocity = new Vector2(this.velocity.x, 0);
+                vy = 0;
+                this.velocity = new Vector2(vx, 0);
             }
             // Apply
             if (newX !== x || newY !== y) {
