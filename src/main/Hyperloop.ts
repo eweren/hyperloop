@@ -255,10 +255,9 @@ export class Hyperloop extends Game {
 
     private updateIntro(): void {
         // Proceed to next stage
-        if (this.stageTime > 2) { // TODO 13!!!
+        if (this.stageTime > 13) {
             // Fade in
-            this.getFader().fadeIn({duration: 1}); // TODO REMOVE!!!
-            this.setStage(GameStage.BRAKE); // TODO DRIVE!!!
+            this.setStage(GameStage.DRIVE);
             return;
         }
     }
