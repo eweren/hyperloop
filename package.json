@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package#",
   "name": "hyperloop",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "TODO",
   "homepage": "TODO",
   "author": "The Cat Hive Developers",
