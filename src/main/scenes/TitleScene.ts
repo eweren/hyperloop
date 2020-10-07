@@ -49,18 +49,18 @@ export class TitleScene extends Scene<Hyperloop> {
 
     public activate(): void {
         this.game.input.onButtonPress.connect(this.handleButton, this);
+        window.addEventListener("mousedown", this.handleButton.bind(this), {once: true});
     }
 
     public deactivate(): void {
         this.game.input.onButtonPress.disconnect(this.handleButton, this);
     }
 
-    private handleButton(event: ControllerEvent): void {
-        if (event.intents & ControllerIntent.CONFIRM) {
+    private handleButton(event: ControllerEvent | MouseEvent): void {
+        if (event instanceof MouseEvent || event.intents & ControllerIntent.CONFIRM) {
             TitleScene.confirmSound.play();
             this.startGame();
-        }
-        if (event.intents & ControllerIntent.PLAYER_RELOAD) {
+        } else if (event.intents & ControllerIntent.PLAYER_RELOAD) {
             TitleScene.confirmSound.play();
             this.gotoCredits();
         }
