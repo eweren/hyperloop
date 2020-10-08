@@ -70,6 +70,7 @@ export class PlayerNode extends CharacterNode {
     private shotRecoil = 0.2;
     private muzzleFlash: MuzzleFlashNode;
     private health: HealthNode;
+    private mouseDistanceToPlayer: number = 1000;
     private get aimingAngleNonNegative(): number {
         return -this.aimingAngle + Math.PI / 2;
     }
@@ -344,8 +345,8 @@ export class PlayerNode extends CharacterNode {
             const backwards = this.direction === 1 && this.aimingAngle < 0 || this.direction === -1 && this.aimingAngle >= 0;
             this.playerLeg?.getAseprite().setDirection(backwards ? "reverse" : "forward");
             // Transform flashlight to match scaling and rotation of the arm.
-
             this.flashLight.transform(f => {
+                this.flashLight.setDistance(this.mouseDistanceToPlayer);
                 if (this.isMirrorX()) {
                     this.flashLight.setY(-3);
                     f.setRotation(Math.PI);
@@ -427,8 +428,17 @@ export class PlayerNode extends CharacterNode {
         this.debug = debug;
     }
 
+    public async flickerLight(): Promise<void> {
+        this.flashLight.flicker();
+    }
+
+    public async manipulateLight(factor: number): Promise<void> {
+        this.flashLight.manipulateLight(factor);
+    }
+
     private handlePointerMove(event: ScenePointerMoveEvent): void {
         this.crosshairNode.moveTo(event.getScreenX(), event.getScreenY());
+        this.mouseDistanceToPlayer = new Vector2(event.getX(), event.getY()).getDistance(this.getScenePosition());
         this.aimingAngle = new Vector2(event.getX(), event.getY())
             .sub(this.playerArm ? this.playerArm.getScenePosition() : this.getScenePosition())
             .getAngle();

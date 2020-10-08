@@ -1,12 +1,19 @@
 
 import { Direction } from "../../../engine/geom/Direction";
-import { SceneNode, SceneNodeArgs } from "../../../engine/scene/SceneNode";
+import { SceneNode, SceneNodeArgs, SceneNodeAspect } from "../../../engine/scene/SceneNode";
+import { clamp } from "../../../engine/util/math";
+import { sleep } from "../../../engine/util/time";
 import { Layer } from "../../constants";
 import { Hyperloop } from "../../Hyperloop";
 import { PlayerNode } from "../PlayerNode";
 
 export class FlashlightNode extends SceneNode<Hyperloop> {
     private static image = FlashlightNode.generateImage(200, 100);
+    private readonly maxDistance = 200;
+    private readonly flickerRounds = 50;
+    private distance = 200;
+    private flickerFactor = 1;
+    private standardLight = 1;
 
     public constructor(private randomRotate?: boolean, args?: SceneNodeArgs) {
         super({
@@ -15,6 +22,27 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
             layer: Layer.LIGHT,
             ...args
         });
+        (window as any)["flashlight"] = this;
+    }
+
+    public setDistance(newDistance: number): void {
+        this.distance = newDistance;
+        this.invalidate(SceneNodeAspect.RENDERING);
+    }
+
+    public getDistance(): number {
+        return this.distance;
+    }
+    public manipulateLight(factor: number): void {
+        this.standardLight *= factor;
+    }
+
+    public async flicker(): Promise<void> {
+        for (let flickerRounds = 0; flickerRounds < this.flickerRounds; flickerRounds++) {
+            this.flickerFactor = Math.random();
+            await sleep();
+        }
+        this.flickerFactor = this.standardLight;
     }
 
     public draw(context: CanvasRenderingContext2D): void {
@@ -28,7 +56,11 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
             const randomAngle = Math.PI * 0.04 * (Math.sin(t * 0.5) + 0.5 * Math.sin(t * 0.84) + 0.3 * Math.sin(t * 0.941));
             context.rotate(randomAngle);
         }
-        context.drawImage(FlashlightNode.image, 0, -54);
+        const newHeight = clamp((this.maxDistance / this.distance) * this.maxDistance / 2, 100, 200);
+        const newWidth = clamp(this.distance, 100, 200);
+        context.globalAlpha = this.flickerFactor;
+        context.drawImage(FlashlightNode.image, 0, -newHeight / 2 - 4, newWidth, newHeight);
+        context.globalAlpha = 1;
         context.restore();
     }
 
@@ -48,8 +80,8 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
                 const span = ymid * fx;
                 let c = 0;
                 if (dy < span) {
-                    const lightY = (0.5 - 0.5 * Math.cos(Math.PI * (1 - dy / span))) ** 0.5;
-                    const lightX = (fx < 0.25 ? 0.5 - 0.5 * Math.cos(Math.PI * fx / 0.25) : ((1 - fx) / 0.75) ** 0.7);
+                    const lightY = (0.5 - 0.5 * Math.cos(Math.PI * (1 - dy / span))) ** 0.7;
+                    const lightX = (fx < 0.25 ? 0.5 - 0.5 * Math.cos(Math.PI * fx / 0.25) : ((1 - fx) / 0.75) ** 0.9);
                     c = 255 * lightX * lightY;
                 }
                 data[p] = data[p + 1] = data[p + 2] = c;

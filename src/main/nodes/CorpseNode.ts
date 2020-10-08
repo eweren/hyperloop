@@ -5,6 +5,8 @@ import { asset } from "../../engine/assets/Assets";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { Sound } from "../../engine/assets/Sound";
 import { MusicManager } from "../MusicManager";
+import { sleep } from "../../engine/util/time";
+import { PlayerNode } from "./PlayerNode";
 
 export class CorpseNode extends InteractiveNode {
     @asset("sprites/corpse.aseprite.json")
@@ -27,7 +29,7 @@ export class CorpseNode extends InteractiveNode {
         }, "PRESS E TO SEARCH CORPSE");
     }
 
-    public interact(): void {
+    public async interact(): Promise<void> {
         if (this.canInteract()) {
             // TODO play some neat key take sound
             this.keyTaken = true;
@@ -35,19 +37,23 @@ export class CorpseNode extends InteractiveNode {
             CorpseNode.pickupSound.play();
             const player = this.getTarget();
             player?.say("This key will surely be useful", 3, 0.5);
-            setTimeout(() => {
-                CorpseNode.lightSound.play();
-                this.getGame().turnOffAllLights();
-                MusicManager.getInstance().loopTrack(2);
-                const game = this.getGame();
-                const fader = game.getFader();
-                fader.fadeOut({ duration: 0.1 }).then(() => {
-                    fader.fadeIn({ duration: 2 });
-                });
-                // Deactivated until better solution? 1.5 looks really shitty
-                // game.getCamera().setZoom(1.5);
-                player?.say("Uh oh...", 3, 1.5);
-            }, 5000);
+            await sleep(5000);
+            CorpseNode.lightSound.play();
+            this.getGame().turnOffAllLights();
+            MusicManager.getInstance().loopTrack(2);
+            const game = this.getGame();
+            const fader = game.getFader();
+            fader.fadeOut({ duration: 0.1 }).then(() => {
+                fader.fadeIn({ duration: 2 });
+            });
+            // Deactivated until better solution? 1.5 looks really shitty
+            // game.getCamera().setZoom(1.5);
+            player?.say("Uh oh...", 3, 1.5);
+            await sleep(5000);
+            (player as PlayerNode)?.flickerLight();
+            (player as PlayerNode)?.manipulateLight(0.5);
+            player?.say("Ehh... Really? Isn't it already scary enough?", 3, 1.5);
+
         }
     }
 
