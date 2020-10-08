@@ -37,6 +37,7 @@ export class TitleScene extends Scene<Hyperloop> {
         this.imageNode.appendTo(this.rootNode);
 
         MusicManager.getInstance().loopTrack(0);
+        window.addEventListener("mousedown", this.handleButton.bind(this), { once: true });
     }
 
     public update(dt: number, time: number): void {
