@@ -36,9 +36,7 @@ export class ControllerManager {
         this.currentControllerFamily = initialControllerFamily;
 
         this.onButtonDown.connect(e => {
-            if (this.currentControllerFamily !== e.controllerFamily) {
-                this.currentControllerFamily = e.controllerFamily;
-            }
+            this.currentControllerFamily = e.controllerFamily;
             this[currentActiveIntentsSymbol] |= e.intents;
         });
 
@@ -49,6 +47,8 @@ export class ControllerManager {
         this.onButtonUp.connect(e => {
             this[currentActiveIntentsSymbol] &= ~e.intents;
         });
+
+        window.addEventListener("mousemove", () => { this.currentControllerFamily = ControllerFamily.KEYBOARD; });
     }
 
     public set currentControllerFamily(controllerFamily: ControllerFamily) {

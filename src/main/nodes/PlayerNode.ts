@@ -30,6 +30,7 @@ import { AsepriteNode } from "../../engine/scene/AsepriteNode";
 import { ScenePointerDownEvent } from "../../engine/scene/events/ScenePointerDownEvent";
 import { DeadSpaceSuitNode } from "./DeadSpaceSuiteNode";
 import { ControllerEvent } from "../../engine/input/ControllerEvent";
+import { ControllerFamily } from "../../engine/input/ControllerFamily";
 
 const groundColors = [
     "#806057",
@@ -71,7 +72,7 @@ export class PlayerNode extends CharacterNode {
     private shotRecoil = 0.2;
     private muzzleFlash: MuzzleFlashNode;
     private health: HealthNode;
-    private isController = true;
+    private initDone = false;
     private get aimingAngleNonNegative(): number {
         return -this.aimingAngle + Math.PI / 2;
     }
@@ -186,6 +187,10 @@ export class PlayerNode extends CharacterNode {
 
     public update(dt: number, time: number) {
         super.update(dt, time);
+        if (this.isInScene() && !this.initDone) {
+            this.initDone = true;
+            this.getGame().input.onDrag.filter(ev => ev.isRightStick && !!ev.direction && ev.direction.getLength() > 0.5).connect(this.handleControllerInput, this);
+        }
         if (!this.ammoCounter.isInScene() && isDev()) {
             const rootNode = this.getGame().getGameScene().rootNode;
             this.ammoCounter.setX(rootNode.getWidth() - 10);
@@ -209,7 +214,7 @@ export class PlayerNode extends CharacterNode {
             this.crosshairNode.hide();
             return;
         }
-        if (this.isController) {
+        if (this.getGame().input.currentControllerFamily === ControllerFamily.GAMEPAD) {
             this.crosshairNode.hide();
         } else {
             this.crosshairNode.show();
@@ -272,7 +277,6 @@ export class PlayerNode extends CharacterNode {
         if (event.direction && event.direction.getLength() > 0.5) {
             this.aimingAngle = event.direction.getAngle(new Vector2(0, 1));
             this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
-            this.isController = true;
             return;
         }
     }
@@ -447,7 +451,6 @@ export class PlayerNode extends CharacterNode {
         this.aimingAngle = new Vector2(event.getX(), event.getY())
             .sub(this.playerArm ? this.playerArm.getScenePosition() : this.getScenePosition())
             .getAngle();
-        this.isController = false;
     }
 
     private handlePointerDown(event: ScenePointerDownEvent): void {

@@ -13,6 +13,7 @@ import { FadeTransition } from "../../engine/transitions/FadeTransition";
 import { TitleScene } from "./TitleScene";
 import { MusicManager } from "../MusicManager";
 import { FxManager } from "../FxManager";
+import { ControllerFamily } from "../../engine/input/ControllerFamily";
 
 export class SuccessScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -30,8 +31,9 @@ export class SuccessScene extends Scene<Hyperloop> {
         this.outTransition = new FadeToBlackTransition({ duration: 0.5, exclusive: true });
         this.imageNode.appendTo(this.rootNode);
         this.buildCredits();
+        const keyToPress = this.input.currentControllerFamily === ControllerFamily.GAMEPAD ? "B" : "Enter";
         this.textNode
-            .setText("Press Enter to exit")
+            .setText(`Press ${keyToPress} to exit`)
             .moveTo(GAME_WIDTH - 56, GAME_HEIGHT - 64)
             .appendTo(this.rootNode);
         MusicManager.getInstance().loopTrack(3);
@@ -89,15 +91,15 @@ export class SuccessScene extends Scene<Hyperloop> {
     }
 
     public activate(): void {
-        this.game.input.onButtonPress.connect(this.handleButton, this);
+        this.game.input.onButtonDown.connect(this.handleButton, this);
     }
 
     public deactivate(): void {
-        this.game.input.onButtonPress.disconnect(this.handleButton, this);
+        this.game.input.onButtonDown.disconnect(this.handleButton, this);
     }
 
     private handleButton(event: ControllerEvent): void {
-        if (event.intents & ControllerIntent.CONFIRM) {
+        if (event.intents & ControllerIntent.CONFIRM || event.intents & ControllerIntent.ABORT) {
             this.backToStart();
         }
     }

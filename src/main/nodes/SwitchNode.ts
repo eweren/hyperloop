@@ -4,6 +4,7 @@ import { InteractiveNode } from "./InteractiveNode";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { Sound } from "../../engine/assets/Sound";
 import { asset } from "../../engine/assets/Assets";
+import { ControllerFamily } from "../../engine/input/ControllerFamily";
 
 export interface SwitchNodeArgs extends SceneNodeArgs {
     onlyOnce?: boolean;
@@ -35,9 +36,14 @@ export class SwitchNode extends InteractiveNode {
             anchor: Direction.CENTER,
             tag: "off",
             ...args
-        }, "Press E to pull lever");
+        }, "PRESS E TO PULL LEVER");
         this.onlyOnce = onlyOnce;
         this.onUpdate = onUpdate;
+    }
+
+    public update(dt: number, time: number): void {
+        this.caption = `PRESS ${this.getGame().input.currentControllerFamily === ControllerFamily.GAMEPAD ? "Y" : "E"} TO PULL LEVER`;
+        super.update(dt, time);
     }
 
     public setOnUpdate(func: (state: boolean) => boolean): void {

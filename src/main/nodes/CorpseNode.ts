@@ -5,6 +5,7 @@ import { asset } from "../../engine/assets/Assets";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { Sound } from "../../engine/assets/Sound";
 import { MusicManager } from "../MusicManager";
+import { ControllerFamily } from "../../engine/input/ControllerFamily";
 
 export class CorpseNode extends InteractiveNode {
     @asset("sprites/corpse.aseprite.json")
@@ -25,6 +26,11 @@ export class CorpseNode extends InteractiveNode {
             tag: "off",
             ...args
         }, "PRESS E TO SEARCH CORPSE");
+    }
+
+    public update(dt: number, time: number): void {
+        this.caption = `PRESS ${this.getGame().input.currentControllerFamily === ControllerFamily.GAMEPAD ? "Y" : "E"} TO SEARCH CORPSE`;
+        super.update(dt, time);
     }
 
     public interact(): void {
