@@ -9,7 +9,7 @@ import { MonsterNode } from "./MonsterNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
 import { PlayerLegsNode } from "./player/PlayerLegsNode";
 import { RatNode } from "./RatNode";
-import { SceneNodeArgs } from "../../engine/scene/SceneNode";
+import { SceneNodeArgs, SceneNodeAspect } from "../../engine/scene/SceneNode";
 import { ScenePointerMoveEvent } from "../../engine/scene/events/ScenePointerMoveEvent";
 import { Sound } from "../../engine/assets/Sound";
 import { ReadonlyVector2, Vector2 } from "../../engine/graphics/Vector2";
@@ -29,6 +29,7 @@ import { HealthNode } from "./player/HealthNode";
 import { AsepriteNode } from "../../engine/scene/AsepriteNode";
 import { ScenePointerDownEvent } from "../../engine/scene/events/ScenePointerDownEvent";
 import { DeadSpaceSuitNode } from "./DeadSpaceSuiteNode";
+import { ControllerEvent } from "../../engine/input/ControllerEvent";
 
 const groundColors = [
     "#806057",
@@ -70,6 +71,7 @@ export class PlayerNode extends CharacterNode {
     private shotRecoil = 0.2;
     private muzzleFlash: MuzzleFlashNode;
     private health: HealthNode;
+    private isController = true;
     private get aimingAngleNonNegative(): number {
         return -this.aimingAngle + Math.PI / 2;
     }
@@ -207,7 +209,11 @@ export class PlayerNode extends CharacterNode {
             this.crosshairNode.hide();
             return;
         }
-        this.crosshairNode.show();
+        if (this.isController) {
+            this.crosshairNode.hide();
+        } else {
+            this.crosshairNode.show();
+        }
         this.setOpacity(1);
         this.updateCrosshair();
 
@@ -260,6 +266,15 @@ export class PlayerNode extends CharacterNode {
             }
         }
         this.updatePreviouslyPressed();
+    }
+
+    public handleControllerInput(event: ControllerEvent) {
+        if (event.direction && event.direction.getLength() > 0.5) {
+            this.aimingAngle = event.direction.getAngle(new Vector2(0, 1));
+            this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
+            this.isController = true;
+            return;
+        }
     }
 
     public setAmmoToFull() {
@@ -432,6 +447,7 @@ export class PlayerNode extends CharacterNode {
         this.aimingAngle = new Vector2(event.getX(), event.getY())
             .sub(this.playerArm ? this.playerArm.getScenePosition() : this.getScenePosition())
             .getAngle();
+        this.isController = false;
     }
 
     private handlePointerDown(event: ScenePointerDownEvent): void {

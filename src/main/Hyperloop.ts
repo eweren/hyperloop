@@ -107,6 +107,7 @@ export class Hyperloop extends Game {
             new Dialog(Hyperloop.train6Dialog)
         ];
 
+        this.input.onDrag.filter(e => e.isRightStick && !!e.direction && e.direction.getLength() > 0.3).connect(this.getPlayer().handleControllerInput, this.getPlayer());
     }
 
     public update(dt: number, time: number): void {

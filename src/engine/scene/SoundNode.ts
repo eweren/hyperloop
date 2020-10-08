@@ -122,9 +122,9 @@ export class SoundNode<T extends Game = Game> extends SceneNode<T> {
         }
         const volume = clamp(Math.max(0, this.range - distance) / this.range * this.intensity, 0, 1);
         if (volume > 0) {
-            let soundDirection = distance > 0 ? 1 : -1;
+            let soundDirection = horizontalDistance > 0 ? 1 : -1;
             if (Math.abs(distance) < 100) {
-                soundDirection = soundDirection * (Math.abs(horizontalDistance) / 100);
+                soundDirection = horizontalDistance / 100;
             }
             this.sound.setVolume(volume, soundDirection);
             if (!this.sound.isPlaying()) {

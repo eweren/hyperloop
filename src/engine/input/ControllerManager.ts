@@ -20,6 +20,7 @@ export class ControllerManager {
     public readonly onButtonDown = new Signal<ControllerEvent>();
     public readonly onButtonUp = new Signal<ControllerEvent>();
     public readonly onButtonPress = new Signal<ControllerEvent>();
+    public readonly onDrag = new Signal<ControllerEvent>();
     public readonly onControllerFamilyChange = new Signal<ControllerFamily>();
 
     public selectedGamepadStyle = GamepadStyle.XBOX;
@@ -39,6 +40,10 @@ export class ControllerManager {
                 this.currentControllerFamily = e.controllerFamily;
             }
             this[currentActiveIntentsSymbol] |= e.intents;
+        });
+
+        this.onDrag.connect(() => {
+            this.currentControllerFamily = ControllerFamily.GAMEPAD;
         });
 
         this.onButtonUp.connect(e => {
