@@ -1,6 +1,7 @@
 import { Sound } from "../assets/Sound";
 import { Game } from "../Game";
 import { Vector2 } from "../graphics/Vector2";
+import { clamp } from "../util/math";
 import { SceneNode, SceneNodeArgs, SceneNodeAspect } from "./SceneNode";
 
 /**
@@ -40,6 +41,7 @@ export class SoundNode<T extends Game = Game> extends SceneNode<T> {
         this.sound = sound;
         this.range = range;
         this.intensity = intensity;
+        this.sound.setLoop(true);
     }
 
     /**
@@ -112,15 +114,17 @@ export class SoundNode<T extends Game = Game> extends SceneNode<T> {
     public update(dt: number, time: number) {
         super.update(dt, time);
         let distance = 0;
+        let horizontalDistance = 0;
         const scene = this.getScene();
         if (scene) {
             distance = this.getScenePosition().getDistance(new Vector2(scene.camera.getX(), scene.camera.getY()));
+            horizontalDistance = this.getScenePosition().x - scene.camera.getX();
         }
-        const volume = Math.max(0, this.range - distance) / this.range * this.intensity;
+        const volume = clamp(Math.max(0, this.range - distance) / this.range * this.intensity, 0, 1);
         if (volume > 0) {
             let soundDirection = distance > 0 ? 1 : -1;
             if (Math.abs(distance) < 100) {
-                soundDirection = soundDirection * ((this.range - Math.abs(distance)) / this.range);
+                soundDirection = soundDirection * (Math.abs(horizontalDistance) / 100);
             }
             this.sound.setVolume(volume, soundDirection);
             if (!this.sound.isPlaying()) {
