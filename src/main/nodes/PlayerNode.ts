@@ -73,6 +73,7 @@ export class PlayerNode extends CharacterNode {
     private muzzleFlash: MuzzleFlashNode;
     private health: HealthNode;
     private initDone = false;
+    private isRunning = false;
     private get aimingAngleNonNegative(): number {
         return -this.aimingAngle + Math.PI / 2;
     }
@@ -154,7 +155,7 @@ export class PlayerNode extends CharacterNode {
 
     public getSpeed(): number {
         // TODO remove before publishing
-        return this.speed * (this.getScene()?.keyboard.isPressed("Shift") ? 2.4 : 1.2);
+        return this.speed * (this.isRunning ? 2.4 : 1.2);
     }
 
     public getAcceleration(): number {
@@ -190,6 +191,11 @@ export class PlayerNode extends CharacterNode {
         if (this.isInScene() && !this.initDone) {
             this.initDone = true;
             this.getGame().input.onDrag.filter(ev => ev.isRightStick && !!ev.direction && ev.direction.getLength() > 0.5).connect(this.handleControllerInput, this);
+            const handleControllerInputChange = (ev: ControllerEvent) => {
+                this.isRunning = (this.getGame().input.currentActiveIntents & ControllerIntent.PLAYER_RUN) === ControllerIntent.PLAYER_RUN;
+            };
+            this.getGame().input.onButtonDown.connect(handleControllerInputChange, this);
+            this.getGame().input.onButtonUp.connect(handleControllerInputChange, this);
         }
         if (!this.ammoCounter.isInScene() && isDev()) {
             const rootNode = this.getGame().getGameScene().rootNode;
