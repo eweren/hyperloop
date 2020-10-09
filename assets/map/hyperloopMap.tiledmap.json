@@ -1876,7 +1876,7 @@
                         {
                          "name":"intensity",
                          "type":"float",
-                         "value":1
+                         "value":0.25
                         }, 
                         {
                          "name":"range",
@@ -1892,8 +1892,8 @@
                  "type":"sound",
                  "visible":true,
                  "width":0,
-                 "x":1935,
-                 "y":379
+                 "x":1907,
+                 "y":354
                 }, 
                 {
                  "height":27,
@@ -1972,7 +1972,7 @@
                         {
                          "name":"intensity",
                          "type":"float",
-                         "value":1
+                         "value":0.25
                         }, 
                         {
                          "name":"range",
@@ -1989,7 +1989,7 @@
                  "visible":true,
                  "width":0,
                  "x":2160,
-                 "y":356
+                 "y":333
                 }, 
                 {
                  "height":0,

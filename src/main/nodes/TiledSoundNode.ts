@@ -6,13 +6,13 @@ import { Hyperloop } from "../Hyperloop";
 
 const soundAssets = [
     "sounds/loops/loop_breathing.mp3",
-    "sounds/loops/loop_electronicmotor.mp3",
+    "sounds/loops/loop_electronicmotor.ogg",
     "sounds/loops/loop_elektrostatic.mp3",
-    "sounds/loops/loop_fan.mp3",
+    "sounds/loops/loop_fan.ogg",
     "sounds/loops/loop_flamethrower.mp3",
     "sounds/loops/loop_flies.mp3",
     "sounds/loops/loop_gas.mp3",
-    "sounds/loops/loop_halogen.mp3",
+    "sounds/loops/loop_halogen.ogg",
     "sounds/loops/loop_occupied.mp3",
     "sounds/loops/loop_staticRadioSound.mp3"
 ];
