@@ -76,6 +76,8 @@ export class SuccessScene extends Scene<Hyperloop> {
 
     public update (dt: number, time: number): void {
         super.update(dt, time);
+        const keyToPress = this.input.currentControllerFamily === ControllerFamily.GAMEPAD ? "B" : "Enter";
+        this.textNode.setText(`Press ${keyToPress} to exit`);
 
         this.creditNodes.forEach( n => {
             n.moveBy(0, -12 * dt);

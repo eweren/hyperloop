@@ -40,7 +40,7 @@ export class ControllerManager {
             this[currentActiveIntentsSymbol] |= e.intents;
         });
 
-        this.onDrag.connect(() => {
+        this.onDrag.filter(event => !!event.direction && (event.direction.getLength() > 0.1)).connect(() => {
             this.currentControllerFamily = ControllerFamily.GAMEPAD;
         });
 
