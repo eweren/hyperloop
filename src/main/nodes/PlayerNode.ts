@@ -119,8 +119,7 @@ export class PlayerNode extends CharacterNode {
             anchor: Direction.TOP_RIGHT,
             layer: Layer.HUD
         });
-        this.health = new HealthNode({
-            font: PlayerNode.font,
+        this.health = new HealthNode(this.hitpoints, {
             anchor: Direction.TOP,
             layer: Layer.HUD
         });
@@ -147,6 +146,13 @@ export class PlayerNode extends CharacterNode {
             tag: "idle",
             layer: Layer.HUD
         });
+    }
+
+    private initNodes(): void {
+        const rootNode = this.getGame().getGameScene().rootNode;
+        this.health.setX(rootNode.getX());
+        this.health.setY(rootNode.getY());
+        rootNode.appendChild(this.health);
     }
 
     public getShootingRange(): number {
@@ -190,6 +196,7 @@ export class PlayerNode extends CharacterNode {
         super.update(dt, time);
         if (this.isInScene() && !this.initDone) {
             this.initDone = true;
+            this.initNodes();
             this.getGame().input.onDrag.filter(ev => ev.isRightStick && !!ev.direction && ev.direction.getLength() > 0.5).connect(this.handleControllerInput, this);
             const handleControllerInputChange = (ev: ControllerEvent) => {
                 this.isRunning = (this.getGame().input.currentActiveIntents & ControllerIntent.PLAYER_RUN) === ControllerIntent.PLAYER_RUN;
@@ -201,10 +208,7 @@ export class PlayerNode extends CharacterNode {
             const rootNode = this.getGame().getGameScene().rootNode;
             this.ammoCounter.setX(rootNode.getWidth() - 10);
             this.ammoCounter.setY(10);
-            this.health.setX(rootNode.getWidth() / 2);
-            this.health.setY(10);
             rootNode.appendChild(this.ammoCounter);
-            rootNode.appendChild(this.health);
         }
         if (this.getParent() instanceof TrainNode) {
             this.setOpacity(0);
@@ -420,6 +424,7 @@ export class PlayerNode extends CharacterNode {
                 scale: 4,
                 rotation: Math.PI * 2
             }).then(() => {
+                this.hitpoints = 100;
                 // Reset camera
                 camera.setZoom(1);
                 camera.setRotation(0);

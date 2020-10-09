@@ -6,7 +6,7 @@ import { GamepadInput } from "./input/GamepadInput";
 import { Keyboard } from "./input/Keyboard";
 import { Scenes } from "./scene/Scenes";
 import { GAME_HEIGHT, GAME_WIDTH } from "../main/constants";
-import { getAudioContext, getGlobalGainNode } from "./assets/Sound";
+import { getAudioContext } from "./assets/Sound";
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want
