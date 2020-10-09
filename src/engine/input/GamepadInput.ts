@@ -66,6 +66,7 @@ intentMappings.set(GamePadButtonId.BUTTON_4, [ControllerIntent.PLAYER_INTERACT])
 intentMappings.set(GamePadButtonId.SHOULDER_TOP_LEFT, [ControllerIntent.PLAYER_DANCE_1, ControllerIntent.PLAYER_ACTION]);
 intentMappings.set(GamePadButtonId.SHOULDER_TOP_RIGHT, [ControllerIntent.PLAYER_DANCE_2]);
 intentMappings.set(GamePadButtonId.SHOULDER_BOTTOM_RIGHT, [ControllerIntent.PLAYER_ACTION]);
+intentMappings.set(GamePadButtonId.STICK_BUTTON_LEFT, [ControllerIntent.PLAYER_RUN]);
 intentMappings.set(GamePadButtonId.START, [ControllerIntent.PAUSE]);
 intentMappings.set(GamePadButtonId.RIGHT_STICK, [ControllerIntent.LEFT_STICK]);
 intentMappings.set(GamePadButtonId.LEFT_STICK, [ControllerIntent.RIGHT_STICK]);
@@ -289,9 +290,9 @@ class GamepadWrapper {
         const gamepad = navigator.getGamepads()[this.index];
 
         if (gamepad != null) {
-            this.buttons.forEach(button => button.setPressed(gamepad.buttons[button.index].pressed)); 
+            this.buttons.forEach(button => button.setPressed(gamepad.buttons[button.index].pressed));
             this.axes.forEach(axis => axis.setValue(gamepad.axes[axis.index]));
-            this.vectorControls.forEach(control => control.setValue(gamepad.axes[control.xIndex], gamepad.axes[control.yIndex]))
+            this.vectorControls.forEach(control => control.setValue(gamepad.axes[control.xIndex], gamepad.axes[control.yIndex]));
         }
     }
 

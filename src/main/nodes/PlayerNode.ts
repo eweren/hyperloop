@@ -74,6 +74,7 @@ export class PlayerNode extends CharacterNode {
     private health: HealthNode;
     private mouseDistanceToPlayer: number = 1000;
     private initDone = false;
+    private isRunning = false;
     private get aimingAngleNonNegative(): number {
         return -this.aimingAngle + Math.PI / 2;
     }
@@ -119,8 +120,7 @@ export class PlayerNode extends CharacterNode {
             anchor: Direction.TOP_RIGHT,
             layer: Layer.HUD
         });
-        this.health = new HealthNode({
-            font: PlayerNode.font,
+        this.health = new HealthNode(this.hitpoints, {
             anchor: Direction.TOP,
             layer: Layer.HUD
         });
@@ -149,13 +149,20 @@ export class PlayerNode extends CharacterNode {
         });
     }
 
+    private initNodes(): void {
+        const rootNode = this.getGame().getGameScene().rootNode;
+        this.health.setX(rootNode.getX());
+        this.health.setY(rootNode.getY());
+        rootNode.appendChild(this.health);
+    }
+
     public getShootingRange(): number {
         return this.shootingRange;
     }
 
     public getSpeed(): number {
         // TODO remove before publishing
-        return this.speed * (this.getScene()?.keyboard.isPressed("Shift") ? 2.4 : 1.2);
+        return this.speed * (this.isRunning ? 2.4 : 1.2);
     }
 
     public getAcceleration(): number {
@@ -190,16 +197,19 @@ export class PlayerNode extends CharacterNode {
         super.update(dt, time);
         if (this.isInScene() && !this.initDone) {
             this.initDone = true;
+            this.initNodes();
             this.getGame().input.onDrag.filter(ev => ev.isRightStick && !!ev.direction && ev.direction.getLength() > 0.3).connect(this.handleControllerInput, this);
+            const handleControllerInputChange = (ev: ControllerEvent) => {
+                this.isRunning = (this.getGame().input.currentActiveIntents & ControllerIntent.PLAYER_RUN) === ControllerIntent.PLAYER_RUN;
+            };
+            this.getGame().input.onButtonDown.connect(handleControllerInputChange, this);
+            this.getGame().input.onButtonUp.connect(handleControllerInputChange, this);
         }
         if (!this.ammoCounter.isInScene() && isDev()) {
             const rootNode = this.getGame().getGameScene().rootNode;
             this.ammoCounter.setX(rootNode.getWidth() - 10);
             this.ammoCounter.setY(10);
-            this.health.setX(rootNode.getWidth() / 2);
-            this.health.setY(10);
             rootNode.appendChild(this.ammoCounter);
-            rootNode.appendChild(this.health);
         }
         if (this.getParent() instanceof TrainNode) {
             this.setOpacity(0);
@@ -416,6 +426,7 @@ export class PlayerNode extends CharacterNode {
                 scale: 4,
                 rotation: Math.PI * 2
             }).then(() => {
+                this.hitpoints = 100;
                 // Reset camera
                 camera.setZoom(1);
                 camera.setRotation(0);
