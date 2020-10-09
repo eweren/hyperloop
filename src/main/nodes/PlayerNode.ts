@@ -190,7 +190,7 @@ export class PlayerNode extends CharacterNode {
         super.update(dt, time);
         if (this.isInScene() && !this.initDone) {
             this.initDone = true;
-            this.getGame().input.onDrag.filter(ev => ev.isRightStick && !!ev.direction && ev.direction.getLength() > 0.5).connect(this.handleControllerInput, this);
+            this.getGame().input.onDrag.filter(ev => ev.isRightStick && !!ev.direction && ev.direction.getLength() > 0.3).connect(this.handleControllerInput, this);
         }
         if (!this.ammoCounter.isInScene() && isDev()) {
             const rootNode = this.getGame().getGameScene().rootNode;
@@ -275,7 +275,7 @@ export class PlayerNode extends CharacterNode {
     }
 
     public handleControllerInput(event: ControllerEvent) {
-        if (event.direction && event.direction.getLength() > 0.5) {
+        if (event.direction) {
             this.aimingAngle = event.direction.getAngle(new Vector2(0, 1));
             this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
             this.mouseDistanceToPlayer = event.direction.getLength() * 200;
