@@ -11,6 +11,7 @@ import { ControllerEvent } from "../../engine/input/ControllerEvent";
 import { FadeToBlackTransition } from "../../engine/transitions/FadeToBlackTransition";
 import { FadeTransition } from "../../engine/transitions/FadeTransition";
 import { TitleScene } from "./TitleScene";
+import { ControllerFamily } from "../../engine/input/ControllerFamily";
 
 export class GameOverScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -27,7 +28,7 @@ export class GameOverScene extends Scene<Hyperloop> {
         this.outTransition = new FadeToBlackTransition({ duration: 0.5, exclusive: true });
         this.imageNode.appendTo(this.rootNode);
         this.textNode
-            .setText("PRESS ENTER TO RETURN TO MENU")
+            .setText(`PRESS ${this.input.currentControllerFamily === ControllerFamily.GAMEPAD ? "A" : "ENTER"} TO RETURN TO MENU`)
             .moveTo(GAME_WIDTH / 2, GAME_HEIGHT - 64)
             .appendTo(this.rootNode);
     }

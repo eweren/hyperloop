@@ -5,6 +5,7 @@ import { SceneNode } from "../../engine/scene/SceneNode";
 import { Sound } from "../../engine/assets/Sound";
 import { TiledSceneArgs } from "../../engine/scene/TiledMapNode";
 import { asset } from "../../engine/assets/Assets";
+import { ControllerFamily } from "../../engine/input/ControllerFamily";
 
 export class DoorNode extends InteractiveNode {
     @asset("sounds/fx/metalDoor.mp3")
@@ -42,6 +43,7 @@ export class DoorNode extends InteractiveNode {
     }
 
     public update(dt: number, time: number): void {
+        this.caption = `PRESS ${this.getGame().input.currentControllerFamily === ControllerFamily.GAMEPAD ? "Y" : "E"} TO ENTER`;
         super.update(dt, time);
         this.gameTime = time;
     }

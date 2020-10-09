@@ -20,6 +20,7 @@ export class ControllerManager {
     public readonly onButtonDown = new Signal<ControllerEvent>();
     public readonly onButtonUp = new Signal<ControllerEvent>();
     public readonly onButtonPress = new Signal<ControllerEvent>();
+    public readonly onDrag = new Signal<ControllerEvent>();
     public readonly onControllerFamilyChange = new Signal<ControllerFamily>();
 
     public selectedGamepadStyle = GamepadStyle.XBOX;
@@ -35,15 +36,19 @@ export class ControllerManager {
         this.currentControllerFamily = initialControllerFamily;
 
         this.onButtonDown.connect(e => {
-            if (this.currentControllerFamily !== e.controllerFamily) {
-                this.currentControllerFamily = e.controllerFamily;
-            }
+            this.currentControllerFamily = e.controllerFamily;
             this[currentActiveIntentsSymbol] |= e.intents;
+        });
+
+        this.onDrag.connect(() => {
+            this.currentControllerFamily = ControllerFamily.GAMEPAD;
         });
 
         this.onButtonUp.connect(e => {
             this[currentActiveIntentsSymbol] &= ~e.intents;
         });
+
+        window.addEventListener("mousemove", () => { this.currentControllerFamily = ControllerFamily.KEYBOARD; });
     }
 
     public set currentControllerFamily(controllerFamily: ControllerFamily) {

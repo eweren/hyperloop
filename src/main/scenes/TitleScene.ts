@@ -12,10 +12,14 @@ import { FadeTransition } from "../../engine/transitions/FadeTransition";
 import { GAME_HEIGHT, GAME_WIDTH } from "../constants";
 import { Sound } from "../../engine/assets/Sound";
 import { SuccessScene } from "./SuccessScene";
+import { ControllerFamily } from "../../engine/input/ControllerFamily";
 
 export class TitleScene extends Scene<Hyperloop> {
     @asset("images/title-image.png")
     private static titleImage: HTMLImageElement;
+
+    @asset("images/start-overlay-controller.png")
+    private static controllerOverlayImage: HTMLImageElement;
 
     @asset("images/start-overlay.png")
     private static overlayImage: HTMLImageElement;
@@ -24,15 +28,26 @@ export class TitleScene extends Scene<Hyperloop> {
     private static confirmSound: Sound;
 
     private imageNode: ImageNode = new ImageNode({ image: TitleScene.titleImage, anchor: Direction.TOP_LEFT});
+    private controllerImageNode: ImageNode = new ImageNode({ image: TitleScene.controllerOverlayImage, anchor: Direction.BOTTOM});
     private overlayImageNode: ImageNode = new ImageNode({ image: TitleScene.overlayImage, anchor: Direction.BOTTOM});
 
     public setup() {
         this.inTransition = new FadeTransition();
         this.outTransition = new FadeToBlackTransition({ duration: 0.5, exclusive: true });
         this.imageNode.appendTo(this.rootNode);
-        this.overlayImageNode.moveTo(GAME_WIDTH / 2, GAME_HEIGHT).appendTo(this.rootNode);
 
         MusicManager.getInstance().loopTrack(0);
+    }
+
+    public update(dt: number, time: number): void {
+        if (this.input.currentControllerFamily === ControllerFamily.GAMEPAD && !this.controllerImageNode.getParent()) {
+            this.controllerImageNode.moveTo(GAME_WIDTH / 2, GAME_HEIGHT).appendTo(this.rootNode);
+            this.overlayImageNode.remove();
+        } else if (this.input.currentControllerFamily === ControllerFamily.KEYBOARD && !this.overlayImageNode.getParent()) {
+            this.overlayImageNode.moveTo(GAME_WIDTH / 2, GAME_HEIGHT).appendTo(this.rootNode);
+            this.controllerImageNode.remove();
+        }
+        super.update(dt, time);
     }
 
     public cleanup(): void {
@@ -48,12 +63,11 @@ export class TitleScene extends Scene<Hyperloop> {
     }
 
     public activate(): void {
-        this.game.input.onButtonPress.connect(this.handleButton, this);
-        window.addEventListener("mousedown", this.handleButton.bind(this), {once: true});
+        this.input.onButtonDown.connect(this.handleButton, this);
     }
 
     public deactivate(): void {
-        this.game.input.onButtonPress.disconnect(this.handleButton, this);
+        this.input.onButtonDown.disconnect(this.handleButton, this);
     }
 
     private handleButton(event: ControllerEvent | MouseEvent): void {

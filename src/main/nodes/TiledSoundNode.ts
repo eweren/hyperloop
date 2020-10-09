@@ -49,6 +49,7 @@ export class TiledSoundNode extends SoundNode<Hyperloop> {
             throw new Error(`Sound '${soundName}' could not be loaded`);
         }
 
-        super({ ...args , range, intensity, sound});
+        super({ ...args, range, intensity, sound });
+        this.set3d();
     }
 }

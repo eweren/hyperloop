@@ -4,6 +4,7 @@ import { Sound } from "../engine/assets/Sound";
 import { RGBColor } from "../engine/color/RGBColor";
 import { Game } from "../engine/Game";
 import { Vector2 } from "../engine/graphics/Vector2";
+import { ControllerFamily } from "../engine/input/ControllerFamily";
 import { ControllerIntent } from "../engine/input/ControllerIntent";
 import { Camera } from "../engine/scene/Camera";
 import { FadeToBlack } from "../engine/scene/camera/FadeToBlack";
@@ -107,6 +108,7 @@ export class Hyperloop extends Game {
             new Dialog(Hyperloop.train6Dialog)
         ];
 
+        this.input.onDrag.filter(e => e.isRightStick && !!e.direction && e.direction.getLength() > 0.3).connect(this.getPlayer().handleControllerInput, this.getPlayer());
     }
 
     public update(dt: number, time: number): void {
@@ -532,7 +534,7 @@ export class Hyperloop extends Game {
                     },
                     spriteHidden: true
                 });
-                endSwitch.setCaption("PRESS E TO ENTER");
+                endSwitch.setCaption(`PRESS ${this.input.currentControllerFamily === ControllerFamily.GAMEPAD ? "Y" : "E"} TO ENTER`);
                 player.getParent()?.appendChild(endSwitch);
                 this.trainIsReady = true;
                 // Spawn the enemies

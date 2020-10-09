@@ -1,5 +1,6 @@
 import { clamp } from "../util/math";
 import { ControllerManager } from "../input/ControllerManager";
+import { Vector2Like } from "../graphics/Vector2";
 
 // Get cross-browser AudioContext (Safari still uses webkitAudioContext…)
 const AudioContext = window.AudioContext ?? (window as any).webkitAudioContext as AudioContext;
@@ -47,14 +48,13 @@ export function getGlobalGainNode(): GainNode {
 export class Sound {
     private source: AudioBufferSourceNode | null = null;
     private loop: boolean = false;
-    private readonly panNode: StereoPannerNode;
-    private readonly gainNode: GainNode;
+    private stereoPannerNode: StereoPannerNode | null = null;
+    private pannerNode: PannerNode | null = null;
+    private gainNode: GainNode | null = null;
+    private uses3D = false;
 
     private constructor(private readonly buffer: AudioBuffer) {
-        this.gainNode = getAudioContext().createGain();
-        this.panNode = getAudioContext().createStereoPanner();
-        this.gainNode.connect(getGlobalGainNode());
-        this.panNode.connect(this.gainNode);
+        this.setStereo();
     }
 
     public static async load(url: string): Promise<Sound> {
@@ -68,6 +68,35 @@ export class Sound {
         });
     }
 
+    public setStereo(): void {
+        this.pannerNode?.disconnect();
+        this.pannerNode = null;
+        const ctx = getAudioContext();
+        this.gainNode = ctx.createGain();
+        this.stereoPannerNode = ctx.createStereoPanner();
+        this.gainNode.connect(getGlobalGainNode());
+        this.stereoPannerNode.connect(this.gainNode);
+        this.uses3D = false;
+    }
+
+    public setPositionedSound(positionInScene: Vector2Like, intensity = 1, range = 150): void {
+        this.gainNode?.disconnect();
+        this.gainNode = null;
+        this.stereoPannerNode?.disconnect();
+        this.stereoPannerNode = null;
+        const ctx = getAudioContext();
+        this.pannerNode = ctx.createPanner();
+        this.pannerNode.connect(ctx.destination);
+        this.pannerNode.panningModel = "HRTF";
+        this.pannerNode.rolloffFactor = 1 / intensity;
+        this.pannerNode.maxDistance = range;
+        this.pannerNode.refDistance = 10;
+        this.pannerNode.positionX.value = positionInScene.x;
+        this.pannerNode.positionY.value = positionInScene.y;
+        this.pannerNode.positionZ.value = -10;
+        this.uses3D = true;
+    }
+
     public static shallowClone(sound: Sound): Sound {
         const cloned = Object.create(sound.constructor.prototype);
         Object.keys(sound).forEach(key => {
@@ -78,6 +107,10 @@ export class Sound {
 
     public shallowClone(): Sound {
         return Sound.shallowClone(this);
+    }
+
+    public is3D(): boolean {
+        return this.uses3D;
     }
 
     public isPlaying(): boolean {
@@ -98,7 +131,11 @@ export class Sound {
             const source = getAudioContext().createBufferSource();
             source.buffer = this.buffer;
             source.loop = this.loop;
-            source.connect(this.panNode);
+            if (this.stereoPannerNode) {
+                source.connect(this.stereoPannerNode);
+            } else if (this.pannerNode) {
+                source.connect(this.pannerNode);
+            }
 
             source.addEventListener("ended", () => {
                 if (this.source === source) {
@@ -107,8 +144,10 @@ export class Sound {
             });
 
             this.source = source;
-            this.gainNode.gain.setValueAtTime(0, this.source.context.currentTime);
-            this.gainNode.gain.linearRampToValueAtTime(1, this.source.context.currentTime + (args?.fadeIn ?? 0));
+            if (this.gainNode) {
+                this.gainNode.gain.setValueAtTime(0, this.source.context.currentTime);
+                this.gainNode.gain.linearRampToValueAtTime(1, this.source.context.currentTime + (args?.fadeIn ?? 0));
+            }
             if (args?.direction) {
                 this.setDirection(args.direction);
             }
@@ -118,9 +157,9 @@ export class Sound {
 
     public async stop(fadeOut = 0): Promise<void> {
         if (this.source) {
-            if (fadeOut > 0) {
+            if (fadeOut > 0 && this.gainNode) {
                 const stopTime = this.source.context.currentTime + fadeOut;
-                this.panNode.pan.linearRampToValueAtTime(0, stopTime);
+                this.gainNode.gain.linearRampToValueAtTime(0, stopTime);
                 this.source.stop(stopTime);
             } else {
                 try {
@@ -152,12 +191,17 @@ export class Sound {
         if (direction !== undefined) {
             this.setDirection(direction);
         }
-        const gain = this.gainNode.gain;
-        gain.value = clamp(volume, gain.minValue, gain.maxValue);
+        if (this.gainNode) {
+            const gain = this.gainNode.gain;
+            gain.value = clamp(volume, gain.minValue, gain.maxValue);
+        }
     }
 
     public getVolume(): number {
-        return this.gainNode.gain.value;
+        if (this.gainNode) {
+            return this.gainNode.gain.value;
+        }
+        return 0;
     }
 
     /**
@@ -166,10 +210,15 @@ export class Sound {
      * @param direction - The direction-channel of the sound. Can be from -1 (left) to 1 (right).
      */
     public setDirection(direction: number): void {
-        this.panNode.pan.setValueAtTime(direction, getAudioContext().currentTime);
+        if (this.stereoPannerNode) {
+            this.stereoPannerNode.pan.setValueAtTime(direction, getAudioContext().currentTime);
+        }
     }
 
     public getDirection(): number {
-        return this.panNode.pan.value;
+        if (this.stereoPannerNode) {
+            return this.stereoPannerNode.pan.value;
+        }
+        return 0;
     }
 }

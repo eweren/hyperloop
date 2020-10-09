@@ -5,6 +5,7 @@ import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { Sound } from "../../engine/assets/Sound";
 import { asset } from "../../engine/assets/Assets";
 import { SpawnNode } from "./SpawnNode";
+import { ControllerFamily } from "../../engine/input/ControllerFamily";
 
 export class FuseboxNode extends InteractiveNode {
     @asset("sprites/fuse.aseprite.json")
@@ -28,12 +29,16 @@ export class FuseboxNode extends InteractiveNode {
         }, "PRESS E TO USE KEY");
     }
 
+    public update(dt: number, time: number): void {
+        this.caption = `PRESS ${this.getGame().input.currentControllerFamily === ControllerFamily.GAMEPAD ? "Y" : "E"}`+ (this.isOpen ? " TO TURN ON" :" TO USE KEY");
+        super.update(dt, time);
+    }
+
     public interact(): void {
         if (this.canInteract()) {
             if (!this.isOpen) {
                 this.isOpen = true;
                 this.setTag("open-off");
-                this.caption = "PRESS E TO TURN ON";
                 FuseboxNode.doorSound.play();
                 this.getTarget()?.say("Let's turn it on", 2);
                 // Spawn enemy in back

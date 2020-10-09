@@ -9,7 +9,7 @@ import { MonsterNode } from "./MonsterNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
 import { PlayerLegsNode } from "./player/PlayerLegsNode";
 import { RatNode } from "./RatNode";
-import { SceneNodeArgs } from "../../engine/scene/SceneNode";
+import { SceneNodeArgs, SceneNodeAspect } from "../../engine/scene/SceneNode";
 import { ScenePointerMoveEvent } from "../../engine/scene/events/ScenePointerMoveEvent";
 import { Sound } from "../../engine/assets/Sound";
 import { ReadonlyVector2, Vector2 } from "../../engine/graphics/Vector2";
@@ -29,6 +29,8 @@ import { HealthNode } from "./player/HealthNode";
 import { AsepriteNode } from "../../engine/scene/AsepriteNode";
 import { ScenePointerDownEvent } from "../../engine/scene/events/ScenePointerDownEvent";
 import { DeadSpaceSuitNode } from "./DeadSpaceSuiteNode";
+import { ControllerEvent } from "../../engine/input/ControllerEvent";
+import { ControllerFamily } from "../../engine/input/ControllerFamily";
 
 const groundColors = [
     "#806057",
@@ -71,6 +73,7 @@ export class PlayerNode extends CharacterNode {
     private muzzleFlash: MuzzleFlashNode;
     private health: HealthNode;
     private mouseDistanceToPlayer: number = 1000;
+    private initDone = false;
     private get aimingAngleNonNegative(): number {
         return -this.aimingAngle + Math.PI / 2;
     }
@@ -185,6 +188,10 @@ export class PlayerNode extends CharacterNode {
 
     public update(dt: number, time: number) {
         super.update(dt, time);
+        if (this.isInScene() && !this.initDone) {
+            this.initDone = true;
+            this.getGame().input.onDrag.filter(ev => ev.isRightStick && !!ev.direction && ev.direction.getLength() > 0.5).connect(this.handleControllerInput, this);
+        }
         if (!this.ammoCounter.isInScene() && isDev()) {
             const rootNode = this.getGame().getGameScene().rootNode;
             this.ammoCounter.setX(rootNode.getWidth() - 10);
@@ -208,7 +215,11 @@ export class PlayerNode extends CharacterNode {
             this.crosshairNode.hide();
             return;
         }
-        this.crosshairNode.show();
+        if (this.getGame().input.currentControllerFamily === ControllerFamily.GAMEPAD) {
+            this.crosshairNode.hide();
+        } else {
+            this.crosshairNode.show();
+        }
         this.setOpacity(1);
         this.updateCrosshair();
 
@@ -261,6 +272,15 @@ export class PlayerNode extends CharacterNode {
             }
         }
         this.updatePreviouslyPressed();
+    }
+
+    public handleControllerInput(event: ControllerEvent) {
+        if (event.direction && event.direction.getLength() > 0.5) {
+            this.aimingAngle = event.direction.getAngle(new Vector2(0, 1));
+            this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
+            this.mouseDistanceToPlayer = event.direction.getLength() * 200;
+            return;
+        }
     }
 
     public setAmmoToFull() {

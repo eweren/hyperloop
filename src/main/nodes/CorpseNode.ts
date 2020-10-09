@@ -5,6 +5,7 @@ import { asset } from "../../engine/assets/Assets";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { Sound } from "../../engine/assets/Sound";
 import { MusicManager } from "../MusicManager";
+import { ControllerFamily } from "../../engine/input/ControllerFamily";
 import { sleep } from "../../engine/util/time";
 import { PlayerNode } from "./PlayerNode";
 
@@ -27,6 +28,11 @@ export class CorpseNode extends InteractiveNode {
             tag: "off",
             ...args
         }, "PRESS E TO SEARCH CORPSE");
+    }
+
+    public update(dt: number, time: number): void {
+        this.caption = `PRESS ${this.getGame().input.currentControllerFamily === ControllerFamily.GAMEPAD ? "Y" : "E"} TO SEARCH CORPSE`;
+        super.update(dt, time);
     }
 
     public async interact(): Promise<void> {

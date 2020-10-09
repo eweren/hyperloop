@@ -1,3 +1,4 @@
+import { Vector2, Vector2Like } from "../graphics/Vector2";
 import { ControllerEventType } from "./ControllerEventType";
 import { ControllerFamily } from "./ControllerFamily";
 import { ControllerIntent } from "./ControllerIntent";
@@ -7,16 +8,19 @@ const controllerFamilySymbol = Symbol("controllerFamily");
 const intentsSymbol = Symbol("intent");
 const eventTypeSymbol = Symbol("eventType");
 const repeatSymbol = Symbol("repeat");
+const directionSymbol = Symbol("direction");
 
 export class ControllerEvent extends Object {
     private [controllerFamilySymbol]: ControllerFamily;
     private [intentsSymbol]: ControllerIntent;
     private [eventTypeSymbol]: ControllerEventType;
     private [repeatSymbol]: boolean;
+    private [directionSymbol]: Vector2Like | undefined;
 
     constructor(
         controllerFamily: ControllerFamily, eventType: ControllerEventType,
-        intents: ControllerIntent[], repeat: boolean = false
+        intents: ControllerIntent[], repeat: boolean = false,
+        direction?: Vector2Like
     ) {
         super();
 
@@ -24,6 +28,7 @@ export class ControllerEvent extends Object {
         this[intentsSymbol] = intents.reduce((prev, curr) => prev | curr);
         this[eventTypeSymbol] = eventType;
         this[repeatSymbol] = repeat;
+        this[directionSymbol] = direction;
     }
 
     get controllerFamily(): ControllerFamily {
@@ -113,14 +118,30 @@ export class ControllerEvent extends Object {
     get isAbort(): boolean {
         return (this[intentsSymbol] & ControllerIntent.ABORT) === ControllerIntent.ABORT;
     }
+
+    get isLeftStick(): boolean {
+        return (this[intentsSymbol] & ControllerIntent.LEFT_STICK) === ControllerIntent.LEFT_STICK;
+    }
+
+    get isRightStick(): boolean {
+        return (this[intentsSymbol] & ControllerIntent.RIGHT_STICK) === ControllerIntent.RIGHT_STICK;
+    }
+
+    get direction(): Vector2 | undefined {
+        const direction = this[directionSymbol];
+        if (direction) {
+            return new Vector2().setVector(direction);
+        }
+        return direction;
+    }
 }
 
 const gamepadModelSymbol = Symbol("gamepadModel");
 
 export class GamepadControllerEvent extends ControllerEvent {
     private [gamepadModelSymbol]: GamepadModel;
-    constructor(gamepadModel: GamepadModel, eventType: ControllerEventType, intents: ControllerIntent[], repeat: boolean = false) {
-        super(ControllerFamily.GAMEPAD, eventType, intents, repeat);
+    constructor(gamepadModel: GamepadModel, eventType: ControllerEventType, intents: ControllerIntent[], repeat: boolean = false, direction?: Vector2Like) {
+        super(ControllerFamily.GAMEPAD, eventType, intents, repeat, direction);
         this[gamepadModelSymbol] = gamepadModel;
     }
     get gamepadModel(): GamepadModel {
