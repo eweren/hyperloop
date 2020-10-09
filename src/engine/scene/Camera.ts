@@ -109,8 +109,6 @@ export class Camera<T extends Game = Game> {
         this.game = scene.game;
         this.x = this.game.width / 2;
         this.y = this.game.height / 2;
-        (window as any)["camera"] = this;
-        (window as any)["audio"] = getAudioContext();
     }
 
     /**
@@ -148,9 +146,7 @@ export class Camera<T extends Game = Game> {
     public setX(x: number): this {
         if (x !== this.x) {
             this.x = x;
-            const context = getAudioContext();
-            context.listener.positionX.setValueAtTime(this.x, context.currentTime);
-            context.listener.positionY.setValueAtTime(this.y, context.currentTime);
+            getAudioContext().listener.setPosition(this.x, this.y, 0);
             this.invalidateSceneTransformation();
             this.invalidate();
         }
@@ -174,6 +170,7 @@ export class Camera<T extends Game = Game> {
     public setY(y: number): this {
         if (y !== this.y) {
             this.y = y;
+            getAudioContext().listener.setPosition(this.x, this.y, 0);
             this.invalidateSceneTransformation();
             this.invalidate();
         }
@@ -190,9 +187,7 @@ export class Camera<T extends Game = Game> {
         if (x !== this.x || y !== this.y) {
             this.x = x;
             this.y = y;
-            const context = getAudioContext();
-            context.listener.positionX.setValueAtTime(this.x, context.currentTime);
-            context.listener.positionY.setValueAtTime(this.y, context.currentTime);
+            getAudioContext().listener.setPosition(this.x, this.y, 0);
             this.invalidateSceneTransformation();
             this.invalidate();
         }

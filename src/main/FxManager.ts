@@ -7,16 +7,16 @@ import { sleep } from "../engine/util/time";
 
 export class FxManager {
 
-    @asset("sounds/fx/zombieScream.mp3")
+    @asset("sounds/ambient/zombieScream.ogg")
     private static scream: Sound;
 
-    @asset("sounds/fx/drip.mp3")
+    @asset("sounds/ambient/drip.ogg")
     private static drip: Sound;
 
-    @asset("sounds/fx/metalDoor.mp3")
+    @asset("sounds/ambient/metalDoor.ogg")
     private static metalDoor: Sound;
 
-    @asset("sounds/fx/womanHeavyBreathing.mp3")
+    @asset("sounds/ambient/womanHeavyBreathing.ogg")
     private static womanHeavyBreathing: Sound;
 
     private sounds: Array<Sound> = [];
