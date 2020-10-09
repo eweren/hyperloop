@@ -120,7 +120,7 @@ export class Sound {
         if (this.source) {
             if (fadeOut > 0) {
                 const stopTime = this.source.context.currentTime + fadeOut;
-                this.panNode.pan.linearRampToValueAtTime(0, stopTime);
+                this.gainNode.gain.linearRampToValueAtTime(0, stopTime);
                 this.source.stop(stopTime);
             } else {
                 try {
