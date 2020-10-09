@@ -2,7 +2,6 @@ import { Sound } from "../assets/Sound";
 import { Game } from "../Game";
 import { Vector2 } from "../graphics/Vector2";
 import { clamp } from "../util/math";
-import { sleep } from "../util/time";
 import { SceneNode, SceneNodeArgs, SceneNodeAspect } from "./SceneNode";
 
 /**

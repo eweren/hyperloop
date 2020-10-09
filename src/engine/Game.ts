@@ -6,6 +6,7 @@ import { GamepadInput } from "./input/GamepadInput";
 import { Keyboard } from "./input/Keyboard";
 import { Scenes } from "./scene/Scenes";
 import { GAME_HEIGHT, GAME_WIDTH } from "../main/constants";
+import { getAudioContext, getGlobalGainNode } from "./assets/Sound";
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want
@@ -28,6 +29,7 @@ export abstract class Game {
     private gameLoopId: number | null = null;
     private lastUpdateTime: number = performance.now();
     protected currentTime: number = 0;
+    protected paused = false;
 
     public constructor(public readonly width: number = GAME_WIDTH, public readonly height: number = GAME_HEIGHT) {
         const canvas = this.canvas = createCanvas(width, height);
@@ -66,11 +68,21 @@ export abstract class Game {
                 }
             }
         });
-
+        this.input.onButtonDown.filter(ev => ev.isPause).connect(this.pauseGame, this);
     }
 
     public get input(): ControllerManager {
         return this.controllerManager;
+    }
+
+    public pauseGame(): void {
+        if (this.paused) {
+            this.paused = false;
+            getAudioContext().resume();
+        } else {
+            this.paused = true;
+            getAudioContext().suspend();
+        }
     }
 
     private updateCanvasSize(): void {
@@ -113,7 +125,9 @@ export abstract class Game {
 
     protected update(dt: number, time: number): void {
         this.gamepad.update();
-        this.scenes.update(dt, time);
+        if (!this.paused) {
+            this.scenes.update(dt, time);
+        }
     }
 
     protected draw(ctx: CanvasRenderingContext2D, width: number, height: number): void {
