@@ -54,7 +54,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected battlemode = false;
     private battlemodeTimeout = 2000;
     private battlemodeTimeoutTimerId: number | null = null;
-    private storedCollisionCoordinate: Vector2 = new Vector2(0, 0);
+    private storedCollisionCoordinate: Vector2 | null = null;
     protected consecutiveXCollisions = 0;
 
     // Talking/Thinking
@@ -258,7 +258,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         const diffX = Math.cos(angle) * this.getShootingRange();
         const diffY = Math.sin(angle) * this.getShootingRange();
         const isColliding = this.getLineCollision(origin.x, origin.y, diffX, diffY, PROJECTILE_STEP_SIZE);
-        if (isColliding) {
+        if (isColliding && this.storedCollisionCoordinate) {
             const coord = this.storedCollisionCoordinate;
             if (this.debug) {
                 const markNode = new MarkNode({x: coord.x, y: coord.y});
@@ -276,6 +276,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             } else {
                 this.emitSparks(coord.x, coord.y, angle);
             }
+            this.storedCollisionCoordinate = null;
         }
     }
 
