@@ -12,7 +12,7 @@ import { GAME_HEIGHT, GAME_WIDTH, Layer, STANDARD_FONT } from "../constants";
 import { CameraLimitNode } from "../nodes/CameraLimitNode";
 import { DoorNode } from "../nodes/DoorNode";
 import { ScenePointerDownEvent } from "../../engine/scene/events/ScenePointerDownEvent";
-import { isDev } from "../../engine/util/env";
+import { isDebugMap, isDev } from "../../engine/util/env";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { FpsCounterNode } from "../../engine/scene/FpsCounterNode";
 import { Direction } from "../../engine/geom/Direction";
@@ -25,17 +25,29 @@ import { FadeToBlackTransition } from "../../engine/transitions/FadeToBlackTrans
 import { SpawnNode } from "../nodes/SpawnNode";
 import { TriggerNode } from "../nodes/TriggerNode";
 import { DeadSpaceSuitNode } from "../nodes/DeadSpaceSuiteNode";
+import { MusicManager } from "../MusicManager";
+import { FxManager } from "../FxManager";
+
+export enum TargetMap {
+    HYPERLOOP = 0,
+    DEBUG = 1
+}
 
 export class GameScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
     private static font: BitmapFont;
 
-    @asset("map/hyperloopMap.tiledmap.json")
-    private static map: TiledMap;
+    @asset([
+        "map/hyperloopMap.tiledmap.json",
+        "map/debug.tiledmap.json"
+    ])
+    private static maps: TiledMap[];
+
+    private targetMap = isDebugMap() ? TargetMap.DEBUG : TargetMap.HYPERLOOP;
 
     private debugMode: boolean = false;
 
-    private mapNode = new TiledMapNode<Hyperloop>({ map: GameScene.map, objects: {
+    private mapNode = new TiledMapNode<Hyperloop>({ map: GameScene.maps[this.targetMap], objects: {
         "collision": CollisionNode,
         "player": PlayerNode,
         "enemy": MonsterNode,
@@ -78,6 +90,11 @@ export class GameScene extends Scene<Hyperloop> {
                 y: 10,
                 layer: Layer.HUD
             }));
+        }
+
+        if (this.targetMap === TargetMap.DEBUG) {
+            MusicManager.getInstance().stop();
+            FxManager.getInstance().stop();
         }
 
         setTimeout(() => {

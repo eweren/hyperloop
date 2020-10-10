@@ -6,13 +6,13 @@ import { Hyperloop } from "../Hyperloop";
 
 const soundAssets = [
     "sounds/loops/loop_breathing.mp3",
-    "sounds/loops/loop_electronicmotor.mp3",
+    "sounds/loops/loop_electronicmotor.ogg",
     "sounds/loops/loop_elektrostatic.mp3",
-    "sounds/loops/loop_fan.mp3",
+    "sounds/loops/loop_fan.ogg",
     "sounds/loops/loop_flamethrower.mp3",
     "sounds/loops/loop_flies.mp3",
     "sounds/loops/loop_gas.mp3",
-    "sounds/loops/loop_halogen.mp3",
+    "sounds/loops/loop_halogen.ogg",
     "sounds/loops/loop_occupied.mp3",
     "sounds/loops/loop_staticRadioSound.mp3"
 ];
@@ -39,6 +39,7 @@ export class TiledSoundNode extends SoundNode<Hyperloop> {
     public constructor(args?: TiledSceneArgs) {
         const range = args?.tiledObject?.getOptionalProperty("range", "float")?.getValue() ?? 10.0;
         const intensity = args?.tiledObject?.getOptionalProperty("intensity", "float")?.getValue() ?? 1.0;
+        const emitterWidth = args?.tiledObject?.getOptionalProperty("emitterWidth", "float")?.getValue() ?? 1.0;
         const soundName = args?.tiledObject?.getOptionalProperty("sound", "string")?.getValue() ?? "";
 
         const soundAssetIndex = getAssetIndexForName(soundName);
@@ -49,7 +50,7 @@ export class TiledSoundNode extends SoundNode<Hyperloop> {
             throw new Error(`Sound '${soundName}' could not be loaded`);
         }
 
-        super({ ...args, range, intensity, sound });
+        super({ ...args, range, intensity, sound, emitterWidth });
         this.set3d();
     }
 }

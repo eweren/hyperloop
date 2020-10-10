@@ -52,8 +52,9 @@ export class Sound {
     private pannerNode: PannerNode | null = null;
     private gainNode: GainNode | null = null;
     private uses3D = false;
+    private isPaused = false;
 
-    private constructor(private readonly buffer: AudioBuffer) {
+    private constructor(private readonly buffer: AudioBuffer, private defaultVolume = 1) {
         this.setStereo();
     }
 
@@ -79,7 +80,7 @@ export class Sound {
         this.uses3D = false;
     }
 
-    public setPositionedSound(positionInScene: Vector2Like, intensity = 1, range = 150): void {
+    public setPositionedSound(positionInScene: Vector2Like, intensity = 1, range = 150, emitterWidth = 30): void {
         this.gainNode?.disconnect();
         this.gainNode = null;
         this.stereoPannerNode?.disconnect();
@@ -88,12 +89,10 @@ export class Sound {
         this.pannerNode = ctx.createPanner();
         this.pannerNode.connect(ctx.destination);
         this.pannerNode.panningModel = "HRTF";
-        this.pannerNode.rolloffFactor = 1 / intensity;
+        this.pannerNode.rolloffFactor = 1.5 / intensity;
         this.pannerNode.maxDistance = range;
-        this.pannerNode.refDistance = 10;
-        this.pannerNode.positionX.value = positionInScene.x;
-        this.pannerNode.positionY.value = positionInScene.y;
-        this.pannerNode.positionZ.value = -10;
+        this.pannerNode.refDistance = emitterWidth;
+        this.pannerNode.setPosition(positionInScene.x, positionInScene.y, 10);
         this.uses3D = true;
     }
 
@@ -146,7 +145,7 @@ export class Sound {
             this.source = source;
             if (this.gainNode) {
                 this.gainNode.gain.setValueAtTime(0, this.source.context.currentTime);
-                this.gainNode.gain.linearRampToValueAtTime(1, this.source.context.currentTime + (args?.fadeIn ?? 0));
+                this.gainNode.gain.linearRampToValueAtTime(this.defaultVolume, this.source.context.currentTime + (args?.fadeIn ?? 0));
             }
             if (args?.direction) {
                 this.setDirection(args.direction);
@@ -170,6 +169,28 @@ export class Sound {
             }
 
             this.source = null;
+        }
+    }
+
+    public pause(): void {
+        if (!this.isPaused) {
+            this.gainNode?.gain.setValueAtTime(0, this.gainNode.context.currentTime);
+            if (this.pannerNode) {
+                this.pannerNode.refDistance *= 0.2;
+                this.pannerNode.maxDistance *= 0.2;
+            }
+            this.isPaused = true;
+        }
+    }
+
+    public resume(): void {
+        if (this.isPaused) {
+            this.gainNode?.gain.setValueAtTime(this.gainNode.gain.defaultValue, this.gainNode.context.currentTime);
+            if (this.pannerNode) {
+                this.pannerNode.refDistance *= 5;
+                this.pannerNode.maxDistance *= 5;
+            }
+            this.isPaused = false;
         }
     }
 
