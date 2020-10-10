@@ -1,7 +1,6 @@
 import { Color } from "../../engine/color/Color";
 import { RGBColor } from "../../engine/color/RGBColor";
 import { Direction } from "../../engine/geom/Direction";
-import { Polygon2 } from "../../engine/graphics/Polygon2";
 import { Vector2 } from "../../engine/graphics/Vector2";
 import { SceneNode } from "../../engine/scene/SceneNode";
 import { TiledSceneArgs } from "../../engine/scene/TiledMapNode";
