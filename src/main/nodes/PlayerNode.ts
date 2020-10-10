@@ -365,8 +365,12 @@ export class PlayerNode extends CharacterNode {
             // Mirror arm vertically
             if (this.aimingAngle < 0) {
                 c.scaleY(-1);
+                this.muzzleFlash.y = -5;
+                this.muzzleFlash.x = 1;
             } else {
                 c.scaleY(1);
+                this.muzzleFlash.y = -3;
+                this.muzzleFlash.x = -1;
             }
             // look in aiming direction
             this.setMirrorX(this.aimingAngle < 0);

@@ -3,7 +3,7 @@ import { RGBColor } from "../../engine/color/RGBColor";
 import { Direction } from "../../engine/geom/Direction";
 import { Polygon2 } from "../../engine/graphics/Polygon2";
 import { Vector2 } from "../../engine/graphics/Vector2";
-import { SceneNode, SceneNodeAspect } from "../../engine/scene/SceneNode";
+import { SceneNode } from "../../engine/scene/SceneNode";
 import { TiledSceneArgs } from "../../engine/scene/TiledMapNode";
 import { createCanvas, getRenderingContext } from "../../engine/util/graphics";
 import { now } from "../../engine/util/time";
@@ -12,7 +12,6 @@ import { intensifyColor } from "./LightNode";
 
 export class MuzzleFlashNode extends SceneNode<Hyperloop> {
     private color: Color;
-    private readonly polygon: Polygon2 | null;
     private readonly intensity: number;
     private manipulatedIntensity: number;
     private gradient: CanvasGradient | null = null;
@@ -20,55 +19,32 @@ export class MuzzleFlashNode extends SceneNode<Hyperloop> {
 
     public constructor(private duration: number, args?: TiledSceneArgs) {
         super({ anchor: Direction.TOP_LEFT, showBounds: true, ...args });
-        this.color = args?.tiledObject?.getOptionalProperty("color", "color")?.getValue() ?? new RGBColor(1, 0.6, 0.6);
-        this.polygon = args?.tiledObject?.getPolygon() ?? null;
+        this.color = args?.tiledObject?.getOptionalProperty("color", "color")?.getValue() ?? new RGBColor(1, 0.2, 0);
         this.intensity = args?.tiledObject?.getOptionalProperty("intensity", "int")?.getValue() ?? 100;
         this.manipulatedIntensity = this.intensity;
         this.updateGradient();
+        this.hide();
     }
 
     private updateGradient(): void {
-        if (this.polygon === null && this.width !== 0 && this.height !== 0) {
-            this.gradient = null;
-        } else {
-            const colors: Color[] = [];
-            const color = this.color.toRGB();
-            const steps = 16;
-            const overshoot = 0.5;
-            for (let step = 0; step < steps; step++) {
-                const p = (1 + overshoot) * (1 - step / steps) ** 8;
-                const col = intensifyColor(color, p);
-                colors.push(col);
-            }
-            colors.push(new RGBColor(0, 0, 0));
-
-            const canvas = createCanvas(8, 8);
-            const ctx = getRenderingContext(canvas, "2d");
-            const origin = this.polygon?.vertices[0] ?? new Vector2(0, 0);
-            const intensity = this.polygon == null ? this.manipulatedIntensity / 2 : this.manipulatedIntensity;
-            this.gradient = ctx.createRadialGradient(origin.x, origin.y, 0, origin.x, origin.y, intensity);
-            for (let i = 0, count = colors.length - 1; i <= count; i++) {
-                this.gradient.addColorStop(i / count, colors[i].toString());
-            }
+        const colors: Color[] = [];
+        const color = this.color.toRGB();
+        const steps = 16;
+        const overshoot = 0.5;
+        for (let step = 0; step < steps; step++) {
+            const p = (1 + overshoot) * (1 - step / steps) ** 8;
+            const col = intensifyColor(color, p);
+            colors.push(col);
         }
-    }
+        colors.push(new RGBColor(0, 0, 0));
 
-    public setColor(color: Color): this {
-        if (this.color !== color) {
-            this.color = color;
-            this.updateGradient();
-            this.invalidate(SceneNodeAspect.RENDERING);
-        }
-        return this;
-    }
-
-    public updateBoundsPolygon(bounds: Polygon2) {
-        if (this.polygon != null) {
-            for (const vertex of this.polygon.vertices) {
-                bounds.addVertex(vertex);
-            }
-        } else {
-            super.updateBoundsPolygon(bounds);
+        const canvas = createCanvas(8, 8);
+        const ctx = getRenderingContext(canvas, "2d");
+        const origin = new Vector2(0, 0);
+        // const intensity = this.manipulatedIntensity / 2;
+        this.gradient = ctx.createRadialGradient(origin.x, origin.y, 0, origin.x, origin.y, this.manipulatedIntensity);
+        for (let i = 0, count = colors.length - 1; i <= count; i++) {
+            this.gradient.addColorStop(i / count, colors[i].toString());
         }
     }
 
@@ -77,6 +53,7 @@ export class MuzzleFlashNode extends SceneNode<Hyperloop> {
             const fireProgress = (now() - this.fireTimeStamp) / (this.duration * 1000);
             if (fireProgress > 0.9) {
                 this.fireTimeStamp = null;
+                this.hide();
                 return;
             }
             this.manipulatedIntensity = this.intensity * (1 - fireProgress);
@@ -85,6 +62,7 @@ export class MuzzleFlashNode extends SceneNode<Hyperloop> {
     }
 
     public fire() {
+        this.show();
         this.fireTimeStamp = now();
     }
 
@@ -93,17 +71,9 @@ export class MuzzleFlashNode extends SceneNode<Hyperloop> {
             ctx.save();
             ctx.beginPath();
             const intensity = this.manipulatedIntensity;
-            const width = this.getWidth();
-            const height = this.getHeight();
             ctx.fillStyle = this.gradient ?? this.color.toString();
-            if (this.polygon != null) {
-                this.polygon.draw(ctx);
-            } else if (width === 0 && height === 0) {
-                const halfIntensity = intensity / 2;
-                ctx.ellipse(0, 0, halfIntensity, halfIntensity, 0, 0, Math.PI * 2, true);
-            } else {
-                ctx.rect(0, 0, width, height);
-            }
+            const halfIntensity = intensity / 2;
+            ctx.ellipse(0, 0, halfIntensity, halfIntensity, 0, 0, Math.PI * 2, true);
             ctx.fill();
             ctx.restore();
         }
