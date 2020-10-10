@@ -1,4 +1,11 @@
 { "compressionlevel":-1,
+ "editorsettings":
+    {
+     "export":
+        {
+         "target":"."
+        }
+    },
  "height":64,
  "infinite":false,
  "layers":[
@@ -24,7 +31,7 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJztziERAAAIADGi045aVEDAYTb94iMAAAAAAAAAAAAAAOBPzbu8\/AAAAAAAAAAAAAD2NalmAg8=",
+         "data":"eJztzrEJACAMBMC0bu12zuA29iJoYUDwrnvyPIkAAAAAAAAA4Bdlyn3T391XmzdkbAIAAADvaue9mvkHAAAAAAAAAAAAcN8A1HAD3A==",
          "encoding":"base64",
          "height":64,
          "id":3,
@@ -100,14 +107,19 @@
                  "point":true,
                  "properties":[
                         {
+                         "name":"emitterWidth",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
                          "name":"intensity",
                          "type":"float",
-                         "value":0.2
+                         "value":1
                         }, 
                         {
                          "name":"range",
                          "type":"float",
-                         "value":300
+                         "value":30
                         }, 
                         {
                          "name":"sound",
@@ -119,62 +131,6 @@
                  "visible":true,
                  "width":0,
                  "x":658,
-                 "y":568
-                }, 
-                {
-                 "height":0,
-                 "id":351,
-                 "name":"Halogen",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"intensity",
-                         "type":"float",
-                         "value":0.5
-                        }, 
-                        {
-                         "name":"range",
-                         "type":"float",
-                         "value":300
-                        }, 
-                        {
-                         "name":"sound",
-                         "type":"string",
-                         "value":"halogen"
-                        }],
-                 "rotation":0,
-                 "type":"sound",
-                 "visible":true,
-                 "width":0,
-                 "x":495,
-                 "y":568
-                }, 
-                {
-                 "height":0,
-                 "id":352,
-                 "name":"ElektroMotor",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"intensity",
-                         "type":"float",
-                         "value":0.5
-                        }, 
-                        {
-                         "name":"range",
-                         "type":"float",
-                         "value":300
-                        }, 
-                        {
-                         "name":"sound",
-                         "type":"string",
-                         "value":"electronicmotor"
-                        }],
-                 "rotation":0,
-                 "type":"sound",
-                 "visible":true,
-                 "width":0,
-                 "x":315,
                  "y":568
                 }],
          "opacity":1,
@@ -657,10 +613,10 @@
          "y":0
         }],
  "nextlayerid":10,
- "nextobjectid":353,
+ "nextobjectid":359,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.4.1",
+ "tiledversion":"1.4.2",
  "tileheight":18,
  "tilesets":[
         {
