@@ -39,6 +39,7 @@ export class TiledSoundNode extends SoundNode<Hyperloop> {
     public constructor(args?: TiledSceneArgs) {
         const range = args?.tiledObject?.getOptionalProperty("range", "float")?.getValue() ?? 10.0;
         const intensity = args?.tiledObject?.getOptionalProperty("intensity", "float")?.getValue() ?? 1.0;
+        const emitterWidth = args?.tiledObject?.getOptionalProperty("emitterWidth", "float")?.getValue() ?? 1.0;
         const soundName = args?.tiledObject?.getOptionalProperty("sound", "string")?.getValue() ?? "";
 
         const soundAssetIndex = getAssetIndexForName(soundName);
@@ -49,7 +50,7 @@ export class TiledSoundNode extends SoundNode<Hyperloop> {
             throw new Error(`Sound '${soundName}' could not be loaded`);
         }
 
-        super({ ...args, range, intensity, sound });
+        super({ ...args, range, intensity, sound, emitterWidth });
         this.set3d();
     }
 }

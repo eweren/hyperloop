@@ -16,6 +16,9 @@ export interface SoundNodeArgs extends SceneNodeArgs {
 
     /** The sound intensity between 0.0 and 1.0. Defaults to 1.0. */
     intensity?: number;
+
+    /** The width of the sound emitting source. Defaults to 30. */
+    emitterWidth?: number;
 }
 
 /**
@@ -33,14 +36,18 @@ export class SoundNode<T extends Game = Game> extends SceneNode<T> {
     /** The sound intensity. */
     private intensity: number;
 
+    /** The sounds-emitting source width. */
+    private emitterWidth: number;
+
     /**
      * Creates a new scene node displaying the given Aseprite.
      */
-    public constructor({ sound, range, intensity = 1.0, ...args }: SoundNodeArgs) {
+    public constructor({ sound, range, intensity = 1.0, emitterWidth = 30, ...args }: SoundNodeArgs) {
         super({ ...args });
         this.sound = sound;
         this.range = range;
         this.intensity = intensity;
+        this.emitterWidth = emitterWidth;
         this.sound.setLoop(true);
     }
 
@@ -67,7 +74,7 @@ export class SoundNode<T extends Game = Game> extends SceneNode<T> {
     }
 
     public set3d(): void {
-        this.sound.setPositionedSound(new Vector2(this.getX(), this.getY()), this.intensity, this.range);
+        this.sound.setPositionedSound(new Vector2(this.getX(), this.getY()), this.intensity, this.range, this.emitterWidth);
     }
 
     public unset3d(): void {
@@ -140,7 +147,7 @@ export class SoundNode<T extends Game = Game> extends SceneNode<T> {
             }
         } else if (!this.sound.is3D()) {
             this.sound.stop();
-        } else if (this.sound.is3D()) {
+        } else if (!this.sound.isPlaying() && this.sound.is3D()) {
             this.sound.play();
         }
     }
