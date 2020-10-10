@@ -52,6 +52,7 @@ export class Sound {
     private pannerNode: PannerNode | null = null;
     private gainNode: GainNode | null = null;
     private uses3D = false;
+    private isPaused = false;
 
     private constructor(private readonly buffer: AudioBuffer, private defaultVolume = 1) {
         this.setStereo();
@@ -172,18 +173,24 @@ export class Sound {
     }
 
     public pause(): void {
-        this.gainNode?.gain.setValueAtTime(0, this.gainNode.context.currentTime);
-        if (this.pannerNode) {
-            this.pannerNode.refDistance = 0;
-            this.pannerNode.maxDistance = 0;
+        if (!this.isPaused) {
+            this.gainNode?.gain.setValueAtTime(0, this.gainNode.context.currentTime);
+            if (this.pannerNode) {
+                this.pannerNode.refDistance *= 0.2;
+                this.pannerNode.maxDistance *= 0.2;
+            }
+            this.isPaused = true;
         }
     }
 
     public resume(): void {
-        this.gainNode?.gain.setValueAtTime(this.gainNode.gain.defaultValue, this.gainNode.context.currentTime);
-        if (this.pannerNode) {
-            this.pannerNode.refDistance = 0;
-            this.pannerNode.maxDistance = 0;
+        if (this.isPaused) {
+            this.gainNode?.gain.setValueAtTime(this.gainNode.gain.defaultValue, this.gainNode.context.currentTime);
+            if (this.pannerNode) {
+                this.pannerNode.refDistance *= 5;
+                this.pannerNode.maxDistance *= 5;
+            }
+            this.isPaused = false;
         }
     }
 
