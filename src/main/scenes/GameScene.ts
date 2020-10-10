@@ -12,7 +12,7 @@ import { GAME_HEIGHT, GAME_WIDTH, Layer, STANDARD_FONT } from "../constants";
 import { CameraLimitNode } from "../nodes/CameraLimitNode";
 import { DoorNode } from "../nodes/DoorNode";
 import { ScenePointerDownEvent } from "../../engine/scene/events/ScenePointerDownEvent";
-import { isDev } from "../../engine/util/env";
+import { isDebugMap, isDev } from "../../engine/util/env";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { FpsCounterNode } from "../../engine/scene/FpsCounterNode";
 import { Direction } from "../../engine/geom/Direction";
@@ -43,7 +43,7 @@ export class GameScene extends Scene<Hyperloop> {
     ])
     private static maps: TiledMap[];
 
-    private targetMap = TargetMap.HYPERLOOP;
+    private targetMap = isDebugMap() ? TargetMap.DEBUG : TargetMap.HYPERLOOP;
 
     private debugMode: boolean = false;
 

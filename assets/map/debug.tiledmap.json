@@ -1,4 +1,11 @@
 { "compressionlevel":-1,
+ "editorsettings":
+    {
+     "export":
+        {
+         "target":"."
+        }
+    },
  "height":64,
  "infinite":false,
  "layers":[
@@ -24,7 +31,7 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJztziERAAAIADGi045aVEDAYTb94iMAAAAAAAAAAAAAAOBPzbu8\/AAAAAAAAAAAAAD2NalmAg8=",
+         "data":"eJztzrEJACAMBMC0bu12zuA29iJoYUDwrnvyPIkAAAAAAAAA4Bdlyn3T391XmzdkbAIAAADvaue9mvkHAAAAAAAAAAAAcN8A1HAD3A==",
          "encoding":"base64",
          "height":64,
          "id":3,
@@ -100,14 +107,19 @@
                  "point":true,
                  "properties":[
                         {
+                         "name":"emitterWidth",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
                          "name":"intensity",
                          "type":"float",
-                         "value":0.2
+                         "value":0.1
                         }, 
                         {
                          "name":"range",
                          "type":"float",
-                         "value":300
+                         "value":30
                         }, 
                         {
                          "name":"sound",
@@ -127,6 +139,11 @@
                  "name":"Halogen",
                  "point":true,
                  "properties":[
+                        {
+                         "name":"emitterWidth",
+                         "type":"float",
+                         "value":30
+                        }, 
                         {
                          "name":"intensity",
                          "type":"float",
@@ -156,6 +173,11 @@
                  "point":true,
                  "properties":[
                         {
+                         "name":"emitterWidth",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
                          "name":"intensity",
                          "type":"float",
                          "value":0.5
@@ -176,6 +198,159 @@
                  "width":0,
                  "x":315,
                  "y":568
+                }, 
+                {
+                 "height":0,
+                 "id":353,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"afterSwitch"
+                        }],
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":1066.66666666667,
+                 "y":767.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":354,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"afterSwitch"
+                        }],
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":818,
+                 "y":413.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":355,
+                 "name":"EnemySpawn",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"trigger",
+                         "type":"string",
+                         "value":"afterSwitch"
+                        }],
+                 "rotation":0,
+                 "type":"enemySpawn",
+                 "visible":true,
+                 "width":0,
+                 "x":986.666666666667,
+                 "y":752
+                }, 
+                {
+                 "height":0,
+                 "id":356,
+                 "name":"Fan",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"emitterWidth",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":0.5
+                        }, 
+                        {
+                         "name":"range",
+                         "type":"float",
+                         "value":150
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"fan"
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":1034,
+                 "y":406.166666666667
+                }, 
+                {
+                 "height":0,
+                 "id":357,
+                 "name":"Fan",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"emitterWidth",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":0.1
+                        }, 
+                        {
+                         "name":"range",
+                         "type":"float",
+                         "value":300
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"fan"
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":658,
+                 "y":406.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":358,
+                 "name":"Fan",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"emitterWidth",
+                         "type":"float",
+                         "value":60
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":0.7
+                        }, 
+                        {
+                         "name":"range",
+                         "type":"float",
+                         "value":50
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"fan"
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":280.333333333333,
+                 "y":406.666666666667
                 }],
          "opacity":1,
          "properties":[
@@ -632,7 +807,7 @@
                  "value":3
                 }],
          "type":"objectgroup",
-         "visible":false,
+         "visible":true,
          "x":0,
          "y":0
         }, 
@@ -657,10 +832,10 @@
          "y":0
         }],
  "nextlayerid":10,
- "nextobjectid":353,
+ "nextobjectid":359,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.4.1",
+ "tiledversion":"1.4.2",
  "tileheight":18,
  "tilesets":[
         {

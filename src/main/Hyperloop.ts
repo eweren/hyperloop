@@ -9,7 +9,7 @@ import { ControllerIntent } from "../engine/input/ControllerIntent";
 import { Camera } from "../engine/scene/Camera";
 import { FadeToBlack } from "../engine/scene/camera/FadeToBlack";
 import { SceneNode } from "../engine/scene/SceneNode";
-import { skipIntro } from "../engine/util/env";
+import { isDebugMap, skipIntro } from "../engine/util/env";
 import { clamp } from "../engine/util/math";
 import { rnd } from "../engine/util/random";
 import { Dialog } from "./Dialog";
@@ -95,6 +95,28 @@ export class Hyperloop extends Game {
 
     // Called by GameScene
     public setupScene(): void {
+        if (isDebugMap()) {
+            const chars = [ new NpcNode(0), new NpcNode(1), new NpcNode(2), new NpcNode(3), new NpcNode(4) ];
+            const positions = [ 1230, 1200, 1150, 1110, 1090 ];
+            const playerParentNode = this.getPlayer().getParent();
+            if (!playerParentNode) {
+                return;
+            }
+            for (let i = 0; i < chars.length; i++) {
+                chars[i].moveTo(positions[i], 610).appendTo(playerParentNode);
+            }
+            for (let i = 3; i < chars.length; i++) {
+                chars[i].setMirrorX(true);
+            }
+            // Spawn enemies in the right dark side.
+            for (const position of positions) {
+               new SpawnNode({ x: position, y: 710 }).appendTo(playerParentNode).spawnEnemy();
+               new SpawnNode({ x: position + 10, y: 710 }).appendTo(playerParentNode).spawnEnemy();
+               new SpawnNode({ x: position + 20, y: 710 }).appendTo(playerParentNode).spawnEnemy();
+               new SpawnNode({ x: position + 30, y: 710 }).appendTo(playerParentNode).spawnEnemy();
+            }
+            return;
+        }
         this.spawnNPCs();
         this.setStage(GameStage.INTRO);
         // Assets cannot be loaded in constructor because the LoadingScene
@@ -462,6 +484,15 @@ export class Hyperloop extends Game {
 
     public startRespawnSequence(): void {
         console.log("starting respawn with ", this.charactersAvailable, " remaining");
+        if (isDebugMap()) { // could you please not??
+            const player = this.getPlayer();
+            player.moveTo(781, 521);
+            player.setHitpoints(100);
+            player.setAmmoToFull();
+            player.reset();
+            this.getCamera().setFollow(player);
+            return;
+        }
         if (this.charactersAvailable > 1) {
             // Remove NPC from scene
             this.charactersAvailable--;

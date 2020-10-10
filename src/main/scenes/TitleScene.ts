@@ -13,6 +13,7 @@ import { GAME_HEIGHT, GAME_WIDTH } from "../constants";
 import { Sound } from "../../engine/assets/Sound";
 import { SuccessScene } from "./SuccessScene";
 import { ControllerFamily } from "../../engine/input/ControllerFamily";
+import { isDebugMap } from "../../engine/util/env";
 
 export class TitleScene extends Scene<Hyperloop> {
     @asset("images/title-image.png")
@@ -32,6 +33,10 @@ export class TitleScene extends Scene<Hyperloop> {
     private overlayImageNode: ImageNode = new ImageNode({ image: TitleScene.overlayImage, anchor: Direction.BOTTOM});
 
     public setup() {
+        if (isDebugMap()) {
+            this.startGame();
+            return;
+        }
         this.inTransition = new FadeTransition();
         this.outTransition = new FadeToBlackTransition({ duration: 0.5, exclusive: true });
         this.imageNode.appendTo(this.rootNode);
