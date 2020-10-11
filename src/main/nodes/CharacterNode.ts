@@ -172,7 +172,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             if (this.getPlayerCollisionAt(newX, y)) {
                 newX = x;
                 vx = 0;
-                this.velocity = new Vector2(0, vy);
+                this.velocity = new Vector2(0, newvy);
                 this.consecutiveXCollisions += dt;
             } else {
                 this.consecutiveXCollisions = 0;
