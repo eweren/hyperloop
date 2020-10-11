@@ -186,7 +186,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
                 } else if (!this.isJumping) {
                     this.isFalling = true;
                 }
-                newY = y;
+                newY = Math.max(y, this.getClosestNonCollidingPosition(newX, newY, 0, -1).y);
                 vy = 0;
                 this.velocity = new Vector2(vx, 0);
             }
@@ -237,6 +237,18 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         return this;
     }
 
+    protected getClosestNonCollidingPosition(x: number, y: number, stepX = 0, stepY = -1, maxSteps = 100): Vector2 {
+        const originalX = x, originalY = y;
+        for (let i = 0; i < maxSteps; i++) {
+            if (!this.getPlayerCollisionAt(x, y)) {
+                return new Vector2(x, y);
+            }
+            x += stepX;
+            y += stepY;
+        }
+        return new Vector2(originalX, originalY);
+    }
+
     public setDirection(direction = 0): void {
         this.direction = direction;
         if (this.direction !== 0) {
@@ -245,10 +257,14 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     public jump(factor = 1): void {
-        if (this.isOnGround && this.isAlive()) {
+        if (this.hasGroundBelowFeet() && this.isAlive()) {
             this.velocity = new Vector2(this.velocity.x, -this.getJumpPower() * factor);
             this.isJumping = true;
         }
+    }
+
+    public hasGroundBelowFeet(dis = 5): boolean {
+        return !!this.getPlayerCollisionAt(this.x, this.y + dis);
     }
 
     public shoot(angle: number, power: number, origin: Vector2Like = new Vector2(this.getScenePosition().x, this.getScenePosition().y - this.getHeight() * .5)): void {

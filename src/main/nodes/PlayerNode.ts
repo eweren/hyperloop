@@ -240,7 +240,7 @@ export class PlayerNode extends CharacterNode {
             - (input.currentActiveIntents & ControllerIntent.PLAYER_MOVE_LEFT ? 1 : 0);
         this.setDirection(direction);
         // Jump
-        if (this.isOnGround && this.canInteract(ControllerIntent.PLAYER_JUMP)) {
+        if (this.canInteract(ControllerIntent.PLAYER_JUMP)) {
             this.jump();
         }
         if (this.getTag() === "walk") {
