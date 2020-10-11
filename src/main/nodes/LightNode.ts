@@ -31,8 +31,8 @@ export function intensifyColor(color: RGBColor, f: number): Color {
 
 export class LightNode extends SceneNode<Hyperloop> {
     private color: Color;
+    private intensity: number;
     private readonly polygon: Polygon2 | null;
-    private readonly intensity: number;
     private readonly spin: number;
     private gradient: CanvasGradient | null = null;
 
@@ -74,6 +74,15 @@ export class LightNode extends SceneNode<Hyperloop> {
     public setColor(color: Color): this {
         if (this.color !== color) {
             this.color = color;
+            this.updateGradient();
+            this.invalidate(SceneNodeAspect.RENDERING);
+        }
+        return this;
+    }
+
+    public setIntensity(intensity: number): this {
+        if (this.intensity !== intensity) {
+            this.intensity = intensity;
             this.updateGradient();
             this.invalidate(SceneNodeAspect.RENDERING);
         }

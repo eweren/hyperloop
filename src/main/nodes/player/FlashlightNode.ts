@@ -1,10 +1,14 @@
 
+import { Color } from "../../../engine/color/Color";
+import { RGBColor } from "../../../engine/color/RGBColor";
 import { Direction } from "../../../engine/geom/Direction";
 import { SceneNode, SceneNodeArgs, SceneNodeAspect } from "../../../engine/scene/SceneNode";
+import { createCanvas, getRenderingContext } from "../../../engine/util/graphics";
 import { clamp } from "../../../engine/util/math";
 import { sleep } from "../../../engine/util/time";
 import { Layer } from "../../constants";
 import { Hyperloop } from "../../Hyperloop";
+import { intensifyColor } from "../LightNode";
 import { PlayerNode } from "../PlayerNode";
 
 export class FlashlightNode extends SceneNode<Hyperloop> {
@@ -14,6 +18,8 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
     private distance = 200;
     private flickerFactor = 1;
     private standardLight = 1;
+    // private lightEllipsis: LightNode;
+    private gradient: CanvasGradient | null = null;
 
     public constructor(private randomRotate?: boolean, args?: SceneNodeArgs) {
         super({
@@ -22,6 +28,10 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
             layer: Layer.LIGHT,
             ...args
         });
+        // this.lightEllipsis = new LightNode({ layer: Layer.LIGHT, id: "flashlightCircle", anchor: Direction.CENTER });
+        // this.lightEllipsis.setIntensity(1000);
+        // this.lightEllipsis.appendTo(this);
+        this.getGradient();
         (window as any)["flashlight"] = this;
     }
 
@@ -45,6 +55,13 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
         this.flickerFactor = this.standardLight;
     }
 
+    public update(dt: number, time: number): void {
+        super.update(dt, time);
+        this.getGradient();
+        // this.lightEllipsis.setX((this.mirrored ? -1 : 1) * this.distance);
+        // this.lightEllipsis.setOpacity((1 - Math.abs((clamp(this.distance, 0, this.maxDistance) / this.maxDistance))));
+    }
+
     public draw(context: CanvasRenderingContext2D): void {
         context.save();
         const player = this.getPlayer();
@@ -56,12 +73,39 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
             const randomAngle = Math.PI * 0.04 * (Math.sin(t * 0.5) + 0.5 * Math.sin(t * 0.84) + 0.3 * Math.sin(t * 0.941));
             context.rotate(randomAngle);
         }
-        const newHeight = clamp((this.maxDistance / this.distance) * this.maxDistance / 2, 100, 200);
-        const newWidth = clamp(this.distance, 100, 200);
-        context.globalAlpha = this.flickerFactor;
+        const newHeight = clamp((this.maxDistance / this.distance) * this.maxDistance / 2, 0, 200);
+        const newWidth = clamp(this.distance, 0, 200);
+        context.globalAlpha = this.flickerFactor * clamp(this.distance / this.maxDistance, 0, 1) ** 2;
         context.drawImage(FlashlightNode.image, 0, -newHeight / 2 - 4, newWidth, newHeight);
+        context.globalAlpha = this.flickerFactor * (1 - clamp(this.distance / this.maxDistance, 0, 1)) ** 2;
+        context.beginPath();
+        context.fillStyle = this.gradient ?? "#FFF";
+        context.ellipse(0, 0, 200, 200, 0, 0, Math.PI * 2, true);
+        context.fill();
+        context.scale((1 - (clamp(this.distance, 0, 200) / this.maxDistance)), newHeight / 2);
         context.globalAlpha = 1;
         context.restore();
+    }
+
+    private getGradient(): void {
+        const colors: Color[] = [];
+        const color = new RGBColor(1, 1, 1);
+        const steps = 16;
+        const overshoot = 0.5;
+        for (let step = 0; step < steps; step++) {
+            const p = (1 + overshoot) * (1 - step / steps) ** 8;
+            const col = intensifyColor(color, p);
+            colors.push(col);
+        }
+        colors.push(new RGBColor(0, 0, 0));
+
+        const canvas = createCanvas(8, 8);
+        const ctx = getRenderingContext(canvas, "2d");
+        const intensity = 200;
+        this.gradient = ctx.createRadialGradient(this.distance, 0, 0, this.distance, 0, intensity);
+        for (let i = 0, count = colors.length - 1; i <= count; i++) {
+            this.gradient.addColorStop(i / count, colors[i].toString());
+        }
     }
 
     private static generateImage(width: number, height: number): HTMLImageElement {
