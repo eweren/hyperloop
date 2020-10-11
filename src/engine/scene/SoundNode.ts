@@ -164,7 +164,6 @@ export class SoundNode<T extends Game = Game> extends SceneNode<T> {
         if (scene) {
             direction.x -= scene.camera.getX();
             direction.y -= scene.camera.getY();
-            console.log(!this.isColliding(new Vector2().setVector(this.getScenePosition()), direction));
             return !this.isColliding(new Vector2().setVector(this.getScenePosition()), direction);
         }
         return false;
