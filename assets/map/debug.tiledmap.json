@@ -31,7 +31,7 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJztzrEJACAMBMC0bu12zuA29iJoYUDwrnvyPIkAAAAAAAAA4Bdlyn3T391XmzdkbAIAAADvaue9mvkHAAAAAAAAAAAAcN8A1HAD3A==",
+         "data":"eJzt2bEJACAMBEBbt3Y7Z3AbKxsRtIggeNeFPE\/6pAQAAAAAAADAL\/I0t01+t191RrjRCQAAALyrnufKzTsAAAa\/CgAAAAAAAACI0wHwRwPl",
          "encoding":"base64",
          "height":64,
          "id":3,
@@ -103,7 +103,7 @@
                 {
                  "height":0,
                  "id":349,
-                 "name":"Fan",
+                 "name":"Flies",
                  "point":true,
                  "properties":[
                         {
@@ -119,7 +119,73 @@
                         {
                          "name":"range",
                          "type":"float",
+                         "value":300
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"flies"
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":658,
+                 "y":568
+                }, 
+                {
+                 "height":0,
+                 "id":359,
+                 "name":"Gas",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"emitterWidth",
+                         "type":"float",
                          "value":30
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":0.5
+                        }, 
+                        {
+                         "name":"range",
+                         "type":"float",
+                         "value":150
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"gas"
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":497.333333333333,
+                 "y":568
+                }, 
+                {
+                 "height":0,
+                 "id":360,
+                 "name":"Fan",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"emitterWidth",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":0.5
+                        }, 
+                        {
+                         "name":"range",
+                         "type":"float",
+                         "value":150
                         }, 
                         {
                          "name":"sound",
@@ -130,8 +196,140 @@
                  "type":"sound",
                  "visible":true,
                  "width":0,
-                 "x":658,
-                 "y":568
+                 "x":657.333333333333,
+                 "y":401.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":361,
+                 "name":"Occupied",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"emitterWidth",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":0
+                        }, 
+                        {
+                         "name":"range",
+                         "type":"float",
+                         "value":150
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"occupied"
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":280,
+                 "y":405.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":362,
+                 "name":"Elektronicmotor",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"emitterWidth",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":0.3
+                        }, 
+                        {
+                         "name":"range",
+                         "type":"float",
+                         "value":150
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"electronicmotor"
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":1037.33333333333,
+                 "y":406.666666666667
+                }, 
+                {
+                 "height":0,
+                 "id":363,
+                 "name":"Halogen",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"emitterWidth",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":0.1
+                        }, 
+                        {
+                         "name":"range",
+                         "type":"float",
+                         "value":20
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"halogen"
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":317.333333333333,
+                 "y":565.333333333333
+                }, 
+                {
+                 "height":0,
+                 "id":364,
+                 "name":"Radio",
+                 "point":true,
+                 "properties":[
+                        {
+                         "name":"emitterWidth",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
+                         "name":"intensity",
+                         "type":"float",
+                         "value":1
+                        }, 
+                        {
+                         "name":"range",
+                         "type":"float",
+                         "value":300
+                        }, 
+                        {
+                         "name":"sound",
+                         "type":"string",
+                         "value":"staticRadioSound"
+                        }],
+                 "rotation":0,
+                 "type":"sound",
+                 "visible":true,
+                 "width":0,
+                 "x":1270.66666666667,
+                 "y":732
                 }],
          "opacity":1,
          "properties":[
@@ -613,7 +811,7 @@
          "y":0
         }],
  "nextlayerid":10,
- "nextobjectid":359,
+ "nextobjectid":365,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",

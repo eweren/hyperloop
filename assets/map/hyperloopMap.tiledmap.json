@@ -1874,6 +1874,11 @@
                  "point":true,
                  "properties":[
                         {
+                         "name":"emitterWidth",
+                         "type":"float",
+                         "value":30
+                        }, 
+                        {
                          "name":"intensity",
                          "type":"float",
                          "value":0.25
@@ -1881,7 +1886,7 @@
                         {
                          "name":"range",
                          "type":"float",
-                         "value":300
+                         "value":100
                         }, 
                         {
                          "name":"sound",
@@ -1892,8 +1897,8 @@
                  "type":"sound",
                  "visible":true,
                  "width":0,
-                 "x":1907,
-                 "y":354
+                 "x":1906.33333333333,
+                 "y":383
                 }, 
                 {
                  "height":27,
@@ -3967,7 +3972,7 @@
  "nextobjectid":304,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.4.1",
+ "tiledversion":"1.4.2",
  "tileheight":18,
  "tilesets":[
         {

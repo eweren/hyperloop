@@ -51,6 +51,5 @@ export class TiledSoundNode extends SoundNode<Hyperloop> {
         }
 
         super({ ...args, range, intensity, sound, emitterWidth });
-        this.set3d();
     }
 }

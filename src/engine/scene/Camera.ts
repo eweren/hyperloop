@@ -10,7 +10,6 @@ import { ReadonlyVector2Like } from "../graphics/Vector2";
 import { Rect } from "../geom/Rect";
 import { clamp } from "../util/math";
 import { Scene } from "./Scene";
-import { getAudioContext } from "../assets/Sound";
 
 /** Camera target type. Can be a simple position object, a scene node or a function which returns a camera target. */
 export type CameraTarget = ReadonlyVector2Like | SceneNode | (() => CameraTarget);
@@ -146,7 +145,6 @@ export class Camera<T extends Game = Game> {
     public setX(x: number): this {
         if (x !== this.x) {
             this.x = x;
-            getAudioContext().listener.setPosition(this.x, this.y, 0);
             this.invalidateSceneTransformation();
             this.invalidate();
         }
@@ -170,7 +168,6 @@ export class Camera<T extends Game = Game> {
     public setY(y: number): this {
         if (y !== this.y) {
             this.y = y;
-            getAudioContext().listener.setPosition(this.x, this.y, 0);
             this.invalidateSceneTransformation();
             this.invalidate();
         }
@@ -187,7 +184,6 @@ export class Camera<T extends Game = Game> {
         if (x !== this.x || y !== this.y) {
             this.x = x;
             this.y = y;
-            getAudioContext().listener.setPosition(this.x, this.y, 0);
             this.invalidateSceneTransformation();
             this.invalidate();
         }
