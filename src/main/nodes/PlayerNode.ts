@@ -321,14 +321,18 @@ export class PlayerNode extends CharacterNode {
     }
 
     public async reload(): Promise<void> {
-        if (this.isReloading || this.ammo === this.magazineSize) {
+        if (this.isReloading || this.ammo >= this.magazineSize) {
             return;
         }
         this.isReloading = true;
         PlayerNode.reloadSound.setLoop(true);
         PlayerNode.reloadSound.play();
         await sleep(this.reloadDelay);
-        this.ammo = this.magazineSize;
+        if (this.ammo > 0) {
+            this.ammo = this.magazineSize + 1;
+        } else {
+            this.ammo = this.magazineSize;
+        }
         PlayerNode.reloadSound.stop();
         this.isReloading = false;
     }
@@ -428,7 +432,7 @@ export class PlayerNode extends CharacterNode {
                 scale: 4,
                 rotation: Math.PI * 2
             }).then(() => {
-                this.hitpoints = 100;
+                this.health.hide();
                 // Reset camera
                 camera.setZoom(1);
                 camera.setRotation(0);
@@ -447,7 +451,8 @@ export class PlayerNode extends CharacterNode {
 
     public reset(): void {
         super.reset();
-        this.ammo = 12;
+        this.health.show();
+        this.ammo = this.magazineSize;
     }
 
     public getPersonalEnemies(): EnemyNode[] {
