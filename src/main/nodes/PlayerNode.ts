@@ -64,6 +64,7 @@ export class PlayerNode extends CharacterNode {
     private flashLight: FlashlightNode;
 
     /** The aimingAngle in radians */
+    public aimingDiff = new Vector2(0, 0);
     private aimingAngle = Math.PI / 2;
     private ammoCounter: AmmoCounterNode;
     private isReloading = false;
@@ -468,9 +469,9 @@ export class PlayerNode extends CharacterNode {
 
     private handlePointerMove(event: ScenePointerMoveEvent): void {
         this.crosshairNode.moveTo(event.getScreenX(), event.getScreenY());
-        this.aimingAngle = new Vector2(event.getX(), event.getY())
-            .sub(this.playerArm ? this.playerArm.getScenePosition() : this.getScenePosition())
-            .getAngle();
+        this.aimingDiff = new Vector2(event.getX(), event.getY())
+            .sub(this.playerArm ? this.playerArm.getScenePosition() : this.getScenePosition());
+        this.aimingAngle = this.aimingDiff.getAngle();
     }
 
     private handlePointerDown(event: ScenePointerDownEvent): void {
