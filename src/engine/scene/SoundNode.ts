@@ -128,9 +128,7 @@ export class SoundNode<T extends Game = Game> extends SceneNode<T> {
             horizontalDistance = this.getScenePosition().x - scene.camera.getX();
         }
         const volume = clamp(Math.max(0, this.range - distance) / this.range * this.intensity, 0, 1);
-        let soundDirection = horizontalDistance > 0 ? 1 : -1;
-        console.log(distance);
-        if (Math.abs(horizontalDistance) < 100) {
+        let soundDirection = horizontalDistance > 0 ? 1 : -1;        if (Math.abs(horizontalDistance) < 100) {
             soundDirection = horizontalDistance / 100;
         }
         if (volume > 0) {

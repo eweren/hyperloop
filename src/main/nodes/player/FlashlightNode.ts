@@ -35,10 +35,10 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
         if (parent) {
             disFactor = clamp(parent.aimingDiff.getLength() / 100, 0.1, 1);
         }
-        for (let i = 1; i < steps; i++) {
+        for (let i = 2; i < steps; i++) {
             const size = 3 + 8 * (i + 1);
             const dis = disFactor * 12 * i;
-            context.globalAlpha = (i / steps) ** 0.5;
+            context.globalAlpha = 0.2 + 0.5 * Math.sin(Math.PI * (i / steps) ** 0.5);
             context.drawImage(FlashlightNode.image, dis - size / 2, -size / 2 - 4, size, size);
         }
         context.restore();
