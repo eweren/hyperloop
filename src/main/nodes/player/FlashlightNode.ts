@@ -58,8 +58,6 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
     public update(dt: number, time: number): void {
         super.update(dt, time);
         this.getGradient();
-        // this.lightEllipsis.setX((this.mirrored ? -1 : 1) * this.distance);
-        // this.lightEllipsis.setOpacity((1 - Math.abs((clamp(this.distance, 0, this.maxDistance) / this.maxDistance))));
     }
 
     public draw(context: CanvasRenderingContext2D): void {
@@ -124,8 +122,8 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
                 const span = ymid * fx;
                 let c = 0;
                 if (dy < span) {
-                    const lightY = (0.5 - 0.5 * Math.cos(Math.PI * (1 - dy / span))) ** 0.7;
-                    const lightX = (fx < 0.25 ? 0.5 - 0.5 * Math.cos(Math.PI * fx / 0.25) : ((1 - fx) / 0.75) ** 0.9);
+                    const lightY = (0.5 - 0.5 * Math.cos(Math.PI * (1 - dy / span))) ** 0.5;
+                    const lightX = (fx < 0.25 ? 0.5 - 0.5 * Math.cos(Math.PI * fx / 0.25) : ((1 - fx) / 0.75) ** 0.7);
                     c = 255 * lightX * lightY;
                 }
                 data[p] = data[p + 1] = data[p + 2] = c;

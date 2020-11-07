@@ -57,7 +57,6 @@ export class CorpseNode extends InteractiveNode {
             player?.say("Uh oh...", 3, 1.5);
             await sleep(5000);
             (player as PlayerNode)?.flickerLight();
-            (player as PlayerNode)?.manipulateLight(0.5);
             player?.say("Ehh... Really? Isn't it already scary enough?", 3, 1.5);
 
         }
