@@ -78,7 +78,7 @@ export class TitleScene extends Scene<Hyperloop> {
     }
 
     public startGame(): void {
-        if (this.game.scenes.activeScene instanceof GameScene || !!this.game.isHost) {
+        if (this.game.scenes.activeScene instanceof GameScene || !this.game.isHost) {
             return;
         }
         this.game.onGameStart.disconnect(this.startGame.bind(this));
