@@ -119,7 +119,7 @@ export abstract class Game {
         if (!room) {
             room = (Math.random() * 10000000).toFixed();
         }
-        this.socket = io.connect("http://localhost:3000/", { query: { room, username: this.username },transportOptions: ["websocket"] });
+        this.socket = io.connect("http://157.90.175.137:3000/", { query: { room, username: this.username },transportOptions: ["websocket"] });
 
         this.socket.on("connect", () => {
             console.log("Connected to room ", room);
