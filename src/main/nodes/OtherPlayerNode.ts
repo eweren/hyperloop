@@ -207,7 +207,6 @@ export class OtherPlayerNode extends CharacterNode {
         this.velocity = event.velocity ? new Vector2().setVector(event.velocity) : this.velocity;
         this.lastShotTime = event.lastShotTime ?? this.lastShotTime;
         this.setDirection(this.direction);
-        console.log(event.reload, event.shoot, event.jump);
         if (event.reload) {
             this.reload();
         }
