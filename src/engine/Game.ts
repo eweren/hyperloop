@@ -123,7 +123,6 @@ export abstract class Game {
 
         this.socket.on("connect", () => {
             console.log("Connected to room ", room);
-            window.alert(`To let others join your session share the link ${window.location.href + (window.location.href.includes("room=") ? "" : "&room=" + room)}`);
             this.players.add(this.username!);
         });
         this.socket.disconnect().connect();
