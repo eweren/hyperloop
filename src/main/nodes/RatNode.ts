@@ -56,6 +56,7 @@ export class RatNode extends EnemyNode {
         }
     }
 
+
     private moveTimeMin = 0.3;
     private moveTimeMax = 1;
     private waitTimeMin = 2;

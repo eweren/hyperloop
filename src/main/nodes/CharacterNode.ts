@@ -1,6 +1,7 @@
 import { asset } from "../../engine/assets/Assets";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { Sound } from "../../engine/assets/Sound";
+import { UserEvent } from "../../engine/Game";
 import { ReadonlyVector2, Vector2, Vector2Like } from "../../engine/graphics/Vector2";
 import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
 import { cacheResult } from "../../engine/util/cache";
@@ -32,6 +33,8 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected playerArm?: PlayerArmNode;
     private preventNewTag = false;
     private gameTime = 0;
+
+    protected lastSubmittedState: Partial<UserEvent> = {};
 
     // Character settings
     public abstract getShootingRange(): number;
@@ -220,6 +223,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         if (this.getPlayerCollisionAt(this.x, this.y)) {
             this.unstuck();
         }
+        this.updateCharacterState();
     }
 
     protected unstuck(): this {
@@ -237,6 +241,26 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         return this;
     }
 
+    /**
+     * Checks if a character is within anybodies view.
+     */
+    protected isInView(): boolean {
+        const scene = this.getScene();
+        if (scene) {
+            this.getGame().getPlayers().some(node => {
+                const minX = scene.camera.getX();
+                const minY = scene.camera.getY();
+                const maxX = scene.camera.getX() + scene.camera.getWidth();
+                const maxY = scene.camera.getY() + scene.camera.getHeight();
+                const { x, y } = node.getPosition();
+                return x > minX && x < maxX && y > minY && y < maxY;
+            });
+        }
+        return false;
+    }
+
+    protected abstract updateCharacterState(): void;
+
     public setDirection(direction = 0): void {
         this.direction = direction;
         if (this.direction !== 0) {
@@ -248,6 +272,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         if (this.isOnGround && this.isAlive()) {
             this.velocity = new Vector2(this.velocity.x, -this.getJumpPower() * factor);
             this.isJumping = true;
+            this.getGame().updatePosition({jump: true});
         }
     }
 

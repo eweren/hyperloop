@@ -8,6 +8,7 @@ import { SceneNode, SceneNodeArgs, SceneNodeAspect } from "../../engine/scene/Sc
 import { createContext2D } from "../../engine/util/graphics";
 
 class TestGame extends Game {
+    public async spawnOtherPlayer(): Promise<void> {}
 }
 
 class TestScene extends Scene {

@@ -2,7 +2,7 @@ import { DialogJSON } from "*.dialog.json";
 import { asset } from "../engine/assets/Assets";
 import { Sound } from "../engine/assets/Sound";
 import { RGBColor } from "../engine/color/RGBColor";
-import { Game } from "../engine/Game";
+import { Game, UserEvent } from "../engine/Game";
 import { Vector2 } from "../engine/graphics/Vector2";
 import { ControllerFamily } from "../engine/input/ControllerFamily";
 import { ControllerIntent } from "../engine/input/ControllerIntent";
@@ -19,6 +19,7 @@ import { CharacterNode } from "./nodes/CharacterNode";
 import { CollisionNode } from "./nodes/CollisionNode";
 import { LightNode } from "./nodes/LightNode";
 import { NpcNode } from "./nodes/NpcNode";
+import { OtherPlayerNode } from "./nodes/OtherPlayerNode";
 import { PlayerNode } from "./nodes/PlayerNode";
 import { SpawnNode } from "./nodes/SpawnNode";
 import { SwitchNode } from "./nodes/SwitchNode";
@@ -88,10 +89,6 @@ export class Hyperloop extends Game {
     private static readonly train5Dialog: DialogJSON;
     @asset("dialog/train6.dialog.json")
     private static readonly train6Dialog: DialogJSON;
-
-    public constructor() {
-        super();
-    }
 
     // Called by GameScene
     public setupScene(): void {
@@ -537,6 +534,25 @@ export class Hyperloop extends Game {
         }
     }
 
+    public async spawnOtherPlayer(event: UserEvent): Promise<void> {
+        if (!this.scenes.getScene(GameScene)) {
+            this.scenes.setScene(GameScene as any);
+        }
+        if (!this.getPlayers().find(p => p.username)) {
+            try {
+                this.getGameScene();
+            } catch (_) {
+                await this.scenes.setScene(GameScene as any);
+            }
+            const otherPlayer = new OtherPlayerNode(event.username);
+            this.getGameScene().rootNode?.appendChild(otherPlayer);
+            otherPlayer.moveTo(event.position?.x ?? this.getPlayer().getX(), event.position?.y ?? this.getPlayer().getY());
+            otherPlayer.setHitpoints(100);
+            otherPlayer.reset();
+            console.log("Spawned other player");
+        }
+    }
+
     public getTrainDoorCoordinate(): Vector2 {
         const coord = this.getTrain().getScenePosition();
         return new Vector2(coord.x - 170, coord.y - 2);
@@ -597,6 +613,10 @@ export class Hyperloop extends Game {
         return this.getGameScene().rootNode.getDescendantsByType(PlayerNode)[0];
     }
 
+    public getPlayers(): OtherPlayerNode[] {
+        return this.getGameScene().rootNode.getDescendantsByType(OtherPlayerNode);
+    }
+
     public getTrain(): TrainNode {
         return this.getGameScene().rootNode.getDescendantsByType(TrainNode)[0];
     }
@@ -623,6 +643,10 @@ export class Hyperloop extends Game {
 
     public getAllLights(): LightNode[] {
         return this.getGameScene().rootNode.getDescendantsByType(LightNode);
+    }
+
+    public initOnlineGame(): void {
+        super.initOnlineGame();
     }
 }
 

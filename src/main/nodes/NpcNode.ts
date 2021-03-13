@@ -6,6 +6,8 @@ import { EnemyNode } from "./EnemyNode";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { asset } from "../../engine/assets/Assets";
 import { Rect } from "../../engine/geom/Rect";
+import { UserEvent } from "../../engine/Game";
+import { Vector2 } from "../../engine/graphics/Vector2";
 
 export class NpcNode extends CharacterNode {
     @asset([
@@ -67,6 +69,47 @@ export class NpcNode extends CharacterNode {
 
     public getPersonalEnemies(): EnemyNode[] {
         return [];
+    }
+
+    protected updateCharacterState(): void {
+        if (!this.getGame().isHost) {
+            return;
+        }
+        const currentState = {
+            direction: this.direction,
+            hitpoints: this.hitpoints,
+            isFalling: this.isFalling,
+            isJumping: this.isJumping,
+            isOnGround: this.isOnGround,
+            position: this.getPosition(),
+            velocity: this.velocity,
+            enemyId: this.getId() ?? undefined
+        };
+        const updateObj: Partial<UserEvent> = {};
+        for (const property in currentState) {
+            if ((currentState as any)[property] !== (this.lastSubmittedState as any)[property]) {
+                if ((currentState as any)[property] instanceof Vector2) {
+                    const { x, y } = (currentState as any)[property];
+                    if (!(this.lastSubmittedState as any)[property] || x !== (this.lastSubmittedState as any)[property].x || y !== (this.lastSubmittedState as any)[property].y) {
+                        (updateObj as any)[property] = (currentState as any)[property];
+                    }
+                } else {
+                    (updateObj as any)[property] = (currentState as any)[property];
+                }
+            }
+        }
+        if (Object.entries(updateObj).length > 0 && this.isInView()) {
+            this.getGame().updatePosition(updateObj);
+        }
+        this.lastSubmittedState = {
+            direction: this.direction,
+            hitpoints: this.hitpoints,
+            isFalling: this.isFalling,
+            isOnGround: this.isOnGround,
+            position: this.getPosition(),
+            velocity: this.velocity,
+            enemyId: this.getId() ?? undefined
+        };
     }
 
 }

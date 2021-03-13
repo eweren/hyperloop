@@ -1,3 +1,5 @@
+import * as io from "socket.io-client";
+
 import { Assets } from "./assets/Assets";
 import { clamp } from "./util/math";
 import { ControllerManager } from "./input/ControllerManager";
@@ -7,12 +9,37 @@ import { Keyboard } from "./input/Keyboard";
 import { Scenes } from "./scene/Scenes";
 import { GAME_HEIGHT, GAME_WIDTH } from "../main/constants";
 import { getAudioContext } from "./assets/Sound";
+import { Vector2Like } from "./graphics/Vector2";
+import { Signal } from "./util/Signal";
+import { getRoom } from "./util/env";
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want
  * updates to jump too much.
  */
 const MAX_DT = 0.1;
+
+export interface UserEvent {
+    reload: boolean;
+    shoot: boolean,
+    jump: boolean;
+    mouseDistanceToPlayer: number;
+    username: string;
+    position: Vector2Like;
+    aimingAngle: number;
+    direction: number;
+    velocity: Vector2Like;
+    lastShotTime: number;
+    isOnGround: boolean;
+    isFalling: boolean;
+    hitpoints: number;
+    characterId?: string;
+    enemyId?: string;
+}
+
+export interface JoinEvent {
+    username: string;
+}
 
 export abstract class Game {
     public readonly controllerManager = ControllerManager.getInstance();
@@ -22,6 +49,14 @@ export abstract class Game {
     public readonly assets = new Assets();
 
     public backgroundColor: string = "black";
+
+    protected socket?: SocketIOClient.Socket;
+    public username: string | null = null;
+    public onPlayerUpdate = new Signal<UserEvent>();
+    public onPlayerConnect = new Signal<string>();
+    public onGameStart = new Signal<void>();
+    public players: Set<string> = new Set();
+    public isHost = false;
 
     public canvas: HTMLCanvasElement;
     private readonly ctx: CanvasRenderingContext2D;
@@ -73,6 +108,55 @@ export abstract class Game {
 
     public get input(): ControllerManager {
         return this.controllerManager;
+    }
+
+    public initOnlineGame(): void {
+        while (!this.username) {
+            this.username = window.prompt("Enter a username");
+        }
+
+        let room = getRoom();
+        if (!room) {
+            room = (Math.random() * 10000000).toFixed();
+        }
+        this.socket = io.connect("http://localhost:3000/", { query: { room, username: this.username },transportOptions: ["websocket"] });
+
+        this.socket.on("connect", () => {
+            console.log("Connected to room ", room);
+            window.alert(`To let others join your session share the link ${window.location.href + (window.location.href.includes("room=") ? "" : "&room=" + room)}`);
+            this.players.add(this.username!);
+        });
+        this.socket.disconnect().connect();
+
+        this.socket.on("playerUpdate", (val: UserEvent) => {
+            if (val.username !== this.username) {
+                this.spawnOtherPlayer(val);
+                this.onGameStart.emit();
+                this.onPlayerUpdate.emit(val);
+            }
+        });
+
+        this.socket.on("roomInfo", (val: {host: string, users: Array<string>}) => {
+            if (val.host === this.username) {
+                this.isHost = true;
+                console.log("This is the host");
+            }
+            this.players.clear();
+            val.users.forEach(user => {
+                this.players.add(user);
+            });
+        });
+
+
+        this.socket.on("disconnect", () => {
+            console.log(this.socket!.id);
+        });
+    }
+
+    public abstract spawnOtherPlayer(event: UserEvent): Promise<void>;
+
+    public updatePosition(event: Partial<UserEvent>): void {
+        this.socket!.emit("playerUpdate", event);
     }
 
     public pauseGame(): void {
@@ -139,6 +223,10 @@ export abstract class Game {
             this.lastUpdateTime = performance.now();
             this.nextFrame();
         }
+    }
+
+    public startForOtherPlayers(): void {
+        this.socket?.emit("startGame");
     }
 
     public stop(): void {

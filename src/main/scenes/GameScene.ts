@@ -45,7 +45,7 @@ export class GameScene extends Scene<Hyperloop> {
 
     private targetMap = isDebugMap() ? TargetMap.DEBUG : TargetMap.HYPERLOOP;
 
-    private debugMode: boolean = false;
+    private debugMode: boolean = true;
 
     private mapNode = new TiledMapNode<Hyperloop>({ map: GameScene.maps[this.targetMap], objects: {
         "collision": CollisionNode,

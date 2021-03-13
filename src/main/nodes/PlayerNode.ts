@@ -31,6 +31,7 @@ import { ScenePointerDownEvent } from "../../engine/scene/events/ScenePointerDow
 import { DeadSpaceSuitNode } from "./DeadSpaceSuiteNode";
 import { ControllerEvent } from "../../engine/input/ControllerEvent";
 import { ControllerFamily } from "../../engine/input/ControllerFamily";
+import { UserEvent } from "../../engine/Game";
 
 const groundColors = [
     "#806057",
@@ -64,7 +65,7 @@ export class PlayerNode extends CharacterNode {
     private flashLight: FlashlightNode;
 
     /** The aimingAngle in radians */
-    private aimingAngle = Math.PI / 2;
+    private aimingAngle = +(Math.PI / 2).toFixed(3);
     private ammoCounter: AmmoCounterNode;
     private isReloading = false;
     private reloadStart: number | null = null;
@@ -76,7 +77,7 @@ export class PlayerNode extends CharacterNode {
     private initDone = false;
     private isRunning = false;
     private get aimingAngleNonNegative(): number {
-        return -this.aimingAngle + Math.PI / 2;
+        return +(-this.aimingAngle + Math.PI / 2).toFixed(3);
     }
     private ammo = 12;
     private nextShot = 0;
@@ -282,11 +283,12 @@ export class PlayerNode extends CharacterNode {
             }
         }
         this.updatePreviouslyPressed();
+        this.updateCharacterState();
     }
 
     public handleControllerInput(event: ControllerEvent) {
         if (event.direction) {
-            this.aimingAngle = event.direction.getAngle(new Vector2(0, 1));
+            this.aimingAngle = +event.direction.getAngle(new Vector2(0, 1)).toFixed(3);
             this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
             this.mouseDistanceToPlayer = event.direction.getLength() * 200;
             return;
@@ -315,6 +317,7 @@ export class PlayerNode extends CharacterNode {
             PlayerNode.dryFireSound.stop();
             PlayerNode.dryFireSound.play();
         } else if (this.ammo > 0 && !this.isReloading) {
+            this.getGame().updatePosition({shoot: true});
             this.lastShotTime = now();
             this.ammo--;
             this.muzzleFlash.fire();
@@ -326,6 +329,7 @@ export class PlayerNode extends CharacterNode {
         if (this.isReloading || this.ammo === this.magazineSize) {
             return;
         }
+        this.getGame().updatePosition({reload: true});
         this.isReloading = true;
         PlayerNode.reloadSound.setLoop(true);
         PlayerNode.reloadSound.play();
@@ -412,7 +416,9 @@ export class PlayerNode extends CharacterNode {
         this.lastHitTimestamp = now();
         const { centerX, centerY } = this.getSceneBounds();
         this.emitBlood(centerX, centerY, Math.random() * Math.PI * 2, damage);
-        return super.hurt(damage, origin);
+        const died = super.hurt(damage, origin);
+        this.updateCharacterState();
+        return died;
     }
 
     public die(): void {
@@ -474,9 +480,56 @@ export class PlayerNode extends CharacterNode {
     private handlePointerMove(event: ScenePointerMoveEvent): void {
         this.crosshairNode.moveTo(event.getScreenX(), event.getScreenY());
         this.mouseDistanceToPlayer = new Vector2(event.getX(), event.getY()).getDistance(this.getScenePosition());
-        this.aimingAngle = new Vector2(event.getX(), event.getY())
+        this.aimingAngle = +new Vector2(event.getX(), event.getY())
             .sub(this.playerArm ? this.playerArm.getScenePosition() : this.getScenePosition())
-            .getAngle();
+            .getAngle().toFixed(3);
+        this.updateCharacterState();
+    }
+
+    protected updateCharacterState(): void {
+        const currentState = {
+            aimingAngle: this.aimingAngle,
+            direction: this.direction,
+            hitpoints: this.hitpoints,
+            isFalling: this.isFalling,
+            isJumping: this.isJumping,
+            isOnGround: this.isOnGround,
+            isReloading: this.isReloading,
+            mouseDistanceToPlayer: this.mouseDistanceToPlayer,
+            position: this.getPosition(),
+            velocity: this.velocity,
+            reloadStart: this.reloadStart ?? undefined,
+            lastShotTime: this.lastShotTime,
+            username: this.getGame().username!
+        };
+        const updateObj: Partial<UserEvent> = {};
+        for (const property in currentState) {
+            if ((currentState as any)[property] !== (this.lastSubmittedState as any)[property]) {
+                if ((currentState as any)[property] instanceof Vector2) {
+                    const { x, y } = (currentState as any)[property];
+                    if (!(this.lastSubmittedState as any)[property] || x !== (this.lastSubmittedState as any)[property].x || y !== (this.lastSubmittedState as any)[property].y) {
+                        (updateObj as any)[property] = (currentState as any)[property];
+                    }
+                } else {
+                    (updateObj as any)[property] = (currentState as any)[property];
+                }
+            }
+        }
+        if (Object.entries(updateObj).length > 0) {
+            this.getGame().updatePosition(updateObj);
+        }
+        this.lastSubmittedState = {
+            aimingAngle: this.aimingAngle,
+            direction: this.direction,
+            hitpoints: this.hitpoints,
+            isFalling: this.isFalling,
+            isOnGround: this.isOnGround,
+            mouseDistanceToPlayer: this.mouseDistanceToPlayer,
+            position: {x: this.getPosition().x, y: this.getPosition().y},
+            velocity: {x: this.velocity.x, y: this.velocity.y},
+            lastShotTime: this.lastShotTime,
+            username: this.getGame().username!
+        };
     }
 
     private handlePointerDown(event: ScenePointerDownEvent): void {

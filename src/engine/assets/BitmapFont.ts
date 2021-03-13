@@ -1,5 +1,6 @@
 import { FontJSON } from "*.font.json";
 import { loadImage } from "../util/graphics.js";
+import { clamp } from "../util/math.js";
 
 const CHAR_SPACING = 1;
 
@@ -14,6 +15,7 @@ export class BitmapFont {
     private charCount: number;
     private charReverseMap: Record<string, number>;
     public charHeight!: number;
+    private currentLineWidth = 0;
 
     private constructor(
         sourceImage: HTMLImageElement, colors: Record<string, string>, charMap: string,
@@ -142,9 +144,16 @@ export class BitmapFont {
             const index = this.getCharIndex(currentChar);
             const spaceReduction = precursorChar && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
             ctx.translate(-spaceReduction, 0);
-            this.drawCharacter(ctx, index, color);
-            ctx.translate(this.charWidths[index] + CHAR_SPACING, 0);
-            precursorChar = currentChar;
+            if (currentChar === "\n") {
+                ctx.translate(-(clamp(this.currentLineWidth, 0, width)), this.charHeight + CHAR_SPACING);
+                this.currentLineWidth = 0;
+                precursorChar = currentChar;
+            } else {
+                this.drawCharacter(ctx, index, color);
+                ctx.translate(this.charWidths[index] + CHAR_SPACING, 0);
+                precursorChar = currentChar;
+                this.currentLineWidth += this.charWidths[index] + CHAR_SPACING;
+            }
         }
 
         ctx.restore();
@@ -152,19 +161,29 @@ export class BitmapFont {
 
     public measureText(text: string): { width: number, height: number } {
         let width = 0;
+        let maxWidth = 0;
         let precursorChar = null;
+        let height = this.charHeight;
         for (const currentChar of text) {
             const index = this.getCharIndex(currentChar);
             const spaceReduction = precursorChar && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
-            width += this.charWidths[index] - spaceReduction + CHAR_SPACING;
+            if (currentChar === "\n") {
+                height += this.charHeight;
+                width = 0;
+            } else {
+                width += this.charWidths[index] - spaceReduction + CHAR_SPACING;
+                if (width > maxWidth) {
+                    maxWidth = width;
+                }
+            }
             precursorChar = currentChar;
         }
 
         if (text.length > 0) {
-            width -= CHAR_SPACING;
+            maxWidth -= CHAR_SPACING;
         }
 
-        return { width, height: this.charHeight };
+        return { width: maxWidth, height };
     }
 
     public drawTextWithOutline(

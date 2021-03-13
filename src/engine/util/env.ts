@@ -95,3 +95,12 @@ export function isDebugMap(): boolean {
     }
     return false;
 }
+
+/**
+ * Figures out if development mode is enabled and if to skip intro.
+ */
+export function getRoom(): string {
+    return window.location.search.substr(1).split("&").find(key => {
+        return key.toLowerCase().startsWith("room=");
+    })?.substr("room=".length) ?? "";
+}
