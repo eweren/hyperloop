@@ -534,6 +534,17 @@ export class Hyperloop extends Game {
         }
     }
 
+    public checkIfPlayersShouldBeRemoved(): string | null {
+        if (this.scenes.getScene(GameScene)) {
+            const playersToRemove = this.getPlayers().filter(player => this.players.has(player.username));
+            if (playersToRemove.length === 1) {
+                playersToRemove[0].remove();
+                return playersToRemove[0].username;
+            }
+        }
+        return null;
+    }
+
     public async spawnOtherPlayer(event: UserEvent): Promise<void> {
         if (!this.scenes.getScene(GameScene)) {
             this.scenes.setScene(GameScene as any);

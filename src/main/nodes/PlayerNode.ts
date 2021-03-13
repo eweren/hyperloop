@@ -17,7 +17,6 @@ import { asset } from "../../engine/assets/Assets";
 import { AmmoCounterNode } from "./player/AmmoCounterNode";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { Layer, STANDARD_FONT } from "../constants";
-import { isDev } from "../../engine/util/env";
 import { now, sleep } from "../../engine/util/time";
 import { ParticleNode, valueCurves } from "./ParticleNode";
 import { rnd, rndItem, timedRnd } from "../../engine/util/random";
@@ -32,6 +31,7 @@ import { DeadSpaceSuitNode } from "./DeadSpaceSuiteNode";
 import { ControllerEvent } from "../../engine/input/ControllerEvent";
 import { ControllerFamily } from "../../engine/input/ControllerFamily";
 import { UserEvent } from "../../engine/Game";
+import { isDev } from "../../engine/util/env";
 
 const groundColors = [
     "#806057",

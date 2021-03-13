@@ -12,6 +12,7 @@ export class SpawnNode extends SceneNode<Hyperloop> {
         super({
             ...args
         });
+        this.id = `${args?.tiledObject?.toJSON().id ?? null}`;
         this.trigger = args?.tiledObject?.getOptionalProperty("trigger", "string")?.getValue() ?? "";
         this.hitpoints = args?.tiledObject?.getOptionalProperty("hitpoints", "int")?.getValue() ?? 0;
     }
@@ -23,7 +24,8 @@ export class SpawnNode extends SceneNode<Hyperloop> {
     public spawnEnemy() {
         const enemy = new MonsterNode({
             x: this.x,
-            y: this.y
+            y: this.y,
+            id: this.id
         });
         if (this.hitpoints > 0) {
             enemy.setHitpoints(this.hitpoints);

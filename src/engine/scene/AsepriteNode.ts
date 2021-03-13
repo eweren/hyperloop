@@ -19,6 +19,9 @@ export interface AsepriteNodeArgs extends SceneNodeArgs {
 
     /** Optional forced source bounds. If not set then bounds are read from the sprite. */
     sourceBounds?: Rect;
+
+    /** Optional filter to apply to the canvas */
+    filter?: string;
 }
 
 /**
@@ -39,6 +42,8 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
     /** The current time index of the animation. */
     private time = 0;
 
+    protected filter: string | null = null;
+
     private mirrorX: boolean;
     private tagPlayTime = 0;
     private tagStartTime = 0;
@@ -56,6 +61,7 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
             height: aseprite.height,
         });
         this.aseprite = aseprite;
+        this.filter = args.filter ?? null;
         this.tag = args.tag ?? null;
         this.mirrorX = args.mirrorX ?? false;
         this.sourceBounds = sourceBounds ?? null;
@@ -155,6 +161,11 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
     /** @inheritDoc */
     public draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
+        let oldFilter = "";
+        if (this.filter) {
+            oldFilter = ctx.filter;
+            ctx.filter = "hue-rotate(90deg)";
+        }
         if (this.mirrorX) {
             ctx.translate(this.aseprite.width, 0);
             ctx.scale(-1, 1);
@@ -167,6 +178,9 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
             this.aseprite.drawTag(ctx, this.tag, 0, 0, this.time * 1000);
         } else {
             this.aseprite.draw(ctx, 0, 0, this.time * 1000);
+        }
+        if (this.filter) {
+            ctx.filter = oldFilter;
         }
         ctx.restore();
     }

@@ -139,7 +139,7 @@ export class SceneNode<T extends Game = Game> {
     private scene: Scene<T, unknown> | null = null;
 
     /** The ID of the node. Null if none. */
-    private id: string | null;
+    protected id: string | null;
 
     /** The node position relative to the parent node. */
     private position = new Vector2();

@@ -78,9 +78,6 @@ export class TitleScene extends Scene<Hyperloop> {
     }
 
     public startGame(): void {
-        if (this.game.scenes.activeScene instanceof GameScene || !this.game.isHost) {
-            return;
-        }
         this.game.onGameStart.disconnect(this.startGame.bind(this));
         this.game.scenes.setScene(GameScene);
         if (this.game.isHost) {
@@ -101,10 +98,10 @@ export class TitleScene extends Scene<Hyperloop> {
     }
 
     private handleButton(event: ControllerEvent | MouseEvent): void {
-        if (event instanceof MouseEvent || event.intents & ControllerIntent.CONFIRM) {
+        if (this.game.isHost && (event instanceof MouseEvent || event.intents & ControllerIntent.CONFIRM)) {
             TitleScene.confirmSound.play();
             this.startGame();
-        } else if (event.intents & ControllerIntent.PLAYER_RELOAD) {
+        } else if (!(event instanceof MouseEvent || event.intents & ControllerIntent.CONFIRM) && (event.intents & ControllerIntent.PLAYER_RELOAD)) {
             TitleScene.confirmSound.play();
             this.gotoCredits();
         }

@@ -11,7 +11,7 @@ export class PlayerArmNode extends AsepriteNode<Hyperloop> {
     private static sprite: Aseprite;
     // public flashlight: FlashlightNode;
 
-    public constructor(args?: SceneNodeArgs) {
+    public constructor(filter?: string, args?: SceneNodeArgs) {
         super({
             aseprite: PlayerArmNode.sprite,
             anchor: Direction.LEFT,
@@ -20,6 +20,7 @@ export class PlayerArmNode extends AsepriteNode<Hyperloop> {
             id: "playerarm",
             y: -2,
             sourceBounds: new Rect(0, 5, 12, 3),
+            filter,
             ...args
         });
     }

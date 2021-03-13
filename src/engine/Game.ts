@@ -12,6 +12,7 @@ import { getAudioContext } from "./assets/Sound";
 import { Vector2Like } from "./graphics/Vector2";
 import { Signal } from "./util/Signal";
 import { getRoom } from "./util/env";
+import { GameScene } from "../main/scenes/GameScene";
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want
@@ -125,13 +126,15 @@ export abstract class Game {
             console.log("Connected to room ", room);
             this.players.add(this.username!);
         });
-        this.socket.disconnect().connect();
 
         this.socket.on("playerUpdate", (val: UserEvent) => {
-            if (val.username !== this.username) {
-                this.spawnOtherPlayer(val);
+            if (this.scenes.activeScene instanceof GameScene) {
+                if (val.username !== this.username) {
+                    this.spawnOtherPlayer(val);
+                    this.onPlayerUpdate.emit(val);
+                }
+            } else {
                 this.onGameStart.emit();
-                this.onPlayerUpdate.emit(val);
             }
         });
 
@@ -144,6 +147,10 @@ export abstract class Game {
             val.users.forEach(user => {
                 this.players.add(user);
             });
+            const removedPlayer = this.checkIfPlayersShouldBeRemoved();
+            if (removedPlayer) {
+                console.log(removedPlayer, " left the match");
+            }
         });
 
 
@@ -151,6 +158,7 @@ export abstract class Game {
             console.log(this.socket!.id);
         });
     }
+    public abstract checkIfPlayersShouldBeRemoved(): string | null;
 
     public abstract spawnOtherPlayer(event: UserEvent): Promise<void>;
 

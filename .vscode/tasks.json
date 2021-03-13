@@ -5,10 +5,6 @@
             "label": "Build (and watch) project",
             "type": "npm",
             "script": "watch",
-            "isBackground": false,
-            "presentation": {
-                "reveal": "never"
-            },
             "problemMatcher": [
                 "$tsc-watch"
             ],

@@ -9,6 +9,7 @@ import { createContext2D } from "../../engine/util/graphics";
 
 class TestGame extends Game {
     public async spawnOtherPlayer(): Promise<void> {}
+    public checkIfPlayersShouldBeRemoved(): string | null { return null; }
 }
 
 class TestScene extends Scene {

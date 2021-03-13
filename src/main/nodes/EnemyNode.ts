@@ -1,5 +1,6 @@
 import { UserEvent } from "../../engine/Game";
 import { ReadonlyVector2, Vector2 } from "../../engine/graphics/Vector2";
+import { SceneNodeAspect } from "../../engine/scene/SceneNode";
 import { clamp } from "../../engine/util/math";
 import { rnd } from "../../engine/util/random";
 import { now } from "../../engine/util/time";
@@ -70,6 +71,7 @@ export abstract class EnemyNode extends CharacterNode {
 
     protected abstract targetPosition: ReadonlyVector2;
     protected moveAroundAnchor: Vector2 = new Vector2(0, 0);
+    private initDone = false;
 
     public getShootingRange(): number {
         return this.shootingRange;
@@ -94,6 +96,10 @@ export abstract class EnemyNode extends CharacterNode {
 
     // default ai implementation
     protected updateAi(dt: number, time: number) {
+        if (this.isInScene() && !this.initDone) {
+            this.initDone = true;
+            this.getGame().onPlayerUpdate.filter(ev => !!ev.characterId && ev.characterId === this.getId()).connect(this.handleCharacterUpdate, this);
+        }
         if (!this.isAlive()) {
             this.setDirection(0);
             return;
@@ -210,7 +216,7 @@ export abstract class EnemyNode extends CharacterNode {
         if (time > this.lastStateChange + this.attackDelay) {
             // Hurt player
             const player = this.getPlayer();
-            const playerDied = player?.hurt(clamp(Math.floor(Math.random() * 30), 5, 30), this.getScenePosition());
+            const playerDied = player?.hurt(clamp(Math.floor(Math.random() * 10), 2, 10), this.getScenePosition());
             this.scream();
             if (playerDied) {
                 this.setState(AiState.BORED);
@@ -301,10 +307,35 @@ export abstract class EnemyNode extends CharacterNode {
         return enemies;
     }
 
+    public handleCharacterUpdate(event: UserEvent) {
+        console.log(".");
+        this.direction = event.direction ?? this.direction;
+        this.hitpoints = event.hitpoints ?? this.hitpoints;
+        this.isFalling = event.isFalling ?? this.isFalling;
+        this.isOnGround = event.isOnGround ?? this.isOnGround;
+        if (event.position) {
+            this.setX(event.position.x);
+            this.setY(event.position.y);
+        }
+        this.velocity = event.velocity ? new Vector2().setVector(event.velocity) : this.velocity;
+        this.setDirection(this.direction);
+
+        // Jump
+        if (this.isOnGround && event.jump) {
+            this.jump();
+        }
+        this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
+    }
+
     protected updateCharacterState(): void {
         if (!this.getGame().isHost) {
             return;
         }
+        const enemyId = this.getId();
+        if (!enemyId) {
+            return;
+        }
+        console.log(enemyId);
         const currentState = {
             direction: this.direction,
             hitpoints: this.hitpoints,
@@ -313,7 +344,7 @@ export abstract class EnemyNode extends CharacterNode {
             isOnGround: this.isOnGround,
             position: this.getPosition(),
             velocity: this.velocity,
-            enemyId: this.getId() ?? undefined
+            enemyId: enemyId
         };
         const updateObj: Partial<UserEvent> = {};
         for (const property in currentState) {

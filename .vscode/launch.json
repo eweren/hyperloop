@@ -2,13 +2,6 @@
     "version": "0.2.0",
     "inputs": [
         {
-            "id": "webServerPort",
-            "type": "promptString",
-            "description": "Development Web Server port to use.",
-            "default": "8000",
-            "password": false
-        },
-        {
             "id": "devMode",
             "type": "pickString",
             "description": "Whether development mode options will be available in-game or not.",
@@ -27,14 +20,14 @@
             "program": "${workspaceFolder}/node_modules/webpack-dev-server/bin/webpack-dev-server.js",
             "args": [
                 "-d",
-                "--port=${input:webServerPort}"
+                "--port=8000"
             ],
             "skipFiles": [
                 "<node_internals>/**"
             ]
         },
         {
-            "type": "chrome",
+            "type": "pwa-chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
             "url": "http://localhost:${input:webServerPort}?dev=${input:devMode}",
