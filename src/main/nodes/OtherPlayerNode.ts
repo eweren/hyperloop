@@ -83,9 +83,7 @@ export class OtherPlayerNode extends CharacterNode {
     private dustParticles: ParticleNode;
     private crosshairNode: AsepriteNode;
 
-    protected filter = "hue-rotate(130deg)";
-
-    public constructor(public readonly username: string, args?: SceneNodeArgs) {
+    public constructor(public readonly username: string, protected filter = "hue-rotate(130deg)",  args?: SceneNodeArgs) {
         super({
             aseprite: OtherPlayerNode.sprite,
             anchor: Direction.BOTTOM,
@@ -95,7 +93,7 @@ export class OtherPlayerNode extends CharacterNode {
             layer: Layer.FOREGROUND,
             sourceBounds: new Rect(6, 6, 8, 26),
             cameraTargetOffset: new Vector2(0, -26),
-            filter: "hue-rotate(130deg)",
+            filter,
             ...args
         });
         this.removeOnDie = false;
@@ -107,11 +105,10 @@ export class OtherPlayerNode extends CharacterNode {
         this.appendChild(this.playerName);
         this.appendChild(this.playerLeg);
         this.appendChild(this.playerArm);
-        const ambientPlayerLight = new AmbientPlayerNode();
+        const ambientPlayerLight = new AmbientPlayerNode(this.filter);
         this.playerLeg?.appendChild(ambientPlayerLight);
         this.playerArm?.appendChild(this.flashLight);
         this.flashLight?.appendChild(this.muzzleFlash);
-        (<any>window)["otherplayer"] = this;
 
         this.dustParticles = new ParticleNode({
             y: this.getHeight() / 2,

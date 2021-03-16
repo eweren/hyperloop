@@ -14,7 +14,7 @@ export class AmbientPlayerNode extends SceneNode<Hyperloop> {
     private readonly intensity: number;
     private gradient: CanvasGradient | null = null;
 
-    public constructor(args?: TiledSceneArgs) {
+    public constructor(private filter?: string, args?: TiledSceneArgs) {
         super({
             anchor: Direction.CENTER,
             id: "flashlight",
@@ -59,12 +59,15 @@ export class AmbientPlayerNode extends SceneNode<Hyperloop> {
 
     public draw(ctx: CanvasRenderingContext2D): void {
         ctx.save();
+        const oldFilter = ctx.filter;
+        ctx.filter = this.filter ?? oldFilter;
         ctx.beginPath();
         const intensity = this.intensity;
         ctx.fillStyle = this.gradient ?? this.color.toString();
         const halfIntensity = intensity / 2;
         ctx.ellipse(0, 0, halfIntensity, halfIntensity, 0, 0, Math.PI * 2, true);
         ctx.fill();
+        ctx.filter = oldFilter;
         ctx.restore();
     }
 }

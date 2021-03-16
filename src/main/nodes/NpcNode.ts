@@ -59,11 +59,9 @@ export class NpcNode extends CharacterNode {
         super.update(dt, time);
     }
 
-
     public die(): void {
         super.die();
     }
-
 
     public getPersonalEnemies(): EnemyNode[] {
         return [];
