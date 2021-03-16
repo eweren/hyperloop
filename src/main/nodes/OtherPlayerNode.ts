@@ -23,7 +23,7 @@ import { UserEvent } from "../../engine/Game";
 import { PlayerNode } from "./PlayerNode";
 import { TextNode } from "../../engine/scene/TextNode";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
-import { Hyperloop } from "../Hyperloop";
+import { DeadSpaceSuitNode } from "./DeadSpaceSuiteNode";
 
 const groundColors = [
     "#806057",
@@ -230,6 +230,10 @@ export class OtherPlayerNode extends CharacterNode {
         if (this.isOnGround && event.jump) {
             this.jump();
         }
+
+        if (this.hitpoints <= 0) {
+            this.die();
+        }
         this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
     }
 
@@ -238,7 +242,7 @@ export class OtherPlayerNode extends CharacterNode {
     }
 
     /** Since we do not want this character to send updates, we just leave it blank here to not trigger super method. */
-    protected syncCharacterState(): void {}
+    public syncCharacterState(): void {}
 
     public getPersonalEnemies(): CharacterNode[] {
         const monsters = this.getScene()?.rootNode.getDescendantsByType(MonsterNode) ?? [];
@@ -320,13 +324,7 @@ export class OtherPlayerNode extends CharacterNode {
             // Transform flashlight to match scaling and rotation of the arm.
             this.flashLight.transform(f => {
                 this.flashLight.setDistance(this.mouseDistanceToPlayer);
-                // if (this.isMirrorX()) {
-                    // this.flashLight.setY(-3);
-                    // f.setRotation(Math.PI);
-                // } else {
-                    this.flashLight.setY(5);
-                    // f.setRotation(0);
-                // }
+                this.flashLight.setY(5);
             });
         });
         if (this.isJumping) {
@@ -353,6 +351,13 @@ export class OtherPlayerNode extends CharacterNode {
         this.playerArm?.hide();
         OtherPlayerNode.dieScream.stop();
         OtherPlayerNode.dieScream.play();
+        const diePosition = { x: this.getX(), y: this.getY() };
+        setTimeout(() => {
+            new DeadSpaceSuitNode({
+                ...diePosition,
+                layer: this.getLayer(),
+            }).insertBefore(this);
+        }, 6000);
     }
 
     public reset(): void {

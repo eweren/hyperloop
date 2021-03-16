@@ -13,6 +13,7 @@ import { Vector2Like } from "./graphics/Vector2";
 import { Signal } from "./util/Signal";
 import { getRoom, isDev } from "./util/env";
 import { GameScene } from "../main/scenes/GameScene";
+import { PlayerNode } from "../main/nodes/PlayerNode";
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want
@@ -140,6 +141,12 @@ export abstract class Game {
                 }
             } else {
                 this.onGameStart.emit();
+                setTimeout(() => {
+                    if (val.username !== this.username) {
+                        this.spawnOtherPlayer(val);
+                        this.onPlayerUpdate.emit(val);
+                    }
+                });
             }
         });
 
@@ -155,6 +162,7 @@ export abstract class Game {
             if (removedPlayer) {
                 console.log(removedPlayer, " left the match");
             }
+            this.getPlayer()?.syncCharacterState(true);
         });
 
 
@@ -165,6 +173,8 @@ export abstract class Game {
     public abstract checkIfPlayersShouldBeRemoved(): string | null;
 
     public abstract spawnOtherPlayer(event: UserEvent): Promise<void>;
+
+    public abstract getPlayer(): PlayerNode;
 
     public syncNodeData(event: Partial<UserEvent>): void {
         this.socket?.emit("playerUpdate", event);

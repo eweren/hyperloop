@@ -25,7 +25,7 @@ import { SpawnNode } from "./nodes/SpawnNode";
 import { SwitchNode } from "./nodes/SwitchNode";
 import { TrainNode } from "./nodes/TrainNode";
 import { GameOverScene } from "./scenes/GameOverScene";
-import { GameScene } from "./scenes/GameScene";
+import { GameScene, playerSpawnPoints } from "./scenes/GameScene";
 import { LoadingScene } from "./scenes/LoadingScene";
 import { SuccessScene } from "./scenes/SuccessScene";
 
@@ -93,25 +93,6 @@ export class Hyperloop extends Game {
     // Called by GameScene
     public setupScene(): void {
         if (isDebugMap()) {
-            // const chars = [ new NpcNode(0), new NpcNode(1), new NpcNode(2), new NpcNode(3), new NpcNode(4) ];
-            // const positions = [ 1230, 1200, 1150, 1110, 1090 ];
-            // const playerParentNode = this.getPlayer().getParent();
-            // if (!playerParentNode) {
-            //     return;
-            // }
-            // for (let i = 0; i < chars.length; i++) {
-            //     chars[i].moveTo(positions[i], 610).appendTo(playerParentNode);
-            // }
-            // for (let i = 3; i < chars.length; i++) {
-            //     chars[i].setMirrorX(true);
-            // }
-            // // Spawn enemies in the right dark side.
-            // for (const position of positions) {
-            //    new SpawnNode({ x: position, y: 710 }).appendTo(playerParentNode).spawnEnemy();
-            //    new SpawnNode({ x: position + 10, y: 710 }).appendTo(playerParentNode).spawnEnemy();
-            //    new SpawnNode({ x: position + 20, y: 710 }).appendTo(playerParentNode).spawnEnemy();
-            //    new SpawnNode({ x: position + 30, y: 710 }).appendTo(playerParentNode).spawnEnemy();
-            // }
             return;
         }
         this.spawnNPCs();
@@ -471,19 +452,15 @@ export class Hyperloop extends Game {
     private initPrespawn(): void {
         this.startDialog(6 - this.npcs.length);
         this.getTrain().showInner();
-        // Place player into train initially
-        // const player = this.getPlayer();
-        // const train = this.getTrain();
-        // player.moveTo(25, 50).appendTo(train);
-        // this.getCamera().setFollow(player);
         this.getCamera().moveTo(1740, 370); // hacky workaround
     }
 
     public startRespawnSequence(): void {
         console.log("starting respawn with ", this.charactersAvailable, " remaining");
-        if (isDebugMap()) { // could you please not??
+        if (isDebugMap()) {
             const player = this.getPlayer();
-            player.moveTo(781, 521);
+            const { x, y } = playerSpawnPoints[clamp(+(Math.random() * playerSpawnPoints.length).toFixed(), 0, playerSpawnPoints.length - 1)];
+            player.moveTo(x, y);
             player.setHitpoints(100);
             player.setAmmoToFull();
             player.reset();
@@ -546,7 +523,7 @@ export class Hyperloop extends Game {
     }
 
     public async spawnOtherPlayer(event: UserEvent): Promise<void> {
-        if (!event.username) {
+        if (!event.username || !event.position) {
             return;
         }
         if (!this.scenes.getScene(GameScene)) {
@@ -563,7 +540,6 @@ export class Hyperloop extends Game {
             otherPlayer.moveTo(event.position?.x ?? this.getPlayer().getX(), event.position?.y ?? this.getPlayer().getY());
             otherPlayer.setHitpoints(100);
             otherPlayer.reset();
-            this.getPlayer().syncCharacterState();
         }
     }
 

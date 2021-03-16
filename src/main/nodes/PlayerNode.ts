@@ -490,7 +490,7 @@ export class PlayerNode extends CharacterNode {
     }
 
     /** @inheritdoc */
-    public syncCharacterState(): void {
+    public syncCharacterState(forceFullSync = false): void {
         const additionalProperties: UserEvent = {
             aimingAngle: this.aimingAngle,
             isReloading: this.isReloading,
@@ -498,7 +498,7 @@ export class PlayerNode extends CharacterNode {
             lastShotTime: this.lastShotTime,
             username: this.getGame().username!
         };
-        super.syncCharacterState(additionalProperties);
+        super.syncCharacterState(additionalProperties, forceFullSync);
     }
 
     private handlePointerDown(event: ScenePointerDownEvent): void {

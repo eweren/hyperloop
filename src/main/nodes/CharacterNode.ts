@@ -240,7 +240,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     /**
      * Syncs the character-specific states with the other users.
      */
-    public syncCharacterState(additionalProperties?: any): void {
+    public syncCharacterState(additionalProperties?: any, forceFullSync = false): void {
         if (!this.getGame().isHost && !this.isPlayer) {
             return;
         }
@@ -260,6 +260,11 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             enemyId: enemyId,
             ...additionalProperties
         };
+
+        if (forceFullSync) {
+            this.getGame().syncNodeData(currentState);
+            return;
+        }
 
         const updateObj: Partial<UserEvent> = {};
         for (const property in currentState) {
@@ -420,10 +425,9 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         if (!this.isAlive()) {
             return false;
         }
-        // TODO reduce hit points or kill or something
         // Pushback
         const direction = origin.x > this.getX() ? -1 : 1;
-        const pushForce = damage * 5;
+        const pushForce = damage * 2;
         this.velocity = new Vector2(pushForce * direction, this.velocity.y - pushForce * 0.1);
         // Damage
         this.hitpoints -= damage;

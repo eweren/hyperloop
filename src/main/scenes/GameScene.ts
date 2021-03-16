@@ -24,11 +24,19 @@ import { TriggerNode } from "../nodes/TriggerNode";
 import { DeadSpaceSuitNode } from "../nodes/DeadSpaceSuiteNode";
 import { MusicManager } from "../MusicManager";
 import { FxManager } from "../FxManager";
+import { clamp } from "../../engine/util/math";
 
 export enum TargetMap {
     HYPERLOOP = 0,
     DEBUG = 1
 }
+
+export const playerSpawnPoints = [
+    { x: 772.666666666667, y: 508.666666666667 },
+    { x:864, y:506.666666666667 },
+    { x:941.333333333333, y:603.333333333333 },
+    { x: 704.666666666667, y: 602 }
+];
 
 export class GameScene extends Scene<Hyperloop> {
 
@@ -64,28 +72,11 @@ export class GameScene extends Scene<Hyperloop> {
         this.inTransition = new FadeToBlackTransition({ duration: 2, delay: 1 });
         this.mapNode.moveTo(0, 0).appendTo(this.rootNode).transform(m => m.scale(1));
         const player = this.mapNode.getDescendantById("Player");
+        const { x, y } = playerSpawnPoints[clamp(+(Math.random() * playerSpawnPoints.length).toFixed(), 0, playerSpawnPoints.length - 1)];
+        player?.moveTo(x, y);
         this.camera.setFollow(player);
         this.setLightLayers([ Layer.LIGHT ]);
         this.setHudLayers([ Layer.HUD ]);
-
-        // const door = new DoorNode();
-        // door.moveTo(1040, 380).setLocked(true).appendTo(this.mapNode);
-        // new SwitchNode({ onlyOnce: false, onUpdate: (state) => door.setLocked(!state) }).moveTo(1130, 380).appendTo(this.mapNode);
-        // new SwitchNode({ onlyOnce: true }).moveTo(250, 380).appendTo(this.mapNode);
-        // Test enemies
-        // new MonsterNode().moveTo(2400, 360).appendTo(this.mapNode);
-        // new MonsterNode().moveTo(2500, 360).appendTo(this.mapNode);
-        // new MonsterNode().moveTo(2800, 360).appendTo(this.mapNode);
-
-        // if (isDev()) {
-        //     this.rootNode.appendChild(new FpsCounterNode({
-        //         font: GameScene.font,
-        //         anchor: Direction.TOP_LEFT,
-        //         x: 10,
-        //         y: 10,
-        //         layer: Layer.HUD
-        //     }));
-        // }
 
         if (this.targetMap === TargetMap.DEBUG) {
             MusicManager.getInstance().stop();
