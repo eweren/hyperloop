@@ -85,6 +85,7 @@ export function mutedRandomFx(): boolean {
  * Figures out if development mode is enabled and if to mute the random fx sounds.
  */
 export function isDebugMap(): boolean {
+    return true;
     if (isDev() && !!window.location.search) {
         return !!window.location.search.substr(1).split("&").find(key => {
             if (key.toLowerCase().startsWith("debugmap")) {

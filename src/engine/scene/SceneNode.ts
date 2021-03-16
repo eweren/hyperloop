@@ -141,6 +141,9 @@ export class SceneNode<T extends Game = Game> {
     /** The ID of the node. Null if none. */
     protected id: string | null;
 
+    /** The identifier of the node. Null if none. */
+    protected identifier: number | null = null;
+
     /** The node position relative to the parent node. */
     private position = new Vector2();
 
@@ -240,8 +243,9 @@ export class SceneNode<T extends Game = Game> {
      */
     public constructor({ id = null, x = 0, y = 0, width = 0, height = 0, anchor = Direction.CENTER,
             childAnchor = Direction.CENTER, opacity = 1, showBounds = false, layer = null, hidden = false,
-            collisionMask = 0, cameraTargetOffset }: SceneNodeArgs = {}) {
+            collisionMask = 0, cameraTargetOffset, tiledObject }: SceneNodeArgs = {}) {
         this.id = id;
+        this.identifier = tiledObject?.toJSON().id ?? null;
         this.position.setComponents(x, y);
         this.size.setDimensions(width, height);
         this.opacity = opacity;
@@ -263,6 +267,15 @@ export class SceneNode<T extends Game = Game> {
      */
     public getId(): string | null {
         return this.id;
+    }
+
+    /**
+     * Returns the node identifier specified by tilemap.
+     *
+     * @return The identifier of the node or null if none.
+     */
+    public getIdentifier(): string | number | null {
+        return this.identifier;
     }
 
     /**

@@ -11,7 +11,7 @@ import { GAME_HEIGHT, GAME_WIDTH } from "../main/constants";
 import { getAudioContext } from "./assets/Sound";
 import { Vector2Like } from "./graphics/Vector2";
 import { Signal } from "./util/Signal";
-import { getRoom } from "./util/env";
+import { getRoom, isDev } from "./util/env";
 import { GameScene } from "../main/scenes/GameScene";
 
 /**
@@ -21,21 +21,21 @@ import { GameScene } from "../main/scenes/GameScene";
 const MAX_DT = 0.1;
 
 export interface UserEvent {
-    reload: boolean;
-    shoot: boolean,
-    jump: boolean;
-    mouseDistanceToPlayer: number;
-    username: string;
-    position: Vector2Like;
-    aimingAngle: number;
-    direction: number;
-    velocity: Vector2Like;
-    lastShotTime: number;
-    isOnGround: boolean;
-    isFalling: boolean;
-    hitpoints: number;
-    characterId?: string;
-    enemyId?: string;
+    reload?: boolean;
+    shoot?: boolean,
+    jump?: boolean;
+    mouseDistanceToPlayer?: number;
+    username?: string;
+    position?: Vector2Like;
+    aimingAngle?: number;
+    direction?: number;
+    velocity?: Vector2Like;
+    lastShotTime?: number;
+    isOnGround?: boolean;
+    isReloading?: boolean;
+    isFalling?: boolean;
+    hitpoints?: number;
+    enemyId?: number;
 }
 
 export interface JoinEvent {
@@ -111,19 +111,24 @@ export abstract class Game {
         return this.controllerManager;
     }
 
-    public initOnlineGame(): void {
-        while (!this.username) {
-            this.username = window.prompt("Enter a username");
-        }
-
+    public async initOnlineGame(): Promise<void> {
+        const onlineBaseUrl = isDev() ? "http://localhost:3000/" : "https://ewer.rest:3000/";
         let room = getRoom();
         if (!room) {
             room = (Math.random() * 10000000).toFixed();
         }
-        this.socket = io.connect("https://ewer.rest:3000/", { query: { room, username: this.username },transportOptions: ["websocket"] });
+        const playersInRoomRes = await (await fetch(`${onlineBaseUrl}${room}`)
+            .then(response => response.json()));
+        this.username = (Math.random() * 1000).toFixed(); //   window.prompt("Enter a username");
+        let askForUsername = !this.username || playersInRoomRes?.includes(this.username);
+        while (askForUsername) {
+            this.username = window.prompt("Username already taken. Enter another username");
+            askForUsername = !this.username || playersInRoomRes?.includes(this.username);
+        }
+
+        this.socket = io.connect(onlineBaseUrl, { query: { room, username: this.username },transportOptions: ["websocket"] });
 
         this.socket.on("connect", () => {
-            console.log("Connected to room ", room);
             this.players.add(this.username!);
         });
 
@@ -141,7 +146,6 @@ export abstract class Game {
         this.socket.on("roomInfo", (val: {host: string, users: Array<string>}) => {
             if (val.host === this.username) {
                 this.isHost = true;
-                console.log("This is the host");
             }
             this.players.clear();
             val.users.forEach(user => {
@@ -162,8 +166,8 @@ export abstract class Game {
 
     public abstract spawnOtherPlayer(event: UserEvent): Promise<void>;
 
-    public updatePosition(event: Partial<UserEvent>): void {
-        this.socket!.emit("playerUpdate", event);
+    public syncNodeData(event: Partial<UserEvent>): void {
+        this.socket?.emit("playerUpdate", event);
     }
 
     public pauseGame(): void {

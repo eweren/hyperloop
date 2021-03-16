@@ -4,6 +4,8 @@ import { Sound } from "../../engine/assets/Sound";
 import { UserEvent } from "../../engine/Game";
 import { ReadonlyVector2, Vector2, Vector2Like } from "../../engine/graphics/Vector2";
 import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
+import { SceneNodeAspect } from "../../engine/scene/SceneNode";
+import { TextNode } from "../../engine/scene/TextNode";
 import { cacheResult } from "../../engine/util/cache";
 import { clamp } from "../../engine/util/math";
 import { rnd } from "../../engine/util/random";
@@ -13,7 +15,6 @@ import { CollisionNode } from "./CollisionNode";
 import { DialogNode } from "./DialogNode";
 import { InteractiveNode } from "./InteractiveNode";
 import { MarkLineNode } from "./MarkLineNode";
-import { MarkNode } from "./MarkNode";
 import { ParticleNode, valueCurves } from "./ParticleNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
 import { PlayerLegsNode } from "./player/PlayerLegsNode";
@@ -31,6 +32,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     protected playerLeg?: PlayerLegsNode;
     protected playerArm?: PlayerArmNode;
+    protected playerName?: TextNode<Hyperloop>;
     private preventNewTag = false;
     private gameTime = 0;
 
@@ -52,13 +54,14 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected isFalling = true;
     protected hitpoints = 100;
     protected removeOnDie = true;
-    protected debug = false;
+    protected debug = true;
     private canInteractWith: InteractiveNode | null = null;
     protected battlemode = false;
     private battlemodeTimeout = 2000;
     private battlemodeTimeoutTimerId: number | null = null;
     private storedCollisionCoordinate: Vector2 | null = null;
     protected consecutiveXCollisions = 0;
+    protected isPlayer = false;
 
     // Talking/Thinking
     private speakSince = 0;
@@ -71,6 +74,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     private particleAngle = 0;
 
     private dialogNode: DialogNode;
+    private initDone = false;
 
     public constructor(args: AsepriteNodeArgs) {
         super(args);
@@ -123,7 +127,14 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     public update(dt: number, time: number): void {
+        if (this.isInScene() && !this.initDone) {
+            this.initDone = true;
+            this.getGame().onPlayerUpdate.filter(event => event.enemyId === this.getIdentifier()
+                || event.username === this.getIdentifier())
+                .connect(this.handleCharacterUpdate, this);
+        }
         super.update(dt, time);
+
         this.gameTime = time;
         this.updateTime = time;
         this.preventNewTag = this.getTag() === "die" && this.getTimesPlayed("die") === 0
@@ -223,7 +234,69 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         if (this.getPlayerCollisionAt(this.x, this.y)) {
             this.unstuck();
         }
-        this.updateCharacterState();
+        this.syncCharacterState();
+    }
+
+    /**
+     * Syncs the character-specific states with the other users.
+     */
+    public syncCharacterState(additionalProperties?: any): void {
+        if (!this.getGame().isHost && !this.isPlayer) {
+            return;
+        }
+        const enemyId = this.getIdentifier();
+        if (!enemyId) {
+            return;
+        }
+
+        const currentState: UserEvent = {
+            direction: this.direction,
+            hitpoints: this.hitpoints,
+            isFalling: this.isFalling,
+            isJumping: this.isJumping,
+            isOnGround: this.isOnGround,
+            position: new Vector2(this.getX(), this.getY()),
+            velocity: this.velocity,
+            enemyId: enemyId,
+            ...additionalProperties
+        };
+
+        const updateObj: Partial<UserEvent> = {};
+        for (const property in currentState) {
+            if ((currentState as any)[property] !== (this.lastSubmittedState as any)[property]) {
+                if ((currentState as any)[property] instanceof Vector2) {
+                    const { x, y } = (currentState as any)[property];
+                    if (!(this.lastSubmittedState as any)[property] || x !== (this.lastSubmittedState as any)[property].x || y !== (this.lastSubmittedState as any)[property].y) {
+                        (updateObj as any)[property] = (currentState as any)[property];
+                    }
+                } else {
+                    (updateObj as any)[property] = (currentState as any)[property];
+                }
+                (this.lastSubmittedState as any)[property] = (currentState as any)[property];
+            }
+        }
+        if (Object.entries(updateObj).length > 0 && this.isInAnybodiesView()) {
+            this.getGame().syncNodeData(updateObj);
+        }
+    }
+
+    public handleCharacterUpdate(event: UserEvent) {
+        this.direction = event.direction ?? this.direction;
+        this.hitpoints = event.hitpoints ?? this.hitpoints;
+        this.isFalling = event.isFalling ?? this.isFalling;
+        this.isOnGround = event.isOnGround ?? this.isOnGround;
+        if (event.position) {
+            this.setX(event.position.x);
+            this.setY(event.position.y);
+        }
+        // this.velocity = event.velocity ? new Vector2().setVector(event.velocity) : this.velocity;
+        this.setDirection(this.direction);
+
+        // Jump
+        if (this.isOnGround && event.jump) {
+            this.jump();
+        }
+        this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
     }
 
     protected unstuck(): this {
@@ -244,22 +317,21 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     /**
      * Checks if a character is within anybodies view.
      */
-    protected isInView(): boolean {
+    protected isInAnybodiesView(): boolean {
         const scene = this.getScene();
         if (scene) {
-            this.getGame().getPlayers().some(node => {
-                const minX = scene.camera.getX();
-                const minY = scene.camera.getY();
-                const maxX = scene.camera.getX() + scene.camera.getWidth();
-                const maxY = scene.camera.getY() + scene.camera.getHeight();
-                const { x, y } = node.getPosition();
-                return x > minX && x < maxX && y > minY && y < maxY;
+            return [this.getGame().getPlayer(), ...this.getGame().getPlayers()].some(node => {
+                const minX = node.getX() - 0.5 * scene.camera.getWidth();
+                const minY = node.getY() - 0.5 * scene.camera.getHeight();
+                const maxX = node.getX() + 0.5 * scene.camera.getWidth();
+                const maxY = node.getY() + 0.5 * scene.camera.getHeight();
+                const x = this.getX();
+                const y = this.getY();
+                return x >= minX && x <= maxX && y >= minY && y <= maxY;
             });
         }
         return false;
     }
-
-    protected abstract updateCharacterState(): void;
 
     public setDirection(direction = 0): void {
         this.direction = direction;
@@ -272,7 +344,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         if (this.isOnGround && this.isAlive()) {
             this.velocity = new Vector2(this.velocity.x, -this.getJumpPower() * factor);
             this.isJumping = true;
-            this.getGame().updatePosition({jump: true});
         }
     }
 
@@ -285,12 +356,9 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         const isColliding = this.getLineCollision(origin.x, origin.y, diffX, diffY, PROJECTILE_STEP_SIZE);
         if (isColliding && this.storedCollisionCoordinate) {
             const coord = this.storedCollisionCoordinate;
-            if (this.debug) {
-                const markNode = new MarkNode({x: coord.x, y: coord.y});
-                const markLineNode = new MarkLineNode(new Vector2(origin.x, origin.y), coord);
-                this.getParent()?.appendChild(markNode);
-                this.getParent()?.appendChild(markLineNode);
-            }
+
+            const markLineNode = new MarkLineNode(new Vector2(origin.x, origin.y), coord);
+            this.getParent()?.appendChild(markLineNode);
             if (isColliding instanceof CharacterNode) {
                 const bounds = isColliding.getSceneBounds();
                 const headshot = (coord.y < bounds.minY + 0.25 * (bounds.height));
@@ -302,6 +370,10 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
                 this.emitSparks(coord.x, coord.y, angle);
             }
             this.storedCollisionCoordinate = null;
+        } else {
+            const markLineNode = new MarkLineNode(new Vector2(origin.x, origin.y), new Vector2(origin.x + diffX, origin.y + diffY));
+            this.getParent()?.appendChild(markLineNode);
+
         }
     }
 

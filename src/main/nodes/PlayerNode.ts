@@ -30,8 +30,8 @@ import { ScenePointerDownEvent } from "../../engine/scene/events/ScenePointerDow
 import { DeadSpaceSuitNode } from "./DeadSpaceSuiteNode";
 import { ControllerEvent } from "../../engine/input/ControllerEvent";
 import { ControllerFamily } from "../../engine/input/ControllerFamily";
-import { UserEvent } from "../../engine/Game";
 import { isDev } from "../../engine/util/env";
+import { UserEvent } from "../../engine/Game";
 
 const groundColors = [
     "#806057",
@@ -64,6 +64,8 @@ export class PlayerNode extends CharacterNode {
 
     private flashLight: FlashlightNode;
 
+    protected isPlayer = true;
+
     /** The aimingAngle in radians */
     private aimingAngle = +(Math.PI / 2).toFixed(3);
     private ammoCounter: AmmoCounterNode;
@@ -74,7 +76,7 @@ export class PlayerNode extends CharacterNode {
     private muzzleFlash: MuzzleFlashNode;
     private health: HealthNode;
     private mouseDistanceToPlayer: number = 1000;
-    private initDone = false;
+    private playerInitDone = false;
     private isRunning = false;
     private get aimingAngleNonNegative(): number {
         return +(-this.aimingAngle + Math.PI / 2).toFixed(3);
@@ -196,8 +198,8 @@ export class PlayerNode extends CharacterNode {
 
     public update(dt: number, time: number) {
         super.update(dt, time);
-        if (this.isInScene() && !this.initDone) {
-            this.initDone = true;
+        if (this.isInScene() && !this.playerInitDone) {
+            this.playerInitDone = true;
             this.initNodes();
             this.getGame().input.onDrag.filter(ev => ev.isRightStick && !!ev.direction && ev.direction.getLength() > 0.3).connect(this.handleControllerInput, this);
             const handleControllerInputChange = (ev: ControllerEvent) => {
@@ -244,6 +246,7 @@ export class PlayerNode extends CharacterNode {
         // Jump
         if (this.isOnGround && this.canInteract(ControllerIntent.PLAYER_JUMP)) {
             this.jump();
+            this.getGame().syncNodeData({jump: true});
         }
         if (this.getTag() === "walk") {
             PlayerNode.footsteps.setLoop(true);
@@ -283,7 +286,7 @@ export class PlayerNode extends CharacterNode {
             }
         }
         this.updatePreviouslyPressed();
-        this.updateCharacterState();
+        this.syncCharacterState();
     }
 
     public handleControllerInput(event: ControllerEvent) {
@@ -317,7 +320,7 @@ export class PlayerNode extends CharacterNode {
             PlayerNode.dryFireSound.stop();
             PlayerNode.dryFireSound.play();
         } else if (this.ammo > 0 && !this.isReloading) {
-            this.getGame().updatePosition({shoot: true});
+            this.getGame().syncNodeData({shoot: true});
             this.lastShotTime = now();
             this.ammo--;
             this.muzzleFlash.fire();
@@ -329,7 +332,7 @@ export class PlayerNode extends CharacterNode {
         if (this.isReloading || this.ammo === this.magazineSize) {
             return;
         }
-        this.getGame().updatePosition({reload: true});
+        this.getGame().syncNodeData({reload: true});
         this.isReloading = true;
         PlayerNode.reloadSound.setLoop(true);
         PlayerNode.reloadSound.play();
@@ -417,7 +420,7 @@ export class PlayerNode extends CharacterNode {
         const { centerX, centerY } = this.getSceneBounds();
         this.emitBlood(centerX, centerY, Math.random() * Math.PI * 2, damage);
         const died = super.hurt(damage, origin);
-        this.updateCharacterState();
+        this.syncCharacterState();
         return died;
     }
 
@@ -483,53 +486,19 @@ export class PlayerNode extends CharacterNode {
         this.aimingAngle = +new Vector2(event.getX(), event.getY())
             .sub(this.playerArm ? this.playerArm.getScenePosition() : this.getScenePosition())
             .getAngle().toFixed(3);
-        this.updateCharacterState();
+        this.syncCharacterState();
     }
 
-    protected updateCharacterState(): void {
-        const currentState = {
+    /** @inheritdoc */
+    public syncCharacterState(): void {
+        const additionalProperties: UserEvent = {
             aimingAngle: this.aimingAngle,
-            direction: this.direction,
-            hitpoints: this.hitpoints,
-            isFalling: this.isFalling,
-            isJumping: this.isJumping,
-            isOnGround: this.isOnGround,
             isReloading: this.isReloading,
             mouseDistanceToPlayer: this.mouseDistanceToPlayer,
-            position: this.getPosition(),
-            velocity: this.velocity,
-            reloadStart: this.reloadStart ?? undefined,
             lastShotTime: this.lastShotTime,
             username: this.getGame().username!
         };
-        const updateObj: Partial<UserEvent> = {};
-        for (const property in currentState) {
-            if ((currentState as any)[property] !== (this.lastSubmittedState as any)[property]) {
-                if ((currentState as any)[property] instanceof Vector2) {
-                    const { x, y } = (currentState as any)[property];
-                    if (!(this.lastSubmittedState as any)[property] || x !== (this.lastSubmittedState as any)[property].x || y !== (this.lastSubmittedState as any)[property].y) {
-                        (updateObj as any)[property] = (currentState as any)[property];
-                    }
-                } else {
-                    (updateObj as any)[property] = (currentState as any)[property];
-                }
-            }
-        }
-        if (Object.entries(updateObj).length > 0) {
-            this.getGame().updatePosition(updateObj);
-        }
-        this.lastSubmittedState = {
-            aimingAngle: this.aimingAngle,
-            direction: this.direction,
-            hitpoints: this.hitpoints,
-            isFalling: this.isFalling,
-            isOnGround: this.isOnGround,
-            mouseDistanceToPlayer: this.mouseDistanceToPlayer,
-            position: {x: this.getPosition().x, y: this.getPosition().y},
-            velocity: {x: this.velocity.x, y: this.velocity.y},
-            lastShotTime: this.lastShotTime,
-            username: this.getGame().username!
-        };
+        super.syncCharacterState(additionalProperties);
     }
 
     private handlePointerDown(event: ScenePointerDownEvent): void {

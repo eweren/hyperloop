@@ -10,7 +10,7 @@ import { SceneNodeArgs, SceneNodeAspect } from "../../engine/scene/SceneNode";
 import { Sound } from "../../engine/assets/Sound";
 import { ReadonlyVector2, Vector2 } from "../../engine/graphics/Vector2";
 import { asset } from "../../engine/assets/Assets";
-import { Layer } from "../constants";
+import { Layer, STANDARD_FONT } from "../constants";
 import { now, sleep } from "../../engine/util/time";
 import { ParticleNode, valueCurves } from "./ParticleNode";
 import { rnd, rndItem, timedRnd } from "../../engine/util/random";
@@ -21,6 +21,9 @@ import { TrainNode } from "./TrainNode";
 import { AsepriteNode } from "../../engine/scene/AsepriteNode";
 import { UserEvent } from "../../engine/Game";
 import { PlayerNode } from "./PlayerNode";
+import { TextNode } from "../../engine/scene/TextNode";
+import { BitmapFont } from "../../engine/assets/BitmapFont";
+import { Hyperloop } from "../Hyperloop";
 
 const groundColors = [
     "#806057",
@@ -30,6 +33,9 @@ const groundColors = [
 ];
 
 export class OtherPlayerNode extends CharacterNode {
+    @asset(STANDARD_FONT)
+    private static readonly font: BitmapFont;
+
     @asset("sounds/fx/wilhelmScream.mp3")
     private static readonly dieScream: Sound;
 
@@ -58,7 +64,6 @@ export class OtherPlayerNode extends CharacterNode {
     private shotRecoil = 0.2;
     private muzzleFlash: MuzzleFlashNode;
     private mouseDistanceToPlayer: number = 1000;
-    private initDone = false;
     private isRunning = false;
     private get aimingAngleNonNegative(): number {
         return -this.aimingAngle + Math.PI / 2;
@@ -94,10 +99,12 @@ export class OtherPlayerNode extends CharacterNode {
             ...args
         });
         this.removeOnDie = false;
+        this.playerName = new TextNode({font: OtherPlayerNode.font, text: this.username, anchor: Direction.BOTTOM, y: -(this.getHeight() / 2)});
         this.playerArm = new PlayerArmNode(this.filter);
         this.playerLeg = new PlayerLegsNode(this.filter);
         this.flashLight = new FlashlightNode();
-        this.muzzleFlash = new MuzzleFlashNode(this.shotRecoil, {y: -3});
+        this.muzzleFlash = new MuzzleFlashNode(this.shotRecoil, { y: -3 });
+        this.appendChild(this.playerName);
         this.appendChild(this.playerLeg);
         this.appendChild(this.playerArm);
         const ambientPlayerLight = new AmbientPlayerNode();
@@ -136,6 +143,10 @@ export class OtherPlayerNode extends CharacterNode {
         return this.acceleration;
     }
 
+    public getIdentifier(): string {
+        return this.username;
+    }
+
     public getDeceleration(): number {
         return this.deceleration;
     }
@@ -158,10 +169,6 @@ export class OtherPlayerNode extends CharacterNode {
 
     public update(dt: number, time: number) {
         super.update(dt, time);
-        if (this.isInScene() && !this.initDone) {
-            this.initDone = true;
-            this.getGame().onPlayerUpdate.filter(ev => ev.username === this.username).connect(this.handlePlayerUpdate, this);
-        }
         if (this.getParent() instanceof TrainNode) {
             this.setOpacity(0);
             const door = this.getGame().getTrainDoorCoordinate();
@@ -196,10 +203,11 @@ export class OtherPlayerNode extends CharacterNode {
         }
     }
 
-    public handlePlayerUpdate(event: UserEvent) {
+    public handleCharacterUpdate(event: UserEvent) {
         this.aimingAngle = event.aimingAngle ?? this.aimingAngle;
         this.direction = event.direction ?? this.direction;
         this.hitpoints = event.hitpoints ?? this.hitpoints;
+        this.isReloading = event.isReloading ?? this.isReloading;
         this.isFalling = event.isFalling ?? this.isFalling;
         this.mouseDistanceToPlayer = event.mouseDistanceToPlayer ?? this.mouseDistanceToPlayer;
         this.isOnGround = event.isOnGround ?? this.isOnGround;
@@ -229,7 +237,8 @@ export class OtherPlayerNode extends CharacterNode {
         this.ammo = this.magazineSize;
     }
 
-    protected updateCharacterState(): void {}
+    /** Since we do not want this character to send updates, we just leave it blank here to not trigger super method. */
+    protected syncCharacterState(): void {}
 
     public getPersonalEnemies(): CharacterNode[] {
         const monsters = this.getScene()?.rootNode.getDescendantsByType(MonsterNode) ?? [];

@@ -21,6 +21,8 @@ export class RatNode extends EnemyNode {
     /** minimum distance between enemy and player to stop escaping */
     private squaredSafetyDistance = 100 ** 2;
 
+    protected isRat = true;
+
     public constructor(args?: SceneNodeArgs) {
         super({
             aseprite: RatNode.sprite,

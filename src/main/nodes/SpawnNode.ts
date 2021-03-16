@@ -12,7 +12,7 @@ export class SpawnNode extends SceneNode<Hyperloop> {
         super({
             ...args
         });
-        this.id = `${args?.tiledObject?.toJSON().id ?? null}`;
+        this.identifier = args?.tiledObject?.toJSON().id ?? null;
         this.trigger = args?.tiledObject?.getOptionalProperty("trigger", "string")?.getValue() ?? "";
         this.hitpoints = args?.tiledObject?.getOptionalProperty("hitpoints", "int")?.getValue() ?? 0;
     }

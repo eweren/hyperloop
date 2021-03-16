@@ -93,25 +93,25 @@ export class Hyperloop extends Game {
     // Called by GameScene
     public setupScene(): void {
         if (isDebugMap()) {
-            const chars = [ new NpcNode(0), new NpcNode(1), new NpcNode(2), new NpcNode(3), new NpcNode(4) ];
-            const positions = [ 1230, 1200, 1150, 1110, 1090 ];
-            const playerParentNode = this.getPlayer().getParent();
-            if (!playerParentNode) {
-                return;
-            }
-            for (let i = 0; i < chars.length; i++) {
-                chars[i].moveTo(positions[i], 610).appendTo(playerParentNode);
-            }
-            for (let i = 3; i < chars.length; i++) {
-                chars[i].setMirrorX(true);
-            }
-            // Spawn enemies in the right dark side.
-            for (const position of positions) {
-               new SpawnNode({ x: position, y: 710 }).appendTo(playerParentNode).spawnEnemy();
-               new SpawnNode({ x: position + 10, y: 710 }).appendTo(playerParentNode).spawnEnemy();
-               new SpawnNode({ x: position + 20, y: 710 }).appendTo(playerParentNode).spawnEnemy();
-               new SpawnNode({ x: position + 30, y: 710 }).appendTo(playerParentNode).spawnEnemy();
-            }
+            // const chars = [ new NpcNode(0), new NpcNode(1), new NpcNode(2), new NpcNode(3), new NpcNode(4) ];
+            // const positions = [ 1230, 1200, 1150, 1110, 1090 ];
+            // const playerParentNode = this.getPlayer().getParent();
+            // if (!playerParentNode) {
+            //     return;
+            // }
+            // for (let i = 0; i < chars.length; i++) {
+            //     chars[i].moveTo(positions[i], 610).appendTo(playerParentNode);
+            // }
+            // for (let i = 3; i < chars.length; i++) {
+            //     chars[i].setMirrorX(true);
+            // }
+            // // Spawn enemies in the right dark side.
+            // for (const position of positions) {
+            //    new SpawnNode({ x: position, y: 710 }).appendTo(playerParentNode).spawnEnemy();
+            //    new SpawnNode({ x: position + 10, y: 710 }).appendTo(playerParentNode).spawnEnemy();
+            //    new SpawnNode({ x: position + 20, y: 710 }).appendTo(playerParentNode).spawnEnemy();
+            //    new SpawnNode({ x: position + 30, y: 710 }).appendTo(playerParentNode).spawnEnemy();
+            // }
             return;
         }
         this.spawnNPCs();
@@ -546,6 +546,9 @@ export class Hyperloop extends Game {
     }
 
     public async spawnOtherPlayer(event: UserEvent): Promise<void> {
+        if (!event.username) {
+            return;
+        }
         if (!this.scenes.getScene(GameScene)) {
             this.scenes.setScene(GameScene as any);
         }
@@ -560,7 +563,7 @@ export class Hyperloop extends Game {
             otherPlayer.moveTo(event.position?.x ?? this.getPlayer().getX(), event.position?.y ?? this.getPlayer().getY());
             otherPlayer.setHitpoints(100);
             otherPlayer.reset();
-            console.log("Spawned other player");
+            this.getPlayer().syncCharacterState();
         }
     }
 
@@ -656,8 +659,8 @@ export class Hyperloop extends Game {
         return this.getGameScene().rootNode.getDescendantsByType(LightNode);
     }
 
-    public initOnlineGame(): void {
-        super.initOnlineGame();
+    public async initOnlineGame(): Promise<void> {
+        await super.initOnlineGame();
     }
 }
 

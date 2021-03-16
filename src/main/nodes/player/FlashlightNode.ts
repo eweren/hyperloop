@@ -28,9 +28,6 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
             layer: Layer.LIGHT,
             ...args
         });
-        // this.lightEllipsis = new LightNode({ layer: Layer.LIGHT, id: "flashlightCircle", anchor: Direction.CENTER });
-        // this.lightEllipsis.setIntensity(1000);
-        // this.lightEllipsis.appendTo(this);
         this.getGradient();
         (window as any)["flashlight"] = this;
     }

@@ -39,11 +39,11 @@ export class TitleScene extends Scene<Hyperloop> {
     private playerListNode?: PlayerListNode;
 
     public setup() {
+        this.game.initOnlineGame();
         if (isDebugMap()) {
             this.startGame();
             return;
         }
-        this.game.initOnlineGame();
         this.game.onGameStart.connect(this.startGame.bind(this));
         this.inTransition = new FadeTransition();
         this.outTransition = new FadeToBlackTransition({ duration: 0.5, exclusive: true });
