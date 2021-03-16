@@ -2,7 +2,6 @@ import { Aseprite } from "../../engine/assets/Aseprite";
 import { CharacterNode } from "./CharacterNode";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { Direction } from "../../engine/geom/Direction";
-import { EnemyNode } from "./EnemyNode";
 import { FlashlightNode } from "./player/FlashlightNode";
 import { GameScene } from "../scenes/GameScene";
 import { MonsterNode } from "./MonsterNode";
@@ -189,6 +188,10 @@ export class PlayerNode extends CharacterNode {
 
     public getMagazineSize(): number {
         return this.magazineSize;
+    }
+
+    public getIdentifier(): string {
+        return this.username;
     }
 
     public getLastShotTime(): number {

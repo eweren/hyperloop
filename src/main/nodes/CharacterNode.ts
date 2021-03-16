@@ -246,10 +246,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         if (!this.getGame().isHost && !this.isPlayer) {
             return;
         }
-        const enemyId = this.getIdentifier();
-        if (!enemyId) {
-            return;
-        }
 
         const currentState: UserEvent = {
             direction: this.direction,
@@ -259,7 +255,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             isOnGround: this.isOnGround,
             position: new Vector2(this.getX(), this.getY()),
             velocity: this.velocity,
-            enemyId: enemyId,
             ...additionalProperties
         };
 

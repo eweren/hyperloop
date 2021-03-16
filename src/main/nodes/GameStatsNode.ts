@@ -5,8 +5,9 @@ export class GameStatsNode extends TextNode<Hyperloop> {
 
     public update(dt: number, time: number) {
         super.update(dt, time);
-        this.setText(`SCORES     K  |  D\n${[...this.getGame().getPlayers(), this.getGame().getPlayer()]
-            .map(player => player.username.padEnd(13, " ") + player.killCounter + " | " + player.dieCounter).join("\n")}`);
+        this.setText(`PLAYER        SCORE\n${[...this.getGame().getPlayers(), this.getGame().getPlayer()]
+            .sort((a, b) => b.killCounter - a.killCounter)
+            .map(player => player.username.padEnd(18, " ") + (player.killCounter * 10 - player.dieCounter * 5)).join("\n")}`);
     }
 
     /** @inheritDoc */

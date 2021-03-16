@@ -120,7 +120,7 @@ export abstract class Game {
         }
         const playersInRoomRes = await (await fetch(`${onlineBaseUrl}${room}`)
             .then(response => response.json()));
-        this.username = (Math.random() * 1000).toFixed(); //   window.prompt("Enter a username");
+        this.username = window.prompt("Enter a username"); // (Math.random() * 1000).toFixed();
         let askForUsername = !this.username || playersInRoomRes?.includes(this.username);
         while (askForUsername) {
             this.username = window.prompt("Username already taken. Enter another username");

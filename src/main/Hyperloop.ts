@@ -513,7 +513,7 @@ export class Hyperloop extends Game {
 
     public checkIfPlayersShouldBeRemoved(): string | null {
         if (this.scenes.getScene(GameScene)) {
-            const playersToRemove = this.getPlayers().filter(player => this.players.has(player.username));
+            const playersToRemove = this.getPlayers().filter(player => !this.players.has(player.username));
             if (playersToRemove.length === 1) {
                 playersToRemove[0].remove();
                 return playersToRemove[0].username;
@@ -529,7 +529,7 @@ export class Hyperloop extends Game {
         if (!this.scenes.getScene(GameScene)) {
             this.scenes.setScene(GameScene as any);
         }
-        if (!this.getPlayers().find(p => p.username)) {
+        if (!this.getPlayers().find(p => p.username === event.username)) {
             try {
                 this.getGameScene();
             } catch (_) {
