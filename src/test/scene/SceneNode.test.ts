@@ -6,8 +6,12 @@ import { Game } from "../../engine/Game";
 import { Scene } from "../../engine/scene/Scene";
 import { SceneNode, SceneNodeArgs, SceneNodeAspect } from "../../engine/scene/SceneNode";
 import { createContext2D } from "../../engine/util/graphics";
+import { PlayerNode } from "../../main/nodes/PlayerNode";
 
 class TestGame extends Game {
+    public getPlayer(): PlayerNode {
+        return new PlayerNode();
+    }
     public async spawnOtherPlayer(): Promise<void> {}
     public checkIfPlayersShouldBeRemoved(): string | null { return null; }
 }
