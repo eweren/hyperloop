@@ -11,7 +11,7 @@ export class MarkLineNode extends SceneNode<Hyperloop> {
     private killTime = 0;
     private alpha = 1;
 
-    public constructor(private start: Vector2, private end: Vector2) {
+    public constructor(private start: Vector2, private end: Vector2, private readonly filter?: string) {
         super({
             width: 1,
             height: 1,
@@ -32,10 +32,12 @@ export class MarkLineNode extends SceneNode<Hyperloop> {
     }
 
     public draw(context: CanvasRenderingContext2D): void {
-        context.strokeStyle = "green";
+        context.strokeStyle = "#0000FF";
         const oldOpacity = context.globalAlpha;
 
+        const oldFilter = context.filter;
         context.globalAlpha = clamp(this.alpha, 0, 1);
+        context.filter = this.filter ?? oldFilter;
 
         const line = new Line2(
             this.start,
@@ -46,5 +48,6 @@ export class MarkLineNode extends SceneNode<Hyperloop> {
         context.closePath();
         context.stroke();
         context.globalAlpha = oldOpacity;
+        context.filter = oldFilter;
     }
 }

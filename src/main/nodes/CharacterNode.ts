@@ -35,6 +35,8 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     protected playerName?: TextNode<Hyperloop>;
     private preventNewTag = false;
     private gameTime = 0;
+    public dieCounter = 0;
+    public killCounter = 0;
 
     protected lastSubmittedState: Partial<UserEvent> = {};
 
@@ -362,13 +364,15 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         if (isColliding && this.storedCollisionCoordinate) {
             const coord = this.storedCollisionCoordinate;
 
-            const markLineNode = new MarkLineNode(new Vector2(origin.x, origin.y), coord);
+            const markLineNode = new MarkLineNode(new Vector2(origin.x, origin.y), coord, this.filter ?? undefined);
             this.getParent()?.appendChild(markLineNode);
             if (isColliding instanceof CharacterNode) {
                 const bounds = isColliding.getSceneBounds();
                 const headshot = (coord.y < bounds.minY + 0.25 * (bounds.height));
                 const damage = headshot ? (2.4 * power) : power;
-                isColliding.hurt(damage, this.getScenePosition());
+                if (isColliding.hurt(damage, this.getScenePosition())) {
+                    this.killCounter++;
+                }
                 // Blood particles at hurt character
                 isColliding.emitBlood(coord.x, coord.y, angle, headshot ? 30 : 10);
             } else {
@@ -376,9 +380,8 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             }
             this.storedCollisionCoordinate = null;
         } else {
-            const markLineNode = new MarkLineNode(new Vector2(origin.x, origin.y), new Vector2(origin.x + diffX, origin.y + diffY));
+            const markLineNode = new MarkLineNode(new Vector2(origin.x, origin.y), new Vector2(origin.x + diffX, origin.y + diffY), this.filter ?? undefined);
             this.getParent()?.appendChild(markLineNode);
-
         }
     }
 
@@ -469,6 +472,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         this.endBattlemode();
         this.setTag("die");
         this.hitpoints = 0;
+        this.dieCounter++;
     }
 
     public isAlive(): boolean {

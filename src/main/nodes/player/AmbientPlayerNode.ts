@@ -21,7 +21,7 @@ export class AmbientPlayerNode extends SceneNode<Hyperloop> {
             layer: Layer.LIGHT,
             ...args
         });
-        this.color = args?.tiledObject?.getOptionalProperty("color", "color")?.getValue() ?? new RGBColor(0.2, 0.3, 0.2);
+        this.color = args?.tiledObject?.getOptionalProperty("color", "color")?.getValue() ?? new RGBColor(0.2, 0.2, 0.3);
         this.intensity = args?.tiledObject?.getOptionalProperty("intensity", "int")?.getValue() ?? 250;
         this.updateGradient();
     }

@@ -126,6 +126,7 @@ export abstract class Game {
             this.username = window.prompt("Username already taken. Enter another username");
             askForUsername = !this.username || playersInRoomRes?.includes(this.username);
         }
+        this.getPlayer().username = this.username!;
 
         this.socket = io.connect(onlineBaseUrl, { query: { room, username: this.username },transportOptions: ["websocket"] });
 

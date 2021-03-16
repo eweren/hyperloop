@@ -8,10 +8,9 @@ import { CollisionNode } from "../nodes/CollisionNode";
 import { TrainNode } from "../nodes/TrainNode";
 import { LightNode } from "../nodes/LightNode";
 import { SwitchNode } from "../nodes/SwitchNode";
-import { GAME_HEIGHT, GAME_WIDTH, Layer } from "../constants";
+import { Layer, STANDARD_FONT } from "../constants";
 import { CameraLimitNode } from "../nodes/CameraLimitNode";
 import { DoorNode } from "../nodes/DoorNode";
-import { ScenePointerDownEvent } from "../../engine/scene/events/ScenePointerDownEvent";
 import { isDebugMap, isDev } from "../../engine/util/env";
 import { MonsterNode } from "../nodes/MonsterNode";
 import { RatNode } from "../nodes/RatNode";
@@ -25,6 +24,9 @@ import { DeadSpaceSuitNode } from "../nodes/DeadSpaceSuiteNode";
 import { MusicManager } from "../MusicManager";
 import { FxManager } from "../FxManager";
 import { clamp } from "../../engine/util/math";
+import { GameStatsNode } from "../nodes/GameStatsNode";
+import { Direction } from "../../engine/geom/Direction";
+import { BitmapFont } from "../../engine/assets/BitmapFont";
 
 export enum TargetMap {
     HYPERLOOP = 0,
@@ -39,6 +41,8 @@ export const playerSpawnPoints = [
 ];
 
 export class GameScene extends Scene<Hyperloop> {
+    @asset(STANDARD_FONT)
+    private static font: BitmapFont;
 
     @asset([
         "map/hyperloopMap.tiledmap.json",
@@ -47,8 +51,6 @@ export class GameScene extends Scene<Hyperloop> {
     private static maps: TiledMap[];
 
     private targetMap = isDebugMap() ? TargetMap.DEBUG : TargetMap.HYPERLOOP;
-
-    private debugMode: boolean = true;
 
     private mapNode = new TiledMapNode<Hyperloop>({ map: GameScene.maps[this.targetMap], objects: {
         "collision": CollisionNode,
@@ -67,6 +69,7 @@ export class GameScene extends Scene<Hyperloop> {
         "trigger": TriggerNode,
         "deadspacesuit": DeadSpaceSuitNode
     }});
+    private score: GameStatsNode | null = null;
 
     public setup() {
         this.inTransition = new FadeToBlackTransition({ duration: 2, delay: 1 });
@@ -109,7 +112,7 @@ export class GameScene extends Scene<Hyperloop> {
     private handleKeyDown(event: KeyboardEvent): void {
         if (event.key === "Tab") {
             if (!event.repeat) {
-                this.enterDebugMode();
+                this.showScores();
             }
             event.preventDefault();
             event.stopPropagation();
@@ -119,38 +122,55 @@ export class GameScene extends Scene<Hyperloop> {
     private handleKeyUp(event: KeyboardEvent): void {
         if (event.key === "Tab") {
             if (!event.repeat) {
-                this.leaveDebugMode();
+                this.hideScores();
             }
             event.preventDefault();
             event.stopPropagation();
         }
     }
 
-    private enterDebugMode(): void {
-        if (!this.debugMode) {
-            this.debugMode = true;
-            const bounds = this.mapNode.getSceneBounds();
-            const scale = Math.min(GAME_WIDTH / bounds.width, GAME_HEIGHT / bounds.height);
-            this.camera.setFollow(null).setLimits(this.mapNode.getBounds().toRect()).moveTo(bounds.centerX, bounds.centerY).setZoom(scale);
-            this.onPointerDown.connect(this.handleTeleportClick, this);
+    private showScores(): void {
+        if (this.score == null) {
+            this.score = new GameStatsNode({
+                font: GameScene.font,
+                anchor: Direction.CENTER,
+                layer: Layer.HUD
+            });
         }
+        this.score.setX(this.camera.getWidth() / 2);
+        this.score.setY(this.camera.getHeight() / 2);
+        this.mapNode.appendChild(this.score);
+
+    }
+    private hideScores(): void {
+        this.score?.remove();
     }
 
-    public leaveDebugMode(): void {
-        if (this.debugMode) {
-            const player = this.mapNode.getDescendantById("Player");
-            if (player != null) {
-                this.camera.setFollow(player).setZoom(1);
-            }
-            this.onPointerDown.disconnect(this.handleTeleportClick, this);
-            this.debugMode = false;
-        }
-    }
+    // private enterDebugMode(): void {
+    //     if (!this.debugMode) {
+    //         this.debugMode = true;
+    //         const bounds = this.mapNode.getSceneBounds();
+    //         const scale = Math.min(GAME_WIDTH / bounds.width, GAME_HEIGHT / bounds.height);
+    //         this.camera.setFollow(null).setLimits(this.mapNode.getBounds().toRect()).moveTo(bounds.centerX, bounds.centerY).setZoom(scale);
+    //         this.onPointerDown.connect(this.handleTeleportClick, this);
+    //     }
+    // }
 
-    private handleTeleportClick(event: ScenePointerDownEvent): void {
-        const player = this.mapNode.getDescendantById("Player");
-        if (player != null) {
-            player.moveTo(event.getX(), event.getY());
-        }
-    }
+    // public leaveDebugMode(): void {
+    //     if (this.debugMode) {
+    //         const player = this.mapNode.getDescendantById("Player");
+    //         if (player != null) {
+    //             this.camera.setFollow(player).setZoom(1);
+    //         }
+    //         this.onPointerDown.disconnect(this.handleTeleportClick, this);
+    //         this.debugMode = false;
+    //     }
+    // }
+
+    // private handleTeleportClick(event: ScenePointerDownEvent): void {
+    //     const player = this.mapNode.getDescendantById("Player");
+    //     if (player != null) {
+    //         player.moveTo(event.getX(), event.getY());
+    //     }
+    // }
 }

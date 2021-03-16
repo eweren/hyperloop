@@ -164,7 +164,7 @@ export class AsepriteNode<T extends Game = Game> extends SceneNode<T> {
         let oldFilter = "";
         if (this.filter) {
             oldFilter = ctx.filter;
-            ctx.filter = "hue-rotate(90deg)";
+            ctx.filter = this.filter;
         }
         if (this.mirrorX) {
             ctx.translate(this.aseprite.width, 0);

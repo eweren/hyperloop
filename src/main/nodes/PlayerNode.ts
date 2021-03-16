@@ -32,6 +32,7 @@ import { ControllerEvent } from "../../engine/input/ControllerEvent";
 import { ControllerFamily } from "../../engine/input/ControllerFamily";
 import { isDev } from "../../engine/util/env";
 import { UserEvent } from "../../engine/Game";
+import { OtherPlayerNode } from "./OtherPlayerNode";
 
 const groundColors = [
     "#806057",
@@ -65,6 +66,7 @@ export class PlayerNode extends CharacterNode {
     private flashLight: FlashlightNode;
 
     protected isPlayer = true;
+    public username = "";
 
     /** The aimingAngle in radians */
     private aimingAngle = +(Math.PI / 2).toFixed(3);
@@ -102,7 +104,7 @@ export class PlayerNode extends CharacterNode {
     private dustParticles: ParticleNode;
     private crosshairNode: AsepriteNode;
 
-    public constructor(args?: SceneNodeArgs) {
+    public constructor(args?: SceneNodeArgs, protected filter = "hue-rotate(230deg)") {
         super({
             aseprite: PlayerNode.sprite,
             anchor: Direction.BOTTOM,
@@ -111,11 +113,12 @@ export class PlayerNode extends CharacterNode {
             id: "player",
             sourceBounds: new Rect(6, 6, 8, 26),
             cameraTargetOffset: new Vector2(0, -26),
+            filter,
             ...args
         });
         this.removeOnDie = false;
-        this.playerArm = new PlayerArmNode();
-        this.playerLeg = new PlayerLegsNode();
+        this.playerArm = new PlayerArmNode(filter);
+        this.playerLeg = new PlayerLegsNode(filter);
         this.flashLight = new FlashlightNode();
         this.muzzleFlash = new MuzzleFlashNode(this.shotRecoil, {y: -3});
         this.ammoCounter = new AmmoCounterNode({
@@ -129,7 +132,7 @@ export class PlayerNode extends CharacterNode {
         });
         this.appendChild(this.playerLeg);
         this.appendChild(this.playerArm);
-        const ambientPlayerLight = new AmbientPlayerNode();
+        const ambientPlayerLight = new AmbientPlayerNode(filter);
         this.playerLeg?.appendChild(ambientPlayerLight);
         this.playerArm?.appendChild(this.flashLight);
         this.flashLight?.appendChild(this.muzzleFlash);
@@ -448,7 +451,7 @@ export class PlayerNode extends CharacterNode {
                     x: this.getX(),
                     y: this.getY(),
                     layer: this.getLayer(),
-                }).insertBefore(this);
+                }, this.filter).insertBefore(this);
                 // TODO Jump to dialog sequence in train
                 this.getGame().startRespawnSequence();
                 this.playerArm?.show();
@@ -461,10 +464,11 @@ export class PlayerNode extends CharacterNode {
         this.ammo = 12;
     }
 
-    public getPersonalEnemies(): EnemyNode[] {
+    public getPersonalEnemies(): CharacterNode[] {
         const monsters = this.getScene()?.rootNode.getDescendantsByType(MonsterNode) ?? [];
+        const players = this.getScene()?.rootNode.getDescendantsByType(OtherPlayerNode) ?? [];
         const rats = this.getScene()?.rootNode.getDescendantsByType(RatNode) ?? [];
-        const enemies = [...monsters, ...rats];
+        const enemies = [...monsters, ...rats, ...players];
         return enemies.filter(e => e.isAlive());
     }
 

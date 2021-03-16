@@ -80,10 +80,12 @@ export class OtherPlayerNode extends CharacterNode {
     private readonly magazineSize = 12;
     private readonly reloadDelay = 2200;
 
+    private isDying = false;
+
     private dustParticles: ParticleNode;
     private crosshairNode: AsepriteNode;
 
-    public constructor(public readonly username: string, protected filter = "hue-rotate(130deg)",  args?: SceneNodeArgs) {
+    public constructor(public readonly username: string, protected filter = "hue-rotate(5deg)",  args?: SceneNodeArgs) {
         super({
             aseprite: OtherPlayerNode.sprite,
             anchor: Direction.BOTTOM,
@@ -201,6 +203,9 @@ export class OtherPlayerNode extends CharacterNode {
     }
 
     public handleCharacterUpdate(event: UserEvent) {
+        if (this.isDying) {
+            return;
+        }
         this.aimingAngle = event.aimingAngle ?? this.aimingAngle;
         this.direction = event.direction ?? this.direction;
         this.hitpoints = event.hitpoints ?? this.hitpoints;
@@ -344,16 +349,21 @@ export class OtherPlayerNode extends CharacterNode {
     }
 
     public die(): void {
+        this.isDying = true;
         super.die();
         this.playerArm?.hide();
         OtherPlayerNode.dieScream.stop();
         OtherPlayerNode.dieScream.play();
         const diePosition = { x: this.getX(), y: this.getY() };
         setTimeout(() => {
+            this.isDying = false;
             new DeadSpaceSuitNode({
                 ...diePosition,
-                layer: this.getLayer(),
-            }).insertBefore(this);
+                layer: this.getLayer()},
+                this.filter
+            ).insertBefore(this);
+            this.playerArm?.show();
+            this.setHitpoints(100);
         }, 6000);
     }
 
