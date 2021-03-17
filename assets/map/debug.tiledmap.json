@@ -99,39 +99,6 @@
                  "width":0,
                  "x":819,
                  "y":558
-                }, 
-                {
-                 "height":0,
-                 "id":349,
-                 "name":"Fan",
-                 "point":true,
-                 "properties":[
-                        {
-                         "name":"emitterWidth",
-                         "type":"float",
-                         "value":30
-                        }, 
-                        {
-                         "name":"intensity",
-                         "type":"float",
-                         "value":1
-                        }, 
-                        {
-                         "name":"range",
-                         "type":"float",
-                         "value":30
-                        }, 
-                        {
-                         "name":"sound",
-                         "type":"string",
-                         "value":"fan"
-                        }],
-                 "rotation":0,
-                 "type":"sound",
-                 "visible":true,
-                 "width":0,
-                 "x":658,
-                 "y":568
                 }],
          "opacity":1,
          "properties":[
@@ -616,7 +583,7 @@
  "nextobjectid":359,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.4.2",
+ "tiledversion":"1.4.3",
  "tileheight":18,
  "tilesets":[
         {
