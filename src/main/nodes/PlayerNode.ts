@@ -421,7 +421,7 @@ export class PlayerNode extends CharacterNode {
         }
     }
 
-    public hurt(damage: number, origin: ReadonlyVector2): boolean {
+    public hurt(damage: number, origin?: ReadonlyVector2): boolean {
         this.lastHitTimestamp = now();
         const { centerX, centerY } = this.getSceneBounds();
         this.emitBlood(centerX, centerY, Math.random() * Math.PI * 2, damage);

@@ -214,7 +214,7 @@ export class Sound {
         }
         if (this.gainNode) {
             const gain = this.gainNode.gain;
-            gain.value = clamp(volume, gain.minValue, gain.maxValue);
+            gain.setValueAtTime(clamp(volume, gain.minValue, gain.maxValue), getAudioContext().currentTime);
         }
     }
 

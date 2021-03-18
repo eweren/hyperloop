@@ -637,6 +637,12 @@ export class Hyperloop extends Game {
 
     public async initOnlineGame(): Promise<void> {
         await super.initOnlineGame();
+        this.onPlayerUpdate.connect(val => {
+            // Make sure that player is killed if other player killed this player.
+            if (this.scenes.activeScene instanceof GameScene && val.hitpoints === 0) {
+                this.getPlayer().hurt(100);
+            }
+        });
     }
 }
 

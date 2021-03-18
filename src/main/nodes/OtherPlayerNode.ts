@@ -39,9 +39,6 @@ export class OtherPlayerNode extends CharacterNode {
     @asset("sounds/fx/wilhelmScream.mp3")
     private static readonly dieScream: Sound;
 
-    @asset("sounds/fx/footsteps.ogg")
-    private static readonly footsteps: Sound;
-
     @asset("sounds/fx/dryfire.ogg")
     private static readonly dryFireSound: Sound;
 
@@ -183,14 +180,7 @@ export class OtherPlayerNode extends CharacterNode {
             return;
         }
         this.setOpacity(1);
-
-        if (this.getTag() === "walk") {
-            OtherPlayerNode.footsteps.setLoop(true);
-            OtherPlayerNode.footsteps.play({fadeIn: 0.5});
-        } else {
-            OtherPlayerNode.footsteps.stop(0.3);
-        }
-        // Reload
+        this.syncArmAndLeg();
 
         // Spawn random dust particles while walking
         if (this.isVisible()) {
@@ -258,6 +248,7 @@ export class OtherPlayerNode extends CharacterNode {
     public shoot(): void {
         if (this.ammo === 0) {
             OtherPlayerNode.dryFireSound.stop();
+            OtherPlayerNode.dryFireSound.setDirection(this.directionToPlayer);
             OtherPlayerNode.dryFireSound.play();
         } else if (this.ammo > 0 && !this.isReloading) {
             this.lastShotTime = now();
@@ -272,7 +263,7 @@ export class OtherPlayerNode extends CharacterNode {
             return;
         }
         this.isReloading = true;
-        OtherPlayerNode.reloadSound.setLoop(true);
+        OtherPlayerNode.reloadSound.setDirection(this.directionToPlayer);
         OtherPlayerNode.reloadSound.play();
         await sleep(this.reloadDelay);
         this.ammo = this.magazineSize;
@@ -353,6 +344,7 @@ export class OtherPlayerNode extends CharacterNode {
         super.die();
         this.playerArm?.hide();
         OtherPlayerNode.dieScream.stop();
+        OtherPlayerNode.dieScream.setDirection(this.directionToPlayer);
         OtherPlayerNode.dieScream.play();
         const diePosition = { x: this.getX(), y: this.getY() };
         setTimeout(() => {

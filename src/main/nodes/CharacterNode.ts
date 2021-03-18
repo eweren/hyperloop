@@ -64,6 +64,8 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     private storedCollisionCoordinate: Vector2 | null = null;
     protected consecutiveXCollisions = 0;
     protected isPlayer = false;
+    protected directionToPlayer = 0;
+    protected distanceToPlayer = 0;
 
     // Talking/Thinking
     private speakSince = 0;
@@ -131,7 +133,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public update(dt: number, time: number): void {
         if (this.isInScene() && !this.initDone) {
             this.initDone = true;
-            this.getGame().onPlayerUpdate.filter(event => event.enemyId === this.getIdentifier()
+            this.getGame().onOtherPlayerUpdate.filter(event => event.enemyId === this.getIdentifier()
                 || event.username === this.getIdentifier())
                 .connect(this.handleCharacterUpdate, this);
         }
@@ -236,6 +238,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         if (this.getPlayerCollisionAt(this.x, this.y)) {
             this.unstuck();
         }
+        this.updateDirectionToPlayer();
         this.syncCharacterState();
     }
 
@@ -352,7 +355,11 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public shoot(angle: number, power: number, origin: Vector2Like = new Vector2(this.getScenePosition().x, this.getScenePosition().y - this.getHeight() * .5)): void {
         this.startBattlemode();
         CharacterNode.shootSound.stop();
-        CharacterNode.shootSound.play();
+        if (this.distanceToPlayer > 0) {
+            CharacterNode.shootSound.setDirection(this.directionToPlayer);
+            CharacterNode.shootSound.setVolume(this.distanceToPlayer);
+            CharacterNode.shootSound.play();
+        }
         const diffX = Math.cos(angle) * this.getShootingRange();
         const diffY = Math.sin(angle) * this.getShootingRange();
         const isColliding = this.getLineCollision(origin.x, origin.y, diffX, diffY, PROJECTILE_STEP_SIZE);
@@ -419,14 +426,16 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
      * @param damage - Damage dealt, number > 0
      * @return True if hurt character dies, false otherwise.
      */
-    public hurt(damage: number, origin: ReadonlyVector2): boolean {
+    public hurt(damage: number, origin?: ReadonlyVector2): boolean {
         if (!this.isAlive()) {
             return false;
         }
-        // Pushback
-        const direction = origin.x > this.getX() ? -1 : 1;
-        const pushForce = damage * 2;
-        this.velocity = new Vector2(pushForce * direction, this.velocity.y - pushForce * 0.1);
+        if (origin) {
+            // Pushback
+            const direction = origin.x > this.getX() ? -1 : 1;
+            const pushForce = damage * 2;
+            this.velocity = new Vector2(pushForce * direction, this.velocity.y - pushForce * 0.1);
+        }
         // Damage
         this.hitpoints -= damage;
         if (this.hitpoints <= 0) {
@@ -573,5 +582,12 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     public getNodeToInteractWith(): InteractiveNode | null {
         return this.canInteractWith;
+    }
+
+    private updateDirectionToPlayer(): void {
+        const distanceOnX = this.getX() - this.getGame().getPlayer().getX();
+        this.directionToPlayer = Math.abs(distanceOnX) > 5 ? (clamp(distanceOnX, 1, 150) / 150) : 0;
+        const absDistance = this.getGame().getPlayer().getPosition().getDistance(this.getPosition());
+        this.distanceToPlayer = absDistance > 150 ? 0 : absDistance === 0 ? 0 : 1 / (clamp(absDistance, 5, 150) / 5);
     }
 }

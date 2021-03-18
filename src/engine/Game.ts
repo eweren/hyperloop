@@ -54,6 +54,7 @@ export abstract class Game {
 
     protected socket?: SocketIOClient.Socket;
     public username: string | null = null;
+    public onOtherPlayerUpdate = new Signal<UserEvent>();
     public onPlayerUpdate = new Signal<UserEvent>();
     public onPlayerConnect = new Signal<string>();
     public onGameStart = new Signal<void>();
@@ -138,6 +139,8 @@ export abstract class Game {
             if (this.scenes.activeScene instanceof GameScene) {
                 if (val.username !== this.username) {
                     this.spawnOtherPlayer(val);
+                    this.onOtherPlayerUpdate.emit(val);
+                } else {
                     this.onPlayerUpdate.emit(val);
                 }
             } else {
@@ -145,6 +148,8 @@ export abstract class Game {
                 setTimeout(() => {
                     if (val.username !== this.username) {
                         this.spawnOtherPlayer(val);
+                        this.onOtherPlayerUpdate.emit(val);
+                    } else {
                         this.onPlayerUpdate.emit(val);
                     }
                 });
