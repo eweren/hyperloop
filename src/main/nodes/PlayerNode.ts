@@ -65,7 +65,9 @@ export class PlayerNode extends CharacterNode {
     private flashLight: FlashlightNode;
 
     protected isPlayer = true;
-    public username = "";
+    public get username(): string {
+        return this.getGame().username ?? "";
+    }
 
     /** The aimingAngle in radians */
     private aimingAngle = +(Math.PI / 2).toFixed(3);
@@ -324,6 +326,7 @@ export class PlayerNode extends CharacterNode {
     public shoot(): void {
         if (this.ammo === 0) {
             PlayerNode.dryFireSound.stop();
+            PlayerNode.dryFireSound.setDirection(0);
             PlayerNode.dryFireSound.play();
         } else if (this.ammo > 0 && !this.isReloading) {
             this.getGame().syncNodeData({shoot: true});
@@ -340,7 +343,7 @@ export class PlayerNode extends CharacterNode {
         }
         this.getGame().syncNodeData({reload: true});
         this.isReloading = true;
-        PlayerNode.reloadSound.setLoop(true);
+        PlayerNode.reloadSound.setDirection(0);
         PlayerNode.reloadSound.play();
         await sleep(this.reloadDelay);
         this.ammo = this.magazineSize;

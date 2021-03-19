@@ -127,7 +127,6 @@ export abstract class Game {
             this.username = window.prompt("Username already taken. Enter another username");
             askForUsername = !this.username || playersInRoomRes?.includes(this.username);
         }
-        this.getPlayer().username = this.username!;
 
         this.socket = io.connect(onlineBaseUrl, { query: { room, username: this.username },transportOptions: ["websocket"] });
 
@@ -168,7 +167,9 @@ export abstract class Game {
             if (removedPlayer) {
                 console.log(removedPlayer, " left the match");
             }
-            this.getPlayer()?.syncCharacterState(true);
+            if (this.isInGameScene()) {
+                this.getPlayer()?.syncCharacterState(true);
+            }
         });
 
 
@@ -181,6 +182,10 @@ export abstract class Game {
     public abstract spawnOtherPlayer(event: UserEvent): Promise<void>;
 
     public abstract getPlayer(): PlayerNode;
+
+    public isInGameScene(): boolean {
+        return !!this.scenes.getScene(GameScene);
+    }
 
     public syncNodeData(event: Partial<UserEvent>): void {
         this.socket?.emit("playerUpdate", event);

@@ -359,6 +359,10 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
             CharacterNode.shootSound.setDirection(this.directionToPlayer);
             CharacterNode.shootSound.setVolume(this.distanceToPlayer);
             CharacterNode.shootSound.play();
+        } else if (this.isPlayer) {
+            CharacterNode.shootSound.setDirection(0);
+            CharacterNode.shootSound.setVolume(1);
+            CharacterNode.shootSound.play();
         }
         const diffX = Math.cos(angle) * this.getShootingRange();
         const diffY = Math.sin(angle) * this.getShootingRange();
