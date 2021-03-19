@@ -590,7 +590,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     private updateDirectionToPlayer(): void {
         const distanceOnX = this.getX() - this.getGame().getPlayer().getX();
-        this.directionToPlayer = Math.abs(distanceOnX) > 5 ? (clamp(distanceOnX, 1, 150) / 150) : 0;
+        this.directionToPlayer = Math.abs(distanceOnX) > 5 ? (clamp(distanceOnX, -150, 150) / 150) : 0;
         const absDistance = this.getGame().getPlayer().getPosition().getDistance(this.getPosition());
         this.distanceToPlayer = absDistance > 150 ? 0 : absDistance === 0 ? 0 : 1 / (clamp(absDistance, 5, 150) / 5);
     }
