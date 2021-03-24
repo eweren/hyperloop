@@ -42,7 +42,7 @@ export class CorpseNode extends InteractiveNode {
             this.getGame().keyTaken = true;
             CorpseNode.pickupSound.play();
             const player = this.getTarget();
-            player?.say("This key will surely be useful", 3, 0.5);
+            player?.say({line: "This key will surely be useful", duration: 3, delay: 0.5});
             await sleep(5000);
             CorpseNode.lightSound.play();
             this.getGame().turnOffAllLights();
@@ -54,10 +54,10 @@ export class CorpseNode extends InteractiveNode {
             });
             // Deactivated until better solution? 1.5 looks really shitty
             // game.getCamera().setZoom(1.5);
-            player?.say("Uh oh...", 3, 1.5);
+            player?.say({line: "Uh oh...", duration: 3, delay: 1.5});
             await sleep(5000);
             (player as PlayerNode)?.flickerLight();
-            player?.say("Ehh... Really? Isn't it already scary enough?", 3, 1.5);
+            player?.say({line: "Ehh... Really? Isn't it already scary enough?", duration: 3,delay:  1.5});
 
         }
     }

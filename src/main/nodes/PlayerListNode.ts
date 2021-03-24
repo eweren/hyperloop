@@ -1,11 +1,13 @@
+import { OnlineService } from "../../engine/online/OnlineService";
 import { TextNode } from "../../engine/scene/TextNode";
 import { Hyperloop } from "../Hyperloop";
 
 export class PlayerListNode extends TextNode<Hyperloop> {
+    private readonly onlineService = new OnlineService();
 
     public update(dt: number, time: number) {
         super.update(dt, time);
-        this.setText(`Currently active players:\n${Array.from(this.getGame().players).join("\n")}`);
+        this.setText(`Currently active players:\n${Array.from(this.onlineService.players).join("\n")}`);
     }
 
     /** @inheritDoc */

@@ -30,8 +30,9 @@ import { DeadSpaceSuitNode } from "./DeadSpaceSuiteNode";
 import { ControllerEvent } from "../../engine/input/ControllerEvent";
 import { ControllerFamily } from "../../engine/input/ControllerFamily";
 import { isDev } from "../../engine/util/env";
-import { UserEvent } from "../../engine/Game";
 import { OtherPlayerNode } from "./OtherPlayerNode";
+
+export const playerSyncKeys = ["username", "aimingAngle", "isReloading", "reloadStart", "lastShotTime", "shotRecoil", "mouseDistanceToPlayer", "isRunning", "ammo", "shootingRange", "speed", "acceleration", "deceleration", "jumpPower", "shotDelay", "magazineSize", "reloadDelay"];
 
 const groundColors = [
     "#806057",
@@ -66,7 +67,10 @@ export class PlayerNode extends CharacterNode {
 
     protected isPlayer = true;
     public get username(): string {
-        return this.getGame().username ?? "";
+        return this.onlineService.username;
+    }
+    public set username(username: string) {
+        this.onlineService.username = username;
     }
 
     /** The aimingAngle in radians */
@@ -106,7 +110,7 @@ export class PlayerNode extends CharacterNode {
     private crosshairNode: AsepriteNode;
 
     public constructor(args?: SceneNodeArgs, protected filter = "hue-rotate(230deg)") {
-        super({
+        super(playerSyncKeys, {
             aseprite: PlayerNode.sprite,
             anchor: Direction.BOTTOM,
             childAnchor: Direction.CENTER,
@@ -137,7 +141,9 @@ export class PlayerNode extends CharacterNode {
         this.playerLeg?.appendChild(ambientPlayerLight);
         this.playerArm?.appendChild(this.flashLight);
         this.flashLight?.appendChild(this.muzzleFlash);
-        (<any>window)["player"] = this;
+        if (isDev()) {
+            (<any>window)["player"] = this;
+        }
 
         this.dustParticles = new ParticleNode({
             y: this.getHeight() / 2,
@@ -254,7 +260,6 @@ export class PlayerNode extends CharacterNode {
         // Jump
         if (this.isOnGround && this.canInteract(ControllerIntent.PLAYER_JUMP)) {
             this.jump();
-            this.getGame().syncNodeData({jump: true});
         }
         if (this.getTag() === "walk") {
             PlayerNode.footsteps.setLoop(true);
@@ -301,7 +306,7 @@ export class PlayerNode extends CharacterNode {
         if (event.direction) {
             this.aimingAngle = +event.direction.getAngle(new Vector2(0, 1)).toFixed(3);
             this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
-            this.mouseDistanceToPlayer = event.direction.getLength() * 200;
+            this.mouseDistanceToPlayer = +(event.direction.getLength() * 200).toFixed(2);
             return;
         }
     }
@@ -329,7 +334,6 @@ export class PlayerNode extends CharacterNode {
             PlayerNode.dryFireSound.setDirection(0);
             PlayerNode.dryFireSound.play();
         } else if (this.ammo > 0 && !this.isReloading) {
-            this.getGame().syncNodeData({shoot: true});
             this.lastShotTime = now();
             this.ammo--;
             this.muzzleFlash.fire();
@@ -341,7 +345,7 @@ export class PlayerNode extends CharacterNode {
         if (this.isReloading || this.ammo === this.magazineSize) {
             return;
         }
-        this.getGame().syncNodeData({reload: true});
+        this.emitEvent("reload");
         this.isReloading = true;
         PlayerNode.reloadSound.setDirection(0);
         PlayerNode.reloadSound.play();
@@ -421,13 +425,14 @@ export class PlayerNode extends CharacterNode {
     private recover(): void {
         if (this.isAlive() && this.hitpoints < 100 && now() - this.lastHitTimestamp > this.timeoutForRecover) {
             this.hitpoints++;
+            this.syncCharacterState();
         }
     }
 
     public hurt(damage: number, origin?: ReadonlyVector2): boolean {
         this.lastHitTimestamp = now();
         const { centerX, centerY } = this.getSceneBounds();
-        this.emitBlood(centerX, centerY, Math.random() * Math.PI * 2, damage);
+        this.emitBlood({x: centerX, y: centerY, angle: Math.random() * Math.PI * 2, count: damage});
         const died = super.hurt(damage, origin);
         this.syncCharacterState();
         return died;
@@ -483,32 +488,22 @@ export class PlayerNode extends CharacterNode {
     }
 
     public async flickerLight(): Promise<void> {
+        this.emitEvent("flickerLight");
         this.flashLight.flicker();
     }
 
     public async manipulateLight(factor: number): Promise<void> {
+        this.emitEvent("manipulateLight", factor);
         this.flashLight.manipulateLight(factor);
     }
 
     private handlePointerMove(event: ScenePointerMoveEvent): void {
         this.crosshairNode.moveTo(event.getScreenX(), event.getScreenY());
-        this.mouseDistanceToPlayer = new Vector2(event.getX(), event.getY()).getDistance(this.getScenePosition());
+        this.mouseDistanceToPlayer = +(new Vector2(event.getX(), event.getY()).getDistance(this.getScenePosition()).toFixed(2));
         this.aimingAngle = +new Vector2(event.getX(), event.getY())
             .sub(this.playerArm ? this.playerArm.getScenePosition() : this.getScenePosition())
             .getAngle().toFixed(3);
         this.syncCharacterState();
-    }
-
-    /** @inheritdoc */
-    public syncCharacterState(forceFullSync = false): void {
-        const additionalProperties: UserEvent = {
-            aimingAngle: this.aimingAngle,
-            isReloading: this.isReloading,
-            mouseDistanceToPlayer: this.mouseDistanceToPlayer,
-            lastShotTime: this.lastShotTime,
-            username: this.getGame().username!
-        };
-        super.syncCharacterState(additionalProperties, forceFullSync);
     }
 
     private handlePointerDown(event: ScenePointerDownEvent): void {

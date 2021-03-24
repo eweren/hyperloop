@@ -16,6 +16,7 @@ import { ControllerFamily } from "../../engine/input/ControllerFamily";
 import { isDebugMap } from "../../engine/util/env";
 import { PlayerListNode } from "../nodes/PlayerListNode";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
+import { OnlineService } from "../../engine/online/OnlineService";
 
 export class TitleScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -33,18 +34,19 @@ export class TitleScene extends Scene<Hyperloop> {
     @asset("sounds/interface/ticket.ogg")
     private static confirmSound: Sound;
 
+    private onlineService = new OnlineService();
+
     private imageNode: ImageNode = new ImageNode({ image: TitleScene.titleImage, anchor: Direction.TOP_LEFT, childAnchor: Direction.TOP_LEFT});
     private controllerImageNode: ImageNode = new ImageNode({ image: TitleScene.controllerOverlayImage, anchor: Direction.BOTTOM});
     private overlayImageNode: ImageNode = new ImageNode({ image: TitleScene.overlayImage, anchor: Direction.BOTTOM});
     private playerListNode?: PlayerListNode;
 
     public setup() {
-        this.game.initOnlineGame();
         if (isDebugMap()) {
             this.startGame();
             return;
         }
-        this.game.onGameStart.connect(this.startGame.bind(this));
+        this.onlineService.onGameStateUpdate.filter(ev => ev === "startGame").connect(this.startGame, this);
         this.inTransition = new FadeTransition();
         this.outTransition = new FadeToBlackTransition({ duration: 0.5, exclusive: true });
         this.imageNode.appendTo(this.rootNode);
@@ -74,14 +76,14 @@ export class TitleScene extends Scene<Hyperloop> {
 
     public cleanup(): void {
         this.rootNode.clear();
-        this.game.onGameStart.disconnect(this.startGame.bind(this));
+        this.onlineService.onGameStateUpdate.filter(ev => ev === "startGame").connect(this.startGame, this);
     }
 
     public startGame(): void {
-        this.game.onGameStart.disconnect(this.startGame.bind(this));
+        this.onlineService.onGameStateUpdate.filter(ev => ev === "startGame").connect(this.startGame, this);
         this.game.scenes.setScene(GameScene);
-        if (this.game.isHost) {
-            this.game.startForOtherPlayers();
+        if (this.onlineService.isHost()) {
+            this.onlineService.emitGameState("startGame");
         }
     }
 
@@ -98,7 +100,7 @@ export class TitleScene extends Scene<Hyperloop> {
     }
 
     private handleButton(event: ControllerEvent | MouseEvent): void {
-        if (this.game.isHost && (event instanceof MouseEvent || event.intents & ControllerIntent.CONFIRM)) {
+        if (this.onlineService.isHost() && (event instanceof MouseEvent || event.intents & ControllerIntent.CONFIRM)) {
             TitleScene.confirmSound.play();
             this.startGame();
         } else if (!(event instanceof MouseEvent || event.intents & ControllerIntent.CONFIRM) && (event.intents & ControllerIntent.PLAYER_RELOAD)) {

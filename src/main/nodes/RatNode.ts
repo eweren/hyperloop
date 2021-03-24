@@ -24,7 +24,7 @@ export class RatNode extends EnemyNode {
     protected isRat = true;
 
     public constructor(args?: SceneNodeArgs) {
-        super({
+        super(["targetPosition", "isRat", "squaredSafetyDistance"], {
             aseprite: RatNode.sprite,
             anchor: Direction.BOTTOM,
             tag: "idle",

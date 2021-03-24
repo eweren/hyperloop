@@ -4,6 +4,7 @@ import { RGBColor } from "../../engine/color/RGBColor";
 import { Direction } from "../../engine/geom/Direction";
 import { AsepriteNode } from "../../engine/scene/AsepriteNode";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
+import { isDev } from "../../engine/util/env";
 import { clamp } from "../../engine/util/math";
 import { Layer } from "../constants";
 import { Hyperloop } from "../Hyperloop";
@@ -45,7 +46,9 @@ export class TrainNode extends AsepriteNode<Hyperloop> {
         });
         this.appendChild(this.foreground);
         this.foreground.setOpacity(Infinity);
-        (window as any).train = this;
+        if (isDev()) {
+            (window as any).train = this;
+        }
     }
 
     public update(dt: number, time: number): void {

@@ -29,7 +29,6 @@ export class FlashlightNode extends SceneNode<Hyperloop> {
             ...args
         });
         this.getGradient();
-        (window as any)["flashlight"] = this;
     }
 
     public setDistance(newDistance: number): void {

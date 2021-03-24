@@ -34,6 +34,7 @@ keyToIntentMappings.set("Numpad1", [ControllerIntent.PLAYER_DANCE_1]);
 keyToIntentMappings.set("Numpad2", [ControllerIntent.PLAYER_DANCE_2]);
 
 export class Keyboard {
+    public pauseHandling = false;
     public readonly onKeyDown = new Signal<KeyboardEvent>();
     public readonly onKeyUp = new Signal<KeyboardEvent>();
     public readonly onKeyPress = new Signal<KeyboardEvent>();
@@ -47,6 +48,9 @@ export class Keyboard {
     }
 
     private handleKeyPress(event: KeyboardEvent): void {
+        if (this.pauseHandling) {
+            return;
+        }
         this.onKeyPress.emit(event);
 
         // Quick workaround to make sure, that modifier keys never trigger a game-related
@@ -66,6 +70,9 @@ export class Keyboard {
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
+        if (this.pauseHandling) {
+            return;
+        }
         if (preventDefaultKeyCodes.includes(event.code)) {
             event.preventDefault();
         }
@@ -89,6 +96,9 @@ export class Keyboard {
     }
 
     private handleKeyUp(event: KeyboardEvent): void {
+        if (this.pauseHandling) {
+            return;
+        }
         if (!event.repeat) {
             this.pressed.delete(event.key);
         }

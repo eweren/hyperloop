@@ -1,10 +1,9 @@
 import { asset } from "../../engine/assets/Assets";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { Sound } from "../../engine/assets/Sound";
-import { UserEvent } from "../../engine/Game";
 import { ReadonlyVector2, Vector2, Vector2Like } from "../../engine/graphics/Vector2";
-import { AsepriteNode, AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
-import { SceneNodeAspect } from "../../engine/scene/SceneNode";
+import { AsepriteNodeArgs } from "../../engine/scene/AsepriteNode";
+import { OnlineSceneNode } from "../../engine/scene/OnlineSceneNode";
 import { TextNode } from "../../engine/scene/TextNode";
 import { cacheResult } from "../../engine/util/cache";
 import { clamp } from "../../engine/util/math";
@@ -23,7 +22,7 @@ import { PlayerLegsNode } from "./player/PlayerLegsNode";
 const GRAVITY = 800;
 const PROJECTILE_STEP_SIZE = 2;
 
-export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
+export abstract class CharacterNode extends OnlineSceneNode<Hyperloop> {
     @asset("sounds/fx/gunshot.ogg")
     private static readonly shootSound: Sound;
 
@@ -37,8 +36,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     private gameTime = 0;
     public dieCounter = 0;
     public killCounter = 0;
-
-    protected lastSubmittedState: Partial<UserEvent> = {};
 
     // Character settings
     public abstract getShootingRange(): number;
@@ -80,8 +77,8 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     private dialogNode: DialogNode;
     private initDone = false;
 
-    public constructor(args: AsepriteNodeArgs) {
-        super(args);
+    public constructor(keysOfPropertiesToSync: Array<string>, args: AsepriteNodeArgs) {
+        super({keysOfPropertiesToSync: [...keysOfPropertiesToSync, "position", "direction", "velocity", "isOnGround", "isJumping", "isFalling", "hitpoints", "dieCounter", "killCounter", "tag"] ,...args});
         this.velocity = new Vector2(0, 0);
         // this.setShowBounds(true);
 
@@ -133,9 +130,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     public update(dt: number, time: number): void {
         if (this.isInScene() && !this.initDone) {
             this.initDone = true;
-            this.getGame().onOtherPlayerUpdate.filter(event => event.enemyId === this.getIdentifier()
-                || event.username === this.getIdentifier())
-                .connect(this.handleCharacterUpdate, this);
         }
         super.update(dt, time);
 
@@ -220,17 +214,20 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         if (this.isFalling) {
             this.setTag("fall");
         }
-        // Talking/Thinking
-        if (this.speakLine && time > this.speakUntil) {
-            this.speakLine = "";
-            this.speakUntil = 0;
-            this.speakSince = 0;
-        }
 
         if (this.speakLine && this.gameTime > this.speakSince && this.gameTime < this.speakUntil) {
             const progress = (this.gameTime - this.speakSince);
             const line = this.speakLine.substr(0, Math.ceil(28 * progress));
             this.dialogNode.setText(line);
+        } else if (this.speakLine && this.gameTime > this.speakUntil) {
+            const progress = (this.gameTime - this.speakUntil);
+            const line = this.speakLine.substr(Math.ceil(58 * progress), this.speakLine.length);
+            this.dialogNode.setText(line);
+            if (line === "") {
+                this.speakLine = "";
+                this.speakUntil = 0;
+                this.speakSince = 0;
+            }
         } else {
             this.dialogNode.setText("");
         }
@@ -240,68 +237,6 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         }
         this.updateDirectionToPlayer();
         this.syncCharacterState();
-    }
-
-    /**
-     * Syncs the character-specific states with the other users.
-     */
-    public syncCharacterState(additionalProperties?: any, forceFullSync = false): void {
-        if (!this.getGame().isHost && !this.isPlayer) {
-            return;
-        }
-
-        const currentState: UserEvent = {
-            direction: this.direction,
-            hitpoints: this.hitpoints,
-            isFalling: this.isFalling,
-            isJumping: this.isJumping,
-            isOnGround: this.isOnGround,
-            position: new Vector2(this.getX(), this.getY()),
-            velocity: this.velocity,
-            ...additionalProperties
-        };
-
-        if (forceFullSync) {
-            this.getGame().syncNodeData(currentState);
-            return;
-        }
-
-        const updateObj: Partial<UserEvent> = {};
-        for (const property in currentState) {
-            if ((currentState as any)[property] !== (this.lastSubmittedState as any)[property]) {
-                if ((currentState as any)[property] instanceof Vector2) {
-                    const { x, y } = (currentState as any)[property];
-                    if (!(this.lastSubmittedState as any)[property] || x !== (this.lastSubmittedState as any)[property].x || y !== (this.lastSubmittedState as any)[property].y) {
-                        (updateObj as any)[property] = (currentState as any)[property];
-                    }
-                } else {
-                    (updateObj as any)[property] = (currentState as any)[property];
-                }
-                (this.lastSubmittedState as any)[property] = (currentState as any)[property];
-            }
-        }
-        if (Object.entries(updateObj).length > 0 && this.isInAnybodiesView()) {
-            this.getGame().syncNodeData(updateObj);
-        }
-    }
-
-    public handleCharacterUpdate(event: UserEvent) {
-        this.direction = event.direction ?? this.direction;
-        this.hitpoints = event.hitpoints ?? this.hitpoints;
-        this.isFalling = event.isFalling ?? this.isFalling;
-        this.isOnGround = event.isOnGround ?? this.isOnGround;
-        if (event.position) {
-            this.setX(event.position.x);
-            this.setY(event.position.y);
-        }
-        // this.velocity = event.velocity ? new Vector2().setVector(event.velocity) : this.velocity;
-        this.setDirection(this.direction);
-
-        // Jump
-        if (this.isOnGround && event.jump) {
-            this.jump();
-        }
-        this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
     }
 
     protected unstuck(): this {
@@ -339,6 +274,9 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     public setDirection(direction = 0): void {
+        if (direction !== this.direction) {
+            this.emitEvent("setDirection", direction);
+        }
         this.direction = direction;
         if (this.direction !== 0) {
             this.setMirrorX(this.direction < 0);
@@ -347,12 +285,14 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     public jump(factor = 1): void {
         if (this.isOnGround && this.isAlive()) {
+            this.emitEvent("jump", factor);
             this.velocity = new Vector2(this.velocity.x, -this.getJumpPower() * factor);
             this.isJumping = true;
         }
     }
 
     public shoot(angle: number, power: number, origin: Vector2Like = new Vector2(this.getScenePosition().x, this.getScenePosition().y - this.getHeight() * .5)): void {
+        this.emitEvent("shoot");
         this.startBattlemode();
         CharacterNode.shootSound.stop();
         if (this.distanceToPlayer > 0) {
@@ -380,9 +320,9 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
                     this.killCounter++;
                 }
                 // Blood particles at hurt character
-                isColliding.emitBlood(coord.x, coord.y, angle, headshot ? 30 : 10);
+                isColliding.emitBlood({x: coord.x, y: coord.y, angle, count: headshot ? 30 : 10});
             } else {
-                this.emitSparks(coord.x, coord.y, angle);
+                this.emitSparks({x: coord.x, y: coord.y, angle});
             }
             this.storedCollisionCoordinate = null;
         } else {
@@ -391,17 +331,19 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
         }
     }
 
-    public emitBlood(x: number, y: number, angle: number, count = 1): void {
+    public emitBlood(args: {x: number, y: number, angle: number, count?: number}): void {
+        this.emitEvent("emitBlood", args);
         const pos = this.getScenePosition();
-        this.particleOffset = new Vector2(x - pos.x, y - pos.y + 20);
-        this.particleAngle = -angle;
-        this.bloodEmitter.emit(count);
+        this.particleOffset = new Vector2(args.x - pos.x, args.y - pos.y + 20);
+        this.particleAngle = -args.angle;
+        this.bloodEmitter.emit(args.count ?? 1);
     }
 
-    public emitSparks(x: number, y: number, angle: number): void {
+    public emitSparks(args: {x: number, y: number, angle: number}): void {
+        this.emitEvent("emitSparks", args);
         const pos = this.getScenePosition();
-        this.particleOffset = new Vector2(x - pos.x, y - pos.y + 20);
-        this.particleAngle = -angle;
+        this.particleOffset = new Vector2(args.x - pos.x, args.y - pos.y + 20);
+        this.particleAngle = -args.angle;
         this.sparkEmitter.emit(rnd(4, 10));
     }
 
@@ -431,6 +373,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
      * @return True if hurt character dies, false otherwise.
      */
     public hurt(damage: number, origin?: ReadonlyVector2): boolean {
+        this.emitEvent("hurt", {damage, origin});
         if (!this.isAlive()) {
             return false;
         }
@@ -453,15 +396,18 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     public setHitpoints(hp: number): void {
+        this.emitEvent("setHitpoints", hp);
         this.hitpoints = hp;
     }
 
     public reset(): void {
+        this.emitEvent("reset");
         this.velocity = new Vector2(0, 0);
         this.setTag("idle");
     }
 
-    public say(line = "", duration = 0, delay = 0): void {
+    public say({line = "", duration = 0, delay = 0}): void {
+        this.emitEvent("say", {line, duration, delay});
         this.speakSince = this.gameTime + delay;
         this.speakUntil = this.speakSince + duration;
         this.speakLine = line;
@@ -469,6 +415,9 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
 
     public setTag(tag: string | null): this {
         if (!this.preventNewTag) {
+            if (this.getTag() !== tag) {
+                this.emitEvent("setTag", tag);
+            }
             super.setTag(tag);
             this.playerLeg?.setTag(tag);
             this.playerArm?.setTag(tag);
@@ -477,6 +426,7 @@ export abstract class CharacterNode extends AsepriteNode<Hyperloop> {
     }
 
     public die(): void {
+        this.emitEvent("die");
         this.endBattlemode();
         this.setTag("die");
         this.hitpoints = 0;

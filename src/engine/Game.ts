@@ -1,4 +1,3 @@
-import * as io from "socket.io-client";
 
 import { Assets } from "./assets/Assets";
 import { clamp } from "./util/math";
@@ -10,10 +9,9 @@ import { Scenes } from "./scene/Scenes";
 import { GAME_HEIGHT, GAME_WIDTH } from "../main/constants";
 import { getAudioContext } from "./assets/Sound";
 import { Vector2Like } from "./graphics/Vector2";
-import { Signal } from "./util/Signal";
-import { getRoom, isDev } from "./util/env";
 import { GameScene } from "../main/scenes/GameScene";
 import { PlayerNode } from "../main/nodes/PlayerNode";
+import { OnlineService } from "./online/OnlineService";
 
 /**
  * Max time delta (in s). If game freezes for a few seconds for whatever reason, we don't want
@@ -52,22 +50,16 @@ export abstract class Game {
 
     public backgroundColor: string = "black";
 
-    protected socket?: SocketIOClient.Socket;
     public username: string | null = null;
-    public onOtherPlayerUpdate = new Signal<UserEvent>();
-    public onPlayerUpdate = new Signal<UserEvent>();
-    public onPlayerConnect = new Signal<string>();
-    public onGameStart = new Signal<void>();
-    public players: Set<string> = new Set();
-    public isHost = false;
-
     public canvas: HTMLCanvasElement;
     private readonly ctx: CanvasRenderingContext2D;
     private readonly gameLoopCallback = this.gameLoop.bind(this);
-    private gameLoopId: number | null = null;
+    protected gameLoopId: number | null = null;
     private lastUpdateTime: number = performance.now();
     protected currentTime: number = 0;
     protected paused = false;
+
+    protected onlineService = new OnlineService();
 
     public constructor(public readonly width: number = GAME_WIDTH, public readonly height: number = GAME_HEIGHT) {
         const canvas = this.canvas = createCanvas(width, height);
@@ -104,91 +96,62 @@ export abstract class Game {
                     }
                     await document.body.requestFullscreen();
                 }
+            } else if (event.key === "t") {
+                if (this.keyboard.pauseHandling) {
+                    return;
+                }
+                this.keyboard.pauseHandling = true;
+                const inputElement = document.createElement("input");
+                inputElement.id = "userInput";
+                const canvasPos = document.getElementsByTagName("canvas")[0].getBoundingClientRect();
+                inputElement.style.top = canvasPos.top + "px";
+                inputElement.style.left = canvasPos.left + "px";
+                inputElement.addEventListener("keydown", (event) => {
+                    if (event.key === "Esc" || event.key === "Escape") {
+                        inputElement.value = "";
+                        inputElement.blur();
+                    } else if (event.key === "Enter") {
+                        inputElement.blur();
+                    }
+                });
+                document.body.appendChild(inputElement);
+                inputElement.focus();
+                // Clear input since it always gets the typed t otherwise.
+                setTimeout(() => {
+                    inputElement.value = "";
+                });
+                inputElement.value = "";
+                inputElement.addEventListener("blur", () => {
+                    if (inputElement.value.length > 0) {
+                        this.getPlayer().say({ line: inputElement.value, duration: clamp(inputElement.value.length / 5, 1, 15) });
+                    }
+                    inputElement.remove();
+                    this.keyboard.pauseHandling = false;
+                }, { once: true });
             }
         });
         this.input.onButtonDown.filter(ev => ev.isPause).connect(this.pauseGame, this);
+        this.onlineService.onOtherPlayerJoined.connect(event => {
+            console.log("On other player joined");
+            this.spawnOtherPlayer(event);
+        });
+        this.onlineService.onOtherPlayerDisconnect.connect(() => {
+            this.checkIfPlayersShouldBeRemoved();
+        });
     }
 
     public get input(): ControllerManager {
         return this.controllerManager;
     }
 
-    public async initOnlineGame(): Promise<void> {
-        const onlineBaseUrl = isDev() ? "http://localhost:3000/" : "https://ewer.rest:3000/";
-        let room = getRoom();
-        if (!room) {
-            room = (Math.random() * 10000000).toFixed();
-        }
-        const playersInRoomRes = await (await fetch(`${onlineBaseUrl}${room}`)
-            .then(response => response.json()));
-        this.username = window.prompt("Enter a username"); // (Math.random() * 1000).toFixed();
-        let askForUsername = !this.username || playersInRoomRes?.includes(this.username);
-        while (askForUsername) {
-            this.username = window.prompt("Username already taken. Enter another username");
-            askForUsername = !this.username || playersInRoomRes?.includes(this.username);
-        }
-
-        this.socket = io.connect(onlineBaseUrl, { query: { room, username: this.username },transportOptions: ["websocket"] });
-
-        this.socket.on("connect", () => {
-            this.players.add(this.username!);
-        });
-
-        this.socket.on("playerUpdate", (val: UserEvent) => {
-            if (this.scenes.activeScene instanceof GameScene) {
-                if (val.username !== this.username) {
-                    this.spawnOtherPlayer(val);
-                    this.onOtherPlayerUpdate.emit(val);
-                } else {
-                    this.onPlayerUpdate.emit(val);
-                }
-            } else {
-                this.onGameStart.emit();
-                setTimeout(() => {
-                    if (val.username !== this.username) {
-                        this.spawnOtherPlayer(val);
-                        this.onOtherPlayerUpdate.emit(val);
-                    } else {
-                        this.onPlayerUpdate.emit(val);
-                    }
-                });
-            }
-        });
-
-        this.socket.on("roomInfo", (val: {host: string, users: Array<string>}) => {
-            if (val.host === this.username) {
-                this.isHost = true;
-            }
-            this.players.clear();
-            val.users.forEach(user => {
-                this.players.add(user);
-            });
-            const removedPlayer = this.checkIfPlayersShouldBeRemoved();
-            if (removedPlayer) {
-                console.log(removedPlayer, " left the match");
-            }
-            if (this.isInGameScene()) {
-                this.getPlayer()?.syncCharacterState(true);
-            }
-        });
-
-
-        this.socket.on("disconnect", () => {
-            console.log(this.socket!.id);
-        });
-    }
     public abstract checkIfPlayersShouldBeRemoved(): string | null;
 
-    public abstract spawnOtherPlayer(event: UserEvent): Promise<void>;
+    public abstract spawnOtherPlayer(event: any): Promise<void>;
 
     public abstract getPlayer(): PlayerNode;
 
     public isInGameScene(): boolean {
         return !!this.scenes.getScene(GameScene);
-    }
-
-    public syncNodeData(event: Partial<UserEvent>): void {
-        this.socket?.emit("playerUpdate", event);
     }
 
     public pauseGame(): void {
@@ -255,10 +218,6 @@ export abstract class Game {
             this.lastUpdateTime = performance.now();
             this.nextFrame();
         }
-    }
-
-    public startForOtherPlayers(): void {
-        this.socket?.emit("startGame");
     }
 
     public stop(): void {

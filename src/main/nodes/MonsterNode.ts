@@ -24,7 +24,7 @@ export class MonsterNode extends EnemyNode {
     protected targetPosition: ReadonlyVector2;
 
     public constructor(args?: SceneNodeArgs) {
-        super({
+        super(["targetPosition"], {
             aseprite: MonsterNode.sprite,
             anchor: Direction.BOTTOM,
             tag: "idle",
@@ -55,6 +55,7 @@ export class MonsterNode extends EnemyNode {
 
     protected scream(direction?: number) {
         if (!this.isScreaming()) {
+            this.emitEvent("scream", direction);
             this.staySilent();
             this.attackSound.play({direction});
         }

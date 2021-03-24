@@ -9,9 +9,10 @@ import { ControllerIntent } from "../engine/input/ControllerIntent";
 import { Camera } from "../engine/scene/Camera";
 import { FadeToBlack } from "../engine/scene/camera/FadeToBlack";
 import { SceneNode } from "../engine/scene/SceneNode";
-import { isDebugMap, skipIntro } from "../engine/util/env";
+import { isDebugMap, isDev, skipIntro } from "../engine/util/env";
 import { clamp } from "../engine/util/math";
 import { rnd } from "../engine/util/random";
+import { sleep } from "../engine/util/time";
 import { Dialog } from "./Dialog";
 import { FxManager } from "./FxManager";
 import { MusicManager } from "./MusicManager";
@@ -235,7 +236,7 @@ export class Hyperloop extends Game {
 
     private nextDialogLine() {
         // Shut up all characters
-        this.npcs.forEach(npc => npc.say());
+        this.npcs.forEach(npc => npc.say({}));
         this.currentDialogLine++;
         if (this.currentDialog && this.currentDialogLine >= this.currentDialog.lines.length) {
             this.currentDialog = null;
@@ -244,7 +245,7 @@ export class Hyperloop extends Game {
             // Show line
             const line = this.currentDialog.lines[this.currentDialogLine];
             const char = this.npcs[line.charNum];
-            char.say(line.line, Infinity);
+            char.say({line: line.line, duration: Infinity});
         }
     }
 
@@ -418,7 +419,7 @@ export class Hyperloop extends Game {
         if (powerSwitch && powerSwitch instanceof SwitchNode) {
             powerSwitch.setOnlyOnce(true);
             powerSwitch.setOnUpdate((state: boolean) => {
-                player.say("Doesn't appear to do anything... yet", 4, 0.5);
+                player.say({line: "Doesn't appear to do anything... yet", duration: 4, delay: 0.5});
                 return false;
             });
         } else {
@@ -459,7 +460,13 @@ export class Hyperloop extends Game {
         console.log("starting respawn with ", this.charactersAvailable, " remaining");
         if (isDebugMap()) {
             const player = this.getPlayer();
-            const { x, y } = playerSpawnPoints[clamp(+(Math.random() * playerSpawnPoints.length).toFixed(), 0, playerSpawnPoints.length - 1)];
+            const otherPlayerPositions = this.getPlayers().map(p => p.getPosition());
+            const possibleSpawnPoints = playerSpawnPoints.filter(p => {
+                const spawnVector = new Vector2(p.x, p.y);
+                return otherPlayerPositions.every(p => p.getDistance(spawnVector) > 100);
+            });
+            const { x, y } = possibleSpawnPoints[clamp(+(Math.random() * possibleSpawnPoints.length).toFixed(), 0,
+                possibleSpawnPoints.length - 1)];
             player.moveTo(x, y);
             player.setHitpoints(100);
             player.setAmmoToFull();
@@ -513,7 +520,7 @@ export class Hyperloop extends Game {
 
     public checkIfPlayersShouldBeRemoved(): string | null {
         if (this.scenes.getScene(GameScene)) {
-            const playersToRemove = this.getPlayers().filter(player => !this.players.has(player.username));
+            const playersToRemove = this.getPlayers().filter(player => !this.onlineService.players.has(player.username));
             if (playersToRemove.length === 1) {
                 playersToRemove[0].remove();
                 return playersToRemove[0].username;
@@ -523,11 +530,18 @@ export class Hyperloop extends Game {
     }
 
     public async spawnOtherPlayer(event: UserEvent): Promise<void> {
-        if (!event.username || !event.position) {
+        console.log("Should spawn other player: ", event);
+        if (event == null || !event.username || !event.position) {
             return;
+        }
+        while (this.gameLoopId == null) {
+            await sleep(100);
         }
         if (!this.scenes.getScene(GameScene)) {
             this.scenes.setScene(GameScene as any);
+        }
+        while (!this.scenes.getScene(GameScene)) {
+            await sleep(100);
         }
         if (!this.getPlayers().find(p => p.username === event.username)) {
             try {
@@ -558,7 +572,7 @@ export class Hyperloop extends Game {
             powerSwitch.setOnUpdate((state: boolean) => {
                 this.turnOnAllLights();
                 const player = this.getPlayer();
-                player.say("Great. Time to go home.", 4, 1);
+                player.say({line: "Great. Time to go home.", duration: 4, delay: 1});
                 // Activate game end zone
                 const doorPos = this.getTrainDoorCoordinate();
                 const endSwitch = new SwitchNode({
@@ -634,21 +648,13 @@ export class Hyperloop extends Game {
     public getAllLights(): LightNode[] {
         return this.getGameScene().rootNode.getDescendantsByType(LightNode);
     }
-
-    public async initOnlineGame(): Promise<void> {
-        await super.initOnlineGame();
-        this.onPlayerUpdate.connect(val => {
-            // Make sure that player is killed if other player killed this player.
-            if (this.scenes.activeScene instanceof GameScene && val.hitpoints === 0) {
-                this.getPlayer().hurt(100);
-            }
-        });
-    }
 }
 
 (async () => {
     const game = new Hyperloop();
     await game.scenes.setScene(LoadingScene);
-    (window as any).game = game;
+    if (isDev()) {
+        (window as any).game = game;
+    }
     game.start();
 })();

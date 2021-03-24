@@ -40,7 +40,7 @@ export class FuseboxNode extends InteractiveNode {
                 this.isOpen = true;
                 this.setTag("open-off");
                 FuseboxNode.doorSound.play();
-                this.getTarget()?.say("Let's turn it on", 2);
+                this.getTarget()?.say({line: "Let's turn it on", duration: 2});
                 // Spawn enemy in back
                 SpawnNode.getForTrigger(this, "fusebox").forEach(spawn => spawn.spawnEnemy());
             } else {
@@ -48,7 +48,7 @@ export class FuseboxNode extends InteractiveNode {
                 this.setTag("open-on");
                 const game = this.getGame();
                 game.turnOnFuseBox();
-                this.getTarget()?.say("Time to find that switch", 5, 8);
+                this.getTarget()?.say({line: "Time to find that switch", duration: 5, delay: 8});
                 FuseboxNode.doorSound.stop();
                 FuseboxNode.leverSound.play();
             }

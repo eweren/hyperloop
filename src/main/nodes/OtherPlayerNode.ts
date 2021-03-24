@@ -6,7 +6,7 @@ import { MonsterNode } from "./MonsterNode";
 import { PlayerArmNode } from "./player/PlayerArmNode";
 import { PlayerLegsNode } from "./player/PlayerLegsNode";
 import { RatNode } from "./RatNode";
-import { SceneNodeArgs, SceneNodeAspect } from "../../engine/scene/SceneNode";
+import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { Sound } from "../../engine/assets/Sound";
 import { ReadonlyVector2, Vector2 } from "../../engine/graphics/Vector2";
 import { asset } from "../../engine/assets/Assets";
@@ -19,8 +19,7 @@ import { MuzzleFlashNode } from "./MuzzleFlashNode";
 import { AmbientPlayerNode } from "./player/AmbientPlayerNode";
 import { TrainNode } from "./TrainNode";
 import { AsepriteNode } from "../../engine/scene/AsepriteNode";
-import { UserEvent } from "../../engine/Game";
-import { PlayerNode } from "./PlayerNode";
+import { PlayerNode, playerSyncKeys } from "./PlayerNode";
 import { TextNode } from "../../engine/scene/TextNode";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { DeadSpaceSuitNode } from "./DeadSpaceSuiteNode";
@@ -77,13 +76,11 @@ export class OtherPlayerNode extends CharacterNode {
     private readonly magazineSize = 12;
     private readonly reloadDelay = 2200;
 
-    private isDying = false;
-
     private dustParticles: ParticleNode;
     private crosshairNode: AsepriteNode;
 
-    public constructor(public readonly username: string, protected filter = "hue-rotate(5deg)",  args?: SceneNodeArgs) {
-        super({
+    public constructor(public username: string, protected filter = "hue-rotate(5deg)",  args?: SceneNodeArgs) {
+        super(playerSyncKeys, {
             aseprite: OtherPlayerNode.sprite,
             anchor: Direction.BOTTOM,
             childAnchor: Direction.CENTER,
@@ -95,6 +92,7 @@ export class OtherPlayerNode extends CharacterNode {
             filter,
             ...args
         });
+
         this.removeOnDie = false;
         this.playerName = new TextNode({font: OtherPlayerNode.font, text: this.username, anchor: Direction.BOTTOM, y: -(this.getHeight() / 2)});
         this.playerArm = new PlayerArmNode(this.filter);
@@ -165,6 +163,9 @@ export class OtherPlayerNode extends CharacterNode {
 
     public update(dt: number, time: number) {
         super.update(dt, time);
+        if (this.playerName?.getText() !== this.username) {
+            this.playerName?.setText(this.username);
+        }
         if (this.getParent() instanceof TrainNode) {
             this.setOpacity(0);
             const door = this.getGame().getTrainDoorCoordinate();
@@ -190,43 +191,6 @@ export class OtherPlayerNode extends CharacterNode {
                 }
             }
         }
-    }
-
-    public handleCharacterUpdate(event: UserEvent) {
-        if (this.isDying) {
-            return;
-        }
-        this.aimingAngle = event.aimingAngle ?? this.aimingAngle;
-        this.direction = event.direction ?? this.direction;
-        this.hitpoints = event.hitpoints ?? this.hitpoints;
-        this.isReloading = event.isReloading ?? this.isReloading;
-        this.isFalling = event.isFalling ?? this.isFalling;
-        this.mouseDistanceToPlayer = event.mouseDistanceToPlayer ?? this.mouseDistanceToPlayer;
-        this.isOnGround = event.isOnGround ?? this.isOnGround;
-        if (event.position) {
-            this.setX(event.position.x);
-            this.setY(event.position.y);
-        }
-        this.velocity = event.velocity ? new Vector2().setVector(event.velocity) : this.velocity;
-        this.lastShotTime = event.lastShotTime ?? this.lastShotTime;
-        this.setDirection(this.direction);
-        if (event.reload) {
-            this.reload();
-        }
-        this.syncArmAndLeg();
-        // Shoot
-        if (event.shoot) {
-            this.shoot();
-        }
-        // Jump
-        if (this.isOnGround && event.jump) {
-            this.jump();
-        }
-
-        if (this.hitpoints <= 0) {
-            this.die();
-        }
-        this.invalidate(SceneNodeAspect.SCENE_TRANSFORMATION);
     }
 
     public setAmmoToFull() {
@@ -335,12 +299,11 @@ export class OtherPlayerNode extends CharacterNode {
 
     public hurt(damage: number, origin: ReadonlyVector2): boolean {
         const { centerX, centerY } = this.getSceneBounds();
-        this.emitBlood(centerX, centerY, Math.random() * Math.PI * 2, damage);
+        this.emitBlood({x: centerX, y: centerY, angle: Math.random() * Math.PI * 2, count: damage});
         return super.hurt(damage, origin);
     }
 
     public die(): void {
-        this.isDying = true;
         super.die();
         this.playerArm?.hide();
         OtherPlayerNode.dieScream.stop();
@@ -348,7 +311,6 @@ export class OtherPlayerNode extends CharacterNode {
         OtherPlayerNode.dieScream.play();
         const diePosition = { x: this.getX(), y: this.getY() };
         setTimeout(() => {
-            this.isDying = false;
             new DeadSpaceSuitNode({
                 ...diePosition,
                 layer: this.getLayer()},

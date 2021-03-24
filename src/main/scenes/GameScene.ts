@@ -34,10 +34,12 @@ export enum TargetMap {
 }
 
 export const playerSpawnPoints = [
-    { x: 772.666666666667, y: 508.666666666667 },
-    { x:864, y:506.666666666667 },
-    { x:941.333333333333, y:603.333333333333 },
-    { x: 704.666666666667, y: 602 }
+    { x: 309, y: 449 },
+    { x: 309, y: 773 },
+    { x: 309, y: 611 },
+    {x: 1267, y: 449},
+    {x: 1267, y: 773},
+    {x: 1267, y: 611}
 ];
 
 export class GameScene extends Scene<Hyperloop> {

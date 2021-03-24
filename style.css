@@ -29,3 +29,11 @@ html, body {
 #gameCanvas:focus {
     outline: 0;
 }
+
+#userInput {
+    z-index: 10000;
+    position: absolute;
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+}
