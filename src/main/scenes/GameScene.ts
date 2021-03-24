@@ -27,20 +27,21 @@ import { clamp } from "../../engine/util/math";
 import { GameStatsNode } from "../nodes/GameStatsNode";
 import { Direction } from "../../engine/geom/Direction";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
+import { UserSpawnNode } from "../nodes/UserSpawnNode";
 
 export enum TargetMap {
     HYPERLOOP = 0,
     DEBUG = 1
 }
 
-export const playerSpawnPoints = [
-    { x: 309, y: 449 },
-    { x: 309, y: 773 },
-    { x: 309, y: 611 },
-    {x: 1267, y: 449},
-    {x: 1267, y: 773},
-    {x: 1267, y: 611}
-];
+// export const playerSpawnPoints = [
+//     { x: 309, y: 449 },
+//     { x: 309, y: 773 },
+//     { x: 309, y: 611 },
+//     {x: 1267, y: 449},
+//     {x: 1267, y: 773},
+//     {x: 1267, y: 611}
+// ];
 
 export class GameScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -52,11 +53,14 @@ export class GameScene extends Scene<Hyperloop> {
     ])
     private static maps: TiledMap[];
 
+    public userSpawnPoints: UserSpawnNode[] = [];
+
     private targetMap = isDebugMap() ? TargetMap.DEBUG : TargetMap.HYPERLOOP;
 
     private mapNode = new TiledMapNode<Hyperloop>({ map: GameScene.maps[this.targetMap], objects: {
         "collision": CollisionNode,
         "player": PlayerNode,
+        "userSpawn": UserSpawnNode,
         "enemy": MonsterNode,
         "rat": RatNode,
         "train": TrainNode,
@@ -77,7 +81,9 @@ export class GameScene extends Scene<Hyperloop> {
         this.inTransition = new FadeToBlackTransition({ duration: 2, delay: 1 });
         this.mapNode.moveTo(0, 0).appendTo(this.rootNode).transform(m => m.scale(1));
         const player = this.mapNode.getDescendantById("Player");
-        const { x, y } = playerSpawnPoints[clamp(+(Math.random() * playerSpawnPoints.length).toFixed(), 0, playerSpawnPoints.length - 1)];
+        this.userSpawnPoints = this.mapNode.getDescendantsByType(UserSpawnNode);
+        const { x, y } = this.userSpawnPoints[clamp(+(Math.random() * this.userSpawnPoints.length).toFixed(), 0,
+            this.userSpawnPoints.length - 1)];
         player?.moveTo(x, y);
         this.camera.setFollow(player);
         this.setLightLayers([ Layer.LIGHT ]);

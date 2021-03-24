@@ -26,7 +26,7 @@ import { SpawnNode } from "./nodes/SpawnNode";
 import { SwitchNode } from "./nodes/SwitchNode";
 import { TrainNode } from "./nodes/TrainNode";
 import { GameOverScene } from "./scenes/GameOverScene";
-import { GameScene, playerSpawnPoints } from "./scenes/GameScene";
+import { GameScene } from "./scenes/GameScene";
 import { LoadingScene } from "./scenes/LoadingScene";
 import { SuccessScene } from "./scenes/SuccessScene";
 
@@ -461,7 +461,7 @@ export class Hyperloop extends Game {
         if (isDebugMap()) {
             const player = this.getPlayer();
             const otherPlayerPositions = this.getPlayers().map(p => p.getPosition());
-            const possibleSpawnPoints = playerSpawnPoints.filter(p => {
+            const possibleSpawnPoints = this.getGameScene().userSpawnPoints.filter(p => {
                 const spawnVector = new Vector2(p.x, p.y);
                 return otherPlayerPositions.every(p => p.getDistance(spawnVector) > 100);
             });
