@@ -385,7 +385,7 @@ export abstract class CharacterNode extends OnlineSceneNode<Hyperloop> {
         // Damage
         this.hitpoints -= damage;
         if (this.hitpoints <= 0) {
-            this.die();
+            this.die(attackerId ?? undefined);
             return true;
         } else {
             this.setTag("hurt");
@@ -424,7 +424,7 @@ export abstract class CharacterNode extends OnlineSceneNode<Hyperloop> {
         return this;
     }
 
-    public die(): void {
+    public die(attackerId?: string | number): void {
         this.emitEvent("die");
         this.endBattlemode();
         this.setTag("die");

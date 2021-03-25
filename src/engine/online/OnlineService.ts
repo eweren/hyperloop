@@ -9,7 +9,8 @@ export interface RoomInfoEvent {
     host: string,
     users: Array<string>,
     playerJoined?: string,
-    playerLeft?: string
+    playerLeft?: string,
+    gameTime?: number
 }
 
 export interface ActionEvent {
@@ -46,6 +47,9 @@ export class OnlineService {
 
     /** Emits if a new player has joined. */
     public onOtherPlayerJoined = new Signal<any>();
+
+    /** Emits if a gameTime update was emitted. */
+    public onGameTimeUpdate = new Signal<number>();
 
     /** Emits if a player has lost connection. */
     public onOtherPlayerDisconnect = new Signal<string>();
@@ -112,6 +116,11 @@ export class OnlineService {
             }
         });
 
+        // Listen on gameTime. Those updates are related to the online game-state.
+        this.socket.on("gameTime", (val: number) => {
+            this.onGameTimeUpdate.emit(val);
+        });
+
         // Listen on updates of the room. Those are typically actions like players joining/leaving or host.switching.
         this.socket.on("roomInfo", (val: RoomInfoEvent) => {
 
@@ -122,6 +131,9 @@ export class OnlineService {
             }
             if (val.playerLeft) {
                 this.onOtherPlayerDisconnect.emit(val.playerLeft);
+            }
+            if (val.gameTime) {
+                this.onGameTimeUpdate.emit(val.gameTime);
             }
         });
 
@@ -159,9 +171,12 @@ export class OnlineService {
      * Sends an update of the gameState to the server, so that other clients of the room can react to the changes.
      * @param event - The event to be send as an update.
      */
-    public emitGameState(event: string): void {
+    public emitGameState(event: string, startTime?: number): void {
         if (this._lastGameState === event) {
             return;
+        }
+        if (event === "startGame" && startTime) {
+            this.socket.emit("gameTime", startTime / 1000);
         }
         this._lastGameState = event;
         this.socket.emit("gameState", event);

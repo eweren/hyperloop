@@ -31,6 +31,8 @@ import { ControllerEvent } from "../../engine/input/ControllerEvent";
 import { ControllerFamily } from "../../engine/input/ControllerFamily";
 import { isDev } from "../../engine/util/env";
 import { OtherPlayerNode } from "./OtherPlayerNode";
+import { GameTimeNode } from "../../engine/scene/GameTimeNode";
+import { Hyperloop } from "../Hyperloop";
 
 export const playerSyncKeys = ["username", "aimingAngle", "isReloading", "reloadStart", "lastShotTime", "shotRecoil", "mouseDistanceToPlayer", "isRunning", "ammo", "shootingRange", "speed", "acceleration", "deceleration", "jumpPower", "shotDelay", "magazineSize", "reloadDelay"];
 
@@ -82,6 +84,7 @@ export class PlayerNode extends CharacterNode {
     private shotRecoil = 0.2;
     private muzzleFlash: MuzzleFlashNode;
     private health: HealthNode;
+    private gameTimeNode: GameTimeNode<Hyperloop>;
     private mouseDistanceToPlayer: number = 1000;
     private playerInitDone = false;
     private isRunning = false;
@@ -130,6 +133,11 @@ export class PlayerNode extends CharacterNode {
         this.ammoCounter = new AmmoCounterNode({
             font: PlayerNode.font,
             anchor: Direction.TOP_RIGHT,
+            layer: Layer.HUD
+        });
+        this.gameTimeNode = new GameTimeNode({
+            font: PlayerNode.font,
+            anchor: Direction.TOP,
             layer: Layer.HUD
         });
         this.health = new HealthNode(this.hitpoints, {
@@ -227,6 +235,12 @@ export class PlayerNode extends CharacterNode {
             this.ammoCounter.setX(rootNode.getWidth() - 10);
             this.ammoCounter.setY(10);
             rootNode.appendChild(this.ammoCounter);
+        }
+        if (!this.gameTimeNode.isInScene() && isDev()) {
+            const rootNode = this.getGame().getGameScene().rootNode;
+            this.gameTimeNode.setX(rootNode.getWidth() / 2 - this.gameTimeNode.getWidth() / 2);
+            this.gameTimeNode.setY(10);
+            rootNode.appendChild(this.gameTimeNode);
         }
         if (this.getParent() instanceof TrainNode) {
             this.setOpacity(0);
@@ -440,7 +454,7 @@ export class PlayerNode extends CharacterNode {
         return died;
     }
 
-    public die(): void {
+    public die(attackerId?: string): void {
         super.die();
         this.playerArm?.hide();
         PlayerNode.dieScream.stop();
@@ -450,25 +464,46 @@ export class PlayerNode extends CharacterNode {
         if (camera) {
             const fader = camera.fadeToBlack;
             fader.fadeOut({ duration: 6 });
-            camera.focus(this, {
-                duration: 6,
-                scale: 4,
-                rotation: Math.PI * 2
-            }).then(() => {
-                this.hitpoints = 100;
-                // Reset camera
-                camera.setZoom(1);
-                camera.setRotation(0);
-                fader.fadeIn({ duration: 3 });
-                new DeadSpaceSuitNode({
-                    x: this.getX(),
-                    y: this.getY(),
-                    layer: this.getLayer(),
-                }, this.filter).insertBefore(this);
-                // TODO Jump to dialog sequence in train
-                this.getGame().startRespawnSequence();
-                this.playerArm?.show();
-            });
+            const killer = this.getGame().getPlayers().find(p => p.getIdentifier() === attackerId);
+            if (killer) {
+                camera.setFollow(killer);
+                setTimeout(() => {
+                    this.hitpoints = 100;
+                    // Reset camera
+                    camera.setFollow(this);
+                    camera.setZoom(1);
+                    camera.setRotation(0);
+                    fader.fadeIn({ duration: 3 });
+                    new DeadSpaceSuitNode({
+                        x: this.getX(),
+                        y: this.getY(),
+                        layer: this.getLayer(),
+                    }, this.filter).insertBefore(this);
+                    // TODO Jump to dialog sequence in train
+                    this.getGame().startRespawnSequence();
+                    this.playerArm?.show();
+                }, 6000);
+            } else {
+                camera.focus(this, {
+                    duration: 6,
+                    scale: 4,
+                    rotation: Math.PI * 2
+                }).then(() => {
+                    this.hitpoints = 100;
+                    // Reset camera
+                    camera.setZoom(1);
+                    camera.setRotation(0);
+                    fader.fadeIn({ duration: 3 });
+                    new DeadSpaceSuitNode({
+                        x: this.getX(),
+                        y: this.getY(),
+                        layer: this.getLayer(),
+                    }, this.filter).insertBefore(this);
+                    // TODO Jump to dialog sequence in train
+                    this.getGame().startRespawnSequence();
+                    this.playerArm?.show();
+                });
+            }
         }
     }
 

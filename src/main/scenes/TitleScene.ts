@@ -17,6 +17,7 @@ import { isDebugMap } from "../../engine/util/env";
 import { PlayerListNode } from "../nodes/PlayerListNode";
 import { BitmapFont } from "../../engine/assets/BitmapFont";
 import { OnlineService } from "../../engine/online/OnlineService";
+import { now } from "../../engine/util/time";
 
 export class TitleScene extends Scene<Hyperloop> {
     @asset(STANDARD_FONT)
@@ -83,7 +84,7 @@ export class TitleScene extends Scene<Hyperloop> {
         this.onlineService.onGameStateUpdate.filter(ev => ev === "startGame").connect(this.startGame, this);
         this.game.scenes.setScene(GameScene);
         if (this.onlineService.isHost()) {
-            this.onlineService.emitGameState("startGame");
+            this.onlineService.emitGameState("startGame", now());
         }
     }
 

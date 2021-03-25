@@ -60,6 +60,9 @@ export abstract class Game {
     protected paused = false;
 
     protected onlineService = new OnlineService();
+    /** @default 500 */
+    protected gameDuration: number = 500;
+    protected gameStartTime?: number;
 
     public constructor(public readonly width: number = GAME_WIDTH, public readonly height: number = GAME_HEIGHT) {
         const canvas = this.canvas = createCanvas(width, height);
@@ -137,6 +140,9 @@ export abstract class Game {
         });
         this.onlineService.onOtherPlayerDisconnect.connect(() => {
             this.checkIfPlayersShouldBeRemoved();
+        });
+        this.onlineService.onGameTimeUpdate.connect((newTime) => {
+            this.setStartTime(newTime);
         });
     }
 
@@ -229,5 +235,18 @@ export abstract class Game {
 
     public getTime(): number {
         return this.currentTime;
+    }
+
+    public getGameDuration(): number {
+        return this.gameDuration;
+    }
+
+    public getStartTime(): number |undefined {
+        return this.gameStartTime;
+    }
+
+    public setStartTime(gameStartTime: number): void {
+        console.log("Set: ", gameStartTime);
+        this.gameStartTime = gameStartTime;
     }
 }
