@@ -257,8 +257,8 @@ export abstract class EnemyNode extends CharacterNode {
         return true;
     }
 
-    public hurt(damage: number, origin: ReadonlyVector2): boolean {
-        if (!super.hurt(damage, origin)) {
+    public hurt(damage: number, attackerId: string, origin: ReadonlyVector2): boolean {
+        if (!super.hurt(damage, attackerId, origin)) {
             this.setTag("hurt");
             const pl = this.getPlayer();
             if (pl) {

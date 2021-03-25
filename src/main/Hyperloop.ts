@@ -457,13 +457,12 @@ export class Hyperloop extends Game {
     }
 
     public startRespawnSequence(): void {
-        console.log("starting respawn with ", this.charactersAvailable, " remaining");
         if (isDebugMap()) {
             const player = this.getPlayer();
             const otherPlayerPositions = this.getPlayers().map(p => p.getPosition());
             const possibleSpawnPoints = this.getGameScene().userSpawnPoints.filter(p => {
                 const spawnVector = new Vector2(p.x, p.y);
-                return otherPlayerPositions.every(p => p.getDistance(spawnVector) > 100);
+                return otherPlayerPositions.every(p => p.getDistance(spawnVector) > 150);
             });
             const { x, y } = possibleSpawnPoints[clamp(+(Math.random() * possibleSpawnPoints.length).toFixed(), 0,
                 possibleSpawnPoints.length - 1)];

@@ -1,4 +1,3 @@
-import { clamp } from "../util/math";
 import { ControllerManager } from "../input/ControllerManager";
 import { Vector2Like } from "../graphics/Vector2";
 
@@ -54,7 +53,7 @@ export class Sound {
     private uses3D = false;
     private isPaused = false;
 
-    private constructor(private readonly buffer: AudioBuffer, private defaultVolume = 1) {
+    private constructor(private readonly buffer: AudioBuffer, private volume = 1) {
         this.setStereo();
     }
 
@@ -145,7 +144,7 @@ export class Sound {
             this.source = source;
             if (this.gainNode) {
                 this.gainNode.gain.setValueAtTime(0, this.source.context.currentTime);
-                this.gainNode.gain.linearRampToValueAtTime(this.defaultVolume, this.source.context.currentTime + (args?.fadeIn ?? 0));
+                this.gainNode.gain.linearRampToValueAtTime(this.volume, this.source.context.currentTime + (args?.fadeIn ?? 0));
             }
             if (args?.direction) {
                 this.setDirection(args.direction);
@@ -212,10 +211,7 @@ export class Sound {
         if (direction !== undefined) {
             this.setDirection(direction);
         }
-        if (this.gainNode) {
-            const gain = this.gainNode.gain;
-            gain.setValueAtTime(clamp(volume, gain.minValue, gain.maxValue), getAudioContext().currentTime);
-        }
+        this.volume = volume;
     }
 
     public getVolume(): number {

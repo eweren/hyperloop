@@ -25,6 +25,7 @@ const PROJECTILE_STEP_SIZE = 2;
 export abstract class CharacterNode extends OnlineSceneNode<Hyperloop> {
     @asset("sounds/fx/gunshot.ogg")
     private static readonly shootSound: Sound;
+    private shootSound = CharacterNode.shootSound.shallowClone();
 
     @asset(STANDARD_FONT)
     private static readonly dialogFont: BitmapFont;
@@ -63,6 +64,7 @@ export abstract class CharacterNode extends OnlineSceneNode<Hyperloop> {
     protected isPlayer = false;
     protected directionToPlayer = 0;
     protected distanceToPlayer = 0;
+    protected soundVolume = 1;
 
     // Talking/Thinking
     private speakSince = 0;
@@ -294,15 +296,14 @@ export abstract class CharacterNode extends OnlineSceneNode<Hyperloop> {
     public shoot(angle: number, power: number, origin: Vector2Like = new Vector2(this.getScenePosition().x, this.getScenePosition().y - this.getHeight() * .5)): void {
         this.emitEvent("shoot");
         this.startBattlemode();
-        CharacterNode.shootSound.stop();
+        this.shootSound.stop();
         if (this.distanceToPlayer > 0) {
-            CharacterNode.shootSound.setDirection(this.directionToPlayer);
-            CharacterNode.shootSound.setVolume(this.distanceToPlayer);
-            CharacterNode.shootSound.play();
+            this.shootSound.setVolume(this.soundVolume, this.directionToPlayer);
+            this.shootSound.play();
         } else if (this.isPlayer) {
-            CharacterNode.shootSound.setDirection(0);
-            CharacterNode.shootSound.setVolume(1);
-            CharacterNode.shootSound.play();
+            this.shootSound.setDirection(0);
+            this.shootSound.setVolume(1);
+            this.shootSound.play();
         }
         const diffX = Math.cos(angle) * this.getShootingRange();
         const diffY = Math.sin(angle) * this.getShootingRange();
@@ -316,9 +317,7 @@ export abstract class CharacterNode extends OnlineSceneNode<Hyperloop> {
                 const bounds = isColliding.getSceneBounds();
                 const headshot = (coord.y < bounds.minY + 0.25 * (bounds.height));
                 const damage = headshot ? (2.4 * power) : power;
-                if (isColliding.hurt(damage, this.getScenePosition())) {
-                    this.killCounter++;
-                }
+                isColliding.hurt(damage, this.getIdentifier(), this.getScenePosition());
                 // Blood particles at hurt character
                 isColliding.emitBlood({x: coord.x, y: coord.y, angle, count: headshot ? 30 : 10});
             } else {
@@ -372,12 +371,12 @@ export abstract class CharacterNode extends OnlineSceneNode<Hyperloop> {
      * @param damage - Damage dealt, number > 0
      * @return True if hurt character dies, false otherwise.
      */
-    public hurt(damage: number, origin?: ReadonlyVector2): boolean {
-        this.emitEvent("hurt", {damage, origin});
+    public hurt(damage: number, attackerId: string | number | null, origin?: ReadonlyVector2, preventDeath = false): boolean {
+        this.emitEvent("hurt", {damage, attackerId, origin});
         if (!this.isAlive()) {
             return false;
         }
-        if (origin) {
+        if (origin && !preventDeath) {
             // Pushback
             const direction = origin.x > this.getX() ? -1 : 1;
             const pushForce = damage * 2;
@@ -540,8 +539,9 @@ export abstract class CharacterNode extends OnlineSceneNode<Hyperloop> {
 
     private updateDirectionToPlayer(): void {
         const distanceOnX = this.getX() - this.getGame().getPlayer().getX();
-        this.directionToPlayer = Math.abs(distanceOnX) > 5 ? (clamp(distanceOnX, -150, 150) / 150) : 0;
+        this.directionToPlayer = Math.abs(distanceOnX) > 5 ? (clamp(distanceOnX, -300, 300) / 300) : 0;
         const absDistance = this.getGame().getPlayer().getPosition().getDistance(this.getPosition());
-        this.distanceToPlayer = absDistance > 150 ? 0 : absDistance === 0 ? 0 : 1 / (clamp(absDistance, 5, 150) / 5);
+        this.distanceToPlayer = absDistance > 300 ? 0 : absDistance === 0 ? 0 : 1 / (clamp(absDistance, 5, 300) / 5);
+        this.soundVolume = absDistance > 40 ? Math.sin(this.distanceToPlayer * 10) : 1;
     }
 }

@@ -37,12 +37,15 @@ export class OtherPlayerNode extends CharacterNode {
 
     @asset("sounds/fx/wilhelmScream.mp3")
     private static readonly dieScream: Sound;
+    private dieScream = OtherPlayerNode.dieScream.shallowClone();
 
     @asset("sounds/fx/dryfire.ogg")
     private static readonly dryFireSound: Sound;
+    private dryFireSound = OtherPlayerNode.dryFireSound.shallowClone();
 
     @asset("sounds/fx/reload.ogg")
     private static readonly reloadSound: Sound;
+    private reloadSound = OtherPlayerNode.reloadSound.shallowClone();
 
     @asset("sprites/spacesuitbody.aseprite.json")
     private static readonly sprite: Aseprite;
@@ -211,9 +214,9 @@ export class OtherPlayerNode extends CharacterNode {
 
     public shoot(): void {
         if (this.ammo === 0) {
-            OtherPlayerNode.dryFireSound.stop();
-            OtherPlayerNode.dryFireSound.setDirection(this.directionToPlayer);
-            OtherPlayerNode.dryFireSound.play();
+            this.dryFireSound.stop();
+            this.dryFireSound.setVolume(this.soundVolume, this.directionToPlayer);
+            this.dryFireSound.play();
         } else if (this.ammo > 0 && !this.isReloading) {
             this.lastShotTime = now();
             this.ammo--;
@@ -227,11 +230,11 @@ export class OtherPlayerNode extends CharacterNode {
             return;
         }
         this.isReloading = true;
-        OtherPlayerNode.reloadSound.setDirection(this.directionToPlayer);
-        OtherPlayerNode.reloadSound.play();
+        this.reloadSound.setVolume(this.soundVolume, this.directionToPlayer);
+        this.reloadSound.play();
         await sleep(this.reloadDelay);
         this.ammo = this.magazineSize;
-        OtherPlayerNode.reloadSound.stop();
+        this.reloadSound.stop();
         this.isReloading = false;
     }
 
@@ -297,18 +300,22 @@ export class OtherPlayerNode extends CharacterNode {
     }
 
 
-    public hurt(damage: number, origin: ReadonlyVector2): boolean {
+    public hurt(damage: number, attackerId: string, origin: ReadonlyVector2): boolean {
         const { centerX, centerY } = this.getSceneBounds();
         this.emitBlood({x: centerX, y: centerY, angle: Math.random() * Math.PI * 2, count: damage});
-        return super.hurt(damage, origin);
+        const wasKilled = super.hurt(damage, attackerId, origin, true);
+        if (wasKilled && this.getGame().getPlayer().getIdentifier() === attackerId) {
+            this.getGame().getPlayer().killCounter++;
+        }
+        return wasKilled;
     }
 
     public die(): void {
         super.die();
         this.playerArm?.hide();
-        OtherPlayerNode.dieScream.stop();
-        OtherPlayerNode.dieScream.setDirection(this.directionToPlayer);
-        OtherPlayerNode.dieScream.play();
+        this.dieScream.stop();
+        this.dieScream.setVolume(this.soundVolume, this.directionToPlayer);
+        this.dieScream.play();
         const diePosition = { x: this.getX(), y: this.getY() };
         setTimeout(() => {
             new DeadSpaceSuitNode({
@@ -317,7 +324,6 @@ export class OtherPlayerNode extends CharacterNode {
                 this.filter
             ).insertBefore(this);
             this.playerArm?.show();
-            this.setHitpoints(100);
         }, 6000);
     }
 

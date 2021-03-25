@@ -14,7 +14,7 @@ export class GameStatsNode extends TextNode<Hyperloop> {
         super.update(dt, time);
         this.setText(`PLAYER       |  K  |  D  |\n${[...this.getGame().getPlayers(), this.getGame().getPlayer()]
             .sort((a, b) => b.killCounter - a.killCounter)
-            .map(player => `${player.username.toUpperCase().padEnd(12, " ").substr(0, 12)}${player.username === this.onlineService.username ? "←" : " "}| ${player.killCounter.toFixed().padStart(2, " ")}  | ${player.dieCounter.toFixed().padStart(2, " ")}  |`)
+            .map(player => `${player.username?.toUpperCase().padEnd(12, " ").substr(0, 12)}${player.username === this.onlineService.username ? "←" : " "}| ${player.killCounter.toFixed().padStart(2, " ")}  | ${player.dieCounter.toFixed().padStart(2, " ")}  |`)
             .join("\n")}`);
     }
 

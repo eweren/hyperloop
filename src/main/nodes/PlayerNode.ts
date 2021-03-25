@@ -431,11 +431,11 @@ export class PlayerNode extends CharacterNode {
         }
     }
 
-    public hurt(damage: number, origin?: ReadonlyVector2): boolean {
+    public hurt(damage: number, attackerId: string, origin?: ReadonlyVector2): boolean {
         this.lastHitTimestamp = now();
         const { centerX, centerY } = this.getSceneBounds();
         this.emitBlood({x: centerX, y: centerY, angle: Math.random() * Math.PI * 2, count: damage});
-        const died = super.hurt(damage, origin);
+        const died = super.hurt(damage, attackerId, origin);
         this.syncCharacterState();
         return died;
     }

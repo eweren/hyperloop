@@ -37,10 +37,10 @@ export class MonsterNode extends EnemyNode {
         this.hitpoints = rnd(65, 120) + rnd(rnd(100));
     }
 
-    public hurt(damage: number, origin: ReadonlyVector2): boolean {
+    public hurt(damage: number, attackerId: string, origin: ReadonlyVector2): boolean {
         this.damageSound.stop();
         this.damageSound.play();
-        return super.hurt(damage, origin);
+        return super.hurt(damage, attackerId, origin);
     }
 
     private staySilent() {
