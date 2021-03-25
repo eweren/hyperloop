@@ -118,7 +118,7 @@ export class GameScene extends Scene<Hyperloop> {
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
-        if (event.key === "Tab") {
+        if (event.key === "Tab" || event.key === "l") {
             if (!event.repeat) {
                 this.showScores();
             }
@@ -128,7 +128,7 @@ export class GameScene extends Scene<Hyperloop> {
     }
 
     private handleKeyUp(event: KeyboardEvent): void {
-        if (event.key === "Tab") {
+        if (event.key === "Tab" || event.key === "l") {
             if (!event.repeat) {
                 this.hideScores();
             }
