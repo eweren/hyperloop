@@ -105,6 +105,7 @@ export class PlayerNode extends CharacterNode {
     private leftMouseDown = false;
     private rightMouseDown = false;
     private lastHitTimestamp = 0;
+    private automaticWeapon = true;
 
     private dustParticles: ParticleNode;
     private crosshairNode: AsepriteNode;
@@ -174,7 +175,6 @@ export class PlayerNode extends CharacterNode {
     }
 
     public getSpeed(): number {
-        // TODO remove before publishing
         return this.speed * (this.isRunning ? 2.4 : 1.2);
     }
 
@@ -276,7 +276,9 @@ export class PlayerNode extends CharacterNode {
         this.recover();
         // Shoot
         if (this.canInteract(ControllerIntent.PLAYER_ACTION) || this.leftMouseDown) {
-            this.leftMouseDown = false;
+            if (!this.automaticWeapon) {
+                this.leftMouseDown = false;
+            }
             if (time >= this.nextShot && !this.isReloading) {
                 this.shoot();
                 this.nextShot = time + this.shotDelay;
