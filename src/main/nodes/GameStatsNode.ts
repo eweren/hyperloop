@@ -1,13 +1,21 @@
-import { TextNode } from "../../engine/scene/TextNode";
+import { OnlineService } from "../../engine/online/OnlineService";
+import { TextNode, TextNodeArgs } from "../../engine/scene/TextNode";
 import { Hyperloop } from "../Hyperloop";
 
 export class GameStatsNode extends TextNode<Hyperloop> {
+    private readonly onlineService = new OnlineService();
+
+    public constructor(args: TextNodeArgs) {
+        super(args);
+        this.equalCharWidth = true;
+    }
 
     public update(dt: number, time: number) {
         super.update(dt, time);
-        this.setText(`PLAYER        SCORE\n${[...this.getGame().getPlayers(), this.getGame().getPlayer()]
+        this.setText(`PLAYER       |  K  |  D  |\n${[...this.getGame().getPlayers(), this.getGame().getPlayer()]
             .sort((a, b) => b.killCounter - a.killCounter)
-            .map(player => player.username.padEnd(18, " ") + (player.killCounter * 10 - player.dieCounter * 5)).join("\n")}`);
+            .map(player => `${player.username.toUpperCase().padEnd(12, " ").substr(0, 12)}${player.username === this.onlineService.username ? "←" : " "}| ${player.killCounter.toFixed().padStart(2, " ")}  | ${player.dieCounter.toFixed().padStart(2, " ")}  |`)
+            .join("\n")}`);
     }
 
     /** @inheritDoc */

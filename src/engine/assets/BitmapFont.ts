@@ -1,6 +1,5 @@
 import { FontJSON } from "*.font.json";
 import { loadImage } from "../util/graphics.js";
-import { clamp } from "../util/math.js";
 
 const CHAR_SPACING = 1;
 
@@ -113,7 +112,8 @@ export class BitmapFont {
 
     public drawText(
         ctx: CanvasRenderingContext2D, text: string, x: number, y: number, color: string, align = 0,
-        alpha = 1
+        alpha = 1,
+        equalCharWidth = false
     ): void {
         // Do nothing when no text or alpha is 0
         if (text === "" || alpha === 0) {
@@ -140,30 +140,47 @@ export class BitmapFont {
 
         let precursorChar = null;
 
+        const widthOfBiggestChar = this.charWidths.slice().sort((a, b) => b - a)[0];
+        const lineLength = text.split("\n").sort((a, b) => b.length - a.length)[0].length;
+        text = text.split("\n").map(s => s.padEnd(lineLength, " ")).join("\n");
+
         for (const currentChar of text) {
             const index = this.getCharIndex(currentChar);
             const spaceReduction = precursorChar && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
             ctx.translate(-spaceReduction, 0);
             if (currentChar === "\n") {
-                ctx.translate(-(clamp(this.currentLineWidth, 0, width)), this.charHeight + CHAR_SPACING);
-                this.currentLineWidth = 0;
+                if (equalCharWidth) {
+                    ctx.translate(-lineLength * widthOfBiggestChar, this.charHeight + CHAR_SPACING);
+                } else {
+                    ctx.translate(-this.currentLineWidth * widthOfBiggestChar, this.charHeight + CHAR_SPACING);
+                    this.currentLineWidth = 0;
+                }
                 precursorChar = currentChar;
             } else {
-                this.drawCharacter(ctx, index, color);
-                ctx.translate(this.charWidths[index] + CHAR_SPACING, 0);
-                precursorChar = currentChar;
-                this.currentLineWidth += this.charWidths[index] + CHAR_SPACING;
+                if (equalCharWidth) {
+                    const differenceInWidth = widthOfBiggestChar - this.charWidths[index];
+                    ctx.translate(differenceInWidth / 2, 0);
+                    this.drawCharacter(ctx, index, color);
+                    precursorChar = currentChar;
+                    ctx.translate(widthOfBiggestChar - differenceInWidth / 2, 0);
+                } else {
+                    this.drawCharacter(ctx, index, color);
+                    ctx.translate(this.charWidths[index] + CHAR_SPACING, 0);
+                    this.currentLineWidth += this.charWidths[index] + CHAR_SPACING;
+                    precursorChar = currentChar;
+                }
             }
         }
 
         ctx.restore();
     }
 
-    public measureText(text: string): { width: number, height: number } {
+    public measureText(text: string, equalCharWidth?: boolean): { width: number, height: number } {
         let width = 0;
         let maxWidth = 0;
         let precursorChar = null;
         let height = this.charHeight;
+        const widestWidth = this.charWidths.slice().sort((a, b) => b - a)[0];
         for (const currentChar of text) {
             const index = this.getCharIndex(currentChar);
             const spaceReduction = precursorChar && this.compactablePrecursors[index].includes(precursorChar) ? 1 : 0;
@@ -171,7 +188,11 @@ export class BitmapFont {
                 height += this.charHeight;
                 width = 0;
             } else {
-                width += this.charWidths[index] - spaceReduction + CHAR_SPACING;
+                if (equalCharWidth) {
+                    width += widestWidth;
+                } else {
+                    width += this.charWidths[index] - spaceReduction + CHAR_SPACING;
+                }
                 if (width > maxWidth) {
                     maxWidth = width;
                 }

@@ -25,6 +25,9 @@ export interface TextNodeArgs extends SceneNodeArgs {
  * @param T - Optional owner game class.
  */
 export class TextNode<T extends Game = Game> extends SceneNode<T> {
+    /** If the chars should have equal width. */
+    protected equalCharWidth = false;
+
     /** The font used to draw the text. */
     private font: BitmapFont;
 
@@ -143,7 +146,7 @@ export class TextNode<T extends Game = Game> extends SceneNode<T> {
      * Updates the node size according to the text measurements.
      */
     private updateSize(): void {
-        const size = this.font.measureText(this.text);
+        const size = this.font.measureText(this.text, this.equalCharWidth);
         this.resizeTo(size.width, size.height);
     }
 
@@ -152,7 +155,7 @@ export class TextNode<T extends Game = Game> extends SceneNode<T> {
         if (this.outlineColor != null) {
             this.font.drawTextWithOutline(ctx, this.text, 0, 0, this.color, this.outlineColor);
         } else {
-            this.font.drawText(ctx, this.text, 0, 0, this.color);
+            this.font.drawText(ctx, this.text, 0, 0, this.color, 0, 1, this.equalCharWidth);
         }
     }
 }

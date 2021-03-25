@@ -31,7 +31,7 @@
         }, 
         {
          "compression":"zlib",
-         "data":"eJzt2TEOgjAUBuBOnsuzeJLeAPUeuLq6eQY3j2IZiMQFB14p5PuShpA2zesLCfwhJQAAAAAAIt3XLgBgok\/psXYNSyjnOK5dw9TQ166M18y6ufkWlHMcW+nv2NduJ8\/t0NsW+jvt695620J\/AWo7zM\/nGnXszW3hdXydy7v6Uq7DuP7Mlfs8zpV179q1sX01M+8pcO\/Wvmn7ytkhB+7dUmaQeWPIvNv2\/H9djqwDAKBF\/vPGqJ15I7WUGWTeGDIvAAAAAAAAW\/cBAclPvg==",
+         "data":"eJzt2TEOgkAQBVAqz8XRuAHqPbC1tfMMdh7FpSASGyyYZSDvJRtCZovZCQn80DQAAAAAAES6b90AwMzQNI+te1hDOUe7dQ9z41z7sl4L+5bqGZRztFnmO821P8hzO842w3zncz3abDPMF6C203K9q9HH0dxW3sfXubyrL+U6rutPrdx3U63se9fujf2rmXkjvzuzfdMOlbNDH3j+TJlB5o0h8+7b8\/99XWQfAAAZ+c8bo3bmjZQpM8i8MWReAAAAAAAA9u4DWYdQmA==",
          "encoding":"base64",
          "height":64,
          "id":3,
@@ -1074,7 +1074,7 @@
                  "y":793
                 }, 
                 {
-                 "height":36,
+                 "height":35,
                  "id":428,
                  "name":"collision",
                  "properties":[
@@ -1086,9 +1086,9 @@
                  "rotation":0,
                  "type":"collision",
                  "visible":true,
-                 "width":12.0000000000001,
-                 "x":813.002964426877,
-                 "y":540
+                 "width":13,
+                 "x":815,
+                 "y":541
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1120,7 +1120,7 @@
                  "value":0
                 }],
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }, 
@@ -1130,7 +1130,7 @@
          "name":"lights",
          "objects":[
                 {
-                 "height":198,
+                 "height":166,
                  "id":322,
                  "name":"ambientTunnel",
                  "properties":[
@@ -1147,7 +1147,7 @@
                  "y":270
                 }, 
                 {
-                 "height":126,
+                 "height":158,
                  "id":323,
                  "name":"ambientTunnel",
                  "properties":[
@@ -1161,7 +1161,7 @@
                  "visible":true,
                  "width":1098,
                  "x":234,
-                 "y":504
+                 "y":472
                 }, 
                 {
                  "height":162.5,
@@ -1195,7 +1195,7 @@
                  "visible":true,
                  "width":1098,
                  "x":234,
-                 "y":468
+                 "y":436
                 }, 
                 {
                  "height":36,
