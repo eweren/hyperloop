@@ -104,17 +104,13 @@ export class GameScene extends Scene<Hyperloop> {
     }
 
     public activate() {
-        if (isDev()) {
-            this.game.keyboard.onKeyDown.connect(this.handleKeyDown, this);
-            this.game.keyboard.onKeyUp.connect(this.handleKeyUp, this);
-        }
+        this.game.keyboard.onKeyDown.connect(this.handleKeyDown, this);
+        this.game.keyboard.onKeyUp.connect(this.handleKeyUp, this);
     }
 
     public deactivate() {
-        if (isDev()) {
-            this.game.keyboard.onKeyDown.disconnect(this.handleKeyDown, this);
-            this.game.keyboard.onKeyUp.disconnect(this.handleKeyUp, this);
-        }
+        this.game.keyboard.onKeyDown.disconnect(this.handleKeyDown, this);
+        this.game.keyboard.onKeyUp.disconnect(this.handleKeyUp, this);
     }
 
     private handleKeyDown(event: KeyboardEvent): void {
