@@ -11,7 +11,7 @@ import { SwitchNode } from "../nodes/SwitchNode";
 import { Layer, STANDARD_FONT } from "../constants";
 import { CameraLimitNode } from "../nodes/CameraLimitNode";
 import { DoorNode } from "../nodes/DoorNode";
-import { isDebugMap, isDev } from "../../engine/util/env";
+import { isDebugMap } from "../../engine/util/env";
 import { MonsterNode } from "../nodes/MonsterNode";
 import { RatNode } from "../nodes/RatNode";
 import { CorpseNode } from "../nodes/CorpseNode";
