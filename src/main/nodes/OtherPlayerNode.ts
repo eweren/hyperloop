@@ -301,13 +301,7 @@ export class OtherPlayerNode extends CharacterNode {
 
 
     public hurt(damage: number, attackerId: string, origin: ReadonlyVector2): boolean {
-        const { centerX, centerY } = this.getSceneBounds();
-        this.emitBlood({x: centerX, y: centerY, angle: Math.random() * Math.PI * 2, count: damage});
-        const wasKilled = super.hurt(damage, attackerId, origin, true);
-        if (wasKilled && this.getGame().getPlayer().getIdentifier() === attackerId) {
-            this.getGame().getPlayer().killCounter++;
-        }
-        return wasKilled;
+        return false;
     }
 
     public die(): void {
