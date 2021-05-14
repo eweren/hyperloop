@@ -19,6 +19,8 @@ export function isElectron(): boolean {
  * Figures out if development mode is enabled or not.
  */
 export function isDev(): boolean {
+
+    return false;
     return window.location.hostname.includes("localhost");
 }
 

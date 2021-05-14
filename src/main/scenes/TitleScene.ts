@@ -7,11 +7,9 @@ import { GameScene } from "./GameScene";
 import { ControllerIntent } from "../../engine/input/ControllerIntent";
 import { ControllerEvent } from "../../engine/input/ControllerEvent";
 import { FadeToBlackTransition } from "../../engine/transitions/FadeToBlackTransition";
-import { MusicManager } from "../MusicManager";
 import { FadeTransition } from "../../engine/transitions/FadeTransition";
 import { GAME_HEIGHT, GAME_WIDTH, Layer, STANDARD_FONT } from "../constants";
 import { Sound } from "../../engine/assets/Sound";
-import { SuccessScene } from "./SuccessScene";
 import { ControllerFamily } from "../../engine/input/ControllerFamily";
 import { isDebugMap } from "../../engine/util/env";
 import { PlayerListNode } from "../nodes/PlayerListNode";
@@ -51,8 +49,6 @@ export class TitleScene extends Scene<Hyperloop> {
         this.inTransition = new FadeTransition();
         this.outTransition = new FadeToBlackTransition({ duration: 0.5, exclusive: true });
         this.imageNode.appendTo(this.rootNode);
-
-        MusicManager.getInstance().loopTrack(0);
     }
 
     public update(dt: number, time: number): void {
@@ -88,10 +84,6 @@ export class TitleScene extends Scene<Hyperloop> {
         }
     }
 
-    public gotoCredits (): void {
-        this.game.scenes.setScene(SuccessScene);
-    }
-
     public activate(): void {
         this.input.onButtonDown.connect(this.handleButton, this);
     }
@@ -104,9 +96,6 @@ export class TitleScene extends Scene<Hyperloop> {
         if (this.onlineService.isHost() && (event instanceof MouseEvent || event.intents & ControllerIntent.CONFIRM)) {
             TitleScene.confirmSound.play();
             this.startGame();
-        } else if (!(event instanceof MouseEvent || event.intents & ControllerIntent.CONFIRM) && (event.intents & ControllerIntent.PLAYER_RELOAD)) {
-            TitleScene.confirmSound.play();
-            this.gotoCredits();
         }
     }
 }

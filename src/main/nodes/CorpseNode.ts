@@ -4,7 +4,6 @@ import { InteractiveNode } from "./InteractiveNode";
 import { asset } from "../../engine/assets/Assets";
 import { SceneNodeArgs } from "../../engine/scene/SceneNode";
 import { Sound } from "../../engine/assets/Sound";
-import { MusicManager } from "../MusicManager";
 import { ControllerFamily } from "../../engine/input/ControllerFamily";
 import { sleep } from "../../engine/util/time";
 import { PlayerNode } from "./PlayerNode";
@@ -46,7 +45,6 @@ export class CorpseNode extends InteractiveNode {
             await sleep(5000);
             CorpseNode.lightSound.play();
             this.getGame().turnOffAllLights();
-            MusicManager.getInstance().loopTrack(2);
             const game = this.getGame();
             const fader = game.getFader();
             fader.fadeOut({ duration: 0.1 }).then(() => {

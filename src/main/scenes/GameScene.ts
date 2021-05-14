@@ -21,7 +21,6 @@ import { FadeToBlackTransition } from "../../engine/transitions/FadeToBlackTrans
 import { SpawnNode } from "../nodes/SpawnNode";
 import { TriggerNode } from "../nodes/TriggerNode";
 import { DeadSpaceSuitNode } from "../nodes/DeadSpaceSuiteNode";
-import { MusicManager } from "../MusicManager";
 import { FxManager } from "../FxManager";
 import { clamp } from "../../engine/util/math";
 import { GameStatsNode } from "../nodes/GameStatsNode";
@@ -90,7 +89,6 @@ export class GameScene extends Scene<Hyperloop> {
         this.setHudLayers([ Layer.HUD ]);
 
         if (this.targetMap === TargetMap.DEBUG) {
-            MusicManager.getInstance().stop();
             FxManager.getInstance().stop();
         }
 

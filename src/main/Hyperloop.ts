@@ -1,4 +1,3 @@
-import { DialogJSON } from "*.dialog.json";
 import { asset } from "../engine/assets/Assets";
 import { Sound } from "../engine/assets/Sound";
 import { RGBColor } from "../engine/color/RGBColor";
@@ -15,7 +14,6 @@ import { rnd } from "../engine/util/random";
 import { sleep } from "../engine/util/time";
 import { Dialog } from "./Dialog";
 import { FxManager } from "./FxManager";
-import { MusicManager } from "./MusicManager";
 import { CharacterNode } from "./nodes/CharacterNode";
 import { CollisionNode } from "./nodes/CollisionNode";
 import { LightNode } from "./nodes/LightNode";
@@ -25,10 +23,8 @@ import { PlayerNode } from "./nodes/PlayerNode";
 import { SpawnNode } from "./nodes/SpawnNode";
 import { SwitchNode } from "./nodes/SwitchNode";
 import { TrainNode } from "./nodes/TrainNode";
-import { GameOverScene } from "./scenes/GameOverScene";
 import { GameScene } from "./scenes/GameScene";
 import { LoadingScene } from "./scenes/LoadingScene";
-import { SuccessScene } from "./scenes/SuccessScene";
 
 export enum GameStage {
     NONE = 0,
@@ -69,27 +65,12 @@ export class Hyperloop extends Game {
     private gameStage = GameStage.NONE;
     public keyTaken = false; // key taken from corpse
     public fuseboxOn = false;
-    private fadeOutInitiated = false;
     private trainIsReady = false; // game basically won when this is true
 
     // Dialog
     private dialogKeyPressed = false;
     private currentDialogLine = 0;
     private currentDialog: Dialog | null = null;
-
-    @asset("dialog/train.dialog.json")
-    private static readonly trainDialog: DialogJSON;
-
-    @asset("dialog/train2.dialog.json")
-    private static readonly train2Dialog: DialogJSON;
-    @asset("dialog/train3.dialog.json")
-    private static readonly train3Dialog: DialogJSON;
-    @asset("dialog/train4.dialog.json")
-    private static readonly train4Dialog: DialogJSON;
-    @asset("dialog/train5.dialog.json")
-    private static readonly train5Dialog: DialogJSON;
-    @asset("dialog/train6.dialog.json")
-    private static readonly train6Dialog: DialogJSON;
 
     // Called by GameScene
     public setupScene(): void {
@@ -98,16 +79,6 @@ export class Hyperloop extends Game {
         }
         this.spawnNPCs();
         this.setStage(GameStage.INTRO);
-        // Assets cannot be loaded in constructor because the LoadingScene
-        // is not initialized at constructor time and Assets are loaded in the LoadingScene
-        this.dialogs = [
-            new Dialog(Hyperloop.trainDialog),
-            new Dialog(Hyperloop.train2Dialog),
-            new Dialog(Hyperloop.train3Dialog),
-            new Dialog(Hyperloop.train4Dialog),
-            new Dialog(Hyperloop.train5Dialog),
-            new Dialog(Hyperloop.train6Dialog)
-        ];
 
         this.input.onDrag.filter(e => e.isRightStick && !!e.direction && e.direction.getLength() > 0.3).connect(this.getPlayer().handleControllerInput, this.getPlayer());
     }
@@ -130,9 +101,6 @@ export class Hyperloop extends Game {
             case GameStage.STUCK:
                 this.updateStuck();
                 break;
-            case GameStage.RETURN:
-                this.updateReturn(dt);
-                break;
             case GameStage.PRESPAWN:
                 this.updatePrespawn();
                 break;
@@ -148,17 +116,6 @@ export class Hyperloop extends Game {
             this.gameStage = stage;
             this.stageStartTime = this.getTime();
             switch (this.gameStage) {
-                case GameStage.INTRO:
-                    this.initIntro();
-                    break;
-                case GameStage.DRIVE:
-                    this.initDrive();
-                    break;
-                case GameStage.BRAKE:
-                    break;
-                case GameStage.DIALOG:
-                    this.initConversation();
-                    break;
                 case GameStage.STUCK:
                     this.initStuck();
                     break;
@@ -292,7 +249,6 @@ export class Hyperloop extends Game {
             const train = this.getTrain();
             train.setX(train.getX() + speed * dt);
             const shakeIntensity = 1 - progress + Math.sin(Math.PI * progress) * 2;
-            MusicManager.getInstance().setVolume(1 - progress);
             this.handleCamera(shakeIntensity, 1);
         }
     }
@@ -335,30 +291,6 @@ export class Hyperloop extends Game {
         }
     }
 
-    private updateReturn(dt: number) {
-        let train: TrainNode;
-        try {
-            train = this.getTrain();
-        } catch (e) { return; }
-        // Drive off
-        if (this.stageTime > 5) {
-            const progress = clamp((this.stageTime - 5.5) / 10, 0, 1);
-            const speed = this.trainSpeed * progress;
-            train.setX(train.getX() + speed * dt);
-        }
-        this.handleCamera(this.stageTime > 5 ? 1 : 0, this.stageTime / 3);
-        // Driving illusion
-        const pos = train.getScenePosition().x;
-        if (pos > 3100) {
-            train.setX(pos - this.teleportStep * 2);
-        }
-        // Fade out
-        if (this.stageTime > 12 && !this.fadeOutInitiated) {
-            this.fadeOutInitiated = true;
-           this.getFader().fadeOut({ duration: 24 }).then(() => this.scenes.setScene(SuccessScene as any));
-        }
-    }
-
     private handleCamera(shakeForce = 0, toCenterForce = 1): void {
         const cam = this.getCamera();
         // Force towards center
@@ -381,7 +313,6 @@ export class Hyperloop extends Game {
         }
         // Play sound
         setTimeout(() => Hyperloop.introSound.play(), 1000);
-        MusicManager.getInstance().setVolume(0.3);
         // Place player into train initially
         const player = this.getPlayer();
         const train = this.getTrain();
@@ -392,19 +323,6 @@ export class Hyperloop extends Game {
         this.getFader().fadeOut({duration: 0});
     }
 
-    public initDrive(): void {
-        this.getFader().fadeIn({duration: 3});
-        MusicManager.getInstance().setVolume(1);
-        Hyperloop.droneSound.setVolume(0.5);
-        Hyperloop.droneSound.setLoop(true);
-        Hyperloop.droneSound.play();
-        this.startDialog(0);
-    }
-
-    public initConversation(): void {
-        this.startDialog(1);
-    }
-
     public initStuck(): void {
         // Place player into world
         const player = this.getPlayer();
@@ -412,7 +330,6 @@ export class Hyperloop extends Game {
         const pos = player.getScenePosition();
         player.remove().moveTo(pos.x, pos.y).appendTo(train.getParent() as SceneNode<Hyperloop>);
         train.hideInner();
-        MusicManager.getInstance().loopTrack(1);
         FxManager.getInstance().playSounds();
         // Power switch behavior
         const powerSwitch = this.getGameScene().getNodeById("PowerSwitch");
@@ -487,9 +404,6 @@ export class Hyperloop extends Game {
             }
             // Show debate sequence
             this.setStage(GameStage.PRESPAWN);
-        } else {
-            // Game Over or sequence of new train replacing old one
-            this.scenes.setScene(GameOverScene as any);
         }
     }
 
@@ -609,7 +523,6 @@ export class Hyperloop extends Game {
         player.remove().appendTo(train);
         train.showInner();
         FxManager.getInstance().stop();
-        MusicManager.getInstance().loopTrack(3);
     }
 
     public getPlayer(): PlayerNode {

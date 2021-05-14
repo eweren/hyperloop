@@ -230,13 +230,13 @@ export class PlayerNode extends CharacterNode {
             this.getGame().input.onButtonDown.connect(handleControllerInputChange, this);
             this.getGame().input.onButtonUp.connect(handleControllerInputChange, this);
         }
-        if (!this.ammoCounter.isInScene() && isDev()) {
+        if (!this.ammoCounter.isInScene()) {
             const rootNode = this.getGame().getGameScene().rootNode;
             this.ammoCounter.setX(rootNode.getWidth() - 10);
             this.ammoCounter.setY(10);
             rootNode.appendChild(this.ammoCounter);
         }
-        if (!this.gameTimeNode.isInScene() && isDev()) {
+        if (!this.gameTimeNode.isInScene()) {
             const rootNode = this.getGame().getGameScene().rootNode;
             this.gameTimeNode.setX(rootNode.getWidth() / 2 - this.gameTimeNode.getWidth() / 2);
             this.gameTimeNode.setY(10);
