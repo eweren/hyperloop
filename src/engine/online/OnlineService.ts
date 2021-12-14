@@ -67,7 +67,7 @@ export class OnlineService {
     private _lastGameState = "";
 
     public constructor() {
-        const onlineBaseUrl = isDev() ? "http://localhost:3000/" : "https://socket.ewer.rest:3000/";
+        const onlineBaseUrl = isDev() ? "http://localhost:3000/" : "http://hyperloop.thearc.dev:3000/";
         let room = getRoom();
         if (!room) {
             room = (Math.random() * 10000000).toFixed();
